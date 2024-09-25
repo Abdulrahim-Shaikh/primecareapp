@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+
+const { platformSelect } = require("nativewind/theme");
 module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
   content: ["./App.{js,jsx,ts,tsx}", "./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
@@ -18,7 +20,7 @@ module.exports = {
     },
     colors: {
       white: "rgba(255, 255, 255, 1)",
-      primaryColor: "#009281",
+      primaryColor:  platformSelect({ default: "green" }),
       secondaryBg: "rgba(230, 244, 242, 1)",
       neutralColor: "rgba(14, 13, 57, 1)",
       bodyText: "#454567",
