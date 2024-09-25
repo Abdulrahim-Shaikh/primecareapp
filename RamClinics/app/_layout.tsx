@@ -54,8 +54,4 @@ const RootLayout = () => {
   );
 };
 
-export const unstable_settings = {
-  initialRouteName: '(tabs)',
-};
-
 export default RootLayout;
