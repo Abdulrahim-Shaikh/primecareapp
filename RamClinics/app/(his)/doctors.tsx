@@ -1,20 +1,20 @@
 import { Pressable, Text, View } from "react-native";
-import userService from "../../services/UserService";
 import { useEffect } from "react";
-import { useCountStore } from "../state/counter";
+import userService from "../../domain/services/UserService";
+import { useCountStore } from "../../domain/state/counter";
 
 const HISHome = () => {
 
     // let [users, setUsers]= useState([]);
 
-//    useCountStore.getState().count;
+    // let count  = useCountStore.getState().count;
+    // let setUsers  = useCountStore.getState().setUsers;
 
     let {count, users, increase, decrease, setUsers} = useCountStore();
-    
+
     useEffect(() => {
         userService.findAll().then( (res) => {        
             setUsers(res.data);
-
         });
     });
     

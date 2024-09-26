@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
-import { useCountStore } from "../state/counter";
+import { useCountStore } from "../../domain/state/counter";
 
 const HISHome = () => {
 

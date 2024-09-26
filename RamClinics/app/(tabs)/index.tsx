@@ -9,8 +9,8 @@ import NotificationModal from "../../components/homePage/modal/NotificationModal
 import FilterModal from "../../components/homePage/modal/FilterModal";
 import FavouriteModal from "../../components/homePage/modal/FavouriteModal";
 import Header from "../../components/homePage/Header";
-import userService from "../../services/UserService";
 import { Link } from "expo-router";
+import userService from "../../domain/services/UserService";
 
 const Home = () => {
   const [showNotification, setShowNotification] = useState(false);
