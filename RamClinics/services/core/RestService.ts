@@ -1,45 +1,46 @@
 
-import { HttpService } from './HttpService';
+import http from './HttpService';
 
 // @Injectable({providedIn : 'root'})
 export class RestService<T> {
 
-  constructor(public http: HttpService, public entityName: string) {
+  constructor(public entityName: string) {
   }
 
   save(entity: T) {
-    return this.http.postAPI(this.entityName, entity);
+    return http.postAPI(this.entityName, entity);
   }
 
   find(id: number) {
-    return this.http.getAPI(this.entityName + '/' + id);
+    return http.getAPI(this.entityName + '/' + id);
   }
 
   findById(id: number) {
-    return this.http.getAPI(this.entityName + '/find/' + id);
+    return http.getAPI(this.entityName + '/find/' + id);
   }
 
   findAll() {
-    return this.http.getAPI(this.entityName);
+    console.log('>>>>> ' + this.entityName)
+    return http.getAPI(this.entityName);
   }
 
   update(entity: T) {
-    return this.http.putAPI(this.entityName, entity);
+    return http.putAPI(this.entityName, entity);
   }
 
   delete(id: number) {
-    return this.http.deleteAPI(this.entityName, id);
+    return http.deleteAPI(this.entityName, id);
   }
 
   get(path: string) {
-    return this.http.getAPI(this.entityName + '/' + path);
+    return http.getAPI(this.entityName + '/' + path);
   }
 
   put(path: string, entity: any) {
-    return this.http.putAPI(this.entityName + '/' + path, entity);
+    return http.putAPI(this.entityName + '/' + path, entity);
   }
 
   post(path: string, entity: any) {
-    return this.http.postAPI(this.entityName + '/' + path, entity);
+    return http.postAPI(this.entityName + '/' + path, entity);
   }
 }

@@ -2,6 +2,7 @@
   "name": "ramclinics",
   "version": "1.0.0",
   "main": "expo-router/entry",
+  "proxy": "http://16.24.11.104:8080/",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",

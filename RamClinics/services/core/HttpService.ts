@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class HttpService {
+class HttpService {
 
     private userId: string = '';
     private username: string = '';
@@ -10,8 +10,10 @@ export class HttpService {
     private headers = new Map();
     private allowedDivisions: Array<string> = ['CHN'];
 
+    private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/" ;//
+
     getAPI(path: string) {
-        return axios.get(path);
+        return axios.get(this.baseUrl + path);
     }
 
     postAPI(path: string, entity: any) {
@@ -26,3 +28,6 @@ export class HttpService {
         return axios.delete(path + id);
     }
 }
+
+const http = new HttpService();
+export default http;

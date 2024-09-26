@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchSection from "../../components/homePage/SearchSection";
@@ -9,11 +9,16 @@ import NotificationModal from "../../components/homePage/modal/NotificationModal
 import FilterModal from "../../components/homePage/modal/FilterModal";
 import FavouriteModal from "../../components/homePage/modal/FavouriteModal";
 import Header from "../../components/homePage/Header";
+import userService from "../../services/UserService";
 
 const Home = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showFavouriteModal, setShowFavouriteModal] = useState(false);
+
+  let data :any[]= [];
+  userService.findAll().then((response) => { data= response.data;console.log(response.data)});
+
   return (
     <SafeAreaView className="">
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -23,7 +28,9 @@ const Home = () => {
             setShowFavouriteModal={setShowFavouriteModal}
           />
           <SearchSection setShowFilter={setShowFilter} />
-
+          {
+            data.map(user => (<Text>user.firstName</Text>))
+          }
           <UpcomingSlider />
           <DoctorSpeciality />
           <TopDoctor />
