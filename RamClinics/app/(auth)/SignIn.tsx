@@ -34,7 +34,7 @@ const SignIn = () => {
               Forgot password?
             </Link>
           </View>
-          <LinkButton link="/Home" text="Sign In" />
+          <LinkButton link="/" text="Sign In" />
 
           <View className="pt-8">
             <View>

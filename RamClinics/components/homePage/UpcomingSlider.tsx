@@ -32,7 +32,7 @@ const UpcomingSlider = () => {
   }: {
     viewableItems: ViewToken[];
   }) => {
-    if (viewableItems[0].index !== null) {
+    if (viewableItems && viewableItems[0].index !== null) {
       flatListIndex.value = viewableItems[0].index;
     }
   };

@@ -10,6 +10,7 @@ import FilterModal from "../../components/homePage/modal/FilterModal";
 import FavouriteModal from "../../components/homePage/modal/FavouriteModal";
 import Header from "../../components/homePage/Header";
 import userService from "../../services/UserService";
+import { Link } from "expo-router";
 
 const Home = () => {
   const [showNotification, setShowNotification] = useState(false);
@@ -28,6 +29,8 @@ const Home = () => {
             setShowFavouriteModal={setShowFavouriteModal}
           />
           <SearchSection setShowFilter={setShowFilter} />
+          <Link href="/SignIn">Navigate </Link>
+          
           {
             data.map(user => (<Text>user.firstName</Text>))
           }
@@ -35,6 +38,8 @@ const Home = () => {
           <DoctorSpeciality />
           <TopDoctor />
         </View>
+
+        
 
         <NotificationModal
           showNotification={showNotification}
