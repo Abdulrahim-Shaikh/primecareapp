@@ -25,9 +25,9 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
   return (
   
-      <Stack>
-        <Stack.Screen name="(his)" options={{ headerShown: false }} />
+      <Stack initialRouteName="(tabs)">
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(his)" options={{ headerShown: false }} />        
         <Stack.Screen name="(auth)/SignIn" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/SignUp" options={{ headerShown: false }} />
         {/* <Stack.Screen name="index" options={{ headerShown: true }} /> */}

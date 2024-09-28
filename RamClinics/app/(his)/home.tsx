@@ -6,6 +6,7 @@ const HISHome = () => {
 
     let {count, users, increase, decrease} = useCountStore();
 
+    // router.navigate("(tabs)")
     return(
         <View>
             <Text>Hello World</Text>
