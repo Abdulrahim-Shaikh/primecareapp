@@ -32,8 +32,9 @@ const Home = () => {
           />
           {/* <SearchSection setShowFilter={setShowFilter} />     */}
           <View className="p-6 w-full items-center">
-            <View className="py-2 px-3 bg-amber-900 rounded-md w-4/5">
-              <Text className="text-white" onPress={() => router.push("/SignIn")}>Sign In to get details.. <span className="text-teal-400 font-bold ml-20">  Sign In</span></Text>
+            <View className="flex-row justify-between py-2 px-3 bg-amber-900 rounded-md w-4/5">
+              <Text className="text-white" onPress={() => router.push("/SignIn")}>Sign In to get details.. </Text>
+              <Text className="text-teal-400 font-bold">  Sign In</Text>
             </View>
           </View>
           <UpcomingSlider />

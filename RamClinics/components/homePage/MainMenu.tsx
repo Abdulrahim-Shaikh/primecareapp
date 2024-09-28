@@ -7,7 +7,7 @@ const menuItems = [
   {
     icon: "calendar-number-outline",
     title: "My Appoinments",
-    link: "(tabs)/MyAppointment",
+    link: "/MyAppoinment",
   },
   {
     icon: "people-outline",
