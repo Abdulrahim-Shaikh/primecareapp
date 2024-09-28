@@ -1,10 +1,10 @@
 import {
-    Image,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,7 +30,7 @@ const Chat = () => {
               <Pressable
                 onPress={() => router.push("/ChatBox")}
                 key={`key:${id}`}
-                className="p-4 border border-amber-900rounded-2xl flex flex-row justify-between items-start"
+                className="p-4 border border-amber-900 rounded-2xl flex flex-row justify-between items-start"
               >
                 <View className="flex flex-row justify-start items-center gap-4">
                   <Image source={img} style={{ height: 50, width: 50 }} />

@@ -38,7 +38,7 @@ const LanguageSettings = () => {
                   className={`flex-row justify-between items-center pt-4 ${
                     suggestedLanguage.length === idx + 1
                       ? ""
-                      : "border-b border-dashed border-amber-900pb-4"
+                      : "border-b border-dashed border-amber-900 pb-4"
                   }`}
                 >
                   <Text className="text-base font-medium">{item}</Text>
@@ -60,7 +60,7 @@ const LanguageSettings = () => {
                   className={`flex-row justify-between items-center pt-4 ${
                     LanguageList.length === idx + 1
                       ? ""
-                      : "border-b border-dashed border-amber-900pb-4"
+                      : "border-b border-dashed border-amber-900 pb-4"
                   }`}
                 >
                   <Text className="text-base font-medium">{item}</Text>

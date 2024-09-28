@@ -1,12 +1,12 @@
 import {
-    FlatList,
-    Modal,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -136,7 +136,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
             <Text className="text-lg font-semibold ">Schedules</Text>
             <CalendarModal />
           </View>
-          <View className="border border-amber-900rounded-xl p-5 flex-row -mr-20">
+          <View className="border border-amber-900 rounded-xl p-5 flex-row -mr-20">
             <FlatList
               horizontal
               style={{ marginRight: 60 }}
@@ -152,7 +152,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
               )}
             />
           </View>
-          <View className="border border-amber-900rounded-xl p-5 flex-row -mr-20 mt-5">
+          <View className="border border-amber-900 rounded-xl p-5 flex-row -mr-20 mt-5">
             <FlatList
               horizontal
               style={{ marginRight: 60 }}
