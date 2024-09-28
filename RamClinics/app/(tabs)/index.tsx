@@ -25,12 +25,17 @@ const Home = () => {
   return (
     <SafeAreaView className="">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className=" justify-start min-h-[85vh] my-8 items-start ">
+        <View className="justify-start min-h-[85vh] my-8 items-start">
           <Header
             setShowNotification={setShowNotification}
             setShowFavouriteModal={setShowFavouriteModal}
           />
           {/* <SearchSection setShowFilter={setShowFilter} />     */}
+          <View className="p-6 w-full items-center">
+            <View className="py-2 px-3 bg-amber-900 rounded-md w-4/5">
+              <Text className="text-white" onPress={() => router.push("/SignIn")}>Sign In to get details.. <span className="text-teal-400 font-bold ml-20">  Sign In</span></Text>
+            </View>
+          </View>
           <UpcomingSlider />
           <DoctorSpeciality />
           <MainMenu />
