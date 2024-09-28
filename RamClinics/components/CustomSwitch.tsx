@@ -11,7 +11,7 @@ const CustomSwitch = () => {
     >
       <Text
         className={`h-[28px] w-[50px] ${
-          isEnabled ? "bg-primaryColor" : "bg-[#c3c3ce]"
+          isEnabled ? "bg-amber-900" : "bg-[#c3c3ce]"
         } rounded-full`}
       ></Text>
       <Text

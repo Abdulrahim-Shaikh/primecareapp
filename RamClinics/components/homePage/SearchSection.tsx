@@ -15,7 +15,7 @@ const SearchSection = ({
       <View className="flex flex-row justify-between items-center pt-6 w-full">
         <Searchbox />
         <TouchableOpacity
-          className="p-3 rounded-lg bg-primaryColor "
+          className="p-3 rounded-lg bg-amber-900 "
           onPress={() => setShowFilter(true)}
         >
           <MaterialIcons name="tune" size={28} color={"white"} />

@@ -11,7 +11,7 @@ const RadioButton = ({ isActive }: { isActive: boolean }) => {
       <View
         className={`w-3 h-3 border  rounded-full ${
           isActive
-            ? "border-primaryColor bg-primaryColor"
+            ? "border-primaryColor bg-amber-900"
             : "border-borderColor "
         } `}
       ></View>

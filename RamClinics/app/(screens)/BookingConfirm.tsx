@@ -14,7 +14,7 @@ const BookingConfirm = () => {
           <HeaderWithBackButton isPushBack={true} />
 
           <View className=" justify-center items-center pt-4">
-            <Text className="p-6 rounded-full bg-primaryColor">
+            <Text className="p-6 rounded-full bg-amber-900">
               <Feather name="check" size={40} color="white" />
             </Text>
             <Text className="text-2xl font-semibold pt-4">

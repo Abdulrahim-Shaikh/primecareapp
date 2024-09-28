@@ -1,10 +1,10 @@
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -35,7 +35,7 @@ const PatientDetails = () => {
                       key={idx}
                       className={`border border-primaryColor rounded-md py-2 flex-1 font-medium text-center ${
                         selectAge === idx
-                          ? "text-white bg-primaryColor"
+                          ? "text-white bg-amber-900"
                           : "text-primaryColor"
                       } `}
                     >
@@ -64,7 +64,7 @@ const PatientDetails = () => {
                       <Text
                         className={`text-center  py-2 px-8 rounded-lg border border-primaryColor text-base font-medium ${
                           item === activeGenter
-                            ? "bg-primaryColor text-white"
+                            ? "bg-amber-900 text-white"
                             : "text-primaryColor"
                         }`}
                       >

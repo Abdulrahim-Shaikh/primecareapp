@@ -1,12 +1,12 @@
 import {
-  FlatList,
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    FlatList,
+    Modal,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -73,7 +73,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                   <View
                     className={`w-3 h-3 border  rounded-full ${
                       sortBy === idx
-                        ? "border-primaryColor bg-primaryColor"
+                        ? "border-primaryColor bg-amber-900"
                         : "border-borderColor "
                     } `}
                   ></View>
@@ -95,7 +95,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                 <Text
                   className={`text-center  py-4 px-8 rounded-lg border border-primaryColor text-base font-medium ${
                     item === activeGenter
-                      ? "bg-primaryColor text-white"
+                      ? "bg-amber-900 text-white"
                       : "text-primaryColor"
                   }`}
                 >
@@ -120,7 +120,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                 <Text
                   className={`text-center  py-4 px-8 rounded-lg border border-primaryColor text-base font-medium ${
                     idx === activeExperience
-                      ? "bg-primaryColor text-white"
+                      ? "bg-amber-900 text-white"
                       : "text-primaryColor"
                   }`}
                 >

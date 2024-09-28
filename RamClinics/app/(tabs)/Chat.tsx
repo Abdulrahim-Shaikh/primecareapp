@@ -1,10 +1,10 @@
 import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
+    Image,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -40,7 +40,7 @@ const Chat = () => {
                   </View>
                 </View>
 
-                <View className="p-2 rounded-md bg-primaryColor">
+                <View className="p-2 rounded-md bg-amber-900">
                   <Ionicons
                     name="chatbubbles-outline"
                     size={16}

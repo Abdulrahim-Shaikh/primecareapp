@@ -21,7 +21,7 @@ const HeaderWithBackButton = ({
       {setModal && (
         <Text
           onPress={() => setModal(false)}
-          className="bg-primaryColor rounded-full p-2"
+          className="bg-amber-900 rounded-full p-2"
         >
           <Ionicons name="chevron-back" color={"white"} size={20} />
         </Text>
@@ -30,7 +30,7 @@ const HeaderWithBackButton = ({
         <Pressable
           onPress={() => router.back()}
           className={` rounded-full p-2 justify-center items-center ${
-            isTextWhite ? "bg-white text-primaryColor" : "bg-primaryColor"
+            isTextWhite ? "bg-white text-primaryColor" : "bg-amber-900"
           }`}
         >
           <Ionicons

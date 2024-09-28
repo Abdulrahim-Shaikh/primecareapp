@@ -32,7 +32,7 @@ const VideoCall = () => {
             </Pressable>
             <Pressable
               onPress={() => router.push("/AudioCall")}
-              className="py-5 px-6 rounded-full bg-primaryColor justify-center items-center"
+              className="py-5 px-6 rounded-full bg-amber-900 justify-center items-center"
             >
               <FontAwesome name="microphone" size={24} color="white" />
             </Pressable>

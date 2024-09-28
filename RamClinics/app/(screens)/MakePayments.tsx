@@ -1,10 +1,10 @@
 import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
+    Image,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -68,7 +68,7 @@ const MakePayments = () => {
                   onPress={() => router.push("/AddCardPage")}
                   className=" w-[45%] justify-center items-center border border-borderColor py-3 rounded-lg"
                 >
-                  <View className="h-10 w-10 justify-center items-center rounded-full bg-primaryColor">
+                  <View className="h-10 w-10 justify-center items-center rounded-full bg-amber-900">
                     <Text className="text-2xl text-white ">+</Text>
                   </View>
                   <Text className="text-base pt-3 font-semibold text-primaryColor">

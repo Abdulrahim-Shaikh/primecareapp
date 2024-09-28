@@ -27,7 +27,7 @@ const DoctorSpeciality = () => {
           renderItem={({ item }) => (
             <View className="">
               <Pressable className="flex flex-row border border-borderColor p-2 rounded-lg">
-                <Text className=" bg-primaryColor rounded-md p-3 flex justify-center items-center">
+                <Text className=" bg-amber-900 rounded-md p-3 flex justify-center items-center">
                   <Ionicons name={item.icon as any} size={24} color={"white"} />
                 </Text>
                 <View className="px-3">

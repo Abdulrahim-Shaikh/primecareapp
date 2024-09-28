@@ -47,7 +47,7 @@ const OnBoardingSlider = () => {
   });
 
   return (
-    <SafeAreaView className="bg-primaryColor">
+    <SafeAreaView className="bg-amber-900">
       <View className=" absolute pt-8  w-full ">
         <View className="flex-row justify-between items-start w-full px-6">
           <View className="gap-4">

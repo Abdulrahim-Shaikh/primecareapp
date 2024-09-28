@@ -1,17 +1,17 @@
 import {
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Modal,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import React, { useState } from "react";
 import {
-  Feather,
-  FontAwesome,
-  MaterialCommunityIcons,
+    Feather,
+    FontAwesome,
+    MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import HeaderWithBackButton from "../../ui/HeaderWithBackButton";
 
@@ -60,7 +60,7 @@ const NotificationModal = ({
                     show ? "" : "hidden"
                   } `}
                 >
-                  <View className="flex flex-col z-50 bg-primaryColor py-3 w-[140px] rounded-xl">
+                  <View className="flex flex-col z-50 bg-amber-900 py-3 w-[140px] rounded-xl">
                     {sortByOptions.map((item, idx) => (
                       <Text
                         onPress={() => {

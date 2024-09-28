@@ -20,7 +20,7 @@ const HelpSupport = () => {
               className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed border-borderColor"
             >
               <Text className="text-base font-medium">FAQ</Text>
-              <Text className="bg-primaryColor rounded-full p-1 justify-center items-center">
+              <Text className="bg-amber-900 rounded-full p-1 justify-center items-center">
                 <Ionicons name="chevron-forward" color={"white"} size={20} />
               </Text>
             </Pressable>
@@ -29,7 +29,7 @@ const HelpSupport = () => {
               className=" flex-row justify-between items-center py-4 border-b border-dashed border-borderColor"
             >
               <Text className="text-base font-medium">Contact Us</Text>
-              <Text className="bg-primaryColor rounded-full p-1 justify-center items-center">
+              <Text className="bg-amber-900 rounded-full p-1 justify-center items-center">
                 <Ionicons name="chevron-forward" color={"white"} size={20} />
               </Text>
             </Pressable>
@@ -38,7 +38,7 @@ const HelpSupport = () => {
               className=" flex-row justify-between items-center pt-4 "
             >
               <Text className="text-base font-medium">Terms & Conditions</Text>
-              <Text className="bg-primaryColor rounded-full p-1 justify-center items-center">
+              <Text className="bg-amber-900 rounded-full p-1 justify-center items-center">
                 <Ionicons name="chevron-forward" color={"white"} size={20} />
               </Text>
             </Pressable>

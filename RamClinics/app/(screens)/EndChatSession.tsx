@@ -9,7 +9,7 @@ const EndChatSession = () => {
   return (
     <SafeAreaView className="p-6">
       <View className=" justify-center items-center pt-12 pb-8 border-b border-dashed border-borderColor">
-        <View className="p-6 rounded-full bg-primaryColor justify-center items-center">
+        <View className="p-6 rounded-full bg-amber-900 justify-center items-center">
           <AntDesign name="clockcircle" size={24} color="white" />
         </View>
         <Text className="text-2xl font-semibold text-primaryColor pt-6 ">
@@ -46,7 +46,7 @@ const EndChatSession = () => {
           onPress={() => router.push("/WriteReview")}
         >
           <Text
-            className={`text-center  py-3 px-4 rounded-lg border border-primaryColor text-base font-medium bg-primaryColor text-white`}
+            className={`text-center  py-3 px-4 rounded-lg border border-primaryColor text-base font-medium bg-amber-900 text-white`}
           >
             Leave a Review
           </Text>

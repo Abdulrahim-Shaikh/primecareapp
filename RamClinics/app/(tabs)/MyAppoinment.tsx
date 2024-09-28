@@ -145,11 +145,11 @@ const Appoinment = () => {
                   )}
 
                   {item.sessionStatus === "Upcoming" ? (
-                    <Text className="flex-1 text-white border border-primaryColor px-4 py-2 rounded-lg bg-primaryColor text-center">
+                    <Text className="flex-1 text-white border border-primaryColor px-4 py-2 rounded-lg bg-amber-900 text-center">
                       Change Date
                     </Text>
                   ) : (
-                    <Text className="flex-1 text-white border border-primaryColor px-4 py-2 rounded-lg bg-primaryColor text-center">
+                    <Text className="flex-1 text-white border border-primaryColor px-4 py-2 rounded-lg bg-amber-900 text-center">
                       Leave Review
                     </Text>
                   )}
@@ -188,7 +188,7 @@ const Appoinment = () => {
                 onPress={() => router.push("/CancelAppoinment")}
                 className="flex-1"
               >
-                <Text className="text-white border border-primaryColor rounded-lg py-4 bg-primaryColor text-center font-medium ">
+                <Text className="text-white border border-primaryColor rounded-lg py-4 bg-amber-900 text-center font-medium ">
                   Confirm
                 </Text>
               </Pressable>

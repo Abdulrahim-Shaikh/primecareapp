@@ -1,10 +1,10 @@
 import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
+    FlatList,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -40,7 +40,7 @@ const FaqPage = () => {
                       onPress={() => setActiveCategory(index)}
                       className={`text-base border border-primaryColor rounded-md py-1 px-3 ${
                         index === activeCategory
-                          ? "text-white bg-primaryColor"
+                          ? "text-white bg-amber-900"
                           : ""
                       }`}
                     >

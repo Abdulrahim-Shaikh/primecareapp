@@ -2,13 +2,13 @@ import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  Entypo,
-  Feather,
-  FontAwesome6,
-  Foundation,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
+    Entypo,
+    Feather,
+    FontAwesome6,
+    Foundation,
+    Ionicons,
+    MaterialCommunityIcons,
+    MaterialIcons,
 } from "@expo/vector-icons";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
@@ -16,7 +16,7 @@ const ChatWithCustomer = () => {
   const [message, setMessage] = useState(false);
   return (
     <SafeAreaView>
-      <ScrollView className="bg-primaryColor ">
+      <ScrollView className="bg-amber-900 ">
         <View className="px-6 pt-6 pb-20">
           <HeaderWithBackButton
             isPushBack={true}
@@ -40,7 +40,7 @@ const ChatWithCustomer = () => {
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
-              <View className="p-1 bg-primaryColor rounded-full">
+              <View className="p-1 bg-amber-900 rounded-full">
                 <Feather name="check" size={12} color="white" />
               </View>
             </View>
@@ -51,10 +51,10 @@ const ChatWithCustomer = () => {
                 <Feather name="headphones" size={24} color="#009281" />
               </View>
               <View className="">
-                <Text className="text-base text-white p-4 bg-primaryColor  rounded-b-xl rounded-tr-xl max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl max-w-[85%]">
                   Hello, good afternoon Andrew
                 </Text>
-                <Text className="text-base text-white p-4 bg-primaryColor  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
                   Can you tell me the problem you are having? So that I can
                   identify it
                 </Text>
@@ -67,10 +67,10 @@ const ChatWithCustomer = () => {
                 <Feather name="headphones" size={24} color="#009281" />
               </View>
               <View className="">
-                <Text className="text-base text-white p-4 bg-primaryColor  rounded-b-xl rounded-tr-xl max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl max-w-[85%]">
                   Hello, good afternoon Andrew
                 </Text>
-                <Text className="text-base text-white p-4 bg-primaryColor  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
                   Can you tell me the problem you are having? So that I can
                   identify it
                 </Text>
@@ -87,7 +87,7 @@ const ChatWithCustomer = () => {
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
-              <View className="p-1 bg-primaryColor rounded-full">
+              <View className="p-1 bg-amber-900 rounded-full">
                 <Feather name="check" size={12} color="white" />
               </View>
             </View>
@@ -144,7 +144,7 @@ const ChatWithCustomer = () => {
           </Text>
         </View>
         <View>
-          <Text className="p-3 bg-primaryColor rounded-full">
+          <Text className="p-3 bg-amber-900 rounded-full">
             <Ionicons name="paper-plane-outline" size={20} color="white" />
           </Text>
         </View>

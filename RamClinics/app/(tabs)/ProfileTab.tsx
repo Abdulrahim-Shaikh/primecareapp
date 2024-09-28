@@ -1,20 +1,20 @@
 import {
-  Image,
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
+    Image,
+    Modal,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  AntDesign,
-  Entypo,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
+    AntDesign,
+    Entypo,
+    Ionicons,
+    MaterialCommunityIcons,
+    MaterialIcons,
 } from "@expo/vector-icons";
 import profileImg from "../../assets/images/profile-settings-img.png";
 import { router } from "expo-router";
@@ -37,7 +37,7 @@ const ProfileTab = () => {
             <AntDesign name="user" size={24} color={"#009281"} />
             <Text className="text-2xl font-semibold">User Settings</Text>
           </View>
-          <View className="bg-primaryColor rounded-[20px] p-6 flex flex-row justify-between items-center">
+          <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">
             <View className="flex-row gap-4">
               <Image source={profileImg} />
               <View className="">
@@ -127,7 +127,7 @@ const ProfileTab = () => {
                   onPress={() => router.push("/SignIn")}
                   className="flex-1"
                 >
-                  <Text className="text-white border border-primaryColor rounded-lg py-4 bg-primaryColor text-center font-medium ">
+                  <Text className="text-white border border-primaryColor rounded-lg py-4 bg-amber-900 text-center font-medium ">
                     Logout
                   </Text>
                 </Pressable>

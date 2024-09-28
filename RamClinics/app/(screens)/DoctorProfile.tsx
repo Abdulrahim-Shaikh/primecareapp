@@ -2,10 +2,10 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import {
-  AntDesign,
-  Ionicons,
-  MaterialIcons,
-  Octicons,
+    AntDesign,
+    Ionicons,
+    MaterialIcons,
+    Octicons,
 } from "@expo/vector-icons";
 import profileImg from "../../assets/images/doctor-profile-img.png";
 import LinkButton from "../../components/LinkButton";
@@ -17,7 +17,7 @@ const DoctorProfile = () => {
         <View className="flex-row justify-between items-center pt-6 px-6 w-full">
           <Text
             onPress={() => router.back()}
-            className="bg-primaryColor rounded-full p-2"
+            className="bg-amber-900 rounded-full p-2"
           >
             <Ionicons name="chevron-back" color={"white"} size={20} />
           </Text>
@@ -29,7 +29,7 @@ const DoctorProfile = () => {
           <View className="-mt-16">
             <Image source={profileImg} />
           </View>
-          <View className="bg-primaryColor rounded-t-3xl p-6 -mt-20">
+          <View className="bg-amber-900 rounded-t-3xl p-6 -mt-20">
             <View className="flex-row justify-between items-start">
               <View>
                 <Text className="text-white font-semibold text-2xl">
