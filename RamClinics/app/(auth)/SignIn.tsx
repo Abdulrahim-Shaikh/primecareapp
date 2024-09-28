@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
 import NASButton from "../../components/NASButton";
+import logo from "../../assets/images/logo_transparent.png";
 
 const SignIn = () => {
 

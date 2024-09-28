@@ -32,7 +32,7 @@ const UpcomingSlider = () => {
   }: {
     viewableItems: ViewToken[];
   }) => {
-    if (viewableItems && viewableItems[0].index !== null) {
+    if (viewableItems && viewableItems[0]?.index !== null) {
       flatListIndex.value = viewableItems[0].index;
     }
   };
@@ -42,9 +42,9 @@ const UpcomingSlider = () => {
       x.value = event.contentOffset.x;
     },
   });
-  return (
+  return (  
     <View className="pt-8 overflow-hidden">
-      <Text className="text-xl font-semibold px-6">Upcoming Shedule</Text>
+      <Text className="text-xl font-semibold px-6">Upcoming Offers</Text>
       <View className="max-h-[245px]">
         <Animated.FlatList
           ref={flatListRef}

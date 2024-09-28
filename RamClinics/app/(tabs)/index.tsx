@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View, Text } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingSlider from "../../components/homePage/UpcomingSlider";
@@ -9,6 +9,10 @@ import FilterModal from "../../components/homePage/modal/FilterModal";
 import FavouriteModal from "../../components/homePage/modal/FavouriteModal";
 import Header from "../../components/homePage/Header";
 import userService from "../../domain/services/UserService";
+import SearchSection from "../../components/homePage/SearchSection";
+import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+import MainMenu from "../../components/homePage/MainMenu";
 
 const Home = () => {
   const [showNotification, setShowNotification] = useState(false);
@@ -29,6 +33,7 @@ const Home = () => {
           {/* <SearchSection setShowFilter={setShowFilter} />     */}
           <UpcomingSlider />
           <DoctorSpeciality />
+          <MainMenu />
           <TopDoctor />
         </View>
 

@@ -33,10 +33,14 @@ import creditCard from "../assets/images/card.png";
 import bank from "../assets/images/bank.png";
 
 //upcoming slider img
-import sliderImg1 from "../assets/images/upcoming-slider-img-1.png";
-import sliderImg2 from "../assets/images/upcoming-slider-img-2.png";
-import sliderImg3 from "../assets/images/upcoming-slider-img-3.png";
-import sliderImg4 from "../assets/images/upcoming-slider-img-4.png";
+// import sliderImg1 from "../assets/images/upcoming-slider-img-1.png";
+// import sliderImg2 from "../assets/images/upcoming-slider-img-2.png";
+// import sliderImg3 from "../assets/images/upcoming-slider-img-3.png";
+// import sliderImg4 from "../assets/images/upcoming-slider-img-4.png";
+import sliderImg1 from "../assets/images/doc1.png";
+import sliderImg2 from "../assets/images/doc2.png";
+import sliderImg3 from "../assets/images/doc3.png";
+import sliderImg4 from "../assets/images/doc3.png";
 
 export const onbordingSliderData = [
   {
@@ -510,26 +514,26 @@ export const faqData = [
 export const upcomingSliderData = [
   {
     id: 1,
-    title: "Consult with specialists, Prevent you",
-    desc: "Get special 10% discount this December",
+    title: "Liposuction (Minor)",
+    desc: "National Day Offer",
     img: sliderImg1,
   },
   {
     id: 2,
-    title: "Consult with specialists, Prevent you",
-    desc: "Get special 10% discount this December",
+    title: "",
+    desc: "Mohters Day SSC",
     img: sliderImg2,
   },
   {
     id: 3,
-    title: "Consult with specialists, Prevent you",
-    desc: "Get special 10% discount this December",
+    title: "LHR Full Body",
+    desc: "Dr. Daliya Friday",
     img: sliderImg3,
   },
   {
     id: 4,
-    title: "Consult with specialists, Prevent you",
-    desc: "Get special 10% discount this December",
+    title: "LHR Back and Chest",
+    desc: "Dr. Daliya Friday",
     img: sliderImg4,
   },
 ];

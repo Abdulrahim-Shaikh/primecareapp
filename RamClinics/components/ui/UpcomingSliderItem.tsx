@@ -20,10 +20,10 @@ const UpcomingSliderItem = ({ title, desc, doctorImg }: Props) => {
     >
       <View className="flex flex-row justify-between items-center w-full">
         <View className="max-w-[230px] pl-5 relative z-10">
-          <Text className="text-base font-semibold">
+          <Text className="text-lg font-semibold">
             {title} <Image source={arrow} />
           </Text>
-          <Text className=" text-xs pt-8">{desc}</Text>
+          <Text className=" text-base pt-8">{desc}</Text>
         </View>
         <View className=" relative" style={{ marginTop: -40 }}>
           <Image source={doctorImg} className=" z-10" />
