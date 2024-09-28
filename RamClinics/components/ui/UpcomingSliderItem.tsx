@@ -1,9 +1,9 @@
 import {
-    Image,
-    StyleSheet,
-    Text,
-    View,
-    useWindowDimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
 } from "react-native";
 import React from "react";
 import arrow from "../../assets/images/arrow.png";
@@ -16,7 +16,7 @@ const UpcomingSliderItem = ({ title, desc, doctorImg }: Props) => {
   return (
     <View
       style={{ width: SCREEN_WIDTH * 0.9, margin: SCREEN_WIDTH * 0.05 }}
-      className=" bg-amber-100 rounded-2xl mt-7"
+      className=" bg-amber-500 rounded-2xl mt-7"
     >
       <View className="flex flex-row justify-between items-center w-full">
         <View className="max-w-[230px] pl-5 relative z-10">

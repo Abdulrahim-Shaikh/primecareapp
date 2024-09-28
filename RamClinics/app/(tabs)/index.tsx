@@ -1,7 +1,6 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SearchSection from "../../components/homePage/SearchSection";
 import UpcomingSlider from "../../components/homePage/UpcomingSlider";
 import DoctorSpeciality from "../../components/homePage/DoctorSpeciality";
 import TopDoctor from "../(screens)/TopDoctor";
@@ -9,7 +8,6 @@ import NotificationModal from "../../components/homePage/modal/NotificationModal
 import FilterModal from "../../components/homePage/modal/FilterModal";
 import FavouriteModal from "../../components/homePage/modal/FavouriteModal";
 import Header from "../../components/homePage/Header";
-import { Link } from "expo-router";
 import userService from "../../domain/services/UserService";
 
 const Home = () => {
@@ -28,12 +26,7 @@ const Home = () => {
             setShowNotification={setShowNotification}
             setShowFavouriteModal={setShowFavouriteModal}
           />
-          <SearchSection setShowFilter={setShowFilter} />
-          <Link href="/SignIn">Navigate </Link>
-          
-          {
-            data.map(user => (<Text>user.firstName</Text>))
-          }
+          {/* <SearchSection setShowFilter={setShowFilter} />     */}
           <UpcomingSlider />
           <DoctorSpeciality />
           <TopDoctor />

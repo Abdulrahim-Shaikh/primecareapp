@@ -19,7 +19,7 @@ const Header = ({
         </View>
         <View>
           <Text className="text-lg font-semibold">HI, Mark!</Text>
-          <View className=" bg-amber-100 px-3 py-1 rounded-lg mt-2 flex flex-row">
+          <View className=" bg-amber-300 px-3 py-1 rounded-lg mt-2 flex flex-row">
             <Text className="text-[14px]">New York</Text>
             <Text className=" block pl-2 ">
               <Fontisto name="map-marker-alt" size={16} color="#009281" />
@@ -29,7 +29,7 @@ const Header = ({
       </View>
       <View className="flex flex-row gap-2">
         <TouchableOpacity
-          className="border border-bodyText rounded-lg p-2 relative"
+          className="border border-amber-900 rounded-lg p-2 relative"
           onPress={() => setShowNotification(true)}
         >
           <MaterialCommunityIcons name="bell-outline" size={20} />
@@ -37,7 +37,7 @@ const Header = ({
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setShowFavouriteModal(true)}
-          className="border border-bodyText rounded-lg p-2"
+          className="border border-amber-900 rounded-lg p-2"
         >
           <MaterialCommunityIcons name="heart-outline" size={20} />
         </TouchableOpacity>
