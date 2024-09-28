@@ -57,7 +57,7 @@ const menuItems = [
   {
     icon: "wallet-outline",
     title: "My Wallet",
-    link: "",
+    link: "/Wallets",
   },
 ];
 
