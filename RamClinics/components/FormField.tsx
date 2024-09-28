@@ -6,13 +6,15 @@ type PropsType = {
   placeholder: string;
   otherStyle?: string;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+  onChangeText(value: any): void;
 };
 
-const FormField = ({
+const FormField = ({  
   name,
   placeholder,
   otherStyle,
   keyboardType,
+  onChangeText
 }: PropsType) => {
   const [focus, setFocus] = useState(false);
   return (
@@ -20,7 +22,7 @@ const FormField = ({
       {name && <Text className="text-base font-medium">{name}</Text>}
       <View
         className={`px-4 py-3  border rounded-xl w-full mt-2 ${
-          focus ? "border-amber-900 " : "border-borderColor"
+          focus ? "border-amber-900 " : "text-amber-500"
         }`}
       >
         <TextInput
@@ -36,6 +38,7 @@ const FormField = ({
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           keyboardType={keyboardType ? keyboardType : "default"}
+          onChangeText={onChangeText}
         />
       </View>
     </View>

@@ -8,7 +8,7 @@ import { router } from "expo-router";
 const EndChatSession = () => {
   return (
     <SafeAreaView className="p-6">
-      <View className=" justify-center items-center pt-12 pb-8 border-b border-dashed border-borderColor">
+      <View className=" justify-center items-center pt-12 pb-8 border-b border-dashed text-amber-500">
         <View className="p-6 rounded-full bg-amber-900 justify-center items-center">
           <AntDesign name="clockcircle" size={24} color="white" />
         </View>

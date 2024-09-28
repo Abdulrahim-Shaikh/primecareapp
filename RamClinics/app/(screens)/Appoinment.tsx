@@ -59,7 +59,7 @@ const Appoinment = () => {
               <Pressable
                 key={idx}
                 onPress={() => setSelect(idx)}
-                className="flex-row justify-between items-center py-3 px-4 rounded-lg border border-borderColor"
+                className="flex-row justify-between items-center py-3 px-4 rounded-lg border text-amber-500"
               >
                 <View className="flex-row justify-start items-center ">
                   <RadioButton isActive={select === idx} />

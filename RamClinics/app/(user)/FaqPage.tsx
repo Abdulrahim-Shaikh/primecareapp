@@ -1,10 +1,10 @@
 import {
-    FlatList,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -55,7 +55,7 @@ const FaqPage = () => {
               {faqData.map(({ id, question, answer }, idx) => (
                 <Pressable
                   onPress={() => setActiveFaq(idx)}
-                  className="p-4 rounded-xl border border-borderColor"
+                  className="p-4 rounded-xl border text-amber-500"
                   key={id}
                 >
                   <View className="flex-row justify-between items-start">
@@ -71,7 +71,7 @@ const FaqPage = () => {
                     </Text>
                   </View>
                   {activeFaq === idx && (
-                    <Text className="pt-3  border-t border-dashed mt-3 border-borderColor">
+                    <Text className="pt-3  border-t border-dashed mt-3 text-amber-500">
                       {answer}
                     </Text>
                   )}

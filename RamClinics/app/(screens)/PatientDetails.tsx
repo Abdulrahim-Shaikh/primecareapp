@@ -1,10 +1,10 @@
 import {
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -79,7 +79,7 @@ const PatientDetails = () => {
                 <Text className="text-base font-semibold pb-3">
                   Write your problem
                 </Text>
-                <View className="px-4 py-3  border rounded-xl w-full border-borderColor">
+                <View className="px-4 py-3  border rounded-xl w-full text-amber-500">
                   <TextInput
                     multiline={true}
                     placeholder="Write here"

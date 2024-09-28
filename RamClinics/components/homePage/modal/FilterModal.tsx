@@ -42,7 +42,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
       <ScrollView className="p-6">
         <HeaderWithBackButton setModal={setShowFilter} title="Filter" />
 
-        <View className="pt-8 pr-3 flex-row justify-between items-center pb-4 border-b border-dashed border-borderColor">
+        <View className="pt-8 pr-3 flex-row justify-between items-center pb-4 border-b border-dashed text-amber-500">
           <Text className="text-lg font-semibold">Available Today</Text>
           <CustomSwitch />
         </View>
@@ -59,7 +59,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                 className={`justify-between items-center flex-row py-4 ${
                   sortOption.length - 1 === idx
                     ? ""
-                    : "border-b border-dashed border-borderColor"
+                    : "border-b border-dashed text-amber-500"
                 } `}
               >
                 <Text className="text-base font-medium">{item}</Text>
@@ -67,7 +67,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                   className={`border  w-5 h-5 rounded-full justify-center items-center ${
                     sortBy === idx
                       ? "border-amber-900"
-                      : " border-borderColor"
+                      : " text-amber-500"
                   }`}
                 >
                   <View

@@ -52,7 +52,7 @@ const CancelAppoinment = () => {
           <Text className="text-base font-semibold pb-3">
             Write your problem
           </Text>
-          <View className="px-4 py-3  border rounded-xl w-full border-borderColor">
+          <View className="px-4 py-3  border rounded-xl w-full text-amber-500">
             <TextInput
               multiline={true}
               placeholder="Write here"

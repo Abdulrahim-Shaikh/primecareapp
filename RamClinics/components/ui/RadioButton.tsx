@@ -5,7 +5,7 @@ const RadioButton = ({ isActive }: { isActive: boolean }) => {
   return (
     <View
       className={`border  w-5 h-5 rounded-full justify-center items-center ${
-        isActive ? "border-amber-900" : " border-borderColor"
+        isActive ? "border-amber-900" : " text-amber-500"
       }`}
     >
       <View

@@ -13,7 +13,7 @@ const LinkButton = ({ link, text }: PropsType) => {
       onPress={() => router.push(link)}
       className="  w-full py-4 rounded-lg bg-amber-900 "
     >
-      <Text className="text-white text-base  font-medium text-center">
+      <Text className="text-white text-base font-medium text-center">
         {text}
       </Text>
     </Pressable>

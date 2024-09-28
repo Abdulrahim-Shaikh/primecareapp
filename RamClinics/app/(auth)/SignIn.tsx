@@ -1,14 +1,26 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, router } from "expo-router";
-import fb from "../../assets/images/fb.png";
-import google from "../../assets/images/google.png";
-import apple from "../../assets/images/apple.png";
 import FormField from "../../components/FormField";
-import LinkButton from "../../components/LinkButton";
+import { router } from "expo-router";
+import NASButton from "../../components/NASButton";
 
 const SignIn = () => {
+
+  let mobileNo = '';
+
+  const sendOtp = () => {
+    if(!mobileNo) {
+      Alert.alert('Mobile No Should no be empty. ' + mobileNo)
+    }else {
+      router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo}});
+    } 
+  }
+
+  const onChangeText = (val: string) => {
+    mobileNo = val;
+  };
+
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
@@ -18,25 +30,25 @@ const SignIn = () => {
             Access your account securely. Sign in to manage your personalized
             experience.
           </Text>
-          <View className="w-full pt-8">
-            <FormField name="Email" placeholder="Email" />
-            <FormField
-              name="Password"
-              placeholder="*******"
-              otherStyle="mt-4"
-            />
+          <View className="w-full pt-8 pb-8">
+            <FormField name="Mobile No" placeholder="Mobile No" onChangeText={onChangeText} />
+            {/* <FormField name="Password" placeholder="*******" otherStyle="mt-4" /> */}
           </View>
-          <View className="text-amber-500 flex items-end w-full pt-2 pb-7">
+          {/* <View className="text-amber-500 flex items-end w-full pt-2 pb-7">
             <Link
               href={"/ForgetPassword"}
               className="text-[14px] text-text-amber-500 font-bold"
             >
               Forgot password?
             </Link>
-          </View>
-          <LinkButton link="/" text="Sign In" />
+          </View> */}
+          {/* <LinkButton link="/VerifyOTP" text="Send Otp" /> */}
 
-          <View className="pt-8">
+          {/* <Button onPress={sendOtp} title="Send OTP"> </Button> */}
+
+          <NASButton title="Send Otp"   onPress={sendOtp}/>
+
+          {/* <View className="pt-8">
             <View>
               <Text className="text-[14px] font-semibold text-center">
                 Or Continue With
@@ -67,7 +79,7 @@ const SignIn = () => {
                 here
               </Text>
             </View>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>

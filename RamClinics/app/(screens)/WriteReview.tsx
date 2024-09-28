@@ -23,7 +23,7 @@ const WriteReview = () => {
         <View>
           <HeaderWithBackButton isPushBack={true} title="Write a Review" />
         </View>
-        <View className=" justify-center items-center pt-12 pb-8 border-b border-dashed border-borderColor">
+        <View className=" justify-center items-center pt-12 pb-8 border-b border-dashed text-amber-500">
           <Image source={profileImg} />
           <Text className="text-xl pt-8 text-center font-semibold">
             How was your experience with Dr. Dianne Johnson
@@ -41,7 +41,7 @@ const WriteReview = () => {
             <Text className="text-base font-semibold ">Write your review</Text>
             <Text className="text-xs text-amber-900">Max 250 words</Text>
           </View>
-          <View className="px-4 py-3  border rounded-xl w-full border-borderColor">
+          <View className="px-4 py-3  border rounded-xl w-full text-amber-500">
             <TextInput
               multiline={true}
               placeholder="Write your review"

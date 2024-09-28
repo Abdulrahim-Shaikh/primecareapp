@@ -64,7 +64,7 @@ const DoctorCard = ({
         <Text className=" text-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-amber-900 px-4 py-2 rounded-lg">
           Appoinment
         </Text>
-        <Text className="w-[32vw] border-b border-dashed mb-4 border-borderColor"></Text>
+        <Text className="w-[32vw] border-b border-dashed mb-4 text-amber-500"></Text>
         <Text className="text-lg font-semibold">${fee}</Text>
       </View>
     </View>

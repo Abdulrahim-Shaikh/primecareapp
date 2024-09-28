@@ -105,7 +105,7 @@ const ProfileTab = () => {
             style={{ backgroundColor: "rgba(52, 52, 52, 0.5)" }}
           >
             <View className="bg-white w-full pt-16 px-6 pb-6 rounded-t-[60px] ">
-              <View className="pb-4 border-b border-dashed border-borderColor">
+              <View className="pb-4 border-b border-dashed text-amber-500">
                 <Text className="text-[#ff5630] text-2xl text-center font-semibold ">
                   Log Out
                 </Text>

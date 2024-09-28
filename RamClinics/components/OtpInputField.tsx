@@ -1,21 +1,33 @@
 import {
-    NativeSyntheticEvent,
-    StyleSheet,
-    TextInput,
-    TextInputKeyPressEventData,
-    View,
+  NativeSyntheticEvent,
+  StyleSheet,
+  TextInput,
+  TextInputKeyPressEventData,
+  View,
 } from "react-native";
 import React, { useRef } from "react";
 
 type Nullable<T> = T | null;
 
-const OtpInputField = ({ disabled }: { disabled: boolean }) => {
+type PropsType = {
+  // link: string;
+  // title: string;
+  disabled: boolean
+  onPress(otp: string[]): void
+};
+
+const OtpInputField = ({ disabled, onPress }: PropsType) => {
+  
   const inputRefs = useRef<Array<Nullable<TextInput>>>([]);
+  let otpValue: string[] = [];
 
   const handleChange = (text: string, idx: number) => {
+    otpValue[idx] = text;
+    onPress(otpValue)    
     if (text.length !== 0) {
       return inputRefs?.current[idx + 1]?.focus();
     }
+    
     return inputRefs?.current[idx - 1]?.focus();
   };
 

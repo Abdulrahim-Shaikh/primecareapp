@@ -14,15 +14,15 @@ const NotificationSettings = () => {
             <Text className="text-base font-semibold text-amber-900">
               Manage Notification
             </Text>
-            <View className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed border-borderColor">
+            <View className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500">
               <Text className="text-base font-medium">Sound</Text>
               <CustomSwitch />
             </View>
-            <View className=" flex-row justify-between items-center py-4 border-b border-dashed border-borderColor">
+            <View className=" flex-row justify-between items-center py-4 border-b border-dashed text-amber-500">
               <Text className="text-base font-medium">Vibrate</Text>
               <CustomSwitch />
             </View>
-            <View className=" flex-row justify-between items-center py-4 border-b border-dashed border-borderColor">
+            <View className=" flex-row justify-between items-center py-4 border-b border-dashed text-amber-500">
               <Text className="text-base font-medium">New tips available</Text>
               <CustomSwitch />
             </View>
