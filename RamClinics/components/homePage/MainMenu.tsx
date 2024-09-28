@@ -7,7 +7,7 @@ const menuItems = [
   {
     icon: "calendar-number-outline",
     title: "My Appoinments",
-    link: "/MyAppointment",
+    link: "(tabs)/MyAppointment",
   },
   {
     icon: "people-outline",
@@ -17,7 +17,7 @@ const menuItems = [
   {
     icon: "shield-checkmark-outline",
     title: "My Approvals",
-    link: "",
+    link: "/MyApprovals",
   },
   {
     icon: "receipt-outline",
