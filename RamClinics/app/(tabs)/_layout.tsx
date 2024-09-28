@@ -3,7 +3,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import {
-  AntDesign, MaterialCommunityIcons
+  AntDesign, FontAwesome, MaterialCommunityIcons
 } from "@expo/vector-icons";
 
 const TabIcon = ({
@@ -35,7 +35,13 @@ const TabIcon = ({
             color={focused ? "white" : "#009281"}
           />
         )}
-
+        {iconName === "gift" && (
+          <FontAwesome
+            name="gift"
+            size={20}
+            color={focused ? "white" : "#009281"}
+          />
+        )}
         {iconName === "user" && (
           <AntDesign
             name="user"
@@ -92,6 +98,16 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon iconName="calendar" focused={focused} />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="Promotions"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon iconName="gift" focused={focused} />
             ),
           }}
         />
