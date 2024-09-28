@@ -45,6 +45,12 @@ const ProfileTab = () => {
                   Nayeem Raj
                 </Text>
                 <Text className="text-white text-base pt-2">+0123456789</Text>
+
+                <Pressable onPress={() => router.push("/UserProfile")}
+                className="bg-amber-500 mt-4 rounded-full content-center items-center">
+                <Text className="text-md text-white text-base">View Profile</Text>
+                </Pressable>
+
               </View>
             </View>
             <Pressable
