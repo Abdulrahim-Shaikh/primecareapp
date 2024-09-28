@@ -5,7 +5,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 const Searchbox = () => {
   const [searchValue, setSearchValue] = useState("");
   return (
-    <View className="flex flex-row justify-start items-center border border-borderColor rounded-xl p-3 flex-1 mr-1">
+    <View className="flex flex-row justify-start items-center border border-amber-900rounded-xl p-3 flex-1 mr-1">
       <Ionicons
         color={"#c3c3ce"}
         name="search"

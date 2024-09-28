@@ -1,23 +1,23 @@
 import {
-    Image,
-    Modal,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-    AntDesign,
-    Entypo,
-    Feather, FontAwesome6,
-    Foundation,
-    Ionicons,
-    MaterialCommunityIcons,
-    MaterialIcons
+  AntDesign,
+  Entypo,
+  Feather, FontAwesome6,
+  Foundation,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons
 } from "@expo/vector-icons";
 import profileImg from "../../assets/images/done-profile-img.png";
 import profileImg2 from "../../assets/images/chat-reply-img.png";
@@ -64,16 +64,16 @@ const ChatBox = () => {
                 onPress={() => router.push("/AudioCall")}
                 className=" flex-row items-center"
               >
-                <View className="p-2 bg-secondaryBg border border-primaryColor rounded-full items-center justify-center">
+                <View className="p-2 bg-amber-100 border border-amber-900 rounded-full items-center justify-center">
                   <Ionicons name="call-outline" size={16} color="#009281" />
                 </View>
                 <Text className="pl-2 text-base">Audio Call</Text>
               </Pressable>
               <Pressable
                 onPress={() => router.push("/VideoCall")}
-                className=" flex-row items-center mt-3 border-b border-dashed border-borderColor pb-3"
+                className=" flex-row items-center mt-3 border-b border-dashed border-amber-900 pb-3"
               >
-                <View className="p-2 bg-secondaryBg border border-primaryColor rounded-full items-center justify-center">
+                <View className="p-2 bg-amber-100 border border-amber-900 rounded-full items-center justify-center">
                   <Feather name="video" size={16} color="#009281" />
                 </View>
                 <Text className="pl-2 text-base">Video Call</Text>
@@ -93,21 +93,21 @@ const ChatBox = () => {
           </View>
         </View>
         <View
-          className="p-6 bg-secondaryBg rounded-t-3xl -mt-12 pb-24"
+          className="p-6 bg-amber-100 rounded-t-3xl -mt-12 pb-24"
           style={{ zIndex: -1 }}
         >
           <View className=" justify-center items-center">
-            <Text className="text-xs font-semibold px-8 py-2 border border-primaryColor rounded-full">
+            <Text className="text-xs font-semibold px-8 py-2 border border-amber-900 rounded-full">
               10 June, 2023
             </Text>
           </View>
           <View className="pt-8">
             <View className=" justify-end flex-row items-end gap-2">
               <View className=" max-w-[85%]">
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl">
                   Hi, good afternoon Dr. Jenny Wilson
                 </Text>
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl mt-2">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl mt-2">
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
@@ -120,7 +120,7 @@ const ChatBox = () => {
             <View className=" justify-start flex-row items-start gap-2">
               <View>
                 <Image source={profileImg2} />
-                <Text className="text-xs text-bodyText text-center">09.12</Text>
+                <Text className="text-xs text-amber-900 text-center">09.12</Text>
               </View>
 
               <View className="">
@@ -138,7 +138,7 @@ const ChatBox = () => {
             <View className=" justify-start flex-row items-start gap-2">
               <View>
                 <Image source={profileImg2} />
-                <Text className="text-xs text-bodyText text-center">09.10</Text>
+                <Text className="text-xs text-amber-900 text-center">09.10</Text>
               </View>
               <View className="">
                 <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl max-w-[85%]">
@@ -154,10 +154,10 @@ const ChatBox = () => {
           <View className="pt-8">
             <View className=" justify-end flex-row items-end gap-2">
               <View className=" max-w-[85%]">
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl">
                   Hi, good afternoon Dr. Jenny Wilson
                 </Text>
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl mt-2">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl mt-2">
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
@@ -169,7 +169,7 @@ const ChatBox = () => {
         </View>
       </ScrollView>
       <View
-        className={`absolute bottom-0 right-0 left-0 bg-secondaryBg px-4 pb-4 justify-between ${
+        className={`absolute bottom-0 right-0 left-0 bg-amber-100 px-4 pb-4 justify-between ${
           message ? "items-end" : "items-center"
         } flex-row gap-2 `}
       >
@@ -197,7 +197,7 @@ const ChatBox = () => {
           )}
         </View>
         <View
-          className={`flex-row px-4 py-2 rounded-[28px] border border-borderColor flex-1 justify-between ${
+          className={`flex-row px-4 py-2 rounded-[28px] border border-amber-900 flex-1 justify-between ${
             message ? "items-end" : "items-center"
           }`}
         >

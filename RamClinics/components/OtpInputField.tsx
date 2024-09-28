@@ -1,9 +1,9 @@
 import {
-  NativeSyntheticEvent,
-  StyleSheet,
-  TextInput,
-  TextInputKeyPressEventData,
-  View,
+    NativeSyntheticEvent,
+    StyleSheet,
+    TextInput,
+    TextInputKeyPressEventData,
+    View,
 } from "react-native";
 import React, { useRef } from "react";
 
@@ -34,7 +34,7 @@ const OtpInputField = ({ disabled }: { disabled: boolean }) => {
       {[...new Array(4)].map((item, idx) => (
         <View
           key={idx}
-          className="border border-primaryColor py-3 px-5 rounded-lg flex justify-center items-center"
+          className="border border-amber-900 py-3 px-5 rounded-lg flex justify-center items-center"
         >
           <TextInput
             ref={(ref) => {

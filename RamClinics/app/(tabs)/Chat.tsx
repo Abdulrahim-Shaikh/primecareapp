@@ -30,7 +30,7 @@ const Chat = () => {
               <Pressable
                 onPress={() => router.push("/ChatBox")}
                 key={`key:${id}`}
-                className="p-4 border border-borderColor rounded-2xl flex flex-row justify-between items-start"
+                className="p-4 border border-amber-900rounded-2xl flex flex-row justify-between items-start"
               >
                 <View className="flex flex-row justify-start items-center gap-4">
                   <Image source={img} style={{ height: 50, width: 50 }} />

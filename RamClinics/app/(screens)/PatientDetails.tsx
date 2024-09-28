@@ -33,10 +33,10 @@ const PatientDetails = () => {
                     <Text
                       onPress={() => setSelectAge(idx)}
                       key={idx}
-                      className={`border border-primaryColor rounded-md py-2 flex-1 font-medium text-center ${
+                      className={`border border-amber-900 rounded-md py-2 flex-1 font-medium text-center ${
                         selectAge === idx
                           ? "text-white bg-amber-900"
-                          : "text-primaryColor"
+                          : "text-amber-900"
                       } `}
                     >
                       {item}+
@@ -62,10 +62,10 @@ const PatientDetails = () => {
                       key={idx}
                     >
                       <Text
-                        className={`text-center  py-2 px-8 rounded-lg border border-primaryColor text-base font-medium ${
+                        className={`text-center  py-2 px-8 rounded-lg border border-amber-900 text-base font-medium ${
                           item === activeGenter
                             ? "bg-amber-900 text-white"
-                            : "text-primaryColor"
+                            : "text-amber-900"
                         }`}
                       >
                         {item}

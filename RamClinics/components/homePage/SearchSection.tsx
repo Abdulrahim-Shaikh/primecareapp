@@ -10,7 +10,7 @@ const SearchSection = ({
 }) => {
   return (
     <View className="pt-8 px-6">
-      <Text className="text-bodyText font-semibold pb-2">Friday, July 15</Text>
+      <Text className="text-amber-900 font-semibold pb-2">Friday, July 15</Text>
       <Text className="text-[24px] font-semibold">Let’s Find Your Doctor</Text>
       <View className="flex flex-row justify-between items-center pt-6 w-full">
         <Searchbox />

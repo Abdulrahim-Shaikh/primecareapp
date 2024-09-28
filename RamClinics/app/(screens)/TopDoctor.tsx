@@ -45,7 +45,7 @@ const TopDoctor = () => {
               <Pressable>
                 <Text
                   onPress={() => setActiveCategory(index)}
-                  className={`text-base border border-primaryColor rounded-md py-1 px-3 ${
+                  className={`text-base border border-amber-900 rounded-md py-1 px-3 ${
                     index === activeCategory ? "text-white bg-amber-900" : ""
                   }`}
                 >

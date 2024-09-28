@@ -11,7 +11,7 @@ const DoctorSpeciality = () => {
         <Text className=" text-xl font-semibold">Doctor Speciality</Text>
         <Text
           onPress={() => router.push("/DoctorSpecialityPage")}
-          className=" font-semibold text-primaryColor"
+          className=" font-semibold text-amber-900"
         >
           View All
         </Text>
@@ -26,7 +26,7 @@ const DoctorSpeciality = () => {
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => (
             <View className="">
-              <Pressable className="flex flex-row border border-borderColor p-2 rounded-lg">
+              <Pressable className="flex flex-row border border-amber-900p-2 rounded-lg">
                 <Text className=" bg-amber-900 rounded-md p-3 flex justify-center items-center">
                   <Ionicons name={item.icon as any} size={24} color={"white"} />
                 </Text>

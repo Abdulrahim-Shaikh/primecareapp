@@ -107,7 +107,7 @@ const OnBoardingSlider = () => {
           </View>
           <View className="flex justify-between items-center flex-row px-6">
             <Pressable onPress={() => router.push("/SignIn")}>
-              <Text className="font-semibold text-primaryColor">Skip</Text>
+              <Text className="font-semibold text-amber-900">Skip</Text>
             </Pressable>
             <SliderButton
               flatListRef={flatListRef}

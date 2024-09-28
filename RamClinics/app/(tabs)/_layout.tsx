@@ -16,7 +16,7 @@ const TabIcon = ({
   return (
     <View className="flex items-center justify-center gap-2">
       <Text
-        className={`p-3 rounded-lg ${focused ? "bg-neutralColor" : "bg-white"}`}
+        className={`p-3 rounded-lg ${focused ? "bg-amber-500" : "bg-white"}`}
       >
         {iconName === "home" && (
           <Entypo name="home" size={20} color={focused ? "white" : "#009281"} />
@@ -45,7 +45,7 @@ const TabIcon = ({
         )}
       </Text>
       {focused && (
-        <View className="w-2 h-2 rounded-full bg-neutralColor absolute top-[50px] left-[18px] z-50"></View>
+        <View className="w-2 h-2 rounded-full bg-amber-500 absolute top-[50px] left-[18px] z-50"></View>
       )}
     </View>
   );

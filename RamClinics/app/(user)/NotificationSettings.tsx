@@ -10,8 +10,8 @@ const NotificationSettings = () => {
       <ScrollView>
         <View className="p-6">
           <HeaderWithBackButton isPushBack={true} title="Notification" />
-          <View className="mt-8 p-6 border border-primaryColor bg-secondaryBg rounded-xl">
-            <Text className="text-base font-semibold text-primaryColor">
+          <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
+            <Text className="text-base font-semibold text-amber-900">
               Manage Notification
             </Text>
             <View className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed border-borderColor">

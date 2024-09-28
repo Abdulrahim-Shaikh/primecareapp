@@ -19,7 +19,7 @@ const Header = ({
         </View>
         <View>
           <Text className="text-lg font-semibold">HI, Mark!</Text>
-          <View className=" bg-secondaryBg px-3 py-1 rounded-lg mt-2 flex flex-row">
+          <View className=" bg-amber-100 px-3 py-1 rounded-lg mt-2 flex flex-row">
             <Text className="text-[14px]">New York</Text>
             <Text className=" block pl-2 ">
               <Fontisto name="map-marker-alt" size={16} color="#009281" />

@@ -23,10 +23,10 @@ const DoctorCard = ({
   fee,
 }: Props) => {
   return (
-    <View className="p-4 border border-borderColor rounded-2xl w-full mt-4">
+    <View className="p-4 border border-amber-900 rounded-2xl w-full mt-4">
       <View className="flex flex-row w-full justify-between items-start">
         <View className="flex flex-row justify-start items-center">
-          <View className="bg-secondaryBg rounded-lg overflow-hidden mr-3 ">
+          <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
             <Image source={img} />
           </View>
 
@@ -39,7 +39,7 @@ const DoctorCard = ({
             </Text>
             <Text className="py-2">
               {department} <Entypo name="dot-single" />
-              <Text className="text-[12px] text-bodyText">{medicalName}</Text>
+              <Text className="text-[12px] text-amber-900">{medicalName}</Text>
             </Text>
             <Text className="text-[12px]">
               <Text>
@@ -49,19 +49,19 @@ const DoctorCard = ({
               <Text>
                 <Entypo name="dot-single" />
               </Text>
-              <Text className="text-primaryColor">
+              <Text className="text-amber-900">
                 <AntDesign name="clockcircle" /> {availableTime}
               </Text>
             </Text>
           </View>
         </View>
 
-        <View className=" border border-primaryColor p-2 rounded-md ">
+        <View className=" border border-amber-900 p-2 rounded-md ">
           <Ionicons name="heart-outline" size={16} color={"#009281"} />
         </View>
       </View>
       <View className="flex flex-row justify-between items-center pt-3">
-        <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+        <Text className=" text-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-amber-900 px-4 py-2 rounded-lg">
           Appoinment
         </Text>
         <Text className="w-[32vw] border-b border-dashed mb-4 border-borderColor"></Text>

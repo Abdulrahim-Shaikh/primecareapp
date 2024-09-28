@@ -56,13 +56,13 @@ const Appoinment = () => {
                 onPress={() => setActiveTab(item)}
                 className={`flex-1 border-b  pb-2 ${
                   activeTab === item
-                    ? "border-primaryColor"
+                    ? "border-amber-900"
                     : "border-borderColor"
                 }`}
               >
                 <Text
                   className={`text-center font-semibold ${
-                    activeTab === item ? "text-primaryColor" : ""
+                    activeTab === item ? "text-amber-900" : ""
                   }`}
                 >
                   {item}
@@ -75,11 +75,11 @@ const Appoinment = () => {
             {filteredItem.map((item, idx) => (
               <View
                 key={`key: ${item.id}`}
-                className="p-4 border border-borderColor rounded-2xl w-full mt-4"
+                className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
               >
-                <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-borderColor pb-4">
+                <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
                   <View className="flex flex-row justify-start items-center ">
-                    <View className="bg-secondaryBg rounded-lg overflow-hidden mr-3 ">
+                    <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
                       <Image source={item.img} />
                     </View>
 
@@ -96,7 +96,7 @@ const Appoinment = () => {
                               "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
                             } ${
                               item.sessionStatus === "Completed" &&
-                              "text-primaryColor bg-secondaryBg px-2 py-1 rounded-md"
+                              "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
                             } ${
                               item.sessionStatus === "Cancelled" &&
                               "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
@@ -115,14 +115,14 @@ const Appoinment = () => {
                         <Text>
                           <Entypo name="dot-single" />
                         </Text>
-                        <Text className="text-primaryColor">
+                        <Text className="text-amber-900">
                           <AntDesign name="clockcircle" /> {item.availableTime}
                         </Text>
                       </Text>
                     </View>
                   </View>
 
-                  <View className=" border border-primaryColor p-2 rounded-md ">
+                  <View className=" border border-amber-900 p-2 rounded-md ">
                     <Ionicons
                       name="heart-outline"
                       size={16}
@@ -134,22 +134,22 @@ const Appoinment = () => {
                   {item.sessionStatus === "Upcoming" ? (
                     <Text
                       onPress={() => setCancelModal(true)}
-                      className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center"
+                      className=" text-amber-900	 border-t-[1px] border-x-[1px] border-b-[2px] border-amber-900	 px-4 py-2 rounded-lg flex-1 text-center"
                     >
                       Cancel
                     </Text>
                   ) : (
-                    <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
+                    <Text className=" text-amber-900	 border-t-[1px] border-x-[1px] border-b-[2px] border-amber-900	 px-4 py-2 rounded-lg flex-1 text-center">
                       Book Again
                     </Text>
                   )}
 
                   {item.sessionStatus === "Upcoming" ? (
-                    <Text className="flex-1 text-white border border-primaryColor px-4 py-2 rounded-lg bg-amber-900 text-center">
+                    <Text className="flex-1 text-white border border-amber-900	 px-4 py-2 rounded-lg bg-amber-900 text-center">
                       Change Date
                     </Text>
                   ) : (
-                    <Text className="flex-1 text-white border border-primaryColor px-4 py-2 rounded-lg bg-amber-900 text-center">
+                    <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center">
                       Leave Review
                     </Text>
                   )}
@@ -171,7 +171,7 @@ const Appoinment = () => {
                 Cancel Appointment
               </Text>
             </View>
-            <Text className="text-lg pt-4 text-center text-bodyText">
+            <Text className="text-lg pt-4 text-center text-amber-900">
               Are you sure you want to cancel?
             </Text>
 
@@ -180,7 +180,7 @@ const Appoinment = () => {
                 onPress={() => setCancelModal(false)}
                 className="flex-1"
               >
-                <Text className="text-primaryColor border border-primaryColor rounded-lg py-4 bg-secondaryBg text-center font-medium ">
+                <Text className="text-amber-900	border border-bg-amber-900 rounded-lg py-4 bg-amber-100 text-center font-medium ">
                   Cancel
                 </Text>
               </Pressable>
@@ -188,7 +188,7 @@ const Appoinment = () => {
                 onPress={() => router.push("/CancelAppoinment")}
                 className="flex-1"
               >
-                <Text className="text-white border border-primaryColor rounded-lg py-4 bg-amber-900 text-center font-medium ">
+                <Text className="text-white border border-bg-amber-900 rounded-lg py-4 bg-amber-900 text-center font-medium ">
                   Confirm
                 </Text>
               </Pressable>

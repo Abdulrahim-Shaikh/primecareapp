@@ -10,7 +10,7 @@ const LegalPolicies = () => {
       <View className="pt-8">
         <ScrollView>
           <Text className="text-lg font-semibold">Terms</Text>
-          <Text className="text-base text-bodyText pt-2">
+          <Text className="text-base text-amber-900 pt-2">
             Our Legal and Policies outline the terms and conditions governing
             the use of our services. By accessing or using our platform, you
             agree to abide by these terms, which include but are not limited to,
@@ -23,7 +23,7 @@ const LegalPolicies = () => {
           <Text className="text-lg font-semibold pt-8">
             Changes to the Service and/or Terms:
           </Text>
-          <Text className="text-base text-bodyText pt-2">
+          <Text className="text-base text-amber-900 pt-2">
             Changes to the Service and/or Terms" refers to our commitment to
             continuously improve and update our platform to enhance user
             experience and comply with legal requirements. We reserve the right
@@ -31,7 +31,7 @@ const LegalPolicies = () => {
             features, functionalities, and access levels, at any time without
             prior notice. Additionally.
           </Text>
-          <Text className="text-base text-bodyText pt-2">
+          <Text className="text-base text-amber-900 pt-2">
             we may revise these terms of service to reflect changes in our
             business practices, industry standards, or regulatory obligations.
             Any updates to the terms will be effective immediately upon posting
@@ -45,7 +45,7 @@ const LegalPolicies = () => {
           <Text className="text-lg font-semibold pt-8">
             How We Collect Data
           </Text>
-          <Text className="text-base text-bodyText pt-2">
+          <Text className="text-base text-amber-900 pt-2">
             Our Legal and Policies outline the terms and conditions governing
             the use of our services. By accessing or using our platform, you
             agree to abide by these terms, which include but are not limited to,

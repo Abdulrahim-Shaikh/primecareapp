@@ -22,14 +22,14 @@ const DoctorSpecialityPage = () => {
           {doctorSpecialityData2.map(({ name, img, totalDoctor }, idx) => (
             <Pressable
               onPress={() => router.push("/TopDoctor")}
-              className="w-[45%] border border-primaryColor rounded-lg justify-center items-center p-4"
+              className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
               key={idx}
             >
-              <View className="p-3 rounded-md border border-primaryColor">
+              <View className="p-3 rounded-md border border-amber-900">
                 <Image source={img} />
               </View>
               <Text className="text-base font-semibold pt-3">{name}</Text>
-              <Text className="item-center flex-row text-bodyText pt-1">
+              <Text className="item-center flex-row text-amber-900 pt-1">
                 {totalDoctor} doctors{" "}
                 <Feather name="arrow-right" size={14} color="#454567" />{" "}
               </Text>

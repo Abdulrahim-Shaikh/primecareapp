@@ -13,7 +13,7 @@ const ForgetPassword = () => {
           <Text className="text-2xl font-bold text-center">
             Forgot Password
           </Text>
-          <Text className="text-[14px] text-bodyText text-center pt-3">
+          <Text className="text-[14px] text-amber-900 text-center pt-3">
             Reset your password securely for uninterrupted access to your
             account.
           </Text>

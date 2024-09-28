@@ -20,7 +20,7 @@ const FormField = ({
       {name && <Text className="text-base font-medium">{name}</Text>}
       <View
         className={`px-4 py-3  border rounded-xl w-full mt-2 ${
-          focus ? "border-primaryColor " : "border-borderColor"
+          focus ? "border-amber-900 " : "border-borderColor"
         }`}
       >
         <TextInput

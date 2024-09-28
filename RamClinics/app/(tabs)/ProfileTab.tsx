@@ -1,20 +1,20 @@
 import {
-    Image,
-    Modal,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-    AntDesign,
-    Entypo,
-    Ionicons,
-    MaterialCommunityIcons,
-    MaterialIcons,
+  AntDesign,
+  Entypo,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import profileImg from "../../assets/images/profile-settings-img.png";
 import { router } from "expo-router";
@@ -67,7 +67,7 @@ const ProfileTab = () => {
                 onPress={() => onPressFunction(name, link)}
               >
                 <View className="flex-row items-center gap-4">
-                  <View className="bg-secondaryBg rounded-full p-3">
+                  <View className="bg-amber-100 rounded-full p-3">
                     <Ionicons name={icon as any} size={24} color="#009281" />
                   </View>
                   <Text className="text-lg font-semibold">{name}</Text>
@@ -110,7 +110,7 @@ const ProfileTab = () => {
                   Log Out
                 </Text>
               </View>
-              <Text className="text-lg pt-4 text-center text-bodyText">
+              <Text className="text-lg pt-4 text-center text-amber-900">
                 Are you sure you want to log out?
               </Text>
 
@@ -119,7 +119,7 @@ const ProfileTab = () => {
                   onPress={() => setLogoutModal(false)}
                   className="flex-1"
                 >
-                  <Text className="text-primaryColor border border-primaryColor rounded-lg py-4 bg-secondaryBg text-center font-medium ">
+                  <Text className="text-amber-900 border border-amber-900 rounded-lg py-4 bg-amber-100 text-center font-medium ">
                     Cancel
                   </Text>
                 </Pressable>
@@ -127,7 +127,7 @@ const ProfileTab = () => {
                   onPress={() => router.push("/SignIn")}
                   className="flex-1"
                 >
-                  <Text className="text-white border border-primaryColor rounded-lg py-4 bg-amber-900 text-center font-medium ">
+                  <Text className="text-white border border-amber-900 rounded-lg py-4 bg-amber-900 text-center font-medium ">
                     Logout
                   </Text>
                 </Pressable>

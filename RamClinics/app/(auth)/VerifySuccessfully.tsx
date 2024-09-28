@@ -30,7 +30,7 @@ const VerifySuccessfully = () => {
             <Text className="text-2xl font-bold text-center">
               Reset Successfully!
             </Text>
-            <Text className="text-[14px] text-bodyText text-center pt-3 px-6">
+            <Text className="text-[14px] text-amber-900 text-center pt-3 px-6">
               Your password has been reset successfully. Please login with new
               credentials.
             </Text>

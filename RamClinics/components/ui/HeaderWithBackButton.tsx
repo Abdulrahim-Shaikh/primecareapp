@@ -30,7 +30,7 @@ const HeaderWithBackButton = ({
         <Pressable
           onPress={() => router.back()}
           className={` rounded-full p-2 justify-center items-center ${
-            isTextWhite ? "bg-white text-primaryColor" : "bg-amber-900"
+            isTextWhite ? "bg-white text-amber-900" : "bg-amber-900"
           }`}
         >
           <Ionicons

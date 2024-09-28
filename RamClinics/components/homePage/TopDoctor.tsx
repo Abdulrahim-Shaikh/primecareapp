@@ -11,7 +11,7 @@ const TopDoctor = () => {
         <Text className=" text-xl font-semibold">Top Doctor</Text>
         <Text
           onPress={() => router.push("/TopDoctor")}
-          className=" font-semibold text-primaryColor"
+          className=" font-semibold text-amber-900"
         >
           View All
         </Text>

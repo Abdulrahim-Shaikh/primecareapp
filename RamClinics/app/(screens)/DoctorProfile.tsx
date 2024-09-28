@@ -12,7 +12,7 @@ import LinkButton from "../../components/LinkButton";
 
 const DoctorProfile = () => {
   return (
-    <View className="bg-secondaryBg pt-6">
+    <View className="bg-amber-100 pt-6">
       <View className="h-full justify-between items-start w-full">
         <View className="flex-row justify-between items-center pt-6 px-6 w-full">
           <Text
@@ -87,7 +87,7 @@ const DoctorProfile = () => {
           </View>
           <View className="p-6 rounded-t-2xl bg-white -mt-10">
             <Text className="text-xl font-semibold">About Doctor</Text>
-            <Text className=" text-bodyText py-5">
+            <Text className=" text-amber-900 py-5">
               Dr. Dianne Johnson is a dedicated gynecologist committed to
               women's health and well-being. With expertise in obstetrics and
               gynecology, she provides compassionate care, emphasizing

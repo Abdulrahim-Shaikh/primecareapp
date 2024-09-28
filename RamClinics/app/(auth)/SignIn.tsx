@@ -14,7 +14,7 @@ const SignIn = () => {
       <ScrollView>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
           <Text className="text-2xl font-bold text-center">Sign In</Text>
-          <Text className="text-[14px] text-bodyText text-center pt-3">
+          <Text className="text-[14px] text-amber-900 text-center pt-3">
             Access your account securely. Sign in to manage your personalized
             experience.
           </Text>
@@ -26,10 +26,10 @@ const SignIn = () => {
               otherStyle="mt-4"
             />
           </View>
-          <View className="text-primaryColor flex items-end w-full pt-2 pb-7">
+          <View className="text-amber-500 flex items-end w-full pt-2 pb-7">
             <Link
               href={"/ForgetPassword"}
-              className="text-[14px] text-primaryColor font-bold"
+              className="text-[14px] text-text-amber-500 font-bold"
             >
               Forgot password?
             </Link>
@@ -44,22 +44,22 @@ const SignIn = () => {
             </View>
 
             <View className="flex flex-row gap-4 pt-8 justify-center items-center">
-              <View className="border border-borderColor rounded-full p-3">
+              <View className="border border-amber-900 rounded-full p-3">
                 <Image source={fb} />
               </View>
-              <View className="border border-borderColor rounded-full p-3">
+              <View className="border border-amber-900 rounded-full p-3">
                 <Image source={google} />
               </View>
-              <View className="border border-borderColor rounded-full p-3">
+              <View className="border border-amber-900 rounded-full p-3">
                 <Image source={apple} />
               </View>
             </View>
 
             <View className="pt-4">
-              <Text className="text-base text-bodyText text-center">
+              <Text className="text-base text-amber-900 text-center">
                 Don't have an account?{" "}
                 <Text
-                  className=" text-primaryColor"
+                  className=" text-amber-900"
                   onPress={() => router.push("/SignUp")}
                 >
                   Sign up

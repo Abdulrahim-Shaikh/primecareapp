@@ -2,13 +2,13 @@ import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-    Entypo,
-    Feather,
-    FontAwesome6,
-    Foundation,
-    Ionicons,
-    MaterialCommunityIcons,
-    MaterialIcons,
+  Entypo,
+  Feather,
+  FontAwesome6,
+  Foundation,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
@@ -24,19 +24,19 @@ const ChatWithCustomer = () => {
             isTextWhite={true}
           />
         </View>
-        <View className="p-6 bg-secondaryBg rounded-t-3xl -mt-12 pb-24">
+        <View className="p-6 bg-amber-100 rounded-t-3xl -mt-12 pb-24">
           <View className=" justify-center items-center">
-            <Text className="text-xs font-semibold px-8 py-2 border border-primaryColor rounded-full">
+            <Text className="text-xs font-semibold px-8 py-2 border border-amber-900 rounded-full">
               10 June, 2023
             </Text>
           </View>
           <View className="pt-8">
             <View className=" justify-end flex-row items-end gap-2">
               <View className=" max-w-[85%]">
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl">
                   Hi, good afternoon Dr. Jenny Wilson
                 </Text>
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl mt-2">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl mt-2">
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
@@ -80,10 +80,10 @@ const ChatWithCustomer = () => {
           <View className="pt-8">
             <View className=" justify-end flex-row items-end gap-2">
               <View className=" max-w-[85%]">
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl">
                   Hi, good afternoon Dr. Jenny Wilson
                 </Text>
-                <Text className="text-base text-bodyText p-4 bg-white border border-borderColor rounded-t-xl rounded-bl-xl mt-2">
+                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl mt-2">
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
@@ -95,7 +95,7 @@ const ChatWithCustomer = () => {
         </View>
       </ScrollView>
       <View
-        className={`absolute bottom-0 right-0 left-0 bg-secondaryBg px-4 pb-4 justify-between ${
+        className={`absolute bottom-0 right-0 left-0 bg-amber-100 px-4 pb-4 justify-between ${
           message ? "items-end" : "items-center"
         } flex-row gap-2 `}
       >
@@ -123,7 +123,7 @@ const ChatWithCustomer = () => {
           )}
         </View>
         <View
-          className={`flex-row px-4 py-2 rounded-[28px] border border-borderColor flex-1 justify-between ${
+          className={`flex-row px-4 py-2 rounded-[28px] border border-amber-900 flex-1 justify-between ${
             message ? "items-end" : "items-center"
           }`}
         >

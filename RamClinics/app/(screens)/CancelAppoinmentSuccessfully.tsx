@@ -30,7 +30,7 @@ const CancelAppoinmentSuccessfully = () => {
             <Text className="text-2xl font-bold text-center">
               Cancel Successfully!
             </Text>
-            <Text className="text-[14px] text-bodyText text-center pt-3 px-6">
+            <Text className="text-[14px] text-amber-900 text-center pt-3 px-6">
               Your appoinment has been cencelled successfully. All details can
               be found in history section.
             </Text>
