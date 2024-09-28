@@ -22,12 +22,12 @@ const menuItems = [
   {
     icon: "receipt-outline",
     title: "My Invoioces",
-    link: "",
+    link: "/MyInvoices",
   },
   {
     icon: "document-text-outline",
     title: "My Prescriptions",
-    link: "",
+    link: "/MyPrescription",
   },
   {
     icon: "flask-outline",
