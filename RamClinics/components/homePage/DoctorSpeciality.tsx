@@ -11,8 +11,7 @@ const DoctorSpeciality = () => {
         <Text className=" text-xl font-semibold">Doctor Speciality</Text>
         <Text
           onPress={() => router.push("/DoctorSpecialityPage")}
-          className=" font-semibold text-amber-900"
-        >
+          className=" font-semibold text-amber-900">
           View All
         </Text>
       </View>

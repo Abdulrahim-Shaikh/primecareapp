@@ -12,8 +12,14 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { doctorSpecialityData2 } from "../../constants/data";
+import specialtyService from "../../domain/services/SpecialtyService";
 
 const DoctorSpecialityPage = () => {
+
+  specialtyService.findAll().then((res) => {
+    let specialtyData = res.data
+  });
+
   return (
     <SafeAreaView>
       <ScrollView className="p-6">
@@ -21,7 +27,7 @@ const DoctorSpecialityPage = () => {
         <View className="flex-row flex-wrap gap-4 pt-8 pb-16">
           {doctorSpecialityData2.map(({ name, img, totalDoctor }, idx) => (
             <Pressable
-              onPress={() => router.push("/TopDoctor")}
+              onPress={() => router.push("/CityPage")}
               className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
               key={idx}
             >
