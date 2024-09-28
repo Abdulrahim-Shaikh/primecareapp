@@ -93,6 +93,16 @@ const TabLayout = () => {
         />
 
         <Tabs.Screen
+          name="BookAppointment"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon iconName="calendar" focused={focused} />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
           name="MyAppoinment"
           options={{
             headerShown: false,
