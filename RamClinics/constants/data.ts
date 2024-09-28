@@ -136,6 +136,70 @@ export const topDoctorData = [
   },
 ];
 
+export const servicesList = [
+  {
+    id: uuid.v4(),
+    img: friendPic1,
+    name: "Jane Cooper",
+    message: "Hi Cooper how are you...",
+  },
+  {
+    id: uuid.v4(),
+    img: friendPic2,
+    name: "Gerald Hernandez",
+    message: "Hi Gerald how are you...",
+  },
+  {
+    id: uuid.v4(),
+    img: friendPic3,
+    name: "Martin Santos",
+    message: "Hi Martin how are you...",
+  },
+  {
+    id: uuid.v4(),
+    img: friendPic4,
+    name: "Ethan Greer",
+    message: "Hi Ethan how are you...",
+  },
+  {
+    id: uuid.v4(),
+    img: friendPic5,
+    name: "Birdie Perry",
+    message: "Hi Birdie how are you...",
+  },
+  {
+    id: uuid.v4(),
+    img: friendPic6,
+    name: "Lela Lindsey",
+    message: "Hi Lela how are you...",
+  },
+];
+
+
+export const serviceData = [
+  {
+    id: 1,
+    serviceNameAr: "طب أسنان الأسرة",
+    serviceNameEn: "Family Dentistry",
+  },
+  {
+    id: 2,
+    serviceNameAr: "اللثة",
+    serviceNameEn: "Family Dentistry",
+  },
+  {
+    id: 3,
+    serviceNameAr: "طب الأسنان الحفظي",
+    serviceNameEn: "Family Dentistry",
+  },
+  {
+    id: 4,
+    serviceNameAr: "طب الأسنان الوقائي",
+    serviceNameEn: "Maxillofacial Surgery and Implantology",
+  },
+]
+
+
 export const friendChatList = [
   {
     id: uuid.v4(),

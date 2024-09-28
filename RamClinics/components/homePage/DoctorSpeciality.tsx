@@ -4,6 +4,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { doctorSpecialityData } from "../../constants/data";
 
+
 const DoctorSpeciality = () => {
   return (
     <View className="pt-8">

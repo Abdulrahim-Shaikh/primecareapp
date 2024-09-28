@@ -1,10 +1,13 @@
 import {
+  Button,
   Image,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -18,6 +21,8 @@ import {
 import { router } from "expo-router";
 import { myAppoinmentData } from "../../constants/data";
 import Searchbox from "../../components/ui/Searchbox";
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 const tabNames = ["Upcoming", "Completed", "Cancelled"];
 
@@ -25,6 +30,28 @@ const Appoinment = () => {
   const [cancelModal, setCancelModal] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [filteredItem, setFilteredItem] = useState(myAppoinmentData);
+  const [fromDate, setFromDate] = useState(new Date());  // State for start date
+  const [toDate, setToDate] = useState(new Date());
+  const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
+  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false); 
+
+  const onStartDateChange = (selectedDate: any) => {
+    const currentDate = selectedDate || fromDate;
+    setIsFromDatePickerOpen(Platform.OS === 'ios');
+    setFromDate(currentDate);
+
+    // Ensure the end date is after the start date
+    if (currentDate > toDate) {
+      setToDate(currentDate);
+    }
+  };
+
+  // Handle End Date Change
+  const onEndDateChange = (selectedDate: any) => {
+    const currentDate = selectedDate || toDate;
+    setIsToDatePickerOpen(Platform.OS === 'ios');
+    setToDate(currentDate);
+  };
 
   useEffect(() => {
     const filteredData = myAppoinmentData.filter(
@@ -48,6 +75,47 @@ const Appoinment = () => {
           </View>
           <View className="pt-8">
             <Searchbox />
+          </View>
+          <View>
+            <Text>Start Date: {fromDate.toString()}</Text>
+            <Button title="Select Start Date" onPress={() => setIsFromDatePickerOpen(true)} />
+            <Modal visible={isFromDatePickerOpen} transparent={true} animationType="slide">
+              <View>
+                {isFromDatePickerOpen && (
+                  <DateTimePicker
+                    testID="startDatePicker"
+                    value={fromDate}
+                    mode="date"
+                    display="default"
+                    onChange={onStartDateChange}
+                    maximumDate={new Date()} // Optional: Limit selection to today or earlier
+                  />
+                )}
+                <Button title="Confirm" onPress={() => setIsFromDatePickerOpen(false)} />
+              </View>
+            </Modal>
+
+
+            <Text>End Date: {toDate.toString()}</Text>
+            <Button title="Select End Date" onPress={() => setIsToDatePickerOpen(true)} />
+
+            {/* Modal for End Date Picker */}
+            <Modal visible={isToDatePickerOpen} transparent={true} animationType="slide">
+              <View>
+                {isToDatePickerOpen && (
+                  <DateTimePicker
+                    testID="endDatePicker"
+                    value={toDate}
+                    mode="date"
+                    display="default"
+                    onChange={onEndDateChange}
+                    minimumDate={fromDate} // Ensure end date is after start date
+                    maximumDate={new Date()} // Optional: Limit selection to today or earlier
+                  />
+                )}
+                <Button title="Confirm" onPress={() => setIsToDatePickerOpen(false)} />
+              </View>
+            </Modal>
           </View>
           <View className="pt-6 flex flex-row  justify-between items-center">
             {tabNames.map((item, idx) => (
@@ -132,16 +200,20 @@ const Appoinment = () => {
                 </View>
                 <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
                   {item.sessionStatus === "Upcoming" ? (
-                    <Text
-                      onPress={() => setCancelModal(true)}
-                      className=" text-amber-900	 border-t-[1px] border-x-[1px] border-b-[2px] border-amber-900	 px-4 py-2 rounded-lg flex-1 text-center"
-                    >
-                      Cancel
-                    </Text>
+                    <TouchableOpacity>
+                      <Text
+                        onPress={() => setCancelModal(true)}
+                        className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center"
+                      >
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
                   ) : (
-                    <Text className=" text-amber-900	 border-t-[1px] border-x-[1px] border-b-[2px] border-amber-900	 px-4 py-2 rounded-lg flex-1 text-center">
-                      Book Again
-                    </Text>
+                    <TouchableOpacity>
+                      <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
+                        Book Again
+                      </Text>
+                    </TouchableOpacity>
                   )}
 
                   {item.sessionStatus === "Upcoming" ? (
