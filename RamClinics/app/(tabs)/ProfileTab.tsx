@@ -20,10 +20,15 @@ import profileImg from "../../assets/images/profile-settings-img.png";
 import { router } from "expo-router";
 import { profileSettings } from "../../constants/data";
 import CustomSwitch from "../../components/CustomSwitch";
+import { useUserSate } from "../../domain/state/UserState";
 
 const ProfileTab = () => {
   const [logoutModal, setLogoutModal] = useState(false);
-
+  let setUser  = useUserSate.getState().setUser;
+  let user  = useUserSate.getState().user;
+  let patientName  = useUserSate.getState().patientName;
+  let setLoggedOut  = useUserSate.getState().setLoggedOut;
+  console.log("user", user)
   function onPressFunction(name: string, link: string) {
     if (name === "Dark Mode") return;
 
@@ -42,13 +47,14 @@ const ProfileTab = () => {
               <Image source={profileImg} />
               <View className="">
                 <Text className="text-white text-xl font-semibold">
-                  Nayeem Raj
+                  {user && patientName ? patientName : "Guest"}
                 </Text>
-                <Text className="text-white text-base pt-2">+0123456789</Text>
-
+                <Text className="text-white text-base pt-2">
+                  {user && user.mobile ? user.mobile : "+0123456789"}
+                </Text>
                 <Pressable onPress={() => router.push("/UserProfile")}
-                className="bg-amber-500 mt-4 rounded-full content-center items-center">
-                <Text className="text-md text-white text-base">View Profile</Text>
+                  className="bg-amber-500 mt-4 rounded-full content-center items-center">
+                  <Text className="text-md text-white text-base">View Profile</Text>
                 </Pressable>
 
               </View>

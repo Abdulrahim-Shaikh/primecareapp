@@ -9,8 +9,10 @@ import {
 } from "@expo/vector-icons";
 import profileImg from "../../assets/images/UserIcon.png";
 import LinkButton from "../../components/LinkButton";
+import { useUserSate } from "../../domain/state/UserState";
 
 const UserProfile = () => {
+  const { user,setUser } = useUserSate();
   return (
     <View className="bg-amber-100 pt-6">
       <View className="h-full justify-between items-start w-full">
@@ -30,20 +32,20 @@ const UserProfile = () => {
             <Image source={profileImg} />
           </View>
           <View className="text-amber-950 justify-center items-center text m-1">
-            <Text className="text-blue-500 text-xl font-semibold">person@ramClinic.com</Text>
+            <Text className="text-blue-500 text-xl font-semibold">{user && user.email ? user.email : "person@ramclinic.com"}</Text>
           </View>
           <View className="bg-amber-900 rounded-t-3xl p-6 ">
             <View className="flex-row justify-between items-start">
               <View>
                 <Text className=" text-white">First Name</Text>
                 <Text className="text-white font-semibold text-xl">
-                  Abdul Rehaman
+                {user && user.firstName ? user.firstName : "Unknown"}
                 </Text>
               </View>
               <View>
                 <Text className="text-base text-white">Last Name</Text>
                 <Text className=" text-white font-semibold text-xl">
-                  Sayed
+                {user && user.lastName ? user.lastName : "Person"}
                 </Text>
               </View>
               <View>

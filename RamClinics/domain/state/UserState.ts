@@ -19,7 +19,7 @@ export const useUserSate = create<UserState>()((set) => ({
     user: {},
     resource: {},
     loggedIn: false,
-    setUser: (userInfo) => set((state) => ({ user: state.user = userInfo, userId: userInfo.id, userName: userInfo.userName, loggedIn: true, patientName: userInfo.firstName + userInfo.lastName })),
+    setUser: (userInfo) => set((state) => ({ user: state.user = userInfo, userId: userInfo.id, userName: userInfo.userName, loggedIn: true, patientName: userInfo.firstName + ' ' + userInfo.lastName })),
     setResource: (resourceInfo) => set((state) => ({ user: state.resource = resourceInfo })),
     setLoggedOut: (userInfo) => set((state) => ({user: null, userName: '', loggedIn: false})),
 }));

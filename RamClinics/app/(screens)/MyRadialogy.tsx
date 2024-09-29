@@ -8,14 +8,14 @@ import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
 
-const MyPrescription = () => {
+const MyRadialogy = () => {
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
-    const [prescription, setPrescription] = useState([
+    const [radialogy, setRadialogy] = useState([
         { id: 1, totalAmount: 100, branch: "Branch A", date: new Date('2024-01-01') },
         { id: 2, totalAmount: 200, branch: "Branch B", date: new Date('2024-02-15') },
         { id: 3, totalAmount: 150, branch: "Branch C", date: new Date('2024-03-10') },
@@ -47,9 +47,9 @@ const MyPrescription = () => {
             <ScrollView>
                 <View className="pb-8 px-6 pt-4">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="My Prescription" />
+                        <HeaderWithBackButton isPushBack={true} title="My Radialogy" />
                         <MaterialCommunityIcons
-                            name="medical-bag"
+                            name="car-brake-temperature"
                             size={24}
                             color={"#009281"}
                         />
@@ -139,16 +139,16 @@ const MyPrescription = () => {
                     </View>
 
                     <View>
-                        {prescription.map((prescription) => (
-                            <View key={prescription.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                        {radialogy.map((radialogys) => (
+                            <View key={radialogys.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
                                 <View className="flex-row justify-between items-center">
-                                    <Text className="font-semibold">Prescription ID: {prescription.id}</Text>
+                                    <Text className="font-semibold">Radialogy ID: {radialogys.id}</Text>
                                     <AntDesign name="medicinebox" size={24} color="#007BFF" />
                                 </View>
                                 <Text style={styles.invoiceText}>
-                                    Total Amount: <Text style={styles.amount}>${prescription.totalAmount}</Text>
+                                    Total Amount: <Text style={styles.amount}>${radialogys.totalAmount}</Text>
                                 </Text>
-                                <Text style={styles.branchText}>Branch: {prescription.branch}</Text>
+                                <Text style={styles.branchText}>Branch: {radialogys.branch}</Text>
                             </View>
                         ))}
                     </View>
@@ -158,7 +158,7 @@ const MyPrescription = () => {
     );
 };
 
-export default MyPrescription;
+export default MyRadialogy;
 
 const styles = StyleSheet.create({
     invoiceText: {
