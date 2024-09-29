@@ -15,7 +15,7 @@ const Header = ({
 }) => {
 
   let setuser = useUserSate.getState().setUser;
-  let userName = useUserSate.getState().userName;
+  let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
 
   return (
@@ -25,7 +25,7 @@ const Header = ({
           <Image source={profileImg} />
         </View>
         <View>
-          <Text className="text-lg font-semibold">HI, {userName}</Text>
+          <Text className="text-lg font-semibold">HI, {patientName}</Text>
           <View className=" bg-amber-300 px-3 py-1 rounded-lg mt-2 flex flex-row">
             <Text className="text-[14px]">New York</Text>
             <Text className=" block pl-2 ">
