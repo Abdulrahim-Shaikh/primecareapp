@@ -31,8 +31,7 @@ const VerifyOTP = () => {
     }
   }
 
-  const verifyOtp = () => {
-    console.log(otpResp.otp, otp)
+  const verifyOtp = () => {    
       if(otpResp.otp == otp) {
         loginService.byMobileNo(mobileNo).then(res => {
           let user = res.data;
