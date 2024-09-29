@@ -19,29 +19,33 @@ const VerifyOTP = () => {
       otpResp = resp.data;
       console.log(otpResp)
     });
-  })  
+  }, [])  
 
   
   const onPressOtp = (otpVal: string[]) => {
-    if(otpVal.length == 4 ) {
-      otp = otpVal.join('');
+    let val = otpVal.join('')
+    if(val.length == 4 ) {
+      otp = val;
       verifyOtp();
     }
   }
 
+  // const setData: async (user: any) => {
+  //   await setUser(user);    
+  // };
+
   const verifyOtp = () => {    
-      if(otpResp.otp == otp) {
+      if(otpResp.otp == otp) {        
         loginService.byMobileNo(mobileNo).then(res => {
-          let user = res.data;
-          setUser(user);
-          router.navigate('/(tabs)');
-          console.log('==========successs=======');
-        })      
+          let user = res.data;                  
+          //useUserSate.getState().setUser(user);                          
+        }).then((data) =>  router.navigate('/(tabs)'));      
       } else {
         Alert.alert("Invalid OTP!")
       }    
   };
   
+
 
   return (
     <SafeAreaView className="bg-white h-full">
