@@ -1,14 +1,10 @@
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
 import { Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import profileImg from "../../assets/images/homePageProfileImg.png";
 import { useUserSate } from "../../domain/state/UserState";
-import { router } from "expo-router";
 
-let setuser = useUserSate.getState().setUser;
-let userName = useUserSate.getState().userName;
-let loggedIn = useUserSate.getState().loggedIn;
 
 const Header = ({
   setShowNotification,
@@ -17,6 +13,11 @@ const Header = ({
   setShowNotification: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFavouriteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+
+  let setuser = useUserSate.getState().setUser;
+  let userName = useUserSate.getState().userName;
+  let loggedIn = useUserSate.getState().loggedIn;
+
   return (
     <View className="w-full flex flex-row justify-between items-center px-6">
       <View className="flex flex-row justify-start items-center gap-3">
