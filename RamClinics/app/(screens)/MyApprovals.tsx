@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import branchService from "../../domain/services/BranchService";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const tabNames = ["Pending", "Approved", "Cancelled"];
 
@@ -46,12 +47,13 @@ const MyApprovals = () => {
             <ScrollView>
                 <View className="pb-8 px-6 pt-4">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
+                    <HeaderWithBackButton isPushBack={true} title="My Approvals" />
                         <MaterialCommunityIcons
                             name="receipt"
                             size={24}
                             color={"#009281"}
                         />
-                        <Text className="text-2xl font-semibold">My Approvals</Text>
+                        {/* <Text className="text-2xl font-semibold">My Approvals</Text> */}
                     </View>
                     <View className="pt-8 flex-row justify-between">
                         <View className="flex-1 mr-2">

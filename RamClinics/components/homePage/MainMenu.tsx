@@ -24,7 +24,7 @@ const MainMenu = () => {
     },
     {
       icon: "receipt-outline",
-      title: "My Invoioces",
+      title: "My Invoices",
       link: "/MyInvoices",
     },
     {
@@ -35,12 +35,12 @@ const MainMenu = () => {
     {
       icon: "flask-outline",
       title: "Labrotary",
-      link: "",
+      link: "/MyLabrotary",
     },
     {
       icon: "radio-outline",
       title: "Radiology",
-      link: "",
+      link: "/MyRadialogy",
     },
     {
       icon: "pricetag-outline",
@@ -50,7 +50,7 @@ const MainMenu = () => {
     {
       icon: "bandage-outline",
       title: "My Sick Leaves",
-      link: "",
+      link: "/MySickLeaves",
     },
     {
       icon: "accessibility-outline",

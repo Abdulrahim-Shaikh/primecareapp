@@ -9,7 +9,6 @@ import logo from "../../assets/images/logo_transparent.png";
 const SignIn = () => {
 
   let mobileNo = '';
-
   const sendOtp = () => {
     if(!mobileNo) {
       Alert.alert('Mobile No Should no be empty. ' + mobileNo)
