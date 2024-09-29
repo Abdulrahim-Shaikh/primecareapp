@@ -5,7 +5,6 @@ import { Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import profileImg from "../../assets/images/homePageProfileImg.png";
 import { useUserSate } from "../../domain/state/UserState";
 
-
 const Header = ({
   setShowNotification,
   setShowFavouriteModal,

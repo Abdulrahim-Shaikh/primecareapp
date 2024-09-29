@@ -4,76 +4,78 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const menuItems = [
-  {
-    icon: "calendar-number-outline",
-    title: "My Appoinments",
-    link: "/MyAppoinment",
-  },
-  {
-    icon: "people-outline",
-    title: "Family Members",
-    link: "",
-  },
-  {
-    icon: "shield-checkmark-outline",
-    title: "My Approvals",
-    link: "/MyApprovals",
-  },
-  {
-    icon: "receipt-outline",
-    title: "My Invoioces",
-    link: "/MyInvoices",
-  },
-  {
-    icon: "document-text-outline",
-    title: "My Prescriptions",
-    link: "/MyPrescription",
-  },
-  {
-    icon: "flask-outline",
-    title: "Labrotary",
-    link: "",
-  },
-  {
-    icon: "radio-outline",
-    title: "Radiology",
-    link: "",
-  },
-  {
-    icon: "pricetag-outline",
-    title: "Promotions",
-    link: "",
-  },
-  {
-    icon: "bandage-outline",
-    title: "My Sick Leaves",
-    link: "",
-  },
-  {
-    icon: "accessibility-outline",
-    title: "My Vital Signs",
-    link: "",
-  },
-  {
-    icon: "wallet-outline",
-    title: "My Wallet",
-    link: "/Wallets",
-  },
-];
-
 const MainMenu = () => {
+
+  const menuItems = [
+    {
+      icon: "calendar-number-outline",
+      title: "My Appoinments",
+      link: "/MyAppoinment",
+    },
+    {
+      icon: "people-outline",
+      title: "Family Members",
+      link: "",
+    },
+    {
+      icon: "shield-checkmark-outline",
+      title: "My Approvals",
+      link: "/MyApprovals",
+    },
+    {
+      icon: "receipt-outline",
+      title: "My Invoioces",
+      link: "/MyInvoices",
+    },
+    {
+      icon: "document-text-outline",
+      title: "My Prescriptions",
+      link: "/MyPrescription",
+    },
+    {
+      icon: "flask-outline",
+      title: "Labrotary",
+      link: "",
+    },
+    {
+      icon: "radio-outline",
+      title: "Radiology",
+      link: "",
+    },
+    {
+      icon: "pricetag-outline",
+      title: "Promotions",
+      link: "",
+    },
+    {
+      icon: "bandage-outline",
+      title: "My Sick Leaves",
+      link: "",
+    },
+    {
+      icon: "accessibility-outline",
+      title: "My Vital Signs",
+      link: "",
+    },
+    {
+      icon: "wallet-outline",
+      title: "My Wallet",
+      link: "/Wallets",
+    },
+  ];
+
   return (
     <SafeAreaView className="pt-8 w-full">
       <View className="flex flex-row justify-between px-6">
         <Text className=" text-xl font-semibold">Main Menu</Text>
       </View>
-      <ScrollView className="flex-1 flex-row pt-5 px-4 justify-center">        
+      <ScrollView className="flex-1 flex-row pt-5 px-4 ">        
+      
           <FlatList
             data={menuItems}
             numColumns={3}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center" }}
+            contentContainerStyle={{ alignItems: "center", justifyContent: "center" }}
             renderItem={({ item }) => (
               <View className="flex flex-row p-1 m-1 w-32 h-32">
                 <Pressable className="border border-amber-900 p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
@@ -84,7 +86,14 @@ const MainMenu = () => {
                 </Pressable>
               </View>
             )}
-          />        
+          />
+
+          {/* {
+            menuItems.map( item => (
+            
+            ))
+          }
+          </View> */}
       </ScrollView>
     </SafeAreaView>
   );
