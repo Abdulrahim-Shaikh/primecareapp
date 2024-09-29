@@ -7,11 +7,11 @@ export class BranchService extends RestService<any> {
     }
 
     filterByCity(city: any) {
-        return this.get('hisbranch' + "/getBranchesByCity" + city);
+        return this.get("getBranchesByCity" + city);
     }
 
     getAllActiveBranchNames(){
-        return this.get(this.entityName+ "/getAllActiveBranchNames")
+        return this.get("getAllActiveBranchNames")
     }
 }
 const branchService = new BranchService('hisbranch');
