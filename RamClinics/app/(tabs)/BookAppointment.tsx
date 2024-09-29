@@ -1,5 +1,7 @@
 import {
     Alert,
+    Platform,
+    FlatList,
     ScrollView,
     Text,
     TouchableOpacity,
@@ -13,7 +15,6 @@ import {
 import { useRouter } from "expo-router";
 import { SpecialityService } from "../../domain/services/SpecialityService";
 import { useEffect } from "react";
-
 
 const serviceData = [
     {
@@ -34,47 +35,13 @@ const serviceData = [
 ]
 
 const BookAppointment = () => {
-
     const router = useRouter();
-
-    let serviceOptionsDiv = [];
-    for (let i = 0; i < serviceData.length; i++) {
-        serviceOptionsDiv.push(
-            <TouchableOpacity onPress={
-                () => {
-                    Alert.alert('Search by Doctor or Service', 'Please select one', [
-                        {
-                            text: 'Doctor',
-                            onPress: () => router.push({
-                                pathname: "/SpecialistListPage",
-                                params: { option: serviceData[i].title }
-                            }),
-                            style: 'default'
-                        },
-                        {
-                            text: 'Service',
-                            onPress: () => router.push({
-                                pathname: "/ServiceListPage",
-                                params: { option: serviceData[i].title }
-                            }),
-                            style: 'default'
-                        },
-                    ],
-                    )
-                }
-            } key={i} className="bg-slate-300 flex flex-column border justify-stretch items-center border-borderColor p-2 rounded-lg">
-                <Ionicons className="flex justify-center justify-items-center justify-self-center" name={serviceData[i].icon as any} size={24} color={"white"} />
-                <Text>{serviceData[i].title}</Text>
-            </TouchableOpacity>
-        )
-    }
-
 
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className=" pb-8 px-6">
-                    <View className="flex flex-row justify-start items-center gap-4 pt-6">
+                <View className="">
+                    <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
                         <MaterialCommunityIcons
                             name="calendar-check-outline"
                             size={24}
@@ -82,8 +49,44 @@ const BookAppointment = () => {
                         />
                         <Text className="text-2xl font-semibold">Book Appointment</Text>
                     </View>
-                    <View className="pt-8 grid flex-row grid-flow-col justify-evenly">
-                        {serviceOptionsDiv}
+                    <View className="flex-row pt-5 px-4">
+                        <FlatList
+                            data={serviceData}
+                            numColumns={3}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) => (
+                                <View className="flex flex-row p-1 m-1 w-32 h-32">
+                                    <TouchableOpacity className="border border-amber-900 p-2 rounded-lg w-full" onPress={
+                                        () => {
+                                            Alert.alert('Search by Doctor or Service', 'Please select one', [
+                                                {
+                                                    text: 'Doctor',
+                                                    onPress: () => router.push({
+                                                        pathname: "/SpecialistListPage",
+                                                        params: { option: item.title }
+                                                    }),
+                                                    style: 'default'
+                                                },
+                                                {
+                                                    text: 'Service',
+                                                    onPress: () => router.push({
+                                                        pathname: "/ServiceListPage",
+                                                        params: { option: item.title }
+                                                    }),
+                                                    style: 'default'
+                                                },
+                                            ],
+                                            )
+                                        }
+                                    }>
+                                        <View className="py-2 items-center">
+                                            <Ionicons name={item.icon as any} size={36} color={"teal"} />
+                                        </View>
+                                        <Text className="text-sm font-semibold text-center text-teal-800 pt-3 pb-2">{item.title}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )}
+                        />
                     </View>
                 </View>
             </ScrollView>

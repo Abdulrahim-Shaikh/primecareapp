@@ -12,11 +12,11 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { doctorSpecialityData2 } from "../../constants/data";
-import specialtyService from "../../domain/services/SpecialtyService";
+import specialityService from "../../domain/services/SpecialityService";
 
 const DoctorSpecialityPage = () => {
 
-  specialtyService.findAll().then((res) => {
+  specialityService.findAll().then((res) => {
     let specialtyData = res.data
   });
 
