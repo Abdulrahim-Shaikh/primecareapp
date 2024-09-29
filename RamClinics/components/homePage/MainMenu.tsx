@@ -1,6 +1,6 @@
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -68,8 +68,7 @@ const MainMenu = () => {
       <View className="flex flex-row justify-between px-6">
         <Text className=" text-xl font-semibold">Main Menu</Text>
       </View>
-      <View className="flex-1 flex-row pt-5 px-4 justify-center">
-        <ScrollView>
+      <ScrollView className="flex-1 flex-row pt-5 px-4 justify-center">        
           <FlatList
             data={menuItems}
             numColumns={3}
@@ -85,9 +84,8 @@ const MainMenu = () => {
                 </Pressable>
               </View>
             )}
-          />
-        </ScrollView>
-      </View>
+          />        
+      </ScrollView>
     </SafeAreaView>
   );
 };
