@@ -27,7 +27,7 @@ const ServiceListPage = () => {
             })
             .catch((error) => {
                 console.log(error)
-            }) 
+            })
 
     })
 

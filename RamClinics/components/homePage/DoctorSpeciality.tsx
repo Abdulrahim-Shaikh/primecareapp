@@ -1,11 +1,18 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { doctorSpecialityData } from "../../constants/data";
-
+import specialityService from "../../domain/services/SpecialityService";
 
 const DoctorSpeciality = () => {
+
+  // let [specialtyList, setSpecialty] = useState([]);
+  // specialityService.findAll().then((spec) => {
+  //   setSpecialty(spec.data);
+  // })
+
+  
   return (
     <View className="pt-8">
       <View className="flex flex-row justify-between items-center w-full px-6">

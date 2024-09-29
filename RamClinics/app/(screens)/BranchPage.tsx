@@ -1,4 +1,4 @@
-import { router, Stack } from "expo-router";
+import { router, Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
@@ -10,9 +10,12 @@ const BranchPage = () => {
 
     let [branches, setBranches] = useState([]);
 
+    const { city } = useGlobalSearchParams();
+
     useEffect(() => {
         branchService.findAll().then((res) => {
             setBranches(res.data);
+
         });
     });
 
@@ -37,7 +40,6 @@ const BranchPage = () => {
                                         <View>
                                             <Text className="font-bodyText pt-1">
                                                 {item.city}
-
                                             </Text>
                                         </View>
                                     </View>
