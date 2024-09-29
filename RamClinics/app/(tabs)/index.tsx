@@ -32,10 +32,10 @@ const Home = () => {
           />
           {/* <SearchSection setShowFilter={setShowFilter} />     */}
           <View className="p-6 w-full items-center">
-            <View className="flex-row justify-between py-2 px-3 bg-amber-900 rounded-md w-4/5">
-              <Text className="text-white" onPress={() => router.push("/SignIn")}>Sign In to get details.. </Text>
+            <Pressable className="flex-row justify-between py-2 px-3 bg-amber-900 rounded-md w-4/5" onPress={() => router.push("/SignIn")}>
+              <Text className="text-white">Sign In to get details.. </Text>
               <Text className="text-teal-400 font-bold">  Sign In</Text>
-            </View>
+            </Pressable>
           </View>
           <UpcomingSlider />
           <DoctorSpeciality />
