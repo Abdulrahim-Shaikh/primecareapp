@@ -18,8 +18,6 @@ import NASButton from "../../components/NASButton";
 
 const Home = () => {
 
-  let setuser = useUserSate.getState().setUser;
-  let userName = useUserSate.getState().userName;
   let loggedIn = useUserSate.getState().loggedIn;
 
   const [showNotification, setShowNotification] = useState(false);
@@ -39,7 +37,7 @@ const Home = () => {
             <View className="py-4 w-full items-center">
               <View className="flex-row justify-between py-2 px-4 bg-amber-900 rounded-md w-4/5 h-[4.5rem]">
                 <Text className="text-white py-4">Sign In to get details.. </Text>
-                <Pressable className="bg-teal-400 py-2 my-2 rounded-sm" onPress={() => router.push("/SignIn")}>
+                <Pressable className="bg-emerald-500 py-2 my-2 rounded-sm" onPress={() => router.push("/SignIn")}>
                   <Text className="text-white font-bold"> Sign In </Text>
                 </Pressable>
               </View>

@@ -4,6 +4,7 @@ import React from "react";
 import { Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import profileImg from "../../assets/images/homePageProfileImg.png";
 import { useUserSate } from "../../domain/state/UserState";
+import userService from "../../domain/services/UserService";
 
 const Header = ({
   setShowNotification,
@@ -13,9 +14,13 @@ const Header = ({
   setShowFavouriteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
 
-  let setuser = useUserSate.getState().setUser;
+  let user = useUserSate.getState().user;
   let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
+  let branch = useUserSate.getState().branch;
+  // let profileUrl = '../../../../home/technas/uploads/patient/file/'+ user.photo[0];
+
+  // console.log('----------------user-------',user);
 
   return (
     <View className="w-full flex flex-row justify-between items-center px-6">
@@ -25,8 +30,8 @@ const Header = ({
         </View>
         <View>
           <Text className="text-lg font-semibold">HI, {patientName}</Text>
-          <View className=" bg-amber-300 px-3 py-1 rounded-lg mt-2 flex flex-row">
-            <Text className="text-[14px]">New York</Text>
+          <View className=" bg-amber-300 px-3 py-1 rounded-lg mt-2 flex flex-row justify-center">
+            <Text className="text-[14px]">{branch}</Text>
             <Text className=" block pl-2 ">
               <Fontisto name="map-marker-alt" size={16} color="#009281" />
             </Text>

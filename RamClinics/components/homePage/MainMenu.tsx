@@ -65,37 +65,29 @@ const MainMenu = () => {
   ];
 
   return (
-    <SafeAreaView className="pt-8 w-full">
+    <View className="pt-8 w-full">
       <View className="flex flex-row justify-between px-6">
         <Text className=" text-xl font-semibold">Main Menu</Text>
       </View>
-      <ScrollView className="flex-1 flex-row pt-5 px-4 ">        
-      
-          <FlatList
-            data={menuItems}
-            numColumns={3}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center", justifyContent: "center" }}
-            renderItem={({ item }) => (
-              <View className="flex flex-row p-1 m-1 w-32 h-32">
-                <Pressable className="border border-amber-900 p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
-                  <View className="py-2 items-center">
-                    <Ionicons name={item.icon as any} size={36} color={'maroon'} />
-                  </View>
-                  <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item.title}</Text>
-                </Pressable>
-              </View>
-            )}
-          />
-
-          {/* {
-            menuItems.map( item => (
-            
-            ))
-          }
-          </View> */}
-      </ScrollView>
-    </SafeAreaView>
+      <View className="flex-row pt-5 px-4">
+        <FlatList
+          data={menuItems}
+          numColumns={3}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ marginHorizontal:"auto"}}
+          renderItem={({ item }) => (
+            <View className="flex flex-row p-1 m-1 w-32 h-32">
+              <Pressable className="border border-amber-900 p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
+                <View className="py-2 items-center">
+                  <Ionicons name={item.icon as any} size={36} color={"maroon"} />
+                </View>
+                <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item.title}</Text>
+              </Pressable>
+            </View>
+          )}
+        />
+      </View>
+    </View>
   );
 };
 
