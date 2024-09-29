@@ -38,7 +38,7 @@ const VerifyOTP = () => {
       if(otpResp.otp == otp) {        
         loginService.byMobileNo(mobileNo).then(res => {
           let user = res.data;                  
-          //useUserSate.getState().setUser(user);                          
+          useUserSate.getState().setUser(user);                          
         }).then((data) =>  router.navigate('/(tabs)'));      
       } else {
         Alert.alert("Invalid OTP!")

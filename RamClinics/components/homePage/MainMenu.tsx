@@ -1,7 +1,8 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const menuItems = [
   {
@@ -63,28 +64,31 @@ const menuItems = [
 
 const MainMenu = () => {
   return (
-    <View className="pt-8">
-      <View className="flex flex-row justify-between items-center w-full px-6">
+    <SafeAreaView className="pt-8 w-full">
+      <View className="flex flex-row justify-between px-6">
         <Text className=" text-xl font-semibold">Main Menu</Text>
       </View>
-      <View className="flex-row pt-5 px-4">
-        <FlatList
-          data={menuItems}
-          numColumns={3}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View className="flex flex-row p-1 m-1 w-32 h-32">
-              <Pressable className="border border-amber-900 p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
-                <View className="py-2 items-center">
-                  <Ionicons name={item.icon as any} size={36} color={"teal"} />
-                </View>
-                <Text className="text-sm font-semibold text-center text-teal-800 pt-3 pb-2">{item.title}</Text>
-              </Pressable>
-            </View>
-          )}
-        />
+      <View className="flex-1 flex-row pt-5 px-4 justify-center">
+        <ScrollView>
+          <FlatList
+            data={menuItems}
+            numColumns={3}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: "center" }}
+            renderItem={({ item }) => (
+              <View className="flex flex-row p-1 m-1 w-32 h-32">
+                <Pressable className="border border-amber-900 p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
+                  <View className="py-2 items-center">
+                    <Ionicons name={item.icon as any} size={36} color={'maroon'} />
+                  </View>
+                  <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item.title}</Text>
+                </Pressable>
+              </View>
+            )}
+          />
+        </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
