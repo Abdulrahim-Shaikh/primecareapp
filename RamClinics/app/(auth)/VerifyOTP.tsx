@@ -11,8 +11,6 @@ const VerifyOTP = () => {
 
   const {mobileNo} = useLocalSearchParams();
   let {setUser} = useUserSate();
-
-
   let otpResp : any;
   let otp = '';
 
@@ -37,6 +35,7 @@ const VerifyOTP = () => {
           let user = res.data;
           setUser(user);
           router.navigate('/(tabs)');
+          console.log('==========successs=======');
         })      
       } else {
         Alert.alert("Invalid OTP!")

@@ -15,12 +15,10 @@ import { router } from "expo-router";
 import MainMenu from "../../components/homePage/MainMenu";
 
 const Home = () => {
+
   const [showNotification, setShowNotification] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showFavouriteModal, setShowFavouriteModal] = useState(false);
-
-  let data :any[]= [];
-  userService.findAll().then((response) => { data= response.data;console.log(response.data)});
 
   return (
     <SafeAreaView className="">
@@ -31,12 +29,6 @@ const Home = () => {
             setShowFavouriteModal={setShowFavouriteModal}
           />
           {/* <SearchSection setShowFilter={setShowFilter} />     */}
-          <View className="p-6 w-full items-center">
-            <Pressable className="flex-row justify-between py-2 px-3 bg-amber-900 rounded-md w-4/5" onPress={() => router.push("/SignIn")}>
-              <Text className="text-white">Sign In to get details.. </Text>
-              <Text className="text-teal-400 font-bold">  Sign In</Text>
-            </Pressable>
-          </View>
           <UpcomingSlider />
           <DoctorSpeciality />
           <MainMenu />
