@@ -71,7 +71,7 @@ const BookAppointment = () => {
                                                     text: 'Service',
                                                     onPress: () => router.push({
                                                         pathname: "/ServiceListPage",
-                                                        params: { option: item.title }
+                                                        params: { department: item.title }
                                                     }),
                                                     style: 'default'
                                                 },

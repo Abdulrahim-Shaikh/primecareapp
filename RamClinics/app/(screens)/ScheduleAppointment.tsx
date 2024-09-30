@@ -10,7 +10,6 @@ import { StyleSheet } from "react-native";
 import { useRouter, router, useLocalSearchParams } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import scheduleService from "../../domain/services/ScheduleService";
 import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import BookAppointment from "../(tabs)/BookAppointment";
