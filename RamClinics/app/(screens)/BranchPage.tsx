@@ -26,7 +26,7 @@ const BranchPage = () => {
                     <FlatList
                         contentContainerStyle={{ gap: 8 }}
                         data={branches}
-                        keyExtractor={(item, index) => "key" + index}
+                        keyExtractor={(item: any, index) => "key" + index}
                         renderItem={({ item }) => (
                             <View className="">
                                 <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg"

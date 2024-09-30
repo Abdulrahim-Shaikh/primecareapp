@@ -19,14 +19,20 @@ const Header = ({
   let loggedIn = useUserSate.getState().loggedIn;
   let branch = useUserSate.getState().branch;
   // let profileUrl = '../../../../home/technas/uploads/patient/file/'+ user.photo[0];
+  const BASE_URL = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
 
-  // console.log('----------------user-------',user);
+  const profilePhoto = user.profileImg && user.profileImg.length > 0
+    ? { uri: `${BASE_URL}${encodeURIComponent(user.profileImg[0])}` }
+    : profileImg;
 
+  console.log("User Data:", user);
+  console.log("Profile Photo URL:", profilePhoto);
   return (
     <View className="w-full flex flex-row justify-between items-center px-6">
       <View className="flex flex-row justify-start items-center gap-3">
         <View className=" rounded-xl overflow-hidden">
-          <Image source={profileImg} />
+          <Image source={profilePhoto} style={styles.profileImage} />
+
         </View>
         <View>
           <Text className="text-lg font-semibold">HI, {patientName}</Text>
@@ -60,4 +66,9 @@ const Header = ({
 
 export default Header;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  profileImage: {
+    width: 50, 
+    height: 50,
+  },
+});

@@ -28,7 +28,7 @@ const ProfileTab = () => {
   let user  = useUserSate.getState().user;
   let patientName  = useUserSate.getState().patientName;
   let setLoggedOut  = useUserSate.getState().setLoggedOut;
-  console.log("user", user)
+  console.log("user1", user)
   function onPressFunction(name: string, link: string) {
     if (name === "Dark Mode") return;
 

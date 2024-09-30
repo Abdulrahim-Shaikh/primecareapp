@@ -3,27 +3,23 @@ import { View, Modal, Pressable, StyleSheet, Text, Image, Alert, ActivityIndicat
 import { WebView } from 'react-native-webview';
 import pdfImg from "../../assets/images/pdf.png";
 
-interface InvoiceReportProps {
+interface SickLeavesReportProps {
     isVisible: boolean;
     pdfUri: string;
-    invoiceId: string | null;
+    orderId: string | null;
     onClose: () => void;
 }
 
-const InvoiceReport: React.FC<InvoiceReportProps> = ({ isVisible, pdfUri, invoiceId, onClose }) => {
+const SickLeavesReport: React.FC<SickLeavesReportProps> = ({ isVisible, pdfUri, orderId, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    console.log("InvoiceReport Props:", { isVisible, pdfUri, invoiceId });
+    console.log("RadialogyReport Props:", { isVisible, pdfUri, orderId });
 
     return (
-        <Modal visible={isVisible} transparent={true} animationType="slide">
+         <Modal visible={isVisible} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
-                <Text style={styles.invoiceIdText}>Invoice ID: {invoiceId}</Text>
-                {loading && (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator size="large" color="#007BFF" />
-                    </View>
-                )}
+                <Text style={styles.invoiceIdText}>Order ID: {orderId}</Text>
+                {loading && <ActivityIndicator size="large" color="#007BFF" />}
                 {error && <Text style={styles.errorText}>Failed to load PDF. Please try again.</Text>}
                 <Image style={styles.image} source={pdfImg} />
                 <WebView
@@ -47,7 +43,7 @@ const InvoiceReport: React.FC<InvoiceReportProps> = ({ isVisible, pdfUri, invoic
                     <Text style={styles.closeButtonText}>Close</Text>
                 </Pressable>
             </View>
-        </Modal>
+         </Modal>
     );
 };
 
@@ -63,14 +59,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 10,
-    },
-    loadingContainer: {
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-        top: '50%',
-        left: '50%',
-        zIndex: 1,
     },
     webView: {
         width: '100%',
@@ -97,4 +85,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default InvoiceReport;
+export default SickLeavesReport;
