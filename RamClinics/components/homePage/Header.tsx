@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 
 import { Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
-import emptyProfileImg from "../../assets/images/homePageProfileImg.png";
+import emptyProfileImg from "../../assets/images/avatar.png";
 import { useUserSate } from "../../domain/state/UserState";
 import httpService from "../../domain/services/core/HttpService";
 
@@ -21,10 +21,11 @@ const Header = ({
   
   const BASE_URL = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
 
-  const profilePhotoUrl = (user.profileImg && user.profileImg.length > 0) ?  {uri: `${BASE_URL}${encodeURIComponent(user.profileImg[0])}`} : emptyProfileImg;
+  const profilePhotoUrl = user.profileImg && user.profileImg.length>0 && user.profileImg[0].length>0 ? {uri: `${BASE_URL}${encodeURIComponent(user.profileImg[0])}`} : emptyProfileImg;
 
   console.log("User Data:", user);
   console.log("Profile Photo URL:", profilePhotoUrl);
+
   return (
     <View className="w-full flex flex-row justify-between items-center px-6">
       <View className="flex flex-row justify-start items-center gap-3">

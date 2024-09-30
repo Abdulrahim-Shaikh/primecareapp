@@ -16,24 +16,29 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import profileImg from "../../assets/images/profile-settings-img.png";
+import emptyProfileImg from "../../assets/images/avatar.png";
 import { router } from "expo-router";
 import { profileSettings } from "../../constants/data";
 import CustomSwitch from "../../components/CustomSwitch";
 import { useUserSate } from "../../domain/state/UserState";
 
 const ProfileTab = () => {
+
   const [logoutModal, setLogoutModal] = useState(false);
-  let setUser  = useUserSate.getState().setUser;
-  let user  = useUserSate.getState().user;
-  let patientName  = useUserSate.getState().patientName;
-  let setLoggedOut  = useUserSate.getState().setLoggedOut;
+  let setUser = useUserSate.getState().setUser;
+  let user = useUserSate.getState().user;
+  let patientName = useUserSate.getState().patientName;
+  let setLoggedOut = useUserSate.getState().setLoggedOut;
+
+  const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/"
+
   console.log("user1", user)
+
   function onPressFunction(name: string, link: string) {
     if (name === "Dark Mode") return;
-
     router.push(link);
   }
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -44,7 +49,11 @@ const ProfileTab = () => {
           </View>
           <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">
             <View className="flex-row gap-4">
-              <Image source={profileImg} />
+              { user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
+                <Image source={{ uri: `${sourceUrl}${encodeURIComponent(user.profileImg[0])}` }} className="w-16 h-16 rounded-lg" />
+                :
+                <Image source={emptyProfileImg} className="w-16 h-16 rounded-lg" />
+              }
               <View className="">
                 <Text className="text-white text-xl font-semibold">
                   {user && patientName ? patientName : "Guest"}
