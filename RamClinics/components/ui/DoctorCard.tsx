@@ -28,7 +28,7 @@ const DoctorCard = ({
         <View className="flex flex-row justify-start items-center">
           <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
             {/* <Image source={photo} /> */}
-            <Image source={{ uri: photo }} />
+           <Image source={{ uri: photo }} />
           </View>
 
           <View>

@@ -41,16 +41,14 @@ const MyInvoices = () => {
     };
 
     const filterInvoices = () => {
-        console.log("Filtering invoices...");
-        const filtered = invoices.filter((invoice: any) => {
-            const invoiceDate = new Date(invoice.invoiceDate);
-            const isWithinDateRange = invoiceDate >= fromDate && invoiceDate <= toDate;
-            const isBranchSelected = selectedValue ? invoice.branch === selectedValue : true;
-            const isActiveTab = invoice.invoiceStatus === activeTab;
-            console.log({ invoiceDate, isWithinDateRange, isBranchSelected, isActiveTab });
-            return isWithinDateRange && isBranchSelected && isActiveTab;
-        });
-        console.log("Filtered invoices:", filtered);
+        let filtered = invoices?.filter((item: any) => item.invoiceStatus === activeTab) || [];
+        if (selectedValue) {
+            filtered = filtered.filter((item: any) => {
+                const invoiceDate = new Date(item.invoiceDate);
+                const isWithinDateRange = invoiceDate >= fromDate && invoiceDate <= toDate
+                return item.branch === selectedValue && isWithinDateRange;
+            });
+        }
         setFilteredInvoices(filtered);
     };
 
@@ -141,16 +139,17 @@ const MyInvoices = () => {
 
                     <View>
                         {filteredInvoices.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No invoices available.</Text>
+                            <Text className="text-center text-lg text-gray-600 mt-4">No invoices available for this filter.
+                                Select Correct Branch Name, Date & Tabs</Text>
                         ) : (
                             filteredInvoices.map((invoice: any) => (
                                 <Pressable key={invoice.id} onPress={() => openModal(invoice)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
                                     <View className="flex-row justify-between items-center">
                                         <Text className="font-semibold">Invoice ID: {invoice.id}</Text>
-                                        <AntDesign name="filetext1" size={24} color="#007BFF" />
+                                        <AntDesign name="filetext1" size={24} color="#008080" />
                                     </View>
                                     <Text className="mt-2 text-lg text-gray-800">
-                                        Total Amount: <Text className="font-bold text-blue-600">${invoice.total}</Text>
+                                        Total Amount: <Text className="font-bold text-teal-600">{invoice.total}</Text>
                                     </Text>
                                     <Text className="mt-1 text-sm text-gray-600">Branch: {invoice.branch}</Text>
                                     <Text className="mt-1 text-sm text-gray-600">Date: {new Date(invoice.invoiceDate).toLocaleDateString()}</Text>

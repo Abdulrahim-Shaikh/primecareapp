@@ -3,22 +3,22 @@ import { View, Modal, Pressable, StyleSheet, Text, Image, Alert, ActivityIndicat
 import { WebView } from 'react-native-webview';
 import pdfImg from "../../assets/images/pdf.png";
 
-interface InvoiceReportProps {
+interface PrescriptionReportProps {
     isVisible: boolean;
     pdfUri: string;
-    invoiceId: string | null;
+    orderId: string | null;
     onClose: () => void;
 }
 
-const InvoiceReport: React.FC<InvoiceReportProps> = ({ isVisible, pdfUri, invoiceId, onClose }) => {
+const PrescriptionReport: React.FC<PrescriptionReportProps> = ({ isVisible, pdfUri, orderId, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    console.log("InvoiceReport Props:", { isVisible, pdfUri, invoiceId });
+    console.log("PrescriptionReport Props:", { isVisible, pdfUri, orderId });
 
     return (
         <Modal visible={isVisible} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
-                <Text style={styles.invoiceIdText}>Invoice ID: {invoiceId}</Text>
+                <Text style={styles.invoiceIdText}>Order ID: {orderId}</Text>
                 {loading && (
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator size="large" color="#007BFF" />
@@ -95,6 +95,12 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         marginTop: 4,
     },
+    image: {
+        width: 100,
+        height: 100,
+        resizeMode: 'contain',
+        marginTop: 4,
+    },
 });
 
-export default InvoiceReport;
+export default PrescriptionReport;
