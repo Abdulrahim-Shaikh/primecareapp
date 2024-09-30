@@ -4,6 +4,7 @@ import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 type Props = {
+  id: any;
   photo: any;
   name: string;
   department: string;
@@ -14,6 +15,7 @@ type Props = {
 };
 
 const DoctorCard = ({
+  id,
   photo,
   name,
   department,
@@ -33,7 +35,10 @@ const DoctorCard = ({
 
           <View>
             <Text
-              onPress={() => router.push("/DoctorProfile")}
+              onPress={() => router.push({
+                pathname: "/DoctorProfile",
+                params: { id : id}
+              })}
               className="text-base font-medium"
             >
               {name}
