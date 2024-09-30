@@ -13,7 +13,7 @@ const CityPage = () => {
         cityMasterService.findAll().then((res) => {
             setCity(res.data);
         });
-    });
+    }, []);
 
     return (
         <SafeAreaView>

@@ -6,8 +6,8 @@ export class BranchService extends RestService<any> {
         return this.get("byBranchId/" + name);
     }
 
-    filterByCity(city: any) {
-        return this.get("getBranchesByCity" + city);
+    getAllBranchesInCity(city: any) {
+        return this.get("filterByCity/" + city);
     }
 
     getAllActiveBranchNames(){
