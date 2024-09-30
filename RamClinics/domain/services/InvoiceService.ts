@@ -6,9 +6,9 @@ export class InvoiceService extends RestService<any> {
         return this.get("invoicesByPatientId/" + patientId);
     }
 
-    invoiceApprovals(branchId: any, mrno: any, fromdate: any, todate:any) {
-        console.log("here: ", branchId, fromdate, todate, mrno)
-        return this.get(`invoiceApprovals?branchId=${branchId}&fromdate=${fromdate}&toDate=${todate}&mrnNo=${mrno}/`);
+    invoiceApprovals(branchId: any, fromDate: any, toDate:any, mrno: any) {
+        console.log(`invoiceApprovals?branchId=${branchId}&fromDate=${fromDate}&toDate=${toDate}&mrnNo=${mrno}/`)
+        return this.get(`invoiceApprovals?branchId=${branchId}&fromDate=${fromDate}&toDate=${toDate}&mrnNo=${mrno}`);
         // return this.get("invoiceApprovals?branchId="+  branchId + "&fromDate=" + fromdate + "&toDate=" + fromdate + "&mrnNo=" + mrno);
     }
 }

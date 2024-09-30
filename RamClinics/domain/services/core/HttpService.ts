@@ -6,9 +6,8 @@ class HttpService {
     private username: string = '';
     private token: string = '';
     private companyCode = 'TECHNAS';
-    private divisionCode = 'CHN';
-    private headers = new Map();
-    private allowedDivisions: Array<string> = ['CHN'];
+    private divisionCode = 'CHN';    
+    private allowedDivisions = 'CHN'//Array<string> = ['CHN'];
 
     private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/";//
 

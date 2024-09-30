@@ -61,8 +61,8 @@ const MyApprovals = () => {
     const search = () => {
         setMrNo();
         console.log("\n\n---------> mrno: ", mrno, "\tfromdate:", fromDate, "\ttoDate:", toDate, "\tbranchID:", selectedValue);
-        let fDate = moment(fromDate).format("YY-MM-DD");
-        let tDate = moment(toDate).format("YY-MM-DD");
+        let fDate = moment(fromDate).format("YYYY-MM-DD");
+        let tDate = moment(toDate).format("YYYY-MM-DD");
         // let fDate = (new Date(fromDate)).toString();
         // let tDate = (new Date(toDate)).toString();
         console.log('\ndates --->',fDate, tDate);
