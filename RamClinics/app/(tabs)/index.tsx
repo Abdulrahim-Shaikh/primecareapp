@@ -35,10 +35,10 @@ const Home = () => {
             />
             :
             <View className="py-4 w-full items-center">
-              <View className="flex-row justify-between py-2 px-4 bg-amber-900 rounded-md w-4/5 h-[4.5rem]">
-                <Text className="text-white py-4">Sign In to get details... </Text>
-                <Pressable className="bg-emerald-500 py-2 my-2 rounded-sm" onPress={() => router.push("/SignIn")}>
-                  <Text className="text-white font-bold"> Sign In </Text>
+              <View className="flex-row justify-between py-2 px-4 bg-amber-900 rounded-2xl w-4/5 h-[4.5rem]">
+                <Text className="text-white pt-5 pl-1">Sign In to get details.. </Text>
+                <Pressable className="bg-emerald-500 p-2 my-2 rounded-lg border border-indigo-950" onPress={() => router.push("/SignIn")}>
+                  <Text className="text-indigo-950 font-semibold"> Sign In </Text>
                 </Pressable>
               </View>
             </View>

@@ -2,6 +2,9 @@ import { RestService } from "./core/RestService";
 
 export class PatientService extends RestService<any> {
 
+    getByMobileNo(mobileNo: any) {
+        return this.get("byMobileNo/" + mobileNo);
+    }
     getByPatientId(patientId: any) {
         return this.get("getByPatientId" + patientId);
     }

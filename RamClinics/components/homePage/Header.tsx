@@ -1,10 +1,10 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import { Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
-import profileImg from "../../assets/images/homePageProfileImg.png";
+import emptyProfileImg from "../../assets/images/homePageProfileImg.png";
 import { useUserSate } from "../../domain/state/UserState";
-import userService from "../../domain/services/UserService";
+import httpService from "../../domain/services/core/HttpService";
 
 const Header = ({
   setShowNotification,
@@ -18,21 +18,18 @@ const Header = ({
   let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
   let branch = useUserSate.getState().branch;
-  // let profileUrl = '../../../../home/technas/uploads/patient/file/'+ user.photo[0];
+  
   const BASE_URL = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
 
-  const profilePhoto = user.profileImg && user.profileImg.length > 0
-    ? { uri: `${BASE_URL}${encodeURIComponent(user.profileImg[0])}` }
-    : profileImg;
+  const profilePhotoUrl = (user.profileImg && user.profileImg.length > 0) ?  {uri: `${BASE_URL}${encodeURIComponent(user.profileImg[0])}`} : emptyProfileImg;
 
   console.log("User Data:", user);
-  console.log("Profile Photo URL:", profilePhoto);
+  console.log("Profile Photo URL:", profilePhotoUrl);
   return (
     <View className="w-full flex flex-row justify-between items-center px-6">
       <View className="flex flex-row justify-start items-center gap-3">
         <View className=" rounded-xl overflow-hidden">
-          <Image source={profilePhoto} style={styles.profileImage} />
-
+          <Image source={profilePhotoUrl} style={styles.profileImage} />
         </View>
         <View>
           <Text className="text-lg font-semibold">HI, {patientName}</Text>
