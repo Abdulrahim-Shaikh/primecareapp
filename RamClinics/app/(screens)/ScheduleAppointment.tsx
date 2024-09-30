@@ -8,12 +8,14 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native";
 import { useRouter, router, useLocalSearchParams } from "expo-router";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import BookAppointment from "../(tabs)/BookAppointment";
 import appointmentService from "../../domain/services/AppointmentService";
+import moment from 'moment';
+import branchService from "../../domain/services/BranchService";
 
 const styles = StyleSheet.create({
     dropdownButtonStyle: {
@@ -65,78 +67,175 @@ const styles = StyleSheet.create({
 
 const ScheduleAppointment = () => {
     const router = useRouter();
-    const { department, speciality, doctor, date, data } = useLocalSearchParams();
+    const { branchId, department, speciality, doctor, date, params, patientData, patientPolicyData } = useLocalSearchParams();
 
-    const doctorScheduleData = data ? JSON.parse(data.toString()) : {}
+    // const doctorScheduleData = params ? JSON.parse(params.toString()) : {}
+    const [doctorScheduleData, setDoctorScheduleData] = useState(params ? JSON.parse(params.toString()) : {})
+    const [patientDataJson, setPatientDataJson] = useState(patientData ? JSON.parse(patientData.toString()) : {})
+    const [patientPolicyDataJson, setPatientPolicyDataJson] = useState(patientPolicyData ? JSON.parse(patientPolicyData.toString()) : {})
     // const defaultStatus = doctorScheduleData.status ? doctorScheduleData.status : "Booked"
+    const [slots, setSlots] = useState([])
     const [fromDate, setFromDate] = useState(new Date());  // State for start date
     const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
     const [toDate, setToDate] = useState(new Date());  // State for start date
     const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false); // Control for start date picker modal
     const [defaultStatus, setDefaultStatus] = useState(doctorScheduleData.status ? doctorScheduleData.status : "Booked")
+    const [day, setDay] = useState("1");
+    const [slotStartTime, setSlotStartTime] = useState("");
+    const [slotEndTime, setSlotEndTime] = useState("");
+    const [slotStatus, setSlotStatus] = useState("");
+    const [slotName, setSlotName] = useState("");
+    const [branchName, setBranchName] = useState("");
 
     let fromDateAux = new Date();
     let toDateAux = new Date();
 
     useEffect(() => {
+        console.log(typeof Object.values(JSON.parse(params.toString()).slots))
+        console.log(typeof [])
+        setSlots(Object.values(JSON.parse(params.toString()).slots["30"]))
+        setDoctorScheduleData(JSON.parse(params.toString()))
+        setPatientDataJson(JSON.parse(patientData.toString()))
+        setPatientPolicyDataJson(JSON.parse(patientPolicyData.toString()))
+        console.log("patientPolicyData: ", patientPolicyDataJson)
+        // let dt = moment(date, "YYYY-MM-DD")
+        // console.log("slllllll: ", JSON.parse(params.toString()).slots["30"])
+        branchService.find(Number(branchId))
+            .then((response) => {
+                setBranchName(response.data.name)
+                // console.log("response branchService find: ", response.data.name)
+                // console.log("branchName: ", branchName)
+            })
+            .catch((error) => {
+                console.log("\n\n\nerror: ", error)
+            })
     }, [])
 
     const bookAppointment = () => {
+
+        let today = moment().format("YYYY-MM-DDTHH:mm:ss");
+        let updatedDate = moment().format("YYYY-MM-DDTHH:mm:ss");
+        let scheduleId = Object.values(doctorScheduleData.scheduleId)[0]
+        let aptDate = Object.values(doctorScheduleData.date)[0]
+        let appointmentDate = moment(aptDate? aptDate: "").format("YYYY-MM-DDTHH:mm:ss")
+
         let temporaryPayload = {
-            age: 21,
-            appointmentDate: (new Date(fromDate)).toDateString(),
-            branchId: 7215165,
-            branchName: "Doha Medical Complex",
-            cardNo: "0",
-            className: null,
+            mrno: patientDataJson.mrno,
+            age: +patientDataJson.age,
+            appointmentDate: appointmentDate,
+            branchId: +branchId,
+            branchName: branchName,
+            cardNo: patientPolicyDataJson.cardNo,
+            className: patientPolicyDataJson.className,
             createdBy: "ibrahim",
-            createdDate: date,
+            createdDate: today,
             department: department,
-            endTime: (new Date(toDate)).toDateString(),
-            gender: 'Male',
-            hisStatus: 'defaultStatus',
+            startTime: slotStartTime,
+            endTime: slotEndTime,
+            gender: patientDataJson.gender,
+            hisStatus: defaultStatus,
             history: [
                 {
-                    status: 'Booked',
+                    status: defaultStatus,
                     updatedBy: 'ibrahim',
-                    updatedDate: (new Date(new Date())).toString()
+                    updatedDate: "2024-09-30T14:52:21.531Z"
                 }
             ],
-            mobileNo: "594951370",
-            mrno: "KHO-AQRPNT100001",
-            nationalId: null,
-            nationality: 'India',
-            patientId: 'PNT100001',
-            patientName: "Abdulrahim  Shaikh",
-            policyName: "Cash Plan",
-            policyNo: "C0001",
-            practitionerId: 7282358,
-            practitionerName: "Doha Doctor",
+            mobileNo: patientDataJson.mobileNumber,
+            nationalId: patientDataJson.nationalId,
+            nationality: patientDataJson.nationality,
+            patientId: patientDataJson.id,
+            patientName: patientDataJson.firstName + " " + patientDataJson.lastName,
+            policyName: patientPolicyDataJson.policyName,
+            policyNo: patientPolicyDataJson.policyNo,
+            practitionerId: doctorScheduleData.practitionerId,
+            practitionerName: doctorScheduleData.name,
             remarks: null,
             requestByPatient: null,
             shift: null,
             slots: [
                 {
-                    endTime: (new Date(toDate)).toDateString(),
-                    scheduled: 6890450,
-                    slotId: 6901731,
-                    slotName: (new Date(fromDate)).toTimeString() + "-" + (new Date(toDate)).toTimeString(),
-                    startTime: (new Date(fromDate)).toDateString(),
-                    status: 'busy'
+                    endTime: slotStartTime,
+                    scheduleId: scheduleId,
+                    slotId: 6900196,
+                    slotName: slotName,
+                    startTime: slotEndTime,
+                    status: slotStatus
                 }
             ],
             speciality: speciality,
-            startTime: (new Date(fromDate)).toDateString(), 
             status: 'pending',
             visitType: 'Checkup',
             walkIn: null
         }
 
+        console.log("\n\n\ntemporaryPayloadd: ", temporaryPayload)
+        console.log("\n\n\n")
+
+        let temporaryPayload2 = { 
+            "mrno": "KHO-AQRPNT100001", 
+            "patientId": "PNT100001", 
+            "patientName": "Abdulrahim  Shaikh", 
+            "gender": "Male", 
+            "age": 21, 
+            "mobileNo": "594951370", 
+            "nationality": "India", 
+            "department": "Dental", 
+            "speciality": "General Dentist", 
+            "appointmentDate": "2024-09-30T00:00:00", 
+            "branchName": "Ram Buhairah", 
+            "branchId": 593482, 
+            "policyNo": "C0001", 
+            "policyName": "Cash Plan", 
+            "createdBy": "ibrahim", 
+            "visitType": "Checkup", 
+            "status": "pending", 
+            "hisStatus": "Booked", 
+            "slots": [
+                { "slotId": 6900196, "scheduleId": 6889360, "status": "busy", "slotName": "20:30-20:35", "startTime": "2024-09-30T20:30:00", "endTime": "2024-09-30T20:35:00" },
+            ], 
+            "nationalId": null, 
+            "practitionerName": "waari hussain", 
+            "practitionerId": 25937, 
+            "shift": null, 
+            "walkIn": null, 
+            "requestByPatient": null, 
+            "remarks": null, 
+            "history": [
+                { "status": "Booked", "updatedBy": "ibrahim", "updatedDate": "2024-09-30T14:52:21.531Z" }
+            ], 
+            "startTime": "2024-09-30T20:30:00", 
+            "endTime": "2024-09-30T20:45:00", 
+            "className": null, 
+            "cardNo": "0", 
+            "createdDate": "2024-09-30T17:52:21" 
+        }
+        console.log("\n\n\ntemporaryPayload2: ", temporaryPayload2)
+        console.log("\n\n\n")
+
         appointmentService.save(temporaryPayload)
         .then((response) => {
+            console.log("response appointmentService save: ", response)
+
+            Alert.alert('Success', 'Appointment has been booked successfully', [
+                {
+                    text: 'OK',
+                    // onPress: () => router.push({
+                    //     pathname: "/BookAppointment",
+                    // }),
+                    style: 'default'
+                },
+            ],
+            )
+            // router.push({
+            //     pathname: "/BookAppointment",
+            // })
             console.log("appointmentService response: ", response)
         })
         .catch((error) => {
+            // router.push({
+            //     pathname: "/BookAppointment",
+            // })
             console.log("appointmentService error", error)
         })
     }
@@ -155,79 +254,105 @@ const ScheduleAppointment = () => {
                 </View>
             </View>
             <View className="py-8 gap-4 flex justify-center">
-                <View className="flex flex-column gap-2">
-                    <Text className="pl-6">Book Slots</Text>
-                    <View className="flex flex-row justify-center gap-2">
-                        <View>
-                            <Button title="From time" onPress={() => setIsFromDatePickerOpen(true)} />
-                            {isFromDatePickerOpen && (
+                <View className="pl-2 pr-2">
+                    <View className="p-4 border border-amber-900 rounded-2xl w-full mt-4" >
+                        <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
+                            <View className="flex flex-row justify-start items-center ">
+                                <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
+                                    {/* <Image source={item.img} /> */}
+                                </View>
+
                                 <View>
-                                    <DateTimePicker
-                                        value={fromDateAux}
-                                        mode="time"
-                                        display="default"
-                                        onChange={(selectedDate: any) => {
-                                            const currentDate = selectedDate.nativeEvent.timestamp || date;
-                                            setFromDate(currentDate);
-                                            setIsFromDatePickerOpen(false);
-                                        }}
-                                    />
-                                </View>
-                            )}
-                            {/* <TouchableOpacity
-                                className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
-                                <Text className="text-white">From time</Text>
-                            </TouchableOpacity> */}
-                        </View>
-                        <View>
-                            <Button title="To time" onPress={() => setIsToDatePickerOpen(true)} />
-                            {isToDatePickerOpen && (
-                                <View>
-                                    <DateTimePicker
-                                        value={toDateAux}
-                                        mode="time"
-                                        display="default"
-                                        onChange={(selectedDate: any) => {
-                                            const currentDate = selectedDate.nativeEvent.timestamp || date;
-                                            setToDate(currentDate);
-                                            setIsToDatePickerOpen(false);
-                                        }}
-                                    />
-                                </View>
-                            )}
-                            {/* <TouchableOpacity
-                                className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
-                                <Text className="text-white">To Time</Text>
-                            </TouchableOpacity> */}
-                        </View>
-                    </View>
-                    <View className="flex flex-column justify-center gap-2">
-                        {fromDate != null ?
-                            <View className="flex flex-row">
-                                <View className="flex w-2/4 flex-row justify-end">
-                                    <Text> From </Text>
-                                </View>
-                                <View className="flex w-2/4 flex-row justify-start">
-                                    <Text> {new Date(fromDate).toLocaleTimeString()} </Text>
+                                    <Text className="text-base font-medium pb-2">
+                                        Policy No: {patientPolicyDataJson.policyNo}
+                                    </Text>
+                                    <View className="flex-row items-center">
+                                        {/* <Text className="">{patientPolicyDataJson.name} - </Text> */}
+                                        <View>
+                                            <Text
+                                                className="text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md">
+                                                Card No: {patientPolicyDataJson.cardNo}
+                                            </Text>
+                                        </View>
+                                    </View>
+
+                                    <Text className="text-[12px] pt-2">
+                                        {/* <Text>
+                                            <AntDesign name="star" color={"#ffab00"} />
+                                        </Text> */}
+                                        {/* {patientPolicyDataJson.rating} */}
+                                        {/* <Text>
+                                            <Entypo name="dot-single" />
+                                        </Text> */}
+                                        <Text className="text-amber-900">
+                                            <AntDesign name="clockcircle" />
+                                            {patientPolicyDataJson.startDate != null ? " " + new Date(patientPolicyDataJson.startDate).toLocaleTimeString() : ' No start date'} -
+                                            {patientPolicyDataJson.endDate != null ? " " + new Date(patientPolicyDataJson.endDate).toLocaleTimeString() : ' No end date'}
+                                            {/* {new Date(patientPolicyDataJson.endDate).toLocaleTimeString()} */}
+                                        </Text>
+                                    </Text>
                                 </View>
                             </View>
-                            : <></>
-                        }
-                        {toDate != null ?
-                            <View className="flex flex-row">
-                                <View className="flex w-2/4 flex-row justify-end">
-                                    <Text> To </Text>
-                                </View>
-                                <View className="flex w-2/4 flex-row justify-start">
-                                    <Text> {new Date(toDate).toLocaleTimeString()} </Text>
-                                </View>
+
+                            <View className=" border border-amber-900 p-2 rounded-md ">
+                                <MaterialCommunityIcons
+                                    name="check"
+                                    size={24}
+                                    color={"#009281"}
+                                    onPress={() => router.back()}
+                                />
+                                {/* <Ionicons name="heart-outline" size={16} color={"#009281"} /> */}
                             </View>
-                            : <></>
-                        }
+                        </View>
                     </View>
                 </View>
-                <View className="flex justify-center mt-8">
-                    <Text className="pl-6">Status: </Text>
+                <View className="flex flex-column gap-2">
+                    {/* <Text className="pl-6">Book Slots</Text> */}
+                    {slots.length > 0 ?
+                        <View className="flex flex-row justify-center gap-3">
+                            {/* <Text>{Object.values(JSON.parse(params.toString()).slots["30"]).length}</Text> */}
+                            <SelectDropdown
+                                data={slots}
+                                onSelect={(selectedItem: any, index) => {
+                                    let today = moment().format("YYYY-MMM-DD");
+                                    console.log("selectedItemmm: ", selectedItem)
+                                    setSlotStatus(selectedItem.status)
+                                    setSlotName(selectedItem.slotName)
+                                    setSlotStartTime(selectedItem.startTime)
+                                    setSlotEndTime(selectedItem.endTime)
+                                    console.log("hererere")
+                                }}
+                                renderButton={(selectedItem, isOpened) => {
+                                    return (
+                                        <View style={styles.dropdownButtonStyle}>
+                                            <Text style={styles.dropdownButtonTxtStyle}>
+                                                {(selectedItem && selectedItem.slotName) || 'Select slots'}
+                                            </Text>
+                                            <MaterialCommunityIcons
+                                                name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
+                                                size={24}
+                                                color={"#009281"}
+                                            />
+                                        </View>
+                                    )
+                                }}
+                                renderItem={(item: any, index, isSelected) => {
+                                    return (
+                                        <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                            <Text style={styles.dropdownItemTxtStyle}>{item.slotName}</Text>
+                                        </View>
+                                    );
+                                }}
+                                showsVerticalScrollIndicator={false}
+                                dropdownStyle={styles.dropdownMenuStyle}
+                            />
+                        </View>
+                        :
+                        <></>
+                    }
+                </View>
+                <View className="flex justify-center">
+                    {/* <Text className="pl-6">Status: </Text> */}
                     <View className="flex flex-row justify-center gap-3">
                         <SelectDropdown
                             data={['Booked', 'Confirmed']}
@@ -239,7 +364,7 @@ const ScheduleAppointment = () => {
                                 return (
                                     <View style={styles.dropdownButtonStyle}>
                                         <Text style={styles.dropdownButtonTxtStyle}>
-                                            {(selectedItem) || 'Select a service'}
+                                            {(selectedItem) || 'Select slots'}
                                         </Text>
                                         <MaterialCommunityIcons
                                             name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
@@ -261,47 +386,11 @@ const ScheduleAppointment = () => {
                         />
                     </View>
                 </View>
-                <View className="flex justify-center mt-8">
-                    <Text className="pl-6">Policy Details: </Text>
-                    <View className="flex flex-column justify-center gap-2">
-                        <View className="flex flex-row">
-                            <View className="flex w-2/4 flex-row justify-end">
-                                <Text> No </Text>
-                            </View>
-                            <View className="flex w-2/4 flex-row justify-start">
-                                <Text> C0001 </Text>
-                            </View>
-                        </View>
-                        <View className="flex flex-row">
-                            <View className="flex w-2/4 flex-row justify-end">
-                                <Text> Name </Text>
-                            </View>
-                            <View className="flex w-2/4 flex-row justify-start">
-                                <Text> Cash Plan </Text>
-                            </View>
-                        </View>
-                        <View className="flex flex-row">
-                            <View className="flex w-2/4 flex-row justify-end">
-                                <Text> Card No </Text>
-                            </View>
-                            <View className="flex w-2/4 flex-row justify-start">
-                                <Text> 0 </Text>
-                            </View>
-                        </View>
-                        <View className="flex flex-row">
-                            <View className="flex w-2/4 flex-row justify-end">
-                                <Text> Start Date </Text>
-                            </View>
-                            <View className="flex w-2/4 flex-row justify-start">
-                                <Text> - </Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+
                 <View className="flex flex-row justify-center mt-8 pt-8">
                     <TouchableOpacity onPress={
                         () => {
-                            Alert.alert('' + doctor, '' + new Date(fromDate).toLocaleDateString() + "-\n" + new Date(fromDate).toLocaleTimeString() + '  to  ' + new Date(toDate).toLocaleTimeString(), [
+                            Alert.alert('Doctor ' + doctor, 'Date: ' + new Date(fromDate).toLocaleDateString() + " -\nSlot: " + new Date(fromDate).toLocaleTimeString() + '  to  ' + new Date(toDate).toLocaleTimeString(), [
                                 {
                                     text: 'Confirm',
                                     onPress: () => {

@@ -14,6 +14,9 @@ export class PatientService extends RestService<any> {
     addFamilyMember(familyMember:any){
         return this.get("addFamilyMember/" + familyMember);
     }
+    byMobileNo(mobileNo: any) {
+        return this.get(`byMobileNo/${mobileNo}`);
+    }
 
 }
 const patientService = new PatientService('patient');

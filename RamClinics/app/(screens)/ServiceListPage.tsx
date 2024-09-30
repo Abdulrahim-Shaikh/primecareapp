@@ -11,11 +11,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import scheduleService from "../../domain/services/ScheduleService";
 import { useAnimatedRef, useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 // import sliderImg1 from "../../assets/images/doc1.png";
-// import sliderImg2 from "../../assets/images/doc2.png";
+import sliderImg2 from "../../assets/images/doc2.png";
 // import sliderImg3 from "../../assets/images/doc3.png";
 // import sliderImg4 from "../../assets/images/doc3.png";
 import branchService from "../../domain/services/BranchService";
 import moment from 'moment';
+import patientService from "../../domain/services/PatientService";
+import patientPolicyService from "../../domain/services/PatientPolicyService";
 
 const categoryList = [
     "All",
@@ -86,9 +88,14 @@ const ServiceListPage = () => {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // Control for start date picker modal
     const [appointmentEntry, setAppointmentEntry] = useState(false)
     const [doctorScheduleData, setDoctorScheduleData] = useState(myAppoinmentData)
+    const [patientData, setPatientData] = useState({})
+    const [patientPolicyData, setPatientPolicyData] = useState({})
+    const [photoUrl, setPhotoUrl] = useState("")
     const flatListRef = useAnimatedRef<FlatList<any>>();
     const x = useSharedValue(0);
     const flatListIndex = useSharedValue(0);
+    // let patientData = {}
+    // let patientPolicyData = {}
 
     const onViewableItemsChanged = ({
         viewableItems,
@@ -109,9 +116,25 @@ const ServiceListPage = () => {
     useEffect(() => {
         console.log(`option: '${department}'`)
 
+        patientService.byMobileNo("594951370")
+        .then((response: any) => {
+            console.log("patientService.byMobileNo: ", response)
+            setPatientData(response.data[0])
+            patientPolicyService.byPatientId(response.data[0].id)
+            .then((response: any) => {
+                setPatientPolicyData(response.data[0])
+                // patientPolicyData = response.data[0]
+            })
+            .catch((error) => {
+                console.log("patientPolicyService.byPatientId() error: ", error)
+            })
+        })
+        .catch((error) => {
+            console.log("error: ", error)
+        })
+
         branchService.findAll()
             .then((response) => {
-                console.log("response: ", response)
                 setBranchOptions(response.data)
             })
             .catch((error) => {
@@ -120,7 +143,6 @@ const ServiceListPage = () => {
 
         specialityService.getByDept(department)
             .then((response) => {
-                console.log("response1: ", response.data)
                 // setSpecialities(response.data)
                 setSpecialityOptions(response.data)
             })
@@ -137,18 +159,27 @@ const ServiceListPage = () => {
         if (department != null && date != null && speciality != null && doctor != null) {
             console.log("validateForm", department)
             console.log("validateForm", speciality)
-            setAppointmentEntry(true)
             let today = moment().format("YYYY-MMM-DD");
             let requestBody: any = [{
-                date: today,
+                date: "2024-09-30",
                 day: 30,
-                resourceIds: [7282358],
+                resourceIds: [25937],
                 wday: "Mon"
             }]
-            scheduleService.getDoctorSchedule("593482", department, speciality, "false", requestBody)
+            scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
                 .then((response) => {
+                    console.log("response getDoctorSchedule: ", response.data)
+                    setAppointmentEntry(true)
+                    resourceService.find(response.data[0].practitionerId)
+                    .then((response) => {
+                        if (response.data[0] && response.data[0].photo.length > 0 && response.data[0].photo[0]) {
+                            setPhotoUrl(`http://16.24.11.104:8080/HISAdmin/api/resource/file/${response.data[0].photo[0]}`)
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("resourceService.findById() error: ", error)
+                    })
                     setDoctorScheduleData(response.data)
-                    console.log("response3: ", response.data)
                     // setAppointmentEntry(true)
                 })
                 .catch((err) => {
@@ -200,7 +231,7 @@ const ServiceListPage = () => {
                                     data={branchOptions}
                                     onSelect={(selectedItem, index) => {
                                         setBranchId(selectedItem.id)
-                                        console.log("selectedItem: ", selectedItem.id)
+                                        console.log("selectedItemmmmmm: ", selectedItem.id)
                                     }}
                                     renderButton={(selectedItem, isOpened) => {
                                         return (
@@ -391,13 +422,16 @@ const ServiceListPage = () => {
                                             
                                             onPress={() => 
                                                 router.push({
-                                                    pathname: "/ScheduleAppointment",
+                                                    pathname: "/ScheduleAppointment/",
                                                     params: {
+                                                        branchId: branchId,
                                                         department: department,
                                                         speciality: speciality,
                                                         doctor: doctor,
                                                         date: (new Date(date)).toString(),
-                                                        data: JSON.stringify(item)
+                                                        params: JSON.stringify(item),
+                                                        patientData: JSON.stringify(patientData),
+                                                        patientPolicyData: JSON.stringify(patientPolicyData)
                                                     }
                                                 })
                                             }
@@ -406,7 +440,7 @@ const ServiceListPage = () => {
                                             <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
                                                 <View className="flex flex-row justify-start items-center ">
                                                     <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
-                                                        <Image source={item.img} />
+                                                        {/* <Image source={{ uri: photoUrl, }} /> */}
                                                     </View>
 
                                                     <View>
@@ -414,34 +448,20 @@ const ServiceListPage = () => {
                                                             {item.name}
                                                         </Text>
                                                         <View className="flex-row items-center">
-                                                            <Text className="">{item.sessionTyps} - </Text>
                                                             <View>
-                                                                <Text
-                                                                    className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
-                                                                        "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
-                                                                        } ${item.sessionStatus === "Completed" &&
-                                                                        "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
-                                                                        } ${item.sessionStatus === "Cancelled" &&
-                                                                        "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
-                                                                        } `}
+                                                                <Text className="text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
+                                                                    // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
+                                                                    //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
+                                                                    //     } ${item.sessionStatus === "Completed" &&
+                                                                    //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
+                                                                    //     } ${item.sessionStatus === "Cancelled" &&
+                                                                    //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
+                                                                    //     } `}
                                                                 >
-                                                                    {item.sessionStatus}
+                                                                    {item.speciality}
                                                                 </Text>
                                                             </View>
                                                         </View>
-
-                                                        <Text className="text-[12px] pt-2">
-                                                            <Text>
-                                                                <AntDesign name="star" color={"#ffab00"} />
-                                                            </Text>
-                                                            {item.rating}
-                                                            <Text>
-                                                                <Entypo name="dot-single" />
-                                                            </Text>
-                                                            <Text className="text-amber-900">
-                                                                <AntDesign name="clockcircle" /> {item.availableTime}
-                                                            </Text>
-                                                        </Text>
                                                     </View>
                                                 </View>
 
@@ -454,31 +474,15 @@ const ServiceListPage = () => {
                                                 </View>
                                             </View>
                                             <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                                                {item.sessionStatus === "Upcoming" ? (
-                                                    <TouchableOpacity>
-                                                        <Text
-                                                            className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center"
-                                                        >
-                                                            Cancel
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                ) : (
-                                                    <TouchableOpacity>
-                                                        <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
-                                                            Book Again
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                )}
+                                                <TouchableOpacity>
+                                                    <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center" >
+                                                        Cancel
+                                                    </Text>
+                                                </TouchableOpacity>
+                                                <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center">
+                                                    Schedule Appointment
+                                                </Text>
 
-                                                {item.sessionStatus === "Upcoming" ? (
-                                                    <Text className="flex-1 text-white border border-amber-900	 px-4 py-2 rounded-lg bg-amber-900 text-center">
-                                                        Change Date
-                                                    </Text>
-                                                ) : (
-                                                    <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center">
-                                                        Leave Review
-                                                    </Text>
-                                                )}
                                             </View>
                                         </TouchableOpacity>
                                     ))}
