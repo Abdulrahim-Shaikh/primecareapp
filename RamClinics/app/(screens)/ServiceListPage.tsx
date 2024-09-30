@@ -1,10 +1,7 @@
-import { Image, SafeAreaView, ScrollView, View, Text, FlatList, Pressable, TouchableOpacity, Button, Platform, TextInput, Animated, ViewToken } from "react-native";
+import { Image, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, Button, TextInput, ViewToken } from "react-native";
 import { StyleSheet } from "react-native";
-import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import Searchbox from "../../components/ui/Searchbox";
-import React, { Fragment, useEffect, useState } from "react";
-import DoctorCard from "../../components/ui/DoctorCard";
-import { friendChatList, myAppoinmentData, serviceData, topDoctorData } from "../../constants/data";
+import React, { useEffect, useState } from "react";
+import { myAppoinmentData } from "../../constants/data";
 import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import specialityService from "../../domain/services/SpecialityService";
@@ -17,11 +14,8 @@ import { useAnimatedRef, useAnimatedScrollHandler, useSharedValue } from "react-
 // import sliderImg2 from "../../assets/images/doc2.png";
 // import sliderImg3 from "../../assets/images/doc3.png";
 // import sliderImg4 from "../../assets/images/doc3.png";
-import UpcomingSliderItem from "../../components/ui/UpcomingSliderItem";
-import Pagination from "../../components/ui/Pagination";
 import branchService from "../../domain/services/BranchService";
-import DropDown from "../../components/DropDown";
-
+import moment from 'moment';
 
 const categoryList = [
     "All",
@@ -144,12 +138,13 @@ const ServiceListPage = () => {
             console.log("validateForm", department)
             console.log("validateForm", speciality)
             setAppointmentEntry(true)
-            let requestBody: any = {
-                date: (new Date()).toLocaleDateString(),
+            let today = moment().format("YYYY-MMM-DD");
+            let requestBody: any = [{
+                date: today,
                 day: 30,
                 resourceIds: [7282358],
                 wday: "Mon"
-            }
+            }]
             scheduleService.getDoctorSchedule("593482", department, speciality, "false", requestBody)
                 .then((response) => {
                     setDoctorScheduleData(response.data)
