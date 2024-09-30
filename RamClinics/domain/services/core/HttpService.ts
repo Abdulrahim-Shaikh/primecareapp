@@ -12,20 +12,36 @@ class HttpService {
 
     private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/" ;//
 
+    //private baseUrl = "https://ramprimecare.com/HISAdmin/api/" ;//
+
     getAPI(path: string) {
         return axios.get(this.baseUrl + path);
     }
 
     postAPI(path: string, entity: any) {
-        return axios.post(path, entity);
+        return axios.post(this.baseUrl + path, entity);
+        // return axios({
+        //     method: 'post',
+        //     url: `${path}`,
+        //     withCredentials: false,            
+        //     data: entity
+        //   });
+
+        // const requestOptions = { 
+        //     method: 'POST', 
+        //     headers: { 'Content-Type': 'application/json' }, 
+        //     body: JSON.stringify(entity) 
+        // }; 
+        // console.log(path);
+        // return fetch( this.baseUrl + path, requestOptions);
     }
 
     putAPI(path: string, entity: any) {
-        return axios.put(path, entity);
+        return axios.put(this.baseUrl +path, entity);
     }
 
     deleteAPI(path: string, id: number) {
-        return axios.delete(path + id);
+        return axios.delete(this.baseUrl + path + id);
     }
 }
 
