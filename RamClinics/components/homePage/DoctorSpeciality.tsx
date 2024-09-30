@@ -21,7 +21,7 @@ const DoctorSpeciality = () => {
           onPress={() => router.push("/DoctorSpecialityPage")}
           className=" font-semibold text-amber-900">
           View All
-        </Text>
+        </Text> 
       </View>
 
       <View className="h-[90px] pt-5">
