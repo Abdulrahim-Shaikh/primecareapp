@@ -248,6 +248,7 @@ export const myAppoinmentData = [
     sessionTyps: "Video Call",
     rating: "4.3",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -257,6 +258,7 @@ export const myAppoinmentData = [
     sessionTyps: "Audio Call",
     rating: "4.7",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -266,6 +268,7 @@ export const myAppoinmentData = [
     sessionTyps: "Video Call",
     rating: "4.5",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -275,6 +278,7 @@ export const myAppoinmentData = [
     sessionTyps: "Chat Session",
     rating: "4.3",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -284,6 +288,7 @@ export const myAppoinmentData = [
     sessionTyps: "Video Call",
     rating: "4.4",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -293,6 +298,7 @@ export const myAppoinmentData = [
     sessionTyps: "Audio Call",
     rating: "4.3",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -302,6 +308,7 @@ export const myAppoinmentData = [
     sessionTyps: "Video Call",
     rating: "4.2",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -311,6 +318,7 @@ export const myAppoinmentData = [
     sessionTyps: "Chat Session",
     rating: "4.3",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
 
   {
@@ -320,6 +328,7 @@ export const myAppoinmentData = [
     sessionStatus: "Completed",
     sessionTyps: "Video Call",
     rating: "4.9",
+    speciality: "General Dentist",
     availableTime: "12pm-5pm",
   },
   {
@@ -330,6 +339,7 @@ export const myAppoinmentData = [
     sessionTyps: "Chat Session",
     rating: "4.3",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -339,6 +349,7 @@ export const myAppoinmentData = [
     sessionTyps: "Video Call",
     rating: "4.5",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
   {
     id: uuid.v4(),
@@ -348,6 +359,7 @@ export const myAppoinmentData = [
     sessionTyps: "Audio Call",
     rating: "4.3",
     availableTime: "12pm-5pm",
+    speciality: "General Dentist",
   },
 ];
 
