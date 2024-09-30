@@ -10,16 +10,30 @@ class HttpService {
     private headers = new Map();
     private allowedDivisions: Array<string> = ['CHN'];
 
-    private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/" ;//
+    private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/";//
 
     //private baseUrl = "https://ramprimecare.com/HISAdmin/api/" ;//
 
+    getHeaders() {
+        return {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.token,
+                User: '' + this.userId,
+                Username: '' + this.username,
+                Company: '' + this.companyCode,
+                Division: '' + this.divisionCode,
+                AllowedDivisions: this.allowedDivisions,                
+            }
+        }
+    }
+
     getAPI(path: string) {
-        return axios.get(this.baseUrl + path);
+        return axios.get(this.baseUrl + path, this.getHeaders());
     }
 
     postAPI(path: string, entity: any) {
-        return axios.post(this.baseUrl + path, entity);
+        return axios.post(this.baseUrl + path, entity, this.getHeaders());
         // return axios({
         //     method: 'post',
         //     url: `${path}`,
@@ -37,11 +51,11 @@ class HttpService {
     }
 
     putAPI(path: string, entity: any) {
-        return axios.put(this.baseUrl +path, entity);
+        return axios.put(this.baseUrl + path, entity, this.getHeaders());
     }
 
     deleteAPI(path: string, id: number) {
-        return axios.delete(this.baseUrl + path + id);
+        return axios.delete(this.baseUrl + path + id, this.getHeaders());
     }
 }
 
