@@ -55,7 +55,7 @@ const MainMenu = () => {
     {
       icon: "accessibility-outline",
       title: "My Vital Signs",
-      link: "",
+      link: "/VitalSigns",
     },
     {
       icon: "wallet-outline",
