@@ -13,12 +13,13 @@ const VerifyOTP = () => {
   const [user, setUserInfo] = useState();
 
   const [otpResp, setOtpResp] = useState({otp:'9999'});  
-  const [otp, setOtp] = useState('');  
+  // const [otp, setOtp] = useState('');  
+  let otp: string = '';
 
   useEffect(() => {
     loginService.generateOtp(mobileNo).then((resp: any) => {
-      console.log(resp);
-      setOtpResp(otpResp);
+      console.log(resp.data);
+      setOtpResp(resp.data);
       if(mobileNo == '0568165257' || mobileNo == '568165257') {
         otpResp.otp = '9999';
         setOtpResp({...otpResp, otp: '9999'});
@@ -36,18 +37,17 @@ const VerifyOTP = () => {
   const onPressOtp = (otpVal: string[]) => {        
     let val = otpVal.join('')    
     if(val.length == 4 ) {
-      setOtp(val);
+      otp =val;
       verifyOtp();
     }
   }
 
-  const verifyOtp = () => {    
+  const verifyOtp = () => {      
       if(otpResp && otpResp.otp && otpResp.otp == otp) {
         loginService.byMobileNo(mobileNo).then(res => {
           let user = res.data;                  
           setUserInfo(user);
-          router.navigate('/(tabs)')          
-        });
+        }).then(data => router.navigate('/(tabs)')  );
       } else {
         Alert.alert("Invalid OTP!")
       }    
