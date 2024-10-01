@@ -2,7 +2,9 @@ import { create } from "zustand"
 
 interface HISState {
   branches: any[],
-  currentBranch: any
+  currentBranch: any,
+  setBranches: (branches: any[]) => void;
+  setCurrentBranch: (branch: any) => void;
 }
 
 

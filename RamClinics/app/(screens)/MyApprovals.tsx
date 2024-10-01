@@ -23,7 +23,6 @@ const MyApprovals = () => {
     const [showToPicker, setShowToPicker] = useState(false);
     const [selectedValue, setSelectedValue] = useState("");
     const [approvals, setApprovals] = useState([]);
-    const [filteredApprovals, setFilteredApps] = useState([]);
     const [pendingApps, setPendingApps] = useState([]);
     const [approvedApps, setApprovedApps] = useState([]);
     const [cancelledApps, setCancelledApps] = useState([]);
@@ -88,17 +87,12 @@ const MyApprovals = () => {
     };
 
     useEffect(() => {
-        const pending = approvals.filter((app: any) => (app.status === "Pending" || app.status === "In Approval"));
+        const pending = approvals.filter((app: any) => (app.approvalStatus === "Pending" || app.approvalStatus === "In Approval"));
         setPendingApps(pending); 
-        console.log(">>>>>>>>pending approvals: ", pending);
-    
-        const approved = approvals.filter((app: any) =>  (app.status === "Completed" || app.status === "Auto Approved" || app.status === "CASH"));
-        setApprovedApps(approved); 
-        console.log(">>>>>>>>approved approvals: ", approved);
-    
-        const cancelled = approvals.filter((app: any) => (app.status === "Cancelled"));
+        const approved = approvals.filter((app: any) =>  (app.approvalStatus === "Completed" || app.approvalStatus === "Auto Approved" || app.approvalStatus === "CASH"));
+        setApprovedApps(approved);    
+        const cancelled = approvals.filter((app: any) => (app.approvalStatus === "Cancelled"));
         setCancelledApps(cancelled); 
-        console.log(">>>>>>>>cancelled approvals: ", cancelled);
     }, [approvals]);
 
     return (
@@ -152,7 +146,7 @@ const MyApprovals = () => {
                     </View>
 
                     <View>
-                        {filteredApprovals.length === 0 ? (
+                        {approvals.length === 0 ? (
                             <Text className="text-center text-lg text-gray-600 mt-4">No aprrovals available.</Text>
                         ) : (
                             activeTab === "Cancelled" ?

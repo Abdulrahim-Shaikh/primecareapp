@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingSlider from "../../components/homePage/UpcomingSlider";
 import DoctorSpeciality from "../../components/homePage/DoctorSpeciality";
@@ -15,14 +15,37 @@ import { router } from "expo-router";
 import MainMenu from "../../components/homePage/MainMenu";
 import { useUserSate } from "../../domain/state/UserState";
 import NASButton from "../../components/NASButton";
+import branchService from "../../domain/services/BranchService";
+import { useHISSate } from "../../domain/state/HISState";
 
 const Home = () => {
 
   let loggedIn = useUserSate.getState().loggedIn;
-
+  let userBranch = useUserSate.getState().branch;
+  const [branches, setBranchesResp] = useState([]);
+  let {setBranches} = useHISSate();
+  let {setCurrentBranch} = useHISSate();
   const [showNotification, setShowNotification] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showFavouriteModal, setShowFavouriteModal] = useState(false);
+
+  useEffect(() => {
+    branchService.findAll().then((res) => {
+      let branches = res.data;
+      setBranchesResp(branches);
+    }).catch((error) => {
+      console.error("Failed to fetch branches:", error);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (branches) {
+      setBranches(branches);
+    }
+    if (userBranch) {
+      setCurrentBranch(userBranch);
+    }
+  }, [branches, userBranch]);
   
   return (
     <SafeAreaView className="">
@@ -46,7 +69,7 @@ const Home = () => {
           {/* <SearchSection setShowFilter={setShowFilter} />     */}
           <UpcomingSlider />
           <DoctorSpeciality />
-          { loggedIn && (<MainMenu />)}
+          {loggedIn && (<MainMenu />)}
           <TopDoctor />
         </View>
 

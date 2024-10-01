@@ -7,14 +7,15 @@ import LinkButton from "../../components/LinkButton";
 
 const suggestedLanguage = ["English (UK)", "English (US)"];
 const LanguageList = [
-  "Chineses (CN)",
-  "Croatian",
-  "Czech",
-  "Danish",
-  "Hindi",
-  "Spanish",
-  "Bengali",
-  "Russian",
+  "English", "Arabic",
+  // "Chineses (CN)",
+  // "Croatian",
+  // "Czech",
+  // "Danish",
+  // "Hindi",
+  // "Spanish",
+  // "Bengali",
+  // "Russian",
 ];
 
 const LanguageSettings = () => {
@@ -25,7 +26,7 @@ const LanguageSettings = () => {
       <ScrollView>
         <View className="p-6">
           <HeaderWithBackButton isPushBack={true} title="Language" />
-          <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
+          {/* <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
             <Text className="text-base font-semibold text-amber-900">
               Suggested
             </Text>
@@ -46,10 +47,10 @@ const LanguageSettings = () => {
                 </Pressable>
               ))}
             </View>
-          </View>
-          <View className="mt-8 p-6 border border-amber-900  rounded-xl">
+          </View> */}
+          <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
             <Text className="text-base font-semibold text-amber-900">
-              Language
+              Select Language
             </Text>
 
             <View className="pt-2">
