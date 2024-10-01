@@ -25,8 +25,8 @@ const BranchDoctor = () => {
     let [doctors, setDoctor] = useState([]);
 
     useEffect(() => {
-        doctorService.getAllDoctorsByBranch(branchId).then((doc) => {
-            setDoctor(doc.data);
+        doctorService.getAllDoctorsByBranch(branchId).then((response) => {
+            setDoctor(response.data);
         })
     }, [])
 

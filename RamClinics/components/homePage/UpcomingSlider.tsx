@@ -59,7 +59,7 @@ const UpcomingSlider = () => {
       <View className="flex flex-row justify-between items-center w-full px-6">
         <Text className=" text-xl font-semibold">Upcoming Offers</Text>
         <Text
-          onPress={() => router.push("/DoctorSpecialityPage")}
+          onPress={() => router.push("/Offers")}
           className=" font-semibold text-amber-900">
           View All
         </Text> 

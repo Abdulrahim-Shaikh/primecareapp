@@ -1,10 +1,10 @@
 import { router } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import cityMasterService from "../../domain/services/CityMasterService";
 import { useEffect, useState } from "react";
-
+import cityImg from "../../assets/images/Building.png";
 
 const CityPage = () => {
 
@@ -19,18 +19,33 @@ const CityPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title="Select City" isPushBack={true} />
-                <View className="flex-1 justify-center items-center pt-10 space-y-4">
-                    {cities.map((city, index) => (
-                        <Pressable
-                            onPress={() => router.push({
-                                pathname: "/BranchPage",
-                                params: { city: city.city}
-                            })}
-                            className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-3"
-                            key={index}>
-                            <Text className="text-base font-semibold pt-3 justify-center items-center">{city.city}</Text>
-                        </Pressable>
-                    ))}
+                <View className="flex-1 pt-8 space-y-4 ">
+                    <FlatList
+                        contentContainerStyle={{ gap: 12 }}
+                        data={cities}
+                        keyExtractor={(item: any, index) => "key" + index}
+                        renderItem={({ item }) => (
+                            <View className="w-full">
+                                <Pressable
+                                    className="flex flex-row border border-amber-900 rounded-lg p-2 shadow-sm bg-white"
+                                    onPress={() => router.push({
+                                        pathname: "/BranchPage",
+                                        params: { city: item.city }
+                                    })}>
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <Image source={cityImg} style={{ width: 50, height: 50 }} />
+                                    </View>
+                                    <View className="px-4 flex justify-center">
+                                        <Text className="font-semibold text-lg text-gray-800">
+                                            {item.city}</Text>
+                                        <Text className="text-gray-600 pt-1">
+                                            2 Branches
+                                        </Text>
+                                    </View>
+                                </Pressable>
+                            </View>
+                        )}
+                    />
                 </View>
             </ScrollView>
         </SafeAreaView>
