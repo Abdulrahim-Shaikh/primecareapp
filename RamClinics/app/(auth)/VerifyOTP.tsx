@@ -13,8 +13,8 @@ const VerifyOTP = () => {
   const [user, setUserInfo] = useState();
 
   const [otpResp, setOtpResp] = useState({otp:'9999'});  
-  // const [otp, setOtp] = useState('');  
-  let otp: string = '';
+  const [otp, setOtp] = useState('');  
+  // let otp: string = '';
 
   useEffect(() => {
     loginService.generateOtp(mobileNo).then((resp: any) => {
@@ -33,16 +33,19 @@ const VerifyOTP = () => {
     }
   }, [user]);
 
-  
-  const onPressOtp = (otpVal: string[]) => {        
-    let val = otpVal.join('')    
-    if(val.length == 4 ) {
-      otp =val;
+  useEffect( () => {
+    if(otp && otp.length == 4 ) {
       verifyOtp();
     }
+  }, [otp]);
+
+  
+  const onPressOtp = (otpVal: string[]) => {            
+    setOtp(otpVal.join(''));
   }
 
-  const verifyOtp = () => {      
+  const verifyOtp = () => {
+    console.log( otpResp.otp,otp)
       if(otpResp && otpResp.otp && otpResp.otp == otp) {
         loginService.byMobileNo(mobileNo).then(res => {
           let user = res.data;                  
