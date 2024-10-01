@@ -46,7 +46,7 @@ const Home = () => {
           {/* <SearchSection setShowFilter={setShowFilter} />     */}
           <UpcomingSlider />
           <DoctorSpeciality />
-          <MainMenu />
+          { loggedIn && (<MainMenu />)}
           <TopDoctor />
         </View>
 

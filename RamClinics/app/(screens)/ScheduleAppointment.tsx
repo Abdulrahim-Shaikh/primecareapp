@@ -16,6 +16,7 @@ import BookAppointment from "../(tabs)/BookAppointment";
 import appointmentService from "../../domain/services/AppointmentService";
 import moment from 'moment';
 import branchService from "../../domain/services/BranchService";
+import { useUserSate } from "../../domain/state/UserState";
 
 const styles = StyleSheet.create({
     dropdownButtonStyle: {
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
 });
 
 const ScheduleAppointment = () => {
+    let loggedIn = useUserSate.getState().loggedIn;
     const router = useRouter();
     const { branchId, department, speciality, doctor, date, params, patientData, patientPolicyData } = useLocalSearchParams();
 
@@ -394,7 +396,7 @@ const ScheduleAppointment = () => {
                                 {
                                     text: 'Confirm',
                                     onPress: () => {
-                                        bookAppointment()
+                                        loggedIn ? bookAppointment() : router.push("/SignIn");
                                     },
                                     style: 'default'
                                 },

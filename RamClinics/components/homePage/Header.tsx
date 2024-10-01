@@ -34,10 +34,10 @@ const Header = ({
         </View>
         <View>
           <Text className="text-lg font-semibold">HI, {patientName}</Text>
-          <View className=" bg-amber-300 px-3 py-1 rounded-lg mt-2 flex flex-row justify-center">
+          <View className=" bg-emerald-200 px-3 py-1 rounded-lg mt-2 flex flex-row justify-center">
             <Text className="text-[14px]">{branch}</Text>
             <Text className=" block pl-2 ">
-              <Fontisto name="map-marker-alt" size={16} color="#009281" />
+              <Fontisto name="map-marker-alt" size={16} color="indigo" />
             </Text>
           </View>
         </View>

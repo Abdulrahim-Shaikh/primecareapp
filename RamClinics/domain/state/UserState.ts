@@ -9,7 +9,7 @@ interface UserState {
   loggedIn: boolean,
   branch: string,
   setUser: (userInfo: any) => void;
-  setLoggedOut: (userInfo: any) => void;
+  setLoggedOut: () => void;
   setResource: (userInfo: any) => void;
 }
 
@@ -26,34 +26,3 @@ export const useUserSate = create<UserState>()((set) => ({
     setResource: (resourceInfo) => set((state) => ({ user: state.resource = resourceInfo })),
     setLoggedOut: () => set(() => ({user: null, userName: '', loggedIn: false})),
 }));
-
-
-// {
-//   "active": true,
-//   "adminPages": null,
-//   "allowedDivisions": ["CHN"],
-//   "branch": "Technas",
-//   "branchCode": "Technas",
-//   "city": null,
-//   "clientId": null,
-//   "clientPages": null,
-//   "clientPrivilege": null,
-//   "comPort": null,
-//   "companyCode": "TECHNAS",
-//   "country": "India",
-//   "department": null,
-//   "designation": null,
-//   "divisionCode": "CHN",
-//   "email": null,
-//   "firstName": "Abdulrahman",
-//   "id": "PNT100505",
-//   "lastName": "Syed",
-//   "menuAccess": null,
-//   "mobile": "503046250",
-//   "permissions": null,
-//   "posIP": null,
-//   "posPort": null,
-//   "profileImg": [""],
-//   "roles": null,
-//   "speciality": null,
-//   }

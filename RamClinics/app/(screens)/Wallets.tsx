@@ -32,13 +32,13 @@ const Wallets = () => {
             <Text className="text-base font-semibold text-amber-900">
               Your Wallet
             </Text>
-            <View className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500">
+            <View className=" flex-row justify-between items-center py-6 border-b border-dashed text-amber-500">
               <Text className="text-2xl font-medium">Balance</Text>
               <Text className="text-3xl font-semibold">{balance}</Text>
             </View>
             <View className=" flex-row justify-between items-center py-4 text-amber-500">
-              <Button title="Transfer to Doctor" color="#841584" />
-              <Button title="Refill" color="green" />
+              {/* <Button title="Transfer to Doctor" color="#841584" />
+              <Button title="Refill" color="green" /> */}
             </View>
           </View>
           {/* <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">

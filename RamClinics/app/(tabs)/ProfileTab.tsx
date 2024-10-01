@@ -28,6 +28,7 @@ const ProfileTab = () => {
   let setUser = useUserSate.getState().setUser;
   let user = useUserSate.getState().user;
   let patientName = useUserSate.getState().patientName;
+  let loggedIn = useUserSate.getState().loggedIn;
   let setLoggedOut = useUserSate.getState().setLoggedOut;
 
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/"
@@ -61,15 +62,15 @@ const ProfileTab = () => {
                 <Text className="text-white text-base pt-2">
                   {user && user.mobile ? user.mobile : "+0123456789"}
                 </Text>
-                <Pressable onPress={() => router.push("/UserProfile")}
-                  className="bg-amber-500 mt-4 rounded-full content-center items-center">
-                  <Text className="text-md text-white text-base">View Profile</Text>
+                <Pressable onPress={() => loggedIn ? router.push("/UserProfile") : router.push("/SignIn")}
+                  className="bg-emerald-500 mt-4 py-1 rounded-lg items-center border border-2 border-indigo-950 w-3/4">
+                  <Text className="text-md text-indigo-950 text-base">View Profile</Text>
                 </Pressable>
 
               </View>
             </View>
             <Pressable
-              onPress={() => router.push("/EditProfile")}
+              onPress={() => loggedIn ? router.push("/EditProfile") : router.push("/SignIn")}
               className="bg-white p-3 rounded-full"
             >
               <MaterialCommunityIcons
@@ -145,7 +146,7 @@ const ProfileTab = () => {
                   </Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => router.push("/SignIn")}
+                  onPress={() => { setLoggedOut(); router.push("/(tabs)")}}
                   className="flex-1"
                 >
                   <Text className="text-white border border-amber-900 rounded-lg py-4 bg-amber-900 text-center font-medium ">
