@@ -364,12 +364,12 @@ export const myAppoinmentData = [
 ];
 
 export const profileSettings = [
-  {
-    id: 1,
-    icon: "notifications-outline",
-    name: "Notification",
-    link: "/NotificationSettings",
-  },
+  // {
+  //   id: 1,
+  //   icon: "notifications-outline",
+  //   name: "Notification",
+  //   link: "/NotificationSettings",
+  // },
   {
     id: 2,
     icon: "person-circle-outline",

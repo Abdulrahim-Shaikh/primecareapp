@@ -94,7 +94,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo }: Props) =>
         </View>
       </View>
       <TouchableOpacity 
-        className="bg-emerald-500 text-primaryColor border-t-[1px] border-x-[1px] border-b-[1px] border-primaryColor px-4 py-2 rounded-lg"
+        className="bg-lime-500 text-primaryColor border-t-[1px] border-x-[1px] border-b-[1px] border-primaryColor px-4 py-2 rounded-lg"
         style={{ position: 'absolute', right: 15, bottom: 20 }}
           onPress={handleBookPress}
         >

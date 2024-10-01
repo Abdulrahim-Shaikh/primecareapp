@@ -92,7 +92,7 @@ const UpcomingSlider = () => {
           }}
         />
 
-        <View className="">
+        <View className="text-lime-500">
           <Pagination onbordingSliderData={promotionList} x={x} />
         </View>
       </View>

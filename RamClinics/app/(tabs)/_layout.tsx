@@ -16,42 +16,42 @@ const TabIcon = ({
   return (
     <View className="flex items-center justify-center gap-2">
       <Text
-        className={`p-3 rounded-lg ${focused ? "bg-amber-500" : "bg-white"}`}
+        className={`p-3 rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`}
       >
         {iconName === "home" && (
-          <Entypo name="home" size={20} color={focused ? "white" : "#009281"} />
+          <Entypo name="home" size={20} color={focused ? "white" : "rgb(120 53 15)"} />
         )}
-        {iconName === "message" && (
+        {/* {iconName === "message" && (
           <AntDesign
             name="message1"
             size={20}
-            color={focused ? "white" : "#009281"}
+            color={focused ? "white" : "rgb(120 53 15)"}
           />
-        )}
+        )} */}
         {iconName === "calendar" && (
           <MaterialCommunityIcons
             name="calendar-check-outline"
             size={20}
-            color={focused ? "white" : "#009281"}
+            color={focused ? "white" : "rgb(120 53 15)"}
           />
         )}
         {iconName === "gift" && (
           <FontAwesome
             name="gift"
             size={20}
-            color={focused ? "white" : "#009281"}
+            color={focused ? "white" : "rgb(120 53 15)"}
           />
         )}
         {iconName === "user" && (
           <AntDesign
             name="user"
             size={20}
-            color={focused ? "white" : "#009281"}
+            color={focused ? "white" : "rgb(120 53 15)"}
           />
         )}
       </Text>
       {focused && (
-        <View className="w-2 h-2 rounded-full bg-amber-500 absolute top-[50px] left-[18px] z-50"></View>
+        <View className="w-2 h-2 rounded-full bg-lime-500 absolute top-[50px] left-[18px] z-50"></View>
       )}
     </View>
   );
@@ -65,7 +65,7 @@ const TabLayout = () => {
           tabBarShowLabel: false,
 
           tabBarStyle: {
-            backgroundColor: "#009281",
+            backgroundColor: "rgb(120 53 15)",
             height: 80,
             borderTopEndRadius: 15,
             borderTopLeftRadius: 15,
@@ -82,7 +82,7 @@ const TabLayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="Chat"
           options={{
             headerShown: false,
@@ -90,7 +90,7 @@ const TabLayout = () => {
               <TabIcon iconName="message" focused={focused} />
             ),
           }}
-        />
+        /> */}
 
         <Tabs.Screen
           name="BookAppointment"

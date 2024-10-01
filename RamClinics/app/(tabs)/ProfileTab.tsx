@@ -32,7 +32,12 @@ const ProfileTab = () => {
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
   function onPressFunction(name: string, link: string) {
     if (name === "Dark Mode") return;
+    if (name === "My Invoices" || name == "My Prescription" || name == "Security") {
+      router.push("/SignIn");
+    } else {
     router.push(link);
+    }
+
   }
 
   return (
@@ -40,7 +45,7 @@ const ProfileTab = () => {
       <ScrollView>
         <View className=" pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
-            <AntDesign name="user" size={24} color={"#009281"} />
+            <AntDesign name="user" size={24} color={"rgb(132 204 22)"} />
             <Text className="text-2xl font-semibold">User Settings</Text>
           </View>
           <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">
@@ -51,15 +56,17 @@ const ProfileTab = () => {
                 <Image source={emptyProfileImg} className="w-16 h-16 rounded-lg" />
               }
               <View className="">
-                <Text className="text-white text-xl font-semibold">
+                <Text className="text-white text-xl font-bold">
                   {user && patientName ? patientName : "Guest"}
                 </Text>
-                <Text className="text-white text-base pt-2">
-                  {user && user.mobile ? user.mobile : "+0123456789"}
+                <Text className="text-white text-base pt-2 font-semibold">
+                  {user && user.mobile ? user.mobile : "mobile"}
                 </Text>
                 <Pressable onPress={() => loggedIn ? router.push("/UserProfile") : router.push("/SignIn")}
-                  className="bg-emerald-500 mt-4 p-1 px-3 rounded-lg items-center border border-2 border-indigo-950">
-                  <Text className="text-md text-indigo-950 text-base">View Profile</Text>
+                  className="bg-lime-500 mt-4 p-1 px-3 rounded-lg items-center">
+                  <Text className="text-md text-white font-bold">
+                    {user ? "View Profile" : "Sign In"}
+                  </Text>
                 </Pressable>
 
               </View>
@@ -71,7 +78,7 @@ const ProfileTab = () => {
               <MaterialCommunityIcons
                 name="pencil-outline"
                 size={24}
-                color={"#009281"}
+                color={"rgb(120 53 15)"}
               />
             </Pressable>
           </View>
@@ -84,8 +91,8 @@ const ProfileTab = () => {
                 onPress={() => onPressFunction(name, link)}
               >
                 <View className="flex-row items-center gap-4">
-                  <View className="bg-amber-300 rounded-full p-3">
-                    <Ionicons name={icon as any} size={24} color="#009281" />
+                  <View className="bg-lime-500 rounded-full p-3">
+                    <Ionicons name={icon as any} size={24} color="white" />
                   </View>
                   <Text className="text-lg font-semibold">{name}</Text>
                 </View>
@@ -103,12 +110,12 @@ const ProfileTab = () => {
               className="flex-row justify-between items-center pt-3"
             >
               <View className="flex-row items-center gap-4">
-                <View className="bg-[#ffe9d5] rounded-full p-3">
+                <View className="rounded-full p-3">
                   <Text className="">
-                    <MaterialIcons name="logout" size={20} color="#ff5630" />
+                    <MaterialIcons name="logout" size={26} color="rgb(120 53 15)" />
                   </Text>
                 </View>
-                <Text className="text-lg font-semibold text-[#ff5630]">
+                <Text className="text-lg font-semibold text-amber-900">
                   Logout
                 </Text>
               </View>
