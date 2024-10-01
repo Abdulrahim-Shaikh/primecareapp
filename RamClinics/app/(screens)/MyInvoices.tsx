@@ -6,9 +6,8 @@ import branchService from "../../domain/services/BranchService";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import invoiceService from "../../domain/services/InvoiceService";
-import { WebView } from 'react-native-webview';
-import InvoiceReport from "./InvoiceReport";
 import { useUserSate } from "../../domain/state/UserState";
+import PdfViewer from "./PDFViewer";
 
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
 
@@ -22,9 +21,10 @@ const MyInvoices = () => {
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
     const [activeTab, setActiveTab] = useState("Pending");
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [modalVisible, setIsModalVisible] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
-    const [pdfUri, setPdfUri] = useState('');
+    // const [pdfUri, setPdfUri] = useState('');
+    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });        
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
 
@@ -75,7 +75,8 @@ const MyInvoices = () => {
     const openModal = async (invoice: any) => {
         setSelectedInvoice(invoice);
         const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/report/invoiceReport/${invoice.id}`;
-        setPdfUri(pdfUrl);
+        // setPdfUri(pdfUrl);
+        setpdfSource({ uri: pdfUrl, cache: true })
         console.log("Opening modal with ID:", invoice.id);
         console.log("PDF URL:", pdfUrl);
         setIsModalVisible(true);
@@ -84,7 +85,8 @@ const MyInvoices = () => {
     const closeModal = () => {
         setIsModalVisible(false);
         setSelectedInvoice(null);
-        setPdfUri('');
+        // setPdfUri('');
+        setpdfSource({ uri: ``, cache: true })
     };
 
     return (
@@ -159,14 +161,14 @@ const MyInvoices = () => {
                     </View>
                 </View>
             </ScrollView>
-            <Modal visible={isModalVisible} transparent={true}>
+            <Modal visible={modalVisible} transparent={false}  animationType="slide"  onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
-                    <InvoiceReport
-                        isVisible={isModalVisible}
-                        pdfUri={pdfUri}
-                        invoiceId={selectedInvoice?.id}
-                        onClose={closeModal}
-                    />
+
+                <PdfViewer url={pdfSource.uri} invoiceId={selectedInvoice?.id}/>
+
+                <Pressable onPress={closeModal} style={styles.closeButton}>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                </Pressable>
                 </View>
             </Modal>
 
