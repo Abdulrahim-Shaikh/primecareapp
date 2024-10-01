@@ -33,7 +33,7 @@ const TopDoctor = () => {
   const [activeSpeciality, setActiveSpeciality] = useState(0);
 
   useEffect(() => {
-    doctorService.findAll().then((res) => {
+    doctorService.getAllDoctors().then((res) => {
       console.log("filtered patient..", res.data)
       setDoctor(res.data);
       setFilteredDoctors(res.data);
@@ -44,13 +44,14 @@ const TopDoctor = () => {
 
   useEffect(() => {
     const selectedSpeciality = specialityList[activeSpeciality];
-    if (selectedSpeciality === "All") {
+    if (selectedSpeciality === "w") {
       setFilteredDoctors(doctor);
     } else {
       const filtered = doctor.filter(doc => doc.speciality === selectedSpeciality);
       setFilteredDoctors(filtered);
     }
   }, [activeSpeciality, doctor]);
+
   return (
     <SafeAreaView>
       <ScrollView className="pt-6">

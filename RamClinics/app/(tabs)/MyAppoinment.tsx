@@ -22,18 +22,19 @@ import { router } from "expo-router";
 import { myAppoinmentData } from "../../constants/data";
 import Searchbox from "../../components/ui/Searchbox";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import appointmentService from "../../domain/services/AppointmentService";
 
 const tabNames = ["Upcoming", "Completed", "Cancelled"];
 
 const Appoinment = () => {
+
   const [cancelModal, setCancelModal] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [filteredItem, setFilteredItem] = useState(myAppoinmentData);
   const [fromDate, setFromDate] = useState(new Date());  // State for start date
   const [toDate, setToDate] = useState(new Date());
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
-  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false); 
+  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
 
   const onStartDateChange = (selectedDate: any) => {
     const currentDate = selectedDate || fromDate;
@@ -61,6 +62,12 @@ const Appoinment = () => {
     setFilteredItem(filteredData);
   }, [activeTab]);
 
+
+
+  useEffect(() => {
+
+  }, [])
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -71,7 +78,7 @@ const Appoinment = () => {
               size={24}
               color={"#009281"}
             />
-            <Text className="text-2xl font-semibold">My Appoinments</Text>
+            <Text className="text-2xl font-semibold">My Appointments</Text>
           </View>
           <View className="pt-8">
             <Searchbox />
@@ -122,16 +129,14 @@ const Appoinment = () => {
               <Pressable
                 key={idx}
                 onPress={() => setActiveTab(item)}
-                className={`flex-1 border-b  pb-2 ${
-                  activeTab === item
-                    ? "border-amber-900"
-                    : "text-amber-500"
-                }`}
+                className={`flex-1 border-b  pb-2 ${activeTab === item
+                  ? "border-amber-900"
+                  : "text-amber-500"
+                  }`}
               >
                 <Text
-                  className={`text-center font-semibold ${
-                    activeTab === item ? "text-amber-900" : ""
-                  }`}
+                  className={`text-center font-semibold ${activeTab === item ? "text-amber-900" : ""
+                    }`}
                 >
                   {item}
                 </Text>
@@ -159,16 +164,13 @@ const Appoinment = () => {
                         <Text className="">{item.sessionTyps} - </Text>
                         <View>
                           <Text
-                            className={`text-[12px] ${
-                              item.sessionStatus === "Upcoming" &&
+                            className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
                               "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
-                            } ${
-                              item.sessionStatus === "Completed" &&
+                              } ${item.sessionStatus === "Completed" &&
                               "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
-                            } ${
-                              item.sessionStatus === "Cancelled" &&
+                              } ${item.sessionStatus === "Cancelled" &&
                               "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
-                            } `}
+                              } `}
                           >
                             {item.sessionStatus}
                           </Text>
