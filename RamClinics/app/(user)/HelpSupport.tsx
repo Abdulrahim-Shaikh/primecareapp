@@ -48,7 +48,7 @@ const HelpSupport = () => {
           </View>
 
           <View className="mt-8 p-6 border border-amber-900 bg-amber-900 rounded-2xl">
-            <Text className="text-2xl py-1 font-bold text-lime-500">
+            <Text className="text-2xl py-1 font-bold text-lime-400">
               Contact Us
             </Text>
             <View className="border border-white bg-amber-100 rounded-lg p-3 mt-5 mb-3">
