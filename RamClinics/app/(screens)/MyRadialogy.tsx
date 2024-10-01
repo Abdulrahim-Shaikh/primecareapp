@@ -51,7 +51,7 @@ const MyRadialogy = () => {
         }
         setFilteredRadialogy(filtered);
     };
-    
+
     useEffect(() => {
         branchService.findAll().then((res) => {
             setBranches(res.data);

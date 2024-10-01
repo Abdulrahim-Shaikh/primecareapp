@@ -23,7 +23,6 @@ import CustomSwitch from "../../components/CustomSwitch";
 import { useUserSate } from "../../domain/state/UserState";
 
 const ProfileTab = () => {
-
   const [logoutModal, setLogoutModal] = useState(false);
   let setUser = useUserSate.getState().setUser;
   let user = useUserSate.getState().user;
@@ -31,9 +30,6 @@ const ProfileTab = () => {
   let loggedIn = useUserSate.getState().loggedIn;
   let setLoggedOut = useUserSate.getState().setLoggedOut;
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
-
-  console.log("user1", user)
-
   function onPressFunction(name: string, link: string) {
     if (name === "Dark Mode") return;
     router.push(link);
@@ -88,7 +84,7 @@ const ProfileTab = () => {
                 onPress={() => onPressFunction(name, link)}
               >
                 <View className="flex-row items-center gap-4">
-                  <View className="bg-amber-100 rounded-full p-3">
+                  <View className="bg-amber-300 rounded-full p-3">
                     <Ionicons name={icon as any} size={24} color="#009281" />
                   </View>
                   <Text className="text-lg font-semibold">{name}</Text>

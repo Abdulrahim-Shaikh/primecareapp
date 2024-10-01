@@ -89,15 +89,15 @@ const MyApprovals = () => {
 
     useEffect(() => {
         const pending = approvals.filter((app: any) => (app.status === "Pending" || app.status === "In Approval"));
-        setPendingApps(pending); 
+        setPendingApps(pending);
         console.log(">>>>>>>>pending approvals: ", pending);
-    
-        const approved = approvals.filter((app: any) =>  (app.status === "Completed" || app.status === "Auto Approved" || app.status === "CASH"));
-        setApprovedApps(approved); 
+
+        const approved = approvals.filter((app: any) => (app.status === "Completed" || app.status === "Auto Approved" || app.status === "CASH"));
+        setApprovedApps(approved);
         console.log(">>>>>>>>approved approvals: ", approved);
-    
+
         const cancelled = approvals.filter((app: any) => (app.status === "Cancelled"));
-        setCancelledApps(cancelled); 
+        setCancelledApps(cancelled);
         console.log(">>>>>>>>cancelled approvals: ", cancelled);
     }, [approvals]);
 
@@ -156,54 +156,54 @@ const MyApprovals = () => {
                             <Text className="text-center text-lg text-gray-600 mt-4">No aprrovals available.</Text>
                         ) : (
                             activeTab === "Cancelled" ?
-                            cancelledApps.map((apprval: any) => (
-                                <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                cancelledApps.map((apprval: any) => (
+                                    <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                        <View className="flex-row justify-between items-center">
+                                            <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                        </View>
+                                        <Text className="mt-1 text-lg text-gray-800">
+                                            Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
+                                        </Text>
+                                        <Text className="mt-1 text-lg text-gray-800">
+                                            Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                        </Text>
+                                        <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                        <Text className="mt-1 text-md text-gray-600"></Text>
                                     </View>
-                                    <Text className="mt-1 text-lg text-gray-800">
-                                        Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
-                                    </Text>
-                                    <Text className="mt-1 text-lg text-gray-800">
-                                        Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
-                                    </Text>
-                                    <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
-                                    <Text className="mt-1 text-md text-gray-600"></Text>
-                                </View>
-                            ))
-                            :
-                            activeTab === "Approved" ?
-                            approvedApps.map((apprval: any) => (
-                                <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Approval ID: {apprval.id}</Text>
-                                    </View>
-                                    <Text className="mt-1 text-lg text-gray-800">
-                                        Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
-                                    </Text>
-                                    <Text className="mt-1 text-lg text-gray-800">
-                                        Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
-                                    </Text>
-                                    <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
-                                    <Text className="mt-1 text-md text-gray-600"></Text>
-                                </View>
-                            ))
-                            : 
-                            pendingApps.map((apprval: any) => (
-                                <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Approval ID: {apprval.id}</Text>
-                                    </View>
-                                    <Text className="mt-1 text-lg text-gray-800">
-                                        Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
-                                    </Text>
-                                    <Text className="mt-1 text-lg text-gray-800">
-                                        Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
-                                    </Text>
-                                    <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
-                                    <Text className="mt-1 text-md text-gray-600"></Text>
-                                </View>
-                            ))
+                                ))
+                                :
+                                activeTab === "Approved" ?
+                                    approvedApps.map((apprval: any) => (
+                                        <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                            <View className="flex-row justify-between items-center">
+                                                <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                            </View>
+                                            <Text className="mt-1 text-lg text-gray-800">
+                                                Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
+                                            </Text>
+                                            <Text className="mt-1 text-lg text-gray-800">
+                                                Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                            </Text>
+                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                            <Text className="mt-1 text-md text-gray-600"></Text>
+                                        </View>
+                                    ))
+                                    :
+                                    pendingApps.map((apprval: any) => (
+                                        <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                            <View className="flex-row justify-between items-center">
+                                                <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                            </View>
+                                            <Text className="mt-1 text-lg text-gray-800">
+                                                Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
+                                            </Text>
+                                            <Text className="mt-1 text-lg text-gray-800">
+                                                Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                            </Text>
+                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                            <Text className="mt-1 text-md text-gray-600"></Text>
+                                        </View>
+                                    ))
                         )
                         }
                     </View>

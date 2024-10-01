@@ -16,7 +16,7 @@ const LabratoryReport: React.FC<LabratoryReportProps> = ({ isVisible, pdfUri, or
     console.log("LabratoryReport Props:", { isVisible, pdfUri, orderId });
 
     return (
-         <Modal visible={isVisible} transparent={true} animationType="slide">
+        <Modal visible={isVisible} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
                 <Text style={styles.invoiceIdText}>Order ID: {orderId}</Text>
                 {loading && <ActivityIndicator size="large" color="#007BFF" />}
@@ -43,7 +43,7 @@ const LabratoryReport: React.FC<LabratoryReportProps> = ({ isVisible, pdfUri, or
                     <Text style={styles.closeButtonText}>Close</Text>
                 </Pressable>
             </View>
-         </Modal>
+        </Modal>
     );
 };
 

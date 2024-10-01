@@ -4,7 +4,6 @@ import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import emptyImg from "../../assets/images/EmptyDoctorImg.jpg";
 
-
 type Props = {
   id: any;
   photo: any[];
@@ -46,43 +45,34 @@ const DoctorCard = ({
       className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
     >
       <View className="flex flex-row w-full justify-between items-start">
-        <View className="flex flex-row justify-start items-center">
+        <View className="flex flex-row justify-start items-center flex-1">
           <View className="bg-amber-100 rounded-lg overflow-hidden mr-3">
-            <Image source={profilePhotoUrl} style={{ width: 90, height: 120, justifyContent: "center" }} />
-          </View>
-          <View className="mb-10" >
-            <Text
-              onPress={() =>
-                router.push({
-                  pathname: "/DoctorProfile",
-                  params: { id: id },
-                })
-              }
-              className="text-base font-medium "
-            >
-              {name}
-            </Text>
-            <Text className="pt-1">
-              {department}
-            </Text>
-            <Text className="text-[12px] text-amber-900">{primaryBranch}</Text>
-            <Text className="text-[12px]">
-              <Text>
-                <AntDesign name="star" color={"#ffab00"} />
-              </Text>
-              {rating}
-              {/* <Text>
-                <Entypo name="dot-single" />
-              </Text> */}
-              {/* <Text className="text-amber-900">
-                <AntDesign name="clockcircle" /> {clinicHours}
-              </Text> */}
-            </Text>
+            {photo && photo.length > 0 && photo[0] != null ? (
+              <Image source={profilePhotoUrl} style={{ width: 90, height: 120, justifyContent: "center" }} />
 
+            ) : (
+              <Image source={emptyImg} className="w-16 h-16 border-4 border-amber-900" />
+            )}
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text className="text-base font-medium">{name}</Text>
+            <Text className="py-2">
+              {department} <Entypo name="dot-single" />
+              <Text className="text-[12px] text-amber-900">{primaryBranch}</Text>
+            </Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              <Text style={{ maxWidth: '80%' }} className="text-[12px]">
+                <AntDesign name="star" color={"#ffab00"} />
+                {rating}
+                <Entypo name="dot-single" />
+                <Text className="text-amber-900">
+                  <AntDesign name="clockcircle" /> {clinicHours}
+                </Text>
+              </Text>
+            </View>
           </View>
         </View>
-
-        <View className="border border-amber-900 p-2 rounded-md">
+        <View className="border border-amber-900 p-2 rounded-md ml-2">
           <Ionicons name="heart-outline" size={16} color={"#009281"} />
         </View>
       </View>
@@ -93,7 +83,7 @@ const DoctorCard = ({
         </TouchableOpacity>
       </View>
 
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
 };
 

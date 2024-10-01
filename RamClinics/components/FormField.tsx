@@ -6,6 +6,7 @@ type PropsType = {
   placeholder: string;
   otherStyle?: string;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+  value: string;
   onChangeText(value: any): void;
 };
 
@@ -14,6 +15,7 @@ const FormField = ({
   placeholder,
   otherStyle,
   keyboardType,
+  value,
   onChangeText
 }: PropsType) => {
   const [focus, setFocus] = useState(false);
@@ -38,6 +40,7 @@ const FormField = ({
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           keyboardType={keyboardType ? keyboardType : "default"}
+          value={value}
           onChangeText={onChangeText}
         />
       </View>

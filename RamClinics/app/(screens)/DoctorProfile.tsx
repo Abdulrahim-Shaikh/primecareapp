@@ -17,7 +17,7 @@ const DoctorProfile = () => {
     });
   }, [id]);
 
-  const renderValue = (value, placeholder) => {
+  const renderValue = (value: any, placeholder: any) => {
     return value && value.length > 0 && value[0] !== "" ? value : placeholder;
   };
 

@@ -6,19 +6,19 @@ import pdfImg from "../../assets/images/pdf.png";
 interface SickLeavesReportProps {
     isVisible: boolean;
     pdfUri: string;
-    orderId: string | null;
+    patientId: string | null;
     onClose: () => void;
 }
 
-const SickLeavesReport: React.FC<SickLeavesReportProps> = ({ isVisible, pdfUri, orderId, onClose }) => {
+const SickLeavesReport: React.FC<SickLeavesReportProps> = ({ isVisible, pdfUri, patientId, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    console.log("RadialogyReport Props:", { isVisible, pdfUri, orderId });
+    console.log("RadialogyReport Props:", { isVisible, pdfUri, patientId });
 
     return (
          <Modal visible={isVisible} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
-                <Text style={styles.invoiceIdText}>Order ID: {orderId}</Text>
+                <Text style={styles.invoiceIdText}>Order ID: {patientId}</Text>
                 {loading && <ActivityIndicator size="large" color="#007BFF" />}
                 {error && <Text style={styles.errorText}>Failed to load PDF. Please try again.</Text>}
                 <Image style={styles.image} source={pdfImg} />

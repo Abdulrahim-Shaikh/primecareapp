@@ -40,17 +40,18 @@ const UserProfile = () => {
           </Text>
         </View>
         <View className="w-full">
-          <View className="mt-4 flex-row justify-center items-start">
-            {user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
+          <View className="flex-row justify-center items-start">
+            {user && user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
               <Image source={{ uri: `${sourceUrl}${encodeURIComponent(user.profileImg[0])}` }} className="w-64 h-64 rounded-lg" />
               :
               <Image source={emptyProfileImg} className="w-64 h-64 rounded-lg" />
             }
-            {/* <Image source={profileImg} /> */}
           </View>
           <View className="text-amber-950 justify-center items-center text m-1">
-            <Text className="text-blue-500 text-xl font-semibold">{user && user.email ? user.email : "person@ramclinic.com"}</Text>
+            {/* <Text className="text-blue-500 text-xl font-semibold">{user && user.email ? user.email : "person@ramclinic.com"}</Text> */}
           </View>
+        </View>
+        <View className="w-full">
           <View className="bg-amber-900 rounded-t-3xl p-6 ">
             <View className="flex-row justify-between items-start">
               <View>

@@ -56,9 +56,8 @@ const ChatBox = () => {
             </Pressable>
 
             <View
-              className={`p-5 rounded-2xl bg-white absolute top-7 right-0 w-[200px] ${
-                showMore ? "" : "hidden"
-              }`}
+              className={`p-5 rounded-2xl bg-white absolute top-7 right-0 w-[200px] ${showMore ? "" : "hidden"
+                }`}
             >
               <Pressable
                 onPress={() => router.push("/AudioCall")}
@@ -169,9 +168,8 @@ const ChatBox = () => {
         </View>
       </ScrollView>
       <View
-        className={`absolute bottom-0 right-0 left-0 bg-amber-100 px-4 pb-4 justify-between ${
-          message ? "items-end" : "items-center"
-        } flex-row gap-2 `}
+        className={`absolute bottom-0 right-0 left-0 bg-amber-100 px-4 pb-4 justify-between ${message ? "items-end" : "items-center"
+          } flex-row gap-2 `}
       >
         <View className="flex-row">
           {message ? (
@@ -197,9 +195,8 @@ const ChatBox = () => {
           )}
         </View>
         <View
-          className={`flex-row px-4 py-2 rounded-[28px] border border-amber-900 flex-1 justify-between ${
-            message ? "items-end" : "items-center"
-          }`}
+          className={`flex-row px-4 py-2 rounded-[28px] border border-amber-900 flex-1 justify-between ${message ? "items-end" : "items-center"
+            }`}
         >
           <Text className="pr-2">
             <FontAwesome6 name="face-smile" size={20} color="#c3c3ce" />

@@ -169,7 +169,7 @@ const MySickLeaves = () => {
                     <SickLeavesReport
                         isVisible={isModalVisible}
                         pdfUri={pdfUri}
-                        orderId={selectedSickLeaves?.patientId}
+                        patientId={selectedSickLeaves?.id}
                         onClose={closeModal}
                     />
                 </View>
