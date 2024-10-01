@@ -62,17 +62,18 @@ const UpcomingSlider = () => {
           onPress={() => router.push("/Offers")}
           className=" font-semibold text-amber-900">
           View All
-        </Text> 
+        </Text>
       </View>
       <View className="max-h-[245px]">
         <Animated.FlatList
           ref={flatListRef}
           data={promotionList}
           onScroll={onScroll}
-          keyExtractor={(item) => `key:${item.id}`}
+          keyExtractor={(item: any) => `key:${item.id}`}
           renderItem={({ item, index }) => {
             return (
               <UpcomingSliderItem
+                id={item.id}
                 promotionName={item.promotionName}
                 description={item.description}
                 photo={item.photo}

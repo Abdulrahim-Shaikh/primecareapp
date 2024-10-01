@@ -1,22 +1,82 @@
 import {
+  Alert,
   Image,
   ImageBackground,
+  Modal,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   useWindowDimensions,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import arrow from "../../assets/images/arrow.png";
 import sliderImgBg from "../../assets/images/doctor_img_bg.png";
 import background from "../../assets/images/background.jpg"
+import promotionOrderService from "../../domain/services/PromotionOrderService";
+import { useUserSate } from "../../domain/state/UserState";
+import { AntDesign } from "@expo/vector-icons";
 
-type Props = { promotionName: string; description: string; photo: any };
+type Props = { id: number; promotionName: string; description: string; photo: any };
 
-const UpcomingSliderItem = ({ promotionName, description, photo }: Props) => {
+const UpcomingSliderItem = ({ id, promotionName, description, photo }: Props) => {
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const { width: SCREEN_WIDTH } = useWindowDimensions();
+
+  let userId = useUserSate.getState().userId;
+  let patientName = useUserSate.getState().patientName;
+
+  const handleBookPress = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setConfirmationMessage("");
+  };
+
+  const handleConfirmBooking = () => {
+    if (!userId) {
+      Alert.alert('Sign In Required', 'You need to be signed in to complete the booking. Please log in and try again.');
+      return;
+    }
+    const orderData = {
+      id: null,
+      promotionName: promotionName,
+      promotionId: id,
+      status: "Pending",
+      orderDate: new Date().toISOString(),
+      patientId: userId,
+      mrno: `SSW00${userId}`,
+      mobileNo: "",
+      patientName: patientName,
+      nationalityId: "",
+      note: "Booking note",
+      branch: "",
+      department: "",
+      speciality: "",
+      paymentReference: "121",
+      paymentStatus: "Pending",
+      amount: 0,
+      packageOrder: true,
+    };
+
+    promotionOrderService.save(orderData)
+      .then((response) => {
+        setConfirmationMessage('Your booking has been successful');
+        setTimeout(() => {
+          setIsModalVisible(false);
+          setConfirmationMessage("");
+        }, 4000);
+      })
+      .catch((error) => {
+        console.error(error);
+        Alert.alert('An error occurred during the booking process');
+      });
+  };
 
   return (
     <ImageBackground
@@ -36,12 +96,37 @@ const UpcomingSliderItem = ({ promotionName, description, photo }: Props) => {
       <TouchableOpacity 
         className="bg-emerald-500 text-primaryColor border-t-[1px] border-x-[1px] border-b-[1px] border-primaryColor px-4 py-2 rounded-lg"
         style={{ position: 'absolute', right: 15, bottom: 20 }}
-      >
-        <Text>Book</Text>
-      </TouchableOpacity>
-    </View>
-  </ImageBackground>
-  
+          onPress={handleBookPress}
+        >
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Book</Text>
+        </TouchableOpacity>
+        <Modal transparent={true} animationType="slide" visible={isModalVisible} onRequestClose={handleCancel}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <Pressable className="absolute top-3 right-3" onPress={handleCancel}>
+                <AntDesign name="closecircle" size={24} color="#78450f" />
+              </Pressable>
+              {confirmationMessage ? (
+                <Text className="text-xl font-bold text-center mb-4 mt-7">{confirmationMessage}</Text>
+              ) : (
+                <>
+                  <Text className="text-xl font-bold text-center mb-4 mt-7">Do you want to book this service?</Text>
+                  <View className="flex-row justify-between">
+                    <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
+                      <Text className="text-center text-black font-bold">Cancel</Text>
+                    </Pressable>
+                    <Pressable className="flex-1 bg-amber-900 py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
+                      <Text className="text-center text-white font-bold">Confirm</Text>
+                    </Pressable>
+                  </View>
+                </>
+              )}
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </ImageBackground>
+
   );
 };
 
