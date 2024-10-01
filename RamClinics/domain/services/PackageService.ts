@@ -3,7 +3,7 @@ import { RestService } from "./core/RestService";
 export class PackageService extends RestService<any> {
 
     getPackages() {
-        return this.get(`getPackages/`);
+        return this.get("getPackages");
     }
 
     getPackagesByBranch(branch: string) {
