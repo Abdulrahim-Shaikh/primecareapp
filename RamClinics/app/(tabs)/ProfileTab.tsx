@@ -63,7 +63,7 @@ const ProfileTab = () => {
                   {user && user.mobile ? user.mobile : "+0123456789"}
                 </Text>
                 <Pressable onPress={() => loggedIn ? router.push("/UserProfile") : router.push("/SignIn")}
-                  className="bg-emerald-500 mt-4 py-1 rounded-lg items-center border border-2 border-indigo-950 w-3/4">
+                  className="bg-emerald-500 mt-4 p-1 px-3 rounded-lg items-center border border-2 border-indigo-950">
                   <Text className="text-md text-indigo-950 text-base">View Profile</Text>
                 </Pressable>
 
