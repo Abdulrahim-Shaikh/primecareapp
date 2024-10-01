@@ -28,7 +28,7 @@ const SignIn = () => {
           <View className="items-center pb-6">
             <Image source={logo} style={{ maxHeight: 160, maxWidth: 240}}/>
           </View>
-          <Text className="text-2xl font-bold text-center">Sign In</Text>
+          <Text className="text-2xl font-bold text-white text-center">Sign In</Text>
           <Text className="text-[14px] text-amber-900 text-center pt-3">
             Access your account securely. Sign in to manage your personalized
             experience.

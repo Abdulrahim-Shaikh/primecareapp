@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Image,
   Modal,
@@ -21,46 +22,90 @@ import {
 import { router } from "expo-router";
 import { myAppoinmentData } from "../../constants/data";
 import Searchbox from "../../components/ui/Searchbox";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import appointmentService from "../../domain/services/AppointmentService";
+import { useUserSate } from "../../domain/state/UserState";
+import branchService from "../../domain/services/BranchService";
+import patientService from "../../domain/services/PatientService";
 
-const tabNames = ["Upcoming", "Completed", "Cancelled"];
+
+const tabNames = ["Booked", "Checked In"];
 
 const Appoinment = () => {
 
   const [cancelModal, setCancelModal] = useState(false);
-  const [activeTab, setActiveTab] = useState("Upcoming");
+  const [activeTab, setActiveTab] = useState("Booked");
   const [filteredItem, setFilteredItem] = useState(myAppoinmentData);
-  const [fromDate, setFromDate] = useState(new Date());  // State for start date
+  const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
+  const [appointments, setAppointments] = useState(myAppoinmentData);
+  const [allAppointments, setAllAppointments] = useState(myAppoinmentData);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
 
-  const onStartDateChange = (selectedDate: any) => {
+  const onStartDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || fromDate;
-    setIsFromDatePickerOpen(Platform.OS === 'ios');
+    setIsFromDatePickerOpen(false);
     setFromDate(currentDate);
-
-    // Ensure the end date is after the start date
-    if (currentDate > toDate) {
-      setToDate(currentDate);
-    }
   };
 
   // Handle End Date Change
-  const onEndDateChange = (selectedDate: any) => {
+  const onEndDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || toDate;
-    setIsToDatePickerOpen(Platform.OS === 'ios');
+    setIsToDatePickerOpen(false);
     setToDate(currentDate);
   };
 
+  const changeTab = (tab: string) => {
+    console.log("here")
+    setAppointments(allAppointments.filter((item) => item.hisStatus === tab))
+    setActiveTab(tab)
+  }
+
   useEffect(() => {
+    if (useUserSate.getState().loggedIn === false) {
+      Alert.alert('Note', 'You must Sign In to view your appointments', [
+        {
+          text: 'OK',
+          onPress: () => router.push({
+            pathname: "/SignIn",
+          }),
+          style: 'default'
+        },
+      ])
+    }
+    console.log("here")
+    const patientId = useUserSate.getState().userId;
+    console.log("patientId: ", patientId)
+    const branch = useUserSate.getState().branch;
+    let branchId;
+    patientService.getByPatientId(patientId)
+      .then((response) => {
+        branchId = response.data.branchId;
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    appointmentService.getAppointments(patientId, branchId)
+      .then((response) => {
+        setAllAppointments(response.data);
+        for (let i of response.data) {
+          console.log("\n\n\n\ni: ", i)
+        }
+        console.log("appointments: ", response)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+
+
     const filteredData = myAppoinmentData.filter(
       (item) => item.sessionStatus === activeTab
     );
 
     setFilteredItem(filteredData);
-  }, [activeTab]);
+    changeTab("Booked")
+  }, []);
 
 
 
@@ -83,55 +128,28 @@ const Appoinment = () => {
           <View className="pt-8">
             <Searchbox />
           </View>
-          <View>
-            <Text>Start Date: {fromDate.toString()}</Text>
-            <Button title="Select Start Date" onPress={() => setIsFromDatePickerOpen(true)} />
-            <Modal visible={isFromDatePickerOpen} transparent={true} animationType="slide">
-              <View>
-                {isFromDatePickerOpen && (
-                  <DateTimePicker
-                    testID="startDatePicker"
-                    value={fromDate}
-                    mode="date"
-                    display="default"
-                    onChange={onStartDateChange}
-                    maximumDate={new Date()} // Optional: Limit selection to today or earlier
-                  />
-                )}
-                <Button title="Confirm" onPress={() => setIsFromDatePickerOpen(false)} />
-              </View>
-            </Modal>
-
-
-            <Text>End Date: {toDate.toString()}</Text>
-            <Button title="Select End Date" onPress={() => setIsToDatePickerOpen(true)} />
-
-            {/* Modal for End Date Picker */}
-            <Modal visible={isToDatePickerOpen} transparent={true} animationType="slide">
-              <View>
-                {isToDatePickerOpen && (
-                  <DateTimePicker
-                    testID="endDatePicker"
-                    value={toDate}
-                    mode="date"
-                    display="default"
-                    onChange={onEndDateChange}
-                    minimumDate={fromDate} // Ensure end date is after start date
-                    maximumDate={new Date()} // Optional: Limit selection to today or earlier
-                  />
-                )}
-                <Button title="Confirm" onPress={() => setIsToDatePickerOpen(false)} />
-              </View>
-            </Modal>
+          <View className="flex-row justify-between my-4">
+            <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
+              <Text className="text-lg">From: {fromDate.toLocaleDateString()}</Text>
+            </Pressable>
+            {isFromDatePickerOpen && (
+              <DateTimePicker value={fromDate} mode="date" display="default" onChange={onStartDateChange} />
+            )}
+            <Pressable onPress={() => setIsToDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
+              <Text className="text-lg">To: {(new Date(toDate)).toLocaleDateString()}</Text>
+            </Pressable>
+            {isToDatePickerOpen && (
+              <DateTimePicker value={toDate} mode="date" display="default" onChange={onEndDateChange} />
+            )}
           </View>
-          <View className="pt-6 flex flex-row  justify-between items-center">
+          <View className="pt-2 flex flex-row  justify-between items-center">
             {tabNames.map((item, idx) => (
               <Pressable
                 key={idx}
-                onPress={() => setActiveTab(item)}
+                onPress={() => changeTab(item)}
                 className={`flex-1 border-b  pb-2 ${activeTab === item
-                  ? "border-amber-900"
-                  : "text-amber-500"
+                    ? "border-amber-900"
+                    : "text-amber-500"
                   }`}
               >
                 <Text
@@ -145,48 +163,53 @@ const Appoinment = () => {
           </View>
 
           <View className="">
-            {filteredItem.map((item, idx) => (
+            { appointments.length <= 0 &&
+                <Text className="text-center text-lg text-gray-600 mt-4">No appointments scheduled for this filter</Text>
+            }
+            {appointments.map((item) => (
               <View
                 key={`key: ${item.id}`}
                 className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
               >
                 <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
                   <View className="flex flex-row justify-start items-center ">
-                    <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
+                    {/* <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
                       <Image source={item.img} />
-                    </View>
+                    </View> */}
 
                     <View>
                       <Text className="text-base font-medium pb-2">
-                        {item.name}
+                        {item.branchName} - {item.practitionerName}
                       </Text>
-                      <View className="flex-row items-center">
-                        <Text className="">{item.sessionTyps} - </Text>
+                      <View className="flex-row items-center gap-2">
                         <View>
                           <Text
-                            className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
-                              "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
-                              } ${item.sessionStatus === "Completed" &&
-                              "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
-                              } ${item.sessionStatus === "Cancelled" &&
-                              "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
-                              } `}
-                          >
-                            {item.sessionStatus}
+                            className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
+                            {item.speciality}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text
+                            className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
+                            {item.department}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text
+                            className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
+                            {item.hisStatus}
                           </Text>
                         </View>
                       </View>
 
                       <Text className="text-[12px] pt-2">
-                        <Text>
-                          <AntDesign name="star" color={"#ffab00"} />
-                        </Text>
-                        {item.rating}
+                        <Text> <AntDesign name="star" color={"#ffab00"} /> </Text>
+                        {item.age}
                         <Text>
                           <Entypo name="dot-single" />
                         </Text>
                         <Text className="text-amber-900">
-                          <AntDesign name="clockcircle" /> {item.availableTime}
+                          <AntDesign name="clockcircle" /> {item.startTime} - {item.endTime}
                         </Text>
                       </Text>
                     </View>

@@ -5,6 +5,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import {
   AntDesign, FontAwesome, MaterialCommunityIcons
 } from "@expo/vector-icons";
+import { useUserSate } from "../../domain/state/UserState";
 
 const TabIcon = ({
   focused,
@@ -102,15 +103,21 @@ const TabLayout = () => {
           }}
         />
 
-        <Tabs.Screen
-          name="MyAppoinment"
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="calendar" focused={focused} />
-            ),
-          }}
-        />
+
+          {/* {
+            useUserSate.getState().loggedIn && ( */}
+              <Tabs.Screen
+                name="MyAppoinment"
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabIcon iconName="calendar" focused={focused} />
+                  ),
+                }}
+              />
+            {/* )
+          } */}
+
 
         <Tabs.Screen
           name="Promotions"

@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, Button, TextInput, ViewToken } from "react-native";
+import { Image, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, Button, TextInput, ViewToken, Pressable, Alert } from "react-native";
 import { StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { myAppoinmentData } from "../../constants/data";
@@ -18,6 +18,7 @@ import branchService from "../../domain/services/BranchService";
 import moment from 'moment';
 import patientService from "../../domain/services/PatientService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
+import { useUserSate } from "../../domain/state/UserState";
 
 const categoryList = [
     "All",
@@ -90,6 +91,7 @@ const ServiceListPage = () => {
     const [doctorScheduleData, setDoctorScheduleData] = useState(myAppoinmentData)
     const [patientData, setPatientData] = useState({})
     const [patientPolicyData, setPatientPolicyData] = useState({})
+    const [resourceId, setResourceId] = useState("")
     const [photoUrl, setPhotoUrl] = useState("")
     const flatListRef = useAnimatedRef<FlatList<any>>();
     const x = useSharedValue(0);
@@ -115,8 +117,8 @@ const ServiceListPage = () => {
 
     useEffect(() => {
         console.log(`option: '${department}'`)
-
-        patientService.byMobileNo("594951370")
+        const mobile = useUserSate.getState().user.mobile? useUserSate.getState().user.mobile: "0594951370"
+        patientService.byMobileNo(mobile)
         .then((response: any) => {
             console.log("patientService.byMobileNo: ", response)
             setPatientData(response.data[0])
@@ -144,10 +146,9 @@ const ServiceListPage = () => {
         specialityService.getByDept(department)
             .then((response) => {
                 // setSpecialities(response.data)
-                setSpecialityOptions(response.data)
+                console.log("getByDept: ", response.data)
+                setSpecialityOptions(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
             })
-
-
     }, [])
 
     const [activeCategory, setActiveCategory] = useState(0);
@@ -159,17 +160,21 @@ const ServiceListPage = () => {
         if (department != null && date != null && speciality != null && doctor != null) {
             console.log("validateForm", department)
             console.log("validateForm", speciality)
-            let today = moment().format("YYYY-MMM-DD");
+            let dateString = moment(date).format("YYYY-MM-DD");
+            let today= moment().format("YYYY-MM-DD");
+            console.log("today: ", today)
+            console.log("dateString: ", dateString)
             let requestBody: any = [{
-                date: "2024-09-30",
-                day: 30,
-                resourceIds: [25937],
+                date: dateString,
+                day: 1,
+                resourceIds: [resourceId],
                 wday: "Mon"
             }]
             scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
                 .then((response) => {
-                    console.log("response getDoctorSchedule: ", response.data)
+                    console.log("rresponse getDoctorSchedule: ", response.data)
                     setAppointmentEntry(true)
+                    setDoctorScheduleData(response.data)
                     resourceService.find(response.data[0].practitionerId)
                     .then((response) => {
                         if (response.data[0] && response.data[0].photo.length > 0 && response.data[0].photo[0]) {
@@ -179,7 +184,6 @@ const ServiceListPage = () => {
                     .catch((error) => {
                         console.log("resourceService.findById() error: ", error)
                     })
-                    setDoctorScheduleData(response.data)
                     // setAppointmentEntry(true)
                 })
                 .catch((err) => {
@@ -270,7 +274,7 @@ const ServiceListPage = () => {
                                         return (
                                             <View style={styles.dropdownButtonStyle}>
                                                 <Text style={styles.dropdownButtonTxtStyle}>
-                                                    {(selectedItem) || 'Select a service'}
+                                                    {(selectedItem) || 'Select a department'}
                                                 </Text>
                                                 <MaterialCommunityIcons
                                                     name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
@@ -336,12 +340,17 @@ const ServiceListPage = () => {
                             }
 
                             {branchId != "" ?
-                                <View className="flex flex-row justify-center gap-3">
+                                <Pressable 
+                                // onPress={() => {
+                                // }}
+                                className="flex flex-row justify-center gap-3">
                                     <SelectDropdown
                                         data={doctorOptions}
                                         onSelect={(selectedItem, index) => {
+                                            setDoctorScheduleData([])
+                                            setAppointmentEntry(false)
                                             setDoctor(selectedItem.name)
-                                            setIsDatePickerOpen(true)
+                                            setResourceId(selectedItem.id)
                                         }}
                                         renderButton={(selectedItem, isOpened) => {
                                             return (
@@ -367,7 +376,7 @@ const ServiceListPage = () => {
                                         showsVerticalScrollIndicator={false}
                                         dropdownStyle={styles.dropdownMenuStyle}
                                     />
-                                </View>
+                                </Pressable>
                                 :
                                 <></>
                             }
@@ -417,26 +426,7 @@ const ServiceListPage = () => {
                             {appointmentEntry ?
                                 <View className="">
                                     {doctorScheduleData.map((item, idx) => (
-                                        <TouchableOpacity
-                                            key={`key: ${item.id}`}
-                                            
-                                            onPress={() => 
-                                                router.push({
-                                                    pathname: "/ScheduleAppointment/",
-                                                    params: {
-                                                        branchId: branchId,
-                                                        department: department,
-                                                        speciality: speciality,
-                                                        doctor: doctor,
-                                                        date: (new Date(date)).toString(),
-                                                        params: JSON.stringify(item),
-                                                        patientData: JSON.stringify(patientData),
-                                                        patientPolicyData: JSON.stringify(patientPolicyData)
-                                                    }
-                                                })
-                                            }
-                                            className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
-                                        >
+                                        <View key={`key: ${item.id}`} className="p-4 border border-amber-900 rounded-2xl w-full mt-4">
                                             <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
                                                 <View className="flex flex-row justify-start items-center ">
                                                     <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
@@ -474,17 +464,52 @@ const ServiceListPage = () => {
                                                 </View>
                                             </View>
                                             <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                                                <TouchableOpacity>
+                                                <TouchableOpacity
+                                                onPress={() => {
+                                                    console.log("item: ", item)
+                                                }}
+                                                >
                                                     <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center" >
                                                         Cancel
                                                     </Text>
                                                 </TouchableOpacity>
-                                                <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center">
+                                                <Text>{item.slots.length}</Text>
+                                                <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center"
+                                                    onPress={() => 
+                                                    { Object.keys(item.slots).length == 0
+                                                        ?
+                                                            Alert.alert('Note', 'No slots available for appointment', [
+                                                                {
+                                                                    text: 'OK',
+                                                                    // onPress: () => router.push({
+                                                                    //     pathname: "/BookAppointment",
+                                                                    // }),
+                                                                    style: 'default'
+                                                                },
+                                                            ],
+                                                            )
+                                                        :
+                                                            router.push({
+                                                                pathname: "/ScheduleAppointment/",
+                                                                params: {
+                                                                    branchId: branchId,
+                                                                    department: department,
+                                                                    speciality: speciality,
+                                                                    doctor: doctor,
+                                                                    date: (new Date(date)).toString(),
+                                                                    params: JSON.stringify(item),
+                                                                    patientData: JSON.stringify(patientData),
+                                                                    patientPolicyData: JSON.stringify(patientPolicyData)
+                                                                }
+                                                            })
+                                                        }
+                                                    }
+                                                >
                                                     Schedule Appointment
                                                 </Text>
 
                                             </View>
-                                        </TouchableOpacity>
+                                        </View>
                                     ))}
                                 </View>
                                 // <View className="mt-8 flex flex-row justify-center">
