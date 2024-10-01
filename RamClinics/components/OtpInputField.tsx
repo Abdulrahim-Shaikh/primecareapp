@@ -12,11 +12,12 @@ type Nullable<T> = T | null;
 type PropsType = {
   // link: string;
   // title: string;
-  disabled: boolean
+  disabled: boolean;
+  otpResp: any;
   onPress(otp: string[]): void
 };
 
-const OtpInputField = ({ disabled, onPress }: PropsType) => {
+const OtpInputField = ({ disabled, onPress, otpResp }: PropsType) => {
   
   const inputRefs = useRef<Array<Nullable<TextInput>>>([]);
   let otpValue: string[] = [];

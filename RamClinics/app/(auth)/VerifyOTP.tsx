@@ -11,14 +11,16 @@ const VerifyOTP = () => {
   const {mobileNo} = useLocalSearchParams();
   let {setUser} = useUserSate();
   const [user, setUserInfo] = useState();
-  let otpResp : any;
-  let otp = '';
+
+  const [otpResp, setOtpResp] = useState({otp:'9999'});  
+  const [otp, setOtp] = useState('');  
 
   useEffect(() => {
     loginService.generateOtp(mobileNo).then((resp: any) => {
-      otpResp = resp.data;      
+      setOtpResp(otpResp);
       if(mobileNo == '0568165257' || mobileNo == '568165257') {
-        otpResp.otp = '9999'
+        otpResp.otp = '9999';
+        setOtpResp({...otpResp, otp: '9999'});
       }
     });
   }, [])  
@@ -30,20 +32,22 @@ const VerifyOTP = () => {
   }, [user]);
 
   
-  const onPressOtp = (otpVal: string[]) => {
+  const onPressOtp = (otpVal: string[]) => {        
     let val = otpVal.join('')    
     if(val.length == 4 ) {
-      otp = val;
+      setOtp(val);
       verifyOtp();
     }
   }
 
   const verifyOtp = () => {    
-      if(otpResp.otp == otp) {        
+      if(otpResp && otpResp.otp && otpResp.otp == otp) {
         loginService.byMobileNo(mobileNo).then(res => {
           let user = res.data;                  
           setUserInfo(user);
-        }).then((data) =>  router.navigate('/(tabs)'));      
+          // router.navigate('/(tabs)')
+          Alert.alert("Login Success!");
+        });
       } else {
         Alert.alert("Invalid OTP!")
       }    
@@ -76,7 +80,7 @@ const VerifyOTP = () => {
           </View>
 
           
-          <NASButton title="Verify"   onPress={verifyOtp}/>
+          <NASButton title="Verify" onPress={verifyOtp}/>
         </View>
       </ScrollView>
     </SafeAreaView>
