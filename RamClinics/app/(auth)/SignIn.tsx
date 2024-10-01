@@ -17,8 +17,20 @@ const SignIn = () => {
     } 
   }
 
-  const onChangeText = (val: string) => {
-    mobileNo = val;
+  const onChangeText = (val: string) => {   
+    mobileNo = val;    
+    if(mobileNo.startsWith("0")) {
+      mobileNo = mobileNo.substring(1);
+    }
+    if(mobileNo.startsWith("966")) {
+      mobileNo = mobileNo.substring(3);
+    }
+    if(mobileNo.startsWith("+966")) {
+      mobileNo = mobileNo.substring(4);
+    }
+    if(mobileNo.length == 9) {
+      sendOtp();
+    }
   };
 
   return (
@@ -34,7 +46,7 @@ const SignIn = () => {
             experience.
           </Text>
           <View className="w-full pt-8 pb-8">
-            <FormField name="Mobile No" placeholder="Mobile No" onChangeText={onChangeText} />
+            <FormField name="Mobile No" placeholder="05..." onChangeText={onChangeText} onEnter={sendOtp} />
             {/* <FormField name="Password" placeholder="*******" otherStyle="mt-4" /> */}
           </View>
           {/* <View className="text-amber-500 flex items-end w-full pt-2 pb-7">
@@ -49,7 +61,7 @@ const SignIn = () => {
 
           {/* <Button onPress={sendOtp} title="Send OTP"> </Button> */}
 
-          <NASButton title="Send Otp"   onPress={sendOtp}/>
+          <NASButton title="Send Otp" onPress={sendOtp}  />
 
           {/* <View className="pt-8">
             <View>
