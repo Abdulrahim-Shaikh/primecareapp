@@ -10,12 +10,11 @@ import { useUserSate } from "../../domain/state/UserState";
 import invoiceService from "../../domain/services/InvoiceService";
 import moment from "moment";
 
-const tabNames = ["Pending", "Approved", "Cancelled"];
-
 const MyApprovals = () => {
 
     let user = useUserSate.getState().user;
     let mrno = '';
+    const tabNames = ["Pending", "Approved", "Cancelled"];
     const [patient, setPatient] = useState([]);
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
@@ -24,6 +23,10 @@ const MyApprovals = () => {
     const [showToPicker, setShowToPicker] = useState(false);
     const [selectedValue, setSelectedValue] = useState("");
     const [approvals, setApprovals] = useState([]);
+    const [filteredApprovals, setFilteredApps] = useState([]);
+    const [pendingApps, setPendingApps] = useState([]);
+    const [approvedApps, setApprovedApps] = useState([]);
+    const [cancelledApps, setCancelledApps] = useState([]);
     const [activeTab, setActiveTab] = useState("Pending");
 
     const onChangeFrom = (event: DateTimePickerEvent, selectedDate: any) => {
@@ -58,45 +61,65 @@ const MyApprovals = () => {
         });
     }, []);
 
+    // const filterApprovals = () => {
+    //     let pending = approvals?.filter((item: any) =>{ item.status=="Pending" || item.status=="In Approval"});
+    //     setPending(pending);
+    //     let approved = approvals?.filter((item: any) => {item.status=="Completed" || item.status=="Auto Approved" || item.status=="CASH"});
+    //     setApproved(approved);
+    //     let cancelled = approvals?.filter((item: any) => {item.status=="Cancelled"});
+    //     setCancelled(cancelled);
+    // }
+
     const search = () => {
         setMrNo();
         console.log("\n\n---------> mrno: ", mrno, "\tfromdate:", fromDate, "\ttoDate:", toDate, "\tbranchID:", selectedValue);
         let fDate = moment(fromDate).format("YYYY-MM-DD");
         let tDate = moment(toDate).format("YYYY-MM-DD");
-        // let fDate = (new Date(fromDate)).toString();
-        // let tDate = (new Date(toDate)).toString();
-        console.log('\ndates --->',fDate, tDate);
-        console.log(`mrno: '${mrno}'`)
-        console.log(`selectedValue: '${selectedValue}'`)
-        console.log(`fDate: '${fDate}'`)
-        console.log(`tDate: '${tDate}'`)
-        invoiceService.invoiceApprovals(selectedValue, fDate, tDate, mrno).then((res) => {
-            console.log("\n\nFetching approvals:", res.data);
-            setApprovals(res.data);
-        }).catch((error) => {
-            console.error("\n\nFailed to fetch approvals:", error);
-        });
-    }
+        console.log('\ndates --->', fDate, tDate);
+
+        invoiceService.invoiceApprovals(selectedValue, fDate, tDate, mrno)
+            .then((res) => {
+                console.log("\n\nFetching approvals:", res.data);
+                setApprovals(res.data);
+            })
+            .catch((error) => {
+                console.error("\n\nFailed to fetch approvals:", error);
+            });
+    };
+
+    useEffect(() => {
+        const pending = approvals.filter((app: any) => (app.status === "Pending" || app.status === "In Approval"));
+        setPendingApps(pending); 
+        console.log(">>>>>>>>pending approvals: ", pending);
+    
+        const approved = approvals.filter((app: any) =>  (app.status === "Completed" || app.status === "Auto Approved" || app.status === "CASH"));
+        setApprovedApps(approved); 
+        console.log(">>>>>>>>approved approvals: ", approved);
+    
+        const cancelled = approvals.filter((app: any) => (app.status === "Cancelled"));
+        setCancelledApps(cancelled); 
+        console.log(">>>>>>>>cancelled approvals: ", cancelled);
+    }, [approvals]);
 
     return (
         <SafeAreaView>
             <ScrollView>
                 <View className="pb-8 px-6 pt-4">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="My Invoices" />
+                        <HeaderWithBackButton isPushBack={true} title="My Approvals" />
                         <MaterialCommunityIcons name="receipt" size={24} color={"#009281"} />
                     </View>
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {fromDate.toDateString()}</Text>
+                            <Text className="text-lg">From: {moment(fromDate).format("YYYY-MM-DD")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {toDate.toDateString()}</Text>
+                            <Text className="text-lg">To: {moment(toDate).format("YYYY-MM-DD")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
@@ -112,10 +135,10 @@ const MyApprovals = () => {
                             ))}
                         </Picker>
                     </View>
-                    
+
                     <Pressable onPress={() => search()} className="flex-1 bg-emerald-500 p-3 rounded-lg mt-2 mb-4">
                         <Text className="text-lg text-white text-center"> search </Text>
-                    </Pressable> 
+                    </Pressable>
 
                     <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
@@ -123,35 +146,72 @@ const MyApprovals = () => {
                                 <Text className={`text-center font-semibold ${activeTab === item ? "text-amber-900" : "text-gray-700"}`}>
                                     {item}
                                 </Text>
+
                             </Pressable>
                         ))}
                     </View>
 
                     <View>
-                        {approvals.length === 0 ? (
+                        {filteredApprovals.length === 0 ? (
                             <Text className="text-center text-lg text-gray-600 mt-4">No aprrovals available.</Text>
                         ) : (
-                            approvals.map((apprval: any) => (
+                            activeTab === "Cancelled" ?
+                            cancelledApps.map((apprval: any) => (
                                 <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
                                     <View className="flex-row justify-between items-center">
                                         <Text className="font-semibold">Approval ID: {apprval.id}</Text>
-                                        <AntDesign name="filetext1" size={24} color="#007BFF" />
                                     </View>
-                                    <Text className="mt-2 text-lg text-gray-800">
-                                        Total Amount: <Text className="font-bold text-blue-600">${apprval.total}</Text>
+                                    <Text className="mt-1 text-lg text-gray-800">
+                                        Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
                                     </Text>
-                                    <Text className="mt-1 text-sm text-gray-600">Branch: {apprval.branch}</Text>
-                                    <Text className="mt-1 text-sm text-gray-600">Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                    <Text className="mt-1 text-lg text-gray-800">
+                                        Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                    </Text>
+                                    <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                    <Text className="mt-1 text-md text-gray-600"></Text>
                                 </View>
                             ))
-                        )}
+                            :
+                            activeTab === "Approved" ?
+                            approvedApps.map((apprval: any) => (
+                                <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                    <View className="flex-row justify-between items-center">
+                                        <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                    </View>
+                                    <Text className="mt-1 text-lg text-gray-800">
+                                        Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
+                                    </Text>
+                                    <Text className="mt-1 text-lg text-gray-800">
+                                        Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                    </Text>
+                                    <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                    <Text className="mt-1 text-md text-gray-600"></Text>
+                                </View>
+                            ))
+                            : 
+                            pendingApps.map((apprval: any) => (
+                                <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                    <View className="flex-row justify-between items-center">
+                                        <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                    </View>
+                                    <Text className="mt-1 text-lg text-gray-800">
+                                        Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
+                                    </Text>
+                                    <Text className="mt-1 text-lg text-gray-800">
+                                        Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                    </Text>
+                                    <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                    <Text className="mt-1 text-md text-gray-600"></Text>
+                                </View>
+                            ))
+                        )
+                        }
                     </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
     );
 };
-
 export default MyApprovals;
 
 const styles = StyleSheet.create({
