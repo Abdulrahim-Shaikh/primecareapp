@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     dropdownButtonStyle: {
         width: 200,
         height: 50,
-        backgroundColor: '#E9ECEF',
+        backgroundColor: '#d4d4d8',
         borderRadius: 12,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -74,13 +74,11 @@ const ScheduleAppointment = () => {
     // const doctorScheduleData = params ? JSON.parse(params.toString()) : {}
     const [doctorScheduleData, setDoctorScheduleData] = useState(params ? JSON.parse(params.toString()) : {})
     const [patientDataJson, setPatientDataJson] = useState(patientData ? JSON.parse(patientData.toString()) : {})
+    const [fromDate, setFromDate] = useState(new Date())
+    const [toDate, setToDate] = useState(new Date())
     const [patientPolicyDataJson, setPatientPolicyDataJson] = useState(patientPolicyData ? JSON.parse(patientPolicyData.toString()) : {})
     // const defaultStatus = doctorScheduleData.status ? doctorScheduleData.status : "Booked"
     const [slots, setSlots] = useState([])
-    const [fromDate, setFromDate] = useState(new Date());  // State for start date
-    const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
-    const [toDate, setToDate] = useState(new Date());  // State for start date
-    const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false); // Control for start date picker modal
     const [defaultStatus, setDefaultStatus] = useState(doctorScheduleData.status ? doctorScheduleData.status : "Booked")
     const [day, setDay] = useState("1");
     const [slotStartTime, setSlotStartTime] = useState("");
@@ -93,13 +91,19 @@ const ScheduleAppointment = () => {
     let toDateAux = new Date();
 
     useEffect(() => {
-        console.log(typeof Object.values(JSON.parse(params.toString()).slots))
-        console.log(typeof [])
-        setSlots(Object.values(JSON.parse(params.toString()).slots["30"]))
+        console.log("params: ", params)
+        // console.log("\n\n\n\nObject.values(JSON.parse(params.toString()).slots): ", Object.values(JSON.parse(params.toString()).slots)[0])
+        // console.log("\n\n\n\npatientData: ", patientData)
+        let slotsAux: any = Object.values(JSON.parse(params.toString()).slots)[0]
+        console.log("\n\n\n\nslotsAux: ", slotsAux)
+        console.log("\n\n\n\n")
+        slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
+        // console.log("slotsAux: ", slotsAux)
+        setSlots(slotsAux)
         setDoctorScheduleData(JSON.parse(params.toString()))
         setPatientDataJson(JSON.parse(patientData.toString()))
         setPatientPolicyDataJson(JSON.parse(patientPolicyData.toString()))
-        console.log("patientPolicyData: ", patientPolicyDataJson)
+        console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
         // let dt = moment(date, "YYYY-MM-DD")
         // console.log("slllllll: ", JSON.parse(params.toString()).slots["30"])
         branchService.find(Number(branchId))
@@ -112,9 +116,8 @@ const ScheduleAppointment = () => {
                 console.log("\n\n\nerror: ", error)
             })
     }, [])
-
+    
     const bookAppointment = () => {
-
         let today = moment().format("YYYY-MM-DDTHH:mm:ss");
         let updatedDate = moment().format("YYYY-MM-DDTHH:mm:ss");
         let scheduleId = Object.values(doctorScheduleData.scheduleId)[0]
@@ -301,7 +304,6 @@ const ScheduleAppointment = () => {
                                     name="check"
                                     size={24}
                                     color={"#009281"}
-                                    onPress={() => router.back()}
                                 />
                                 {/* <Ionicons name="heart-outline" size={16} color={"#009281"} /> */}
                             </View>
@@ -360,7 +362,7 @@ const ScheduleAppointment = () => {
                             data={['Booked', 'Confirmed']}
                             defaultValue={defaultStatus}
                             onSelect={(selectedItem, index) => {
-                                console.log("hererere")
+                                setDefaultStatus(selectedItem)
                             }}
                             renderButton={(selectedItem, isOpened) => {
                                 return (

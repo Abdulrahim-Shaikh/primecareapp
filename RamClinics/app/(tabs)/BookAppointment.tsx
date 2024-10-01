@@ -63,7 +63,7 @@ const BookAppointment = () => {
                                                     text: 'Doctor',
                                                     onPress: () => router.push({
                                                         pathname: "/SpecialistListPage",
-                                                        params: { option: item.title }
+                                                        params: { department: item.title }
                                                     }),
                                                     style: 'default'
                                                 },
@@ -80,9 +80,9 @@ const BookAppointment = () => {
                                         }
                                     }>
                                         <View className="py-2 items-center">
-                                            <Ionicons name={item.icon as any} size={36} color={"teal"} />
+                                            <Ionicons name={item.icon as any} size={36} color={'#78350f'} />
                                         </View>
-                                        <Text className="text-sm font-semibold text-center text-teal-800 pt-3 pb-2">{item.title}</Text>
+                                        <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item.title}</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
