@@ -30,8 +30,7 @@ const ProfileTab = () => {
   let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
   let setLoggedOut = useUserSate.getState().setLoggedOut;
-
-  const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/"
+  const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
 
   console.log("user1", user)
 
@@ -50,7 +49,7 @@ const ProfileTab = () => {
           </View>
           <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">
             <View className="flex-row gap-4">
-              { user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
+              {user && user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
                 <Image source={{ uri: `${sourceUrl}${encodeURIComponent(user.profileImg[0])}` }} className="w-16 h-16 rounded-lg" />
                 :
                 <Image source={emptyProfileImg} className="w-16 h-16 rounded-lg" />
@@ -146,7 +145,7 @@ const ProfileTab = () => {
                   </Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => { setLoggedOut(); router.push("/(tabs)")}}
+                  onPress={() => { setLoggedOut(); router.push("/(tabs)") }}
                   className="flex-1"
                 >
                   <Text className="text-white border border-amber-900 rounded-lg py-4 bg-amber-900 text-center font-medium ">

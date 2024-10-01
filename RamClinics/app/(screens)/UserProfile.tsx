@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import {
   AntDesign,
@@ -10,9 +10,21 @@ import {
 import profileImg from "../../assets/images/UserIcon.png";
 import LinkButton from "../../components/LinkButton";
 import { useUserSate } from "../../domain/state/UserState";
+import emptyProfileImg from "../../assets/images/avatar.png";
+import patientService from "../../domain/services/PatientService";
 
 const UserProfile = () => {
-  const { user,setUser } = useUserSate();
+  const { user, setUser } = useUserSate();
+  const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
+  let [patient, setPatient] = useState([]);
+  useEffect(() => {
+    patientService.find(user.id).then((res) => {
+      console.log("filtered patient..", res.data)
+      setPatient(res.data);
+    }).catch((error) => {
+      console.error("Failed to fetch labratory:", error);
+    });
+  }, []);
   return (
     <View className="bg-amber-100 pt-6">
       <View className="h-full justify-between items-start w-full">
@@ -28,8 +40,13 @@ const UserProfile = () => {
           </Text>
         </View>
         <View className="w-full">
-          <View className="-mt-16 flex-row justify-center items-start">
-            <Image source={profileImg} />
+          <View className="mt-4 flex-row justify-center items-start">
+            {user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
+              <Image source={{ uri: `${sourceUrl}${encodeURIComponent(user.profileImg[0])}` }} className="w-64 h-64 rounded-lg" />
+              :
+              <Image source={emptyProfileImg} className="w-64 h-64 rounded-lg" />
+            }
+            {/* <Image source={profileImg} /> */}
           </View>
           <View className="text-amber-950 justify-center items-center text m-1">
             <Text className="text-blue-500 text-xl font-semibold">{user && user.email ? user.email : "person@ramclinic.com"}</Text>
@@ -39,13 +56,13 @@ const UserProfile = () => {
               <View>
                 <Text className=" text-white">First Name</Text>
                 <Text className="text-white font-semibold text-xl">
-                {user && user.firstName ? user.firstName : "Unknown"}
+                  {user && user.firstName ? user.firstName : "Unknown"}
                 </Text>
               </View>
               <View>
                 <Text className="text-base text-white">Last Name</Text>
                 <Text className=" text-white font-semibold text-xl">
-                {user && user.lastName ? user.lastName : "Person"}
+                  {user && user.lastName ? user.lastName : "Person"}
                 </Text>
               </View>
               <View>
@@ -66,7 +83,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">MRN NO </Text>
                   <View className="bg-amber-500 rounded-md">
-                    <Text className="text-white text-md">KHB100105421846</Text>
+                    <Text className="text-white text-md">{patient && patient.mrno ? patient.mrno : "KHB100105421846"}</Text>
                   </View>
                 </View>
                 <View className="flex-row gap-2">
@@ -80,7 +97,7 @@ const UserProfile = () => {
                   <View>
                     <Text className="text-white text-xs">Nationl Id</Text>
                     <View className="bg-amber-500 rounded-md pl-1">
-                      <Text className="text-white text-md">28458625824</Text>
+                      <Text className="text-white text-md">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
                     </View>
                   </View>
                 </View>
@@ -99,7 +116,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">Gender </Text>
                   <View className="bg-amber-500 rounded-md">
-                    <Text className="text-white text-md font-semibold">Male</Text>
+                    <Text className="text-white text-md font-semibold">{patient && patient.gender ? patient.gender : "Dont Know"}</Text>
                   </View>
                 </View>
                 <View className="flex-row gap-2 ml-16">
@@ -113,7 +130,10 @@ const UserProfile = () => {
                   <View>
                     <Text className="text-white text-xs">Date Of Birth</Text>
                     <View className="bg-amber-500 rounded-md">
-                      <Text className="text-white text-xs font-semibold">05/06/1999</Text>
+                      <Text className="text-white text-xs font-semibold">
+                        {patient && patient.dob ? new Date(patient.dob).toLocaleDateString() : "05/06/1999"}
+                      </Text>
+
                     </View>
                   </View>
                 </View>
@@ -132,7 +152,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">Nationality</Text>
                   <View className="bg-amber-500 rounded-md">
-                    <Text className="text-white text-md ">India</Text>
+                    <Text className="text-white text-md ">{patient && patient.nationality ? patient.nationality : "India"}</Text>
                   </View>
                 </View>
                 <View className="flex-row gap-2 ml-14 content-end" >
@@ -146,7 +166,7 @@ const UserProfile = () => {
                   <View>
                     <Text className="text-white text-xs">Mobile Number</Text>
                     <View className="bg-amber-500 rounded-md">
-                      <Text className="text-white text-md ">28458625824</Text>
+                      <Text className="text-white text-md ">{user && user.mobile ? user.mobile : "28458625824"}</Text>
                     </View>
                   </View>
                 </View>

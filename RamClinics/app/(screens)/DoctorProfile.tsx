@@ -1,219 +1,121 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialIcons,
-  Octicons,
-} from "@expo/vector-icons";
-import profileImg from "../../assets/images/doctors_profile.jpeg";
-import LinkButton from "../../components/LinkButton";
+import { AntDesign, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import doctorService from "../../domain/services/DoctorService";
+import doctorImg from "../../assets/images/doctorProfile.jpg";
 
 const DoctorProfile = () => {
-
   const { id } = useLocalSearchParams();
-  console.log("doctors>>>>>>>>>>>" , id)
-  let [doctors, setDoctor] = useState([]);
-  console.log("doctors>>>>>>>>>>>" ,doctors)
+  const [doctor, setDoctor] = useState({});
+  console.log("doctor>>>>", doctor);
+  const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/resource/file/";
 
   useEffect(() => {
     doctorService.find(id).then((doc) => {
-        setDoctor(doc.data);
-    })
-}, [])
+      setDoctor(doc.data);
+    });
+  }, [id]);
+
+  const renderValue = (value, placeholder) => {
+    return value && value.length > 0 && value[0] !== "" ? value : placeholder;
+  };
+
+  const renderQualification = () => {
+    const qualification = doctor.qualification && doctor.qualification.length > 0 ? doctor.qualification[0] : '';
+    const qualificationDtsAr = doctor.qualificationDtsAr || '';
+
+    if (!qualification && !qualificationDtsAr) {
+      return "Qualification not specified";
+    } else if (!qualification) {
+      return "Qualification not specified, Details not available";
+    } else if (!qualificationDtsAr) {
+      return `${qualification}, Details not available`;
+    }
+
+    return `${qualification}, ${qualificationDtsAr}`;
+  };
 
   return (
-    <View className="bg-amber-100 pt-6">
-      <View className="h-full justify-between items-start w-full">
-        <View className="flex-row justify-between items-center pt-6 px-6 w-full">
-          <Text
-            onPress={() => router.back()}
-            className="bg-amber-900 rounded-full p-2"
-          >
-            <Ionicons name="chevron-back" color={"white"} size={20} />
-          </Text>
-          <Text className="">
-            <Octicons name="share-android" size={20} color="black" />
-          </Text>
-        </View>
-        <View className="w-full ">
-          
-          <View className="bg-amber-900 rounded-t-3xl p-6 -mt-20">
-          <View className="ustify-between items-center rounded pb-5">
-            <Image style={styles.modalContainer} className="rounded-full" source={profileImg} />
+    <View className="flex-1 bg-amber-100 pt-6 mt-2">
+      <View className="flex-row justify-between items-center px-6">
+        <Text onPress={() => router.back()} className="bg-amber-900 rounded-full p-2">
+          <Ionicons name="chevron-back" color={"white"} size={20} />
+        </Text>
+        <Text>
+          <Octicons name="share-android" size={20} color="black" />
+        </Text>
+      </View>
+
+      <View className="items-center mt-4 mb-6">
+        {doctor.photo && doctor.photo.length > 0 && doctor.photo[0] != null ? (
+          <Image
+            source={{ uri: `${sourceUrl}${encodeURIComponent(doctor.photo[0])}` }}
+            className="w-64 h-64 rounded-full border-4 border-amber-900"
+          />
+        ) : (
+          <Image source={doctorImg} className="w-64 h-64 rounded-full border-4 border-amber-900" />
+        )}
+      </View>
+
+      <View className="bg-amber-900 rounded-t-3xl p-6 mt-5">
+        <View className="flex-row justify-between items-start">
+          <View>
+            <Text className="text-white font-semibold">Doctor Name</Text>
+            <Text className="text-2xl text-white">{doctor.name}</Text>
           </View>
-            <View className="flex-row justify-between items-start">
-              
-              <View>
-                <Text className="text-white font-semibold">
-                  Doctor Name
-                </Text>
-                <Text className="text-2xl text-white">{doctors.name}</Text>
-              </View>
-              <View>
-                <Text className="bg-white p-[10px] rounded-md">
-                  <AntDesign name="heart" size={16} color="#009281" />
-                </Text>
-              </View>
-            </View>
-            <View className="flex-row justify-between items-center pt-4 pb-10">
-              <View className="flex-row gap-2">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="local-hospital"
-                    size={16}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-white text-xs">Department</Text>
-                  <Text className="text-white text-xs font-semibold">{doctors.department}</Text>
-                </View>
-              </View>
-              <View className="flex-row gap-2">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="directions-walk"
-                    size={16}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-white text-xs">Experience</Text>
-                  <Text className="text-white text-xs font-semibold">{doctors.experience}</Text>
-                </View>
-              </View>
-              <View className="flex-row gap-2">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="star-rate"
-                    size={16}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-white text-xs">rating</Text>
-                  <Text className="text-white text-xs font-semibold">{doctors.rating} +</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View className="p-6 bg-slate-50 rounded-t-2xl -mt-10">
-            {/* <Text className="text-xl font-semibold">About Doctor</Text>
-            <Text className=" text-amber-900 py-5">
-              Dr. Dianne Johnson is a dedicated gynecologist committed to
-              women's health and well-being. With expertise in obstetrics and
-              gynecology, she provides compassionate care, emphasizing
-              preventive measures and personalized treatment.
+          <View>
+            <Text className="bg-white p-[10px] rounded-md">
+              <AntDesign name="heart" size={16} color="#009281" />
             </Text>
-
-            <LinkButton link="/Appoinment" text="Make an appoinment" /> */}
-            <View className="flex-row justify-between items-center pb-2 ">
-              <View className="flex-row gap-1 bg-Blue-800 ">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="add-home"
-                    size={20}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-amber-900 text-xs">Professional Details</Text>
-                  <Text className="text-amber-900 text-md font-semibold">{doctors.professionalDts}</Text>
-                </View>
-              </View>
-            </View>
-
-            <View className="flex-row justify-between items-center pt-2 pb-5">
-              <View className="flex-row gap-2">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="access-alarms"
-                    size={20}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-amber-900 text-xs">Doctor Availability</Text>
-                  <Text className="text-amber-900 text-md font-semibold">{doctors.clinicHoursAr}</Text>
-                 
-              </View>
-              {/* <View className="flex-row gap-2">
-                <View>
-                  <Text className="text-amber-900 text-md font-semibold ">      FRIDAY OFF</Text>
-                </View>
-              </View> */}
-              </View>
-
-            </View>
-            <View className="flex-row justify-between items-center  pb-5">
-              <View className="flex-row gap-2">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="menu-book"
-                    size={20}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-amber-900 text-xs">
-                    Qualification
-                  </Text>
-                  <Text className="text-amber-900 text-md font-semibold">{doctors.qualification},  {doctors.qualificationDtsAr} </Text>
-              </View>
-              </View>
-
-            </View>
-
-            <View className="flex-row justify-between items-center pb-5">
-              <View className="flex-row gap-2">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="account-balance"
-                    size={20}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-amber-900 text-xs">
-                    Nationality
-                  </Text>
-                  <Text className="text-amber-900 text-md font-semibold">{doctors.nationality}</Text>
-
-                </View>
-              </View>
-            </View>
-            <View className="flex-row gap-2">
-                <Text className="p-2 rounded-md bg-white">
-                  <MaterialIcons
-                    name="reviews"
-                    size={20}
-                    color="#009281"
-                  />
-                </Text>
-                <View>
-                  <Text className="text-amber-900 text-xs">
-                    Reviews
-                  </Text>
-                  <Text className="text-amber-900 text-md font-semibold">{doctors.reviews}</Text>
-                </View>
-              </View>
-
           </View>
+        </View>
+        <View className="flex-row justify-between items-center pt-4 pb-10">
+          <DetailItem icon="local-hospital" label="Department" value={renderValue(doctor.department, "N/A")} />
+          <DetailItem icon="directions-walk" label="Experience" value={renderValue(doctor.experience, "N/A")} />
+          <DetailItem icon="star-rate" label="Rating" value={renderValue(`${doctor.rating} +`, "N/A")} />
+        </View>
+      </View>
 
+      <View className="p-6 bg-slate-50 rounded-t-2xl -mt-10">
+        <View className="flex-row justify-between items-center pb-2">
+          <DetailItem icon="add-home" label="Professional Details" value={renderValue(doctor.professionalDts, "Details not available")} isAmber />
+        </View>
+        <View className="flex-row justify-between items-center pt-2 pb-5">
+          <DetailItem icon="access-alarms" label="Doctor Availability" value={renderValue(doctor.clinicHoursAr, "Availability not specified")} isAmber />
+        </View>
+        <View className="flex-row justify-between items-center pb-5">
+          <DetailItem icon="menu-book" label="Qualification" value={renderQualification()} isAmber />
+        </View>
+        <View className="flex-row justify-between items-center pb-5">
+          <DetailItem icon="account-balance" label="Nationality" value={renderValue(doctor.nationality, "Nationality not specified")} isAmber />
+        </View>
+        <View className="flex-row gap-2">
+          <DetailItem icon="reviews" label="Reviews" value={renderValue(doctor.reviews, "No reviews yet")} isAmber />
         </View>
       </View>
     </View>
   );
 };
 
+const DetailItem = ({ icon, label, value, isAmber = false }) => (
+  <View className="flex-row items-center gap-2">
+    <Text className="p-2 rounded-md bg-white">
+      <MaterialIcons name={icon} size={20} color="#009281" />
+    </Text>
+    <View>
+      <Text className={`text-xs ${isAmber ? 'text-amber-900' : 'text-white'}`}>{label}</Text>
+      <Text className={`text-md font-semibold ${isAmber ? 'text-amber-900' : 'text-white'}`}>{value}</Text>
+    </View>
+  </View>
+);
+
+
 export default DoctorProfile;
 
-const styles = StyleSheet.create({
+const styles = {
   modalContainer: {
     width: '15rem',
     height: '15rem',
-  }
-});
+  },
+};

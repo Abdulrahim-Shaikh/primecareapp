@@ -1,28 +1,56 @@
 import {
-    FlatList,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import Searchbox from "../../components/ui/Searchbox";
 import DoctorCard from "../../components/ui/DoctorCard";
 import { topDoctorData } from "../../constants/data";
+import { useUserSate } from "../../domain/state/UserState";
+import doctorService from "../../domain/services/DoctorService";
 
-const categoryList = [
+const specialityList = [
   "All",
-  "General",
-  "Dentist",
-  "Nutritionist",
-  "Cardiologist",
+  "General Dentist",
+  "General Practitioner",
+  "Dermatology",
+  "Internal Medicine",
+  "Orthodontics",
+  "Pedodontics",
+  "Machine"
 ];
 
 const TopDoctor = () => {
-  const [activeCategory, setActiveCategory] = useState(0);
+  const { user, setUser } = useUserSate();
+  const [doctor, setDoctor] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [activeSpeciality, setActiveSpeciality] = useState(0);
+
+  useEffect(() => {
+    doctorService.findAll().then((res) => {
+      console.log("filtered patient..", res.data)
+      setDoctor(res.data);
+      setFilteredDoctors(res.data);
+    }).catch((error) => {
+      console.error("Failed to fetch labratory:", error);
+    });
+  }, []);
+
+  useEffect(() => {
+    const selectedSpeciality = specialityList[activeSpeciality];
+    if (selectedSpeciality === "All") {
+      setFilteredDoctors(doctor);
+    } else {
+      const filtered = doctor.filter(doc => doc.speciality === selectedSpeciality);
+      setFilteredDoctors(filtered);
+    }
+  }, [activeSpeciality, doctor]);
   return (
     <SafeAreaView>
       <ScrollView className="pt-6">
@@ -39,15 +67,14 @@ const TopDoctor = () => {
             horizontal
             contentContainerStyle={{ gap: 12 }}
             showsHorizontalScrollIndicator={false}
-            data={categoryList}
+            data={specialityList}
             keyExtractor={(item, index) => "key" + index}
             renderItem={({ item, index }) => (
               <Pressable>
                 <Text
-                  onPress={() => setActiveCategory(index)}
-                  className={`text-base border border-amber-900 rounded-md py-1 px-3 ${
-                    index === activeCategory ? "text-white bg-amber-900" : ""
-                  }`}
+                  onPress={() => setActiveSpeciality(index)}
+                  className={`text-base border border-amber-900 rounded-md py-1 px-3 ${index === activeSpeciality ? "text-white bg-amber-900" : ""
+                    }`}
                 >
                   {item}
                 </Text>
@@ -57,8 +84,8 @@ const TopDoctor = () => {
         </View>
 
         <View className="pb-16 px-6">
-          {topDoctorData.map(({ ...props }, idx) => (
-            <DoctorCard {...props} key={idx} />
+          {filteredDoctors.map((doc, idx) => (
+            <DoctorCard {...doc} key={idx} />
           ))}
         </View>
       </ScrollView>
