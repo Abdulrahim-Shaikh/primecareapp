@@ -5,31 +5,30 @@ import {
   TextInputKeyPressEventData,
   View,
 } from "react-native";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 type Nullable<T> = T | null;
 
 type PropsType = {
-  // link: string;
-  // title: string;
   disabled: boolean;
-  otpResp: any;
-  onPress(otp: string[]): void
+  onPress(otp: string[]): void;
 };
 
-const OtpInputField = ({ disabled, onPress, otpResp }: PropsType) => {
-  
+const OtpInputField = ({ disabled, onPress }: PropsType) => {
   const inputRefs = useRef<Array<Nullable<TextInput>>>([]);
-  let otpValue: string[] = [];
+  const [otpValue, setOtpValue] = useState<string[]>(["", "", "", ""]);
 
   const handleChange = (text: string, idx: number) => {
-    otpValue[idx] = text;
-    onPress(otpValue)    
+    const updatedOtpValue = [...otpValue];
+    updatedOtpValue[idx] = text;
+    setOtpValue(updatedOtpValue);
+
+    onPress(updatedOtpValue);
+
     if (text.length !== 0) {
-      return inputRefs?.current[idx + 1]?.focus();
+      return inputRefs.current[idx + 1]?.focus();
     }
-    
-    return inputRefs?.current[idx - 1]?.focus();
+    return inputRefs.current[idx - 1]?.focus();
   };
 
   const handleBackspace = (
@@ -44,7 +43,7 @@ const OtpInputField = ({ disabled, onPress, otpResp }: PropsType) => {
 
   return (
     <View className="flex flex-row justify-center items-center gap-4">
-      {[...new Array(4)].map((item, idx) => (
+      {[...new Array(4)].map((_, idx) => (
         <View
           key={idx}
           className="border border-amber-900 py-3 px-5 rounded-lg flex justify-center items-center"
@@ -61,7 +60,6 @@ const OtpInputField = ({ disabled, onPress, otpResp }: PropsType) => {
             selectTextOnFocus
             editable={!disabled}
             keyboardType="decimal-pad"
-            testID={`OTPInput-${idx}`}
             onChangeText={(text) => handleChange(text, idx)}
             onKeyPress={(event) => handleBackspace(event, idx)}
           />
