@@ -1,18 +1,19 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import fb from "../../assets/images/fb.png";
-import google from "../../assets/images/google.png";
-import apple from "../../assets/images/apple.png";
 import { router } from "expo-router";
 import FormField from "../../components/FormField";
 import LinkButton from "../../components/LinkButton";
-import RadioButton from "../../components/ui/RadioButton";
 import CheckBox from "react-native-elements/dist/checkbox/CheckBox";
 import { Picker } from "@react-native-picker/picker";
 import { countries } from "../../constants/data";
 import branchService from "../../domain/services/BranchService";
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+import moment from "moment";
+import patientService from "../../domain/services/PatientService";
+import NASButton from "../../components/NASButton";
 
 const SingUp = () => {
 
@@ -52,6 +53,7 @@ const SingUp = () => {
   const [id, setId] = useState('');
   const [selectedIdCountry, setIdCountry] = useState('');
   const [passport, setPassport] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -62,6 +64,8 @@ const SingUp = () => {
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSeletedBranch] = useState('');
   const [city, setCity] = useState('');
+  const [showDatePicker, setShowPicker] = useState(false);
+  const [dob, setDob] = useState(new Date());
 
   useEffect(() => {
     branchService.findAll().then((res) => {
@@ -79,6 +83,42 @@ const SingUp = () => {
   //   console.error("branches:", branches);
   // }, [branchList]);
 
+
+  let signupForm = {
+    "firstName": firstName, 
+    "middleName": secondName,
+    "lastName": lastName,
+    "dob": moment(dob).format("dd-MMM-yy"),
+    "country": selectedIdCountry,
+    "nationalId": id,
+    "passportNo": passport,
+    "nationality": nationality,
+    "mobileNumber": mobileNo,
+    // "companyCode": "TECHNAS",
+    // "divisionCode": "CHN",
+    // "version": "0",
+    // "audit": {"recordInputter": "root", "curNo": 1},
+    "registerBranch": selectedBranch,
+    "city": city,
+    "referredBy": referredBy,
+    "gender": gender,
+    "emailId": email,
+  }
+
+  const savePatient = () => {
+    console.log(signupForm);
+    if (firstName && lastName && dob && mobileNo && selectedBranch && gender) {
+      patientService.save(signupForm).then((res)=>{
+        console.log("Patient saved Successfully", res.data);
+      }).catch((error) => {
+      console.error("Failed to save Patient:", error);
+    });
+    } else {
+      console.log("Mandatory Fields Missing!");
+      Alert.alert("Mandatory Fields Missing!");
+    }
+  };
+
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
@@ -95,7 +135,7 @@ const SingUp = () => {
             <Text className="pt-4 font-medium">Document Type</Text>
             <View className="text-amber-900 flex justify-evenly flex-row items-center">
               <View className="flex-row">
-                <CheckBox checked={selectedOption === 0} onPress={() => setOption(0)} iconType="material-community" 
+                <CheckBox checked={selectedOption === 0} onPress={() => setOption(0)} iconType="material-community"
                   checkedIcon="radiobox-marked" uncheckedIcon="radiobox-blank" />
                 <Text className="text-base font-medium pt-4">
                   ID
@@ -122,20 +162,32 @@ const SingUp = () => {
                     ))}
                   </Picker>
                 </View>
-                <FormField name="ID Number" placeholder="ID Number" otherStyle="mb-4" onEnter={(e) => { setId(e)}} />
+                <FormField name="ID Number" placeholder="ID Number" otherStyle="mb-4" onChangeText={(e) => { setId(e) }} />
               </>
             )}
             {selectedOption === 1 && (
-              <FormField name="Passport" placeholder="Passport" otherStyle="" onEnter={(e) => { setPassport(e)}} />
+              <FormField name="Passport" placeholder="Passport" otherStyle="" onChangeText={(e) => { setPassport(e) }} />
             )}
+            
+            <FormField name="Mobile No. *" placeholder="Mobile Number" otherStyle="" onChangeText={(e) => { setMobileNo(e) }} />
 
-            <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, paddingTop: '2%' }} />
+            <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, paddingTop: '5%' }} />
 
-            <FormField name="First Name" placeholder="First Name" otherStyle="mt-2" onEnter={(e) => { setFirstName(e)}} />
-            <FormField name="Second Name" placeholder="Second Name" otherStyle="mt-2" onEnter={(e) => { setSecondName(e)}} />
-            <FormField name="Last Name" placeholder="Last Name" otherStyle="mt-2" onEnter={(e) => { setLastName(e)}} />
+            <FormField name="First Name *" placeholder="First Name" otherStyle="mt-2" onChangeText={(e) => { setFirstName(e) }} />
+            <FormField name="Second Name" placeholder="Middle Name" otherStyle="mt-2" onChangeText={(e) => { setSecondName(e) }} />
+            <FormField name="Last Name *" placeholder="Last Name" otherStyle="mt-2" onChangeText={(e) => { setLastName(e) }} />
 
-            <Text className="my-2 font-medium">Gender</Text>
+            <Text className="my-2 font-medium">Date of Birth *</Text>
+            <View className="flex-row justify-between my-2">
+              <Pressable onPress={() => setShowPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg mr-2">
+                <Text className="text-lg">{moment(dob).format("YYYY-MM-DD")}</Text>
+              </Pressable>
+              {showDatePicker && (
+                <DateTimePicker value={dob} mode="date" display="default" onChange={() => {setShowPicker(false); setDob(dob)}} />
+              )}
+            </View>
+
+            <Text className="my-2 font-medium">Gender *</Text>
             <View className="border rounded-xl">
               <Picker
                 selectedValue={gender} onValueChange={(g) => { setGender(g) }} className="text-slate-800">
@@ -156,7 +208,7 @@ const SingUp = () => {
               </Picker>
             </View>
 
-            <FormField name="Email" placeholder="Email" otherStyle="mt-4" onEnter={(e) => { setEmail(e)}} />
+            <FormField name="Email" placeholder="Email" otherStyle="mt-4" onChangeText={(e) => { setEmail(e) }} />
 
             <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, paddingVertical: 10 }} />
 
@@ -171,7 +223,7 @@ const SingUp = () => {
               </Picker>
             </View>
 
-            <Text className="my-2 font-medium">Register Branch</Text>
+            <Text className="my-2 font-medium">Register Branch *</Text>
             <View className="border rounded-xl">
               <Picker
                 selectedValue={selectedBranch} onValueChange={(r) => { setSeletedBranch(r) }} className="text-slate-800">
@@ -203,7 +255,7 @@ const SingUp = () => {
               otherStyle="mt-4"
             /> */}
           </View>
-          <LinkButton link="/SignIn" text="Sign Up" />
+          <NASButton title="Register" onPress={savePatient}  />
 
           <View className="pt-8">
             {/* <View>
