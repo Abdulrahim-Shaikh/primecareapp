@@ -501,12 +501,12 @@ export const profileSettings = [
   //   name: "Payment",
   //   link: "/AddCardPage",
   // },
-  {
-    id: 4,
-    icon: "lock-closed-outline",
-    name: "Security",
-    link: "/ChangePassword",
-  },
+  // {
+  //   id: 4,
+  //   icon: "lock-closed-outline",
+  //   name: "Security",
+  //   link: "/ChangePassword",
+  // },
   {
     id: 5,
     icon: "language-outline",

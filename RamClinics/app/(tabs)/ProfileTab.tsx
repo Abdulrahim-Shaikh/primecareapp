@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AntDesign,
@@ -24,7 +24,6 @@ import { useUserSate } from "../../domain/state/UserState";
 
 const ProfileTab = () => {
   const [logoutModal, setLogoutModal] = useState(false);
-  let setUser = useUserSate.getState().setUser;
   let user = useUserSate.getState().user;
   let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
@@ -32,13 +31,17 @@ const ProfileTab = () => {
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
   function onPressFunction(name: string, link: string) {
     if (name === "Dark Mode") return;
-    if (name === "My Invoices" || name == "My Prescription" || name == "Security") {
+    if ( !loggedIn && (name === "My Invoices" || name == "My Prescription" || name == "Security")) {
       router.push("/SignIn");
     } else {
     router.push(link);
     }
 
   }
+
+  useEffect(() => {
+    console.log("loggedIn ?: ",loggedIn);
+  }, [])  
 
   return (
     <SafeAreaView>
@@ -65,7 +68,7 @@ const ProfileTab = () => {
                 <Pressable onPress={() => loggedIn ? router.push("/UserProfile") : router.push("/SignIn")}
                   className="bg-lime-500 mt-4 p-1 px-3 rounded-lg items-center">
                   <Text className="text-md text-white font-bold">
-                    {user ? "View Profile" : "Sign In"}
+                    {loggedIn ? "View Profile" : "Sign In"}
                   </Text>
                 </Pressable>
 
