@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AntDesign,
@@ -19,7 +19,7 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { myAppoinmentData } from "../../constants/data";
 import Searchbox from "../../components/ui/Searchbox";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -64,56 +64,52 @@ const Appoinment = () => {
     setActiveTab(tab)
   }
 
-  useEffect(() => {
-    if (useUserSate.getState().loggedIn === false) {
-      Alert.alert('Note', 'You must Sign In to view your appointments', [
-        {
-          text: 'OK',
-          onPress: () => router.push({
-            pathname: "/SignIn",
-          }),
-          style: 'default'
-        },
-      ])
-    }
-    console.log("here")
-    const patientId = useUserSate.getState().userId;
-    console.log("patientId: ", patientId)
-    const branch = useUserSate.getState().branch;
-    let branchId;
-    patientService.getByPatientId(patientId)
-      .then((response) => {
-        branchId = response.data.branchId;
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    appointmentService.getAppointments(patientId, branchId)
-      .then((response) => {
-        setAllAppointments(response.data);
-        for (let i of response.data) {
-          console.log("\n\n\n\ni: ", i)
-        }
-        console.log("appointments: ", response)
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+  useFocusEffect(
+    useCallback(() => {
+      if (useUserSate.getState().loggedIn === false) {
+        Alert.alert('Note', 'You must Sign In to view your appointments', [
+          {
+            text: 'OK',
+            onPress: () => router.push({
+              pathname: "/SignIn",
+            }),
+            style: 'default'
+          },
+        ])
+      }
+      console.log("here")
+      const patientId = useUserSate.getState().userId;
+      console.log("patientId: ", patientId)
+      const branch = useUserSate.getState().branch;
+      let branchId;
+      patientService.getByPatientId(patientId)
+        .then((response) => {
+          branchId = response.data.branchId;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      appointmentService.getAppointments(patientId, branchId)
+        .then((response) => {
+          setAllAppointments(response.data);
+          for (let i of response.data) {
+            console.log("\n\n\n\ni: ", i)
+          }
+          console.log("appointments: ", response)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
 
 
-    const filteredData = myAppoinmentData.filter(
-      (item) => item.sessionStatus === activeTab
-    );
+      const filteredData = myAppoinmentData.filter(
+        (item) => item.sessionStatus === activeTab
+      );
 
-    setFilteredItem(filteredData);
-    changeTab("Booked")
-  }, []);
-
-
-
-  useEffect(() => {
-
-  }, [])
+      setFilteredItem(filteredData);
+      changeTab("Booked")
+    }, [])
+  )
 
   return (
     <SafeAreaView>
@@ -150,8 +146,8 @@ const Appoinment = () => {
                 key={idx}
                 onPress={() => changeTab(item)}
                 className={`flex-1 border-b  pb-2 ${activeTab === item
-                    ? "border-amber-900"
-                    : "text-amber-500"
+                  ? "border-amber-900"
+                  : "text-amber-500"
                   }`}
               >
                 <Text
@@ -165,8 +161,8 @@ const Appoinment = () => {
           </View>
 
           <View className="">
-            { appointments.length <= 0 &&
-                <Text className="text-center text-lg text-gray-600 mt-4">No appointments scheduled for this filter</Text>
+            {appointments.length <= 0 &&
+              <Text className="text-center text-lg text-gray-600 mt-4">No appointments scheduled for this filter</Text>
             }
             {appointments.map((item) => (
               <View

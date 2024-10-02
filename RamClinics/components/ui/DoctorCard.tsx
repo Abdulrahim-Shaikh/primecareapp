@@ -1,7 +1,7 @@
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import emptyImg from "../../assets/images/EmptyDoctorImg.jpg";
 import doctorService from "../../domain/services/DoctorService";
@@ -54,30 +54,31 @@ const DoctorCard = ({
   let dateAux = new Date();
 
 
-  useEffect(() => {
-    const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
-    patientService.byMobileNo(mobile)
-      .then((response: any) => {
-        setPatientData(response.data[0])
-        patientPolicyService.byPatientId(response.data[0].id)
-          .then((response: any) => {
-            setPatientPolicyData(response.data[0])
-            // patientPolicyData = response.data[0]
-          })
-          .catch((error) => {
-            console.log("patientPolicyService.byPatientId() error: ", error)
-          })
-      })
-      .catch((error) => {
-        console.log("error: ", error)
-      })
+  useFocusEffect(
+    useCallback(() => {
+      const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
+      console.log("mobile: ", useUserSate.getState().user)
+      patientService.byMobileNo(mobile)
+        .then((response: any) => {
+          setPatientData(response.data[0])
+          patientPolicyService.byPatientId(response.data[0].id)
+            .then((response: any) => {
+              setPatientPolicyData(response.data[0])
+              // patientPolicyData = response.data[0]
+            })
+            .catch((error) => {
+              console.log("patientPolicyService.byPatientId() error: ", error)
+            })
+        })
+        .catch((error) => {
+          console.log("error: ", error)
+        })
 
-  }, [])
+    }, [])
+  )
 
 
   const bookAppointment = () => {
-
-
 
     if (patientData == null || Object.keys(patientData).length <= 0) {
       Alert.alert('Note', 'Patient data not found', [
