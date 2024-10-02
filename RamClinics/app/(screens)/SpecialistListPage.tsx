@@ -45,6 +45,7 @@ const SpecialityListPage = () => {
     const [selectedDoctor, setSelectedDoctor] = useState(topDoctorData[0])
     const x = useSharedValue(0);
     const flatListIndex = useSharedValue(0);
+    const [searchValue, setSearchValue] = useState('');
     // let patientData = {}
     // let patientPolicyData = {}
 
@@ -117,7 +118,7 @@ const SpecialityListPage = () => {
                     </View>
                 </View>
                 <View className="px-6 ">
-                    <Searchbox />
+                <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View>
 
                 <View className="pb-16 px-6">

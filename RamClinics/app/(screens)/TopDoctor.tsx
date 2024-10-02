@@ -31,6 +31,7 @@ const TopDoctor = () => {
   const [doctor, setDoctor] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [activeSpeciality, setActiveSpeciality] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     doctorService.getAllDoctors().then((res) => {
@@ -44,13 +45,18 @@ const TopDoctor = () => {
 
   useEffect(() => {
     const selectedSpeciality = specialityList[activeSpeciality];
-    if (selectedSpeciality === "All") {
-      setFilteredDoctors(doctor);
-    } else {
-      const filtered = doctor.filter(doc => doc.speciality === selectedSpeciality);
-      setFilteredDoctors(filtered);
+    let filtered = doctor;
+    if (selectedSpeciality !== "All") {
+      filtered = doctor.filter((doc) => doc.speciality === selectedSpeciality);
     }
-  }, [activeSpeciality, doctor]);
+    if (searchValue) {
+      filtered = filtered.filter(
+        (doc) =>
+          doc.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+    setFilteredDoctors(filtered);
+  }, [activeSpeciality, searchValue, doctor]);
 
   return (
     <SafeAreaView>
@@ -58,9 +64,8 @@ const TopDoctor = () => {
         <View className="px-6">
           <HeaderWithBackButton isPushBack={true} title="Top Doctor" />
         </View>
-
         <View className="pt-8 px-6 ">
-          <Searchbox />
+          <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View>
 
         <View className="flex-row pt-5 gap-3 pl-6">

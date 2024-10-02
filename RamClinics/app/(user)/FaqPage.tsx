@@ -18,6 +18,8 @@ const categoryList = ["General", "Login", "Account", "Doctor", "Lab"];
 const FaqPage = () => {
   const [activeCategory, setActiveCategory] = useState(0);
   const [activeFaq, setActiveFaq] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
+  
   return (
     <SafeAreaView>
       <ScrollView>
@@ -25,7 +27,7 @@ const FaqPage = () => {
           <HeaderWithBackButton isPushBack={true} title="FAQ" />
 
           <View className="pt-8">
-            <Searchbox />
+            <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
 
             <View className="flex-row pt-5 gap-3">
               <FlatList

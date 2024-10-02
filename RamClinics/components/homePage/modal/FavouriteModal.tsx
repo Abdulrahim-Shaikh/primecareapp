@@ -3,7 +3,7 @@ import {
   ScrollView,
   StyleSheet, View
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import HeaderWithBackButton from "../../ui/HeaderWithBackButton";
 import Searchbox from "../../ui/Searchbox";
 import { topDoctorData } from "../../../constants/data";
@@ -19,6 +19,9 @@ const FavouriteModal = ({
   setShowFavouriteModal,
   showFavouriteModal,
 }: Props) => {
+
+  const [searchValue, setSearchValue] = useState('');
+
   return (
     <Modal visible={showFavouriteModal} animationType="slide">
       <ScrollView className="p-6">
@@ -28,7 +31,7 @@ const FavouriteModal = ({
         />
 
         <View className="flex flex-row justify-between items-center pt-6 w-full">
-          <Searchbox />
+          <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View>
         <View className="pb-16">
           {topDoctorData.map(({ ...props }, idx) => (
