@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AntDesign,
@@ -17,15 +17,19 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import emptyProfileImg from "../../assets/images/avatar.png";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { profileSettings } from "../../constants/data";
 import CustomSwitch from "../../components/CustomSwitch";
 import { useUserSate } from "../../domain/state/UserState";
+import { UserContext } from "../../domain/contexts/UserContext";
 
 const ProfileTab = () => {
   const [logoutModal, setLogoutModal] = useState(false);
-  let user = useUserSate.getState().user;
-  let patientName = useUserSate.getState().patientName;
+  const [user, setUser] = useState(null);
+  const { userData } = useContext(UserContext);
+  const [ patientName, setPatientName ] = useState("");
+  // let user = useUserSate.getState().user;
+  // let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
   let setLoggedOut = useUserSate.getState().setLoggedOut;
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
@@ -39,9 +43,15 @@ const ProfileTab = () => {
 
   }
 
-  useEffect(() => {
-    console.log("loggedIn ?: ",loggedIn);
-  }, [])  
+  useFocusEffect(
+    useCallback(() => {
+      setUser(useUserSate.getState().user)
+      setPatientName(useUserSate.getState().patientName)
+      console.log("loggedIn ?: ",loggedIn);
+      console.log("userState: ", useUserSate.getState());
+    }, [])  
+  )
+
 
   return (
     <SafeAreaView>

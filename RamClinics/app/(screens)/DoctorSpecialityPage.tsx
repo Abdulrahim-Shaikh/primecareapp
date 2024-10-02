@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { doctorSpecialityData2 } from "../../constants/data";
 import specialityService from "../../domain/services/SpecialityService";
@@ -18,13 +18,25 @@ import Searchbox from "../../components/ui/Searchbox";
 
 const DoctorSpecialityPage = () => {
 
-  let [specialtyList, setSpecialty] = useState([]);
+  let [specialityList, setSpecialityList] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
+  const { branchId, fromSpeciality, department } = useLocalSearchParams();
 
   useEffect(() => {
-    specialityService.findAll().then((response) => {
-      setSpecialty(response.data);
-    })
+    // specialityService.findAll().then((response) => {
+    //   setSpecialityList(response.data);
+    // })
+
+    if (branchId != null) {
+      console.log("department: ", department)
+      specialityService.getByDept(department)
+        .then((response) => {
+          console.log("getByDept: ", response.data)
+          setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
+          console.log("\n\n\nspecialtyList: ", specialityList)
+        })
+    }
+
   }, [])
 
   // useEffect(() => {
@@ -46,9 +58,19 @@ const DoctorSpecialityPage = () => {
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View>
         <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
-          {specialtyList.map(({ name }, idx) => (
+          {specialityList.map(({ name }, idx) => (
             <Pressable
-              onPress={() => router.push("/CityPage")}
+              onPress={() =>
+                router.push({
+                  pathname: "/BranchDoctor",
+                  params: {
+                    branchId: branchId,
+                    fromSpeciality: fromSpeciality,
+                    department: department,
+                    speciality: name
+                  }
+                })
+              }
               className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
               key={idx}
             >
@@ -56,10 +78,19 @@ const DoctorSpecialityPage = () => {
                 <Image source={specialityIcon} />
               </View>
               <Text className="text-base font-semibold pt-3">{name}</Text>
-              <Text className="item-center flex-row text-amber-900 pt-1">
-                doctors{" "}
-                <Feather name="arrow-right" size={14} color="#454567" />{" "}
-              </Text>
+              {
+                +fromSpeciality
+                  ?
+                  <Text className="item-center flex-row text-amber-900 pt-1">
+                    Select branch {" "}
+                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                  </Text>
+                  :
+                  <Text className="item-center flex-row text-amber-900 pt-1">
+                    Select doctor {" "}
+                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                  </Text>
+              }
             </Pressable>
           ))}
         </View>

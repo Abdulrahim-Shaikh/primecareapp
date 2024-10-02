@@ -148,6 +148,7 @@ const ServiceListPage = () => {
                 // setSpecialities(response.data)
                 console.log("getByDept: ", response.data)
                 setSpecialityOptions(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
+                console.log("specialityOptions: ", specialityOptions)
             })
     }, [])
 
@@ -166,9 +167,9 @@ const ServiceListPage = () => {
             console.log("dateString: ", dateString)
             let requestBody: any = [{
                 date: dateString,
-                day: 1,
+                day: 2,
                 resourceIds: [resourceId],
-                wday: "Mon"
+                wday: "Wed"
             }]
             scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
                 .then((response) => {

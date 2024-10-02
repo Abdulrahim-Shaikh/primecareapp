@@ -16,6 +16,8 @@ import { useRouter } from "expo-router";
 import { SpecialityService } from "../../domain/services/SpecialityService";
 import { useEffect } from "react";
 
+
+// get departments by branch
 const serviceData = [
     {
         id: 1,
@@ -75,6 +77,17 @@ const BookAppointment = () => {
                                                     }),
                                                     style: 'default'
                                                 },
+                                                {
+                                                    text: 'Service2',
+                                                    onPress: () => router.push({
+                                                        pathname: "/BranchPage",
+                                                        params: { 
+                                                            city: null,
+                                                            fromSpeciality: 0,
+                                                            department: item.title
+                                                        }
+                                                    })
+                                                }
                                             ],
                                             )
                                         }

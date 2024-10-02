@@ -58,24 +58,26 @@ const DoctorCard = ({
 
   useFocusEffect(
     useCallback(() => {
-      const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
-      console.log("mobile: ", useUserSate.getState().user)
-      patientService.byMobileNo(mobile)
-        .then((response: any) => {
-          setPatientData(response.data[0])
-          patientPolicyService.byPatientId(response.data[0].id)
-            .then((response: any) => {
-              setPatientPolicyData(response.data[0])
-              // patientPolicyData = response.data[0]
-            })
-            .catch((error) => {
-              console.log("patientPolicyService.byPatientId() error: ", error)
-            })
-        })
-        .catch((error) => {
-          console.log("error: ", error)
-        })
+      if (useUserSate.getState().user != null && useUserSate.getState().user.mobile != null) {
+        const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
+        console.log("mobile: ", useUserSate.getState().user)
+        patientService.byMobileNo(mobile)
+          .then((response: any) => {
+            setPatientData(response.data[0])
+            patientPolicyService.byPatientId(response.data[0].id)
+              .then((response: any) => {
+                setPatientPolicyData(response.data[0])
+                // patientPolicyData = response.data[0]
+              })
+              .catch((error) => {
+                console.log("patientPolicyService.byPatientId() error: ", error)
+              })
+          })
+          .catch((error) => {
+            console.log("error: ", error)
+          })
 
+      }
     }, [])
   )
 
