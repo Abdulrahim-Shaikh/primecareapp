@@ -2,6 +2,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import "../global.css";
+import { UserProvider } from "../domain/contexts/UserContext";
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
@@ -24,10 +25,11 @@ const RootLayout = () => {
 
   if (!fontsLoaded && !error) return null;
   return (
-  
+
+    <UserProvider>
       <Stack initialRouteName="(tabs)">
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(his)" options={{ headerShown: false }} />        
+        <Stack.Screen name="(his)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/SignIn" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/SignUp" options={{ headerShown: false }} />
         {/* <Stack.Screen name="index" options={{ headerShown: true }} /> */}
@@ -47,11 +49,12 @@ const RootLayout = () => {
           name="(auth)/VerifyOTP"
           options={{ headerShown: false }}
         />
-        
-        
+
+
         <Stack.Screen name="(user)" options={{ headerShown: false }} />
         <Stack.Screen name="(screens)" options={{ headerShown: false }} />
-      </Stack>    
+      </Stack>
+    </UserProvider>
   );
 };
 

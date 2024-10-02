@@ -1,14 +1,18 @@
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import OtpInputField from "../../components/OtpInputField";
 import loginService from "../../domain/services/LoginService";
 import NASButton from "../../components/NASButton";
 import { useUserSate } from "../../domain/state/UserState";
+import { UserContext } from "../../domain/contexts/UserContext";
 
 const VerifyOTP = () => {
   const {mobileNo} = useLocalSearchParams();
+
+  const { setUserData } = useContext(UserContext)
+
   let {setUser} = useUserSate();
   const [user, setUserInfo] = useState();
 
@@ -51,6 +55,7 @@ const VerifyOTP = () => {
         loginService.byMobileNo(mobileNo).then(res => {
           let user = res.data;                  
           setUserInfo(user);
+          setUserData(user);
         }).then(data => router.navigate('/(tabs)')  );
       } else {
         Alert.alert("Invalid OTP!")

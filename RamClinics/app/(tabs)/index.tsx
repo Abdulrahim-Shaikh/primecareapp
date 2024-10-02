@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingSlider from "../../components/homePage/UpcomingSlider";
 import DoctorSpeciality from "../../components/homePage/DoctorSpeciality";
@@ -17,12 +17,14 @@ import { useUserSate } from "../../domain/state/UserState";
 import NASButton from "../../components/NASButton";
 import branchService from "../../domain/services/BranchService";
 import { useHISSate } from "../../domain/state/HISState";
+import { UserContext } from "../../domain/contexts/UserContext";
 
 const Home = () => {
 
   let loggedIn = useUserSate.getState().loggedIn;
   let userBranch = useUserSate.getState().branch;
   const [branches, setBranchesResp] = useState([]);
+  const { userData } = useContext(UserContext)
   let {setBranches} = useHISSate();
   let {setCurrentBranch} = useHISSate();
   const [showNotification, setShowNotification] = useState(false);
