@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "RamClinics",
-    "slug": "RamClinics",
+    "slug": "com.technas.net.ramclinics",
     "version": "1.0.0",
     "scheme": "my-app",
     "orientation": "portrait",
