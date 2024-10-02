@@ -4,10 +4,14 @@
   "main": "expo-router/entry",
   "proxy": "http://16.24.11.104:8080/",
   "scripts": {
-    "start": "expo start",
-    "android": "expo run:android",
+    "start": "npx expo start",
+    "android": "npx expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "dist": "npx react-native build-android --mode=release",
+    "runa": "npx expo run:android",
+    "loga": "react-native log-android",
+    "logios": "react-native log-ios"
   },
   "dependencies": {
     "@expo/metro-runtime": "^3.2.3",
