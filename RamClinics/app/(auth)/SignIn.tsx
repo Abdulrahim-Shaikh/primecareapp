@@ -40,7 +40,7 @@ const SignIn = () => {
           <View className="items-center pb-6">
             <Image source={logo} style={{ maxHeight: 160, maxWidth: 240}}/>
           </View>
-          <Text className="text-2xl font-bold text-white text-center">Sign In</Text>
+          <Text className="text-2xl font-bold text-center">Sign In</Text>
           <Text className="text-[14px] text-amber-900 text-center pt-3">
             Access your account securely. Sign in to manage your personalized
             experience.
@@ -63,8 +63,8 @@ const SignIn = () => {
 
           <NASButton title="Send Otp" onPress={sendOtp}  />
 
-          {/* <View className="pt-8">
-            <View>
+          <View className="pt-8">
+            {/* <View>
               <Text className="text-[14px] font-semibold text-center">
                 Or Continue With
               </Text>
@@ -80,21 +80,20 @@ const SignIn = () => {
               <View className="border border-amber-900 rounded-full p-3">
                 <Image source={apple} />
               </View>
-            </View>
+            </View> */}
 
             <View className="pt-4">
               <Text className="text-base text-amber-900 text-center">
                 Don't have an account?{" "}
                 <Text
-                  className=" text-amber-900"
+                  className="text-indigo-950 underline underline-offset-8"
                   onPress={() => router.push("/SignUp")}
                 >
                   Sign up
-                </Text>{" "}
-                here
+                </Text>{" "}here
               </Text>
             </View>
-          </View> */}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
