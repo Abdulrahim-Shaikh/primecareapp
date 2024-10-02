@@ -4,7 +4,7 @@ import Searchbox from "../../components/ui/Searchbox";
 import React, { useEffect, useState } from "react";
 import DoctorCard from "../../components/ui/DoctorCard";
 import { myAppoinmentData, topDoctorData } from "../../constants/data";
-import { router, useGlobalSearchParams, useLocalSearchParams} from "expo-router";
+import { router, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
 import { useAnimatedRef, useSharedValue, useAnimatedScrollHandler } from "react-native-reanimated";
 import branchService from "../../domain/services/BranchService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
@@ -19,18 +19,18 @@ import doctorService from "../../domain/services/DoctorService";
 
 
 const specialityList = [
-  "All",
-  "General Dentist",
-  "General Practitioner",
-  "Dermatology",
-  "Internal Medicine",
-  "Orthodontics",
-  "Pedodontics",
-  "Machine"
+    "All",
+    "General Dentist",
+    "General Practitioner",
+    "Dermatology",
+    "Internal Medicine",
+    "Orthodontics",
+    "Pedodontics",
+    "Machine"
 ];
 
 const SpecialityListPage = () => {
-    const [ activeCategory, setActiveCategory ] = useState(0);
+    const [activeCategory, setActiveCategory] = useState(0);
     const [activeSpeciality, setActiveSpeciality] = useState(0);
     const [branchOptions, setBranchOptions] = useState([])
     const [specialityOptions, setSpecialityOptions] = useState([])
@@ -61,35 +61,35 @@ const SpecialityListPage = () => {
         });
         console.log(`option: '${department}'`)
         patientService.byMobileNo(useUserSate.getState().user.mobile)
-        .then((response: any) => {
-            console.log("patientService.byMobileNo: ", response)
-            setPatientData(response.data[0])
-
-
-            console.log("response.data[0].registerBranch: ", response.data[0].registerBranch)
-            branchService.getBranchByName(response.data.registerBranch)
             .then((response: any) => {
-                setBranchId(response.data.id)
+                console.log("patientService.byMobileNo: ", response)
+                setPatientData(response.data[0])
+
+
+                console.log("response.data[0].registerBranch: ", response.data[0].registerBranch)
+                branchService.getBranchByName(response.data.registerBranch)
+                    .then((response: any) => {
+                        setBranchId(response.data.id)
+                    })
+                    .catch((error) => {
+                        console.log("branchService.getBranchByName() error: ", error)
+                    })
+
+
+                patientPolicyService.byPatientId(response.data[0].id)
+                    .then((response: any) => {
+                        setPatientPolicyData(response.data[0])
+                        // patientPolicyData = response.data[0]
+                    })
+                    .catch((error) => {
+                        console.log("patientPolicyService.byPatientId() error: ", error)
+                    })
+
+
             })
             .catch((error) => {
-                console.log("branchService.getBranchByName() error: ", error)
+                console.log("errorrrr: ", error)
             })
-
-
-            patientPolicyService.byPatientId(response.data[0].id)
-            .then((response: any) => {
-                setPatientPolicyData(response.data[0])
-                // patientPolicyData = response.data[0]
-            })
-            .catch((error) => {
-                console.log("patientPolicyService.byPatientId() error: ", error)
-            })
-
-
-        })
-        .catch((error) => {
-            console.log("errorrrr: ", error)
-        })
 
         branchService.findAll()
             .then((response) => {

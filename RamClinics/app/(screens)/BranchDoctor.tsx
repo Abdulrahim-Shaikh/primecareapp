@@ -1,11 +1,12 @@
 import { View, Text, Pressable, ScrollView, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react'
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HeaderWithBackButton from '../../components/ui/HeaderWithBackButton';
 import Searchbox from '../../components/ui/Searchbox';
 import DoctorCard from '../../components/ui/DoctorCard';
 import doctorService from '../../domain/services/DoctorService';
+import resourceService from '../../domain/services/ResourceService';
 
 
 const categoryList = [
@@ -21,15 +22,32 @@ const BranchDoctor = () => {
     const [searchValue, setSearchValue] = useState('');
     const [activeCategory, setActiveCategory] = useState(0);
 
-    const { branchId } = useLocalSearchParams();
+    const { branchId, fromSpeciality, department, speciality } = useLocalSearchParams();
+    let [doctors, setDoctors] = useState([]);
 
-    let [doctors, setDoctor] = useState([]);
-
-    useEffect(() => {
-        doctorService.getAllDoctorsByBranch(branchId).then((response) => {
-            setDoctor(response.data);
-        })
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            console.log("\n\n\n\nbranchId", branchId);
+            if (branchId != null && department != null && speciality != null) {
+                resourceService.getResourceBySpeciality(branchId, department, speciality)
+                .then((response) => {
+                    setDoctors(response.data)
+                })
+                .catch((error) => {
+                    console.log("error ", error)
+                })
+            } else {
+                doctorService.getAllDoctorsByBranch(branchId)
+                .then((response) => {
+                    setDoctors(response.data);
+                    console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
+                })
+                .catch((error) => {
+                    console.log("\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) error", error);
+                })
+            }
+        },[])
+    )
 
     return (
         <SafeAreaView>
@@ -39,7 +57,7 @@ const BranchDoctor = () => {
                 </View>
 
                 <View className="pt-8 px-6 ">
-                <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
+                    <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View>
 
                 <View className="flex-row pt-5 gap-3 pl-6">

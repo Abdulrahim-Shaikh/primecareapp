@@ -31,6 +31,13 @@ const TabIcon = ({
         )} */}
         {iconName === "calendar" && (
           <MaterialCommunityIcons
+            name="calendar"
+            size={20}
+            color={focused ? "white" : "rgb(120 53 15)"}
+          />
+        )}
+        {iconName === "calendar-check-outline" && (
+          <MaterialCommunityIcons
             name="calendar-check-outline"
             size={20}
             color={focused ? "white" : "rgb(120 53 15)"}
@@ -111,7 +118,7 @@ const TabLayout = () => {
                 options={{
                   headerShown: false,
                   tabBarIcon: ({ color, focused }) => (
-                    <TabIcon iconName="calendar" focused={focused} />
+                    <TabIcon iconName="calendar-check-outline" focused={focused} />
                   ),
                 }}
               />

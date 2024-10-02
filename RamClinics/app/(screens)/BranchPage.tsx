@@ -12,7 +12,7 @@ const BranchPage = () => {
     let [branches, setBranches] = useState([]);
     const [searchValue, setSearchValue] = useState('');
 
-    const { city, fromSpeciality } = useLocalSearchParams();
+    const { city, fromSpeciality, department } = useLocalSearchParams();
 
     useEffect(() => {
         if (city == null || city == "" || city.length == 0) {
@@ -28,12 +28,13 @@ const BranchPage = () => {
         }
     }, []);
 
+
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title="Select Branch" isPushBack={true} />
                 <View className="pt-8">
-                <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
+                    <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View>
                 <View className="flex-1 pt-4 space-y-4 ">
                     <FlatList
@@ -45,12 +46,28 @@ const BranchPage = () => {
                                 <Pressable
                                     className="flex flex-row border border-amber-900 rounded-lg p-4 shadow-sm bg-white"
                                     onPress={() => 
-                                    router.push({
-                                        pathname: "/BranchDoctor",
-                                        params: { 
-                                            branchId: item.id,
-                                        }
-                                    })
+                                    {
+                                        +fromSpeciality
+                                        ?
+                                            router.push({
+                                                pathname: "/BranchDoctor",
+                                                params: { 
+                                                    branchId: item.id,
+                                                    fromSpeciality: fromSpeciality,
+                                                    department: null,
+                                                    speciality: null
+                                                }
+                                            })
+                                        :
+                                            router.push({
+                                                pathname: "/DoctorSpecialityPage",
+                                                params: { 
+                                                    branchId: item.id,
+                                                    fromSpeciality: fromSpeciality,
+                                                    department: department
+                                                }
+                                            })
+                                    }
                                     }>
                                     <View className="rounded-smg bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <Image source={logoRamClinic} style={{ width: 50, height: 50 }} />
