@@ -34,7 +34,7 @@ const BranchDoctor = () => {
         <SafeAreaView>
             <ScrollView className="pt-6">
                 <View className="px-6">
-                    <HeaderWithBackButton isPushBack={true} title="Top Doctor" />
+                    <HeaderWithBackButton isPushBack={true} title="Doctors" />
                 </View>
 
                 <View className="pt-8 px-6 ">

@@ -36,7 +36,15 @@ const DoctorSpeciality = () => {
           renderItem={({ item }) => (
             <View className="">
               <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg"
-                onPress={() => router.push("/CityPage")}>
+                onPress={() => 
+                  router.push({
+                    pathname: "/BranchPage",
+                    params: { 
+                      branchId: null,
+                      fromSpeciality: 1 
+                    }
+                  })
+                }>
                 <Text className=" bg-amber-900 rounded-md p-3 flex justify-center items-center">
                   <Ionicons name={'medical'} size={24} color={"white"} />
                 </Text>
