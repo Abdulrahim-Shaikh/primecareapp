@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -55,11 +55,9 @@ const DoctorCard = ({
 
 
   useEffect(() => {
-    console.log(`option: '${department}'`)
     const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
     patientService.byMobileNo(mobile)
       .then((response: any) => {
-        console.log("patientService.byMobileNo: ", response)
         setPatientData(response.data[0])
         patientPolicyService.byPatientId(response.data[0].id)
           .then((response: any) => {
@@ -78,89 +76,112 @@ const DoctorCard = ({
 
 
   const bookAppointment = () => {
-    doctorService.find(id)
-      .then((response) => {
-        console.log("response.data: ", response.data)
-        console.log("\nresponse.data.speciality: ", response.data.speciality)
-        setSpeciality(response.data.speciality);
-        setDoctorName(response.data.name);
-        console.log("response.data.primaryBranch: ", response.data.primaryBranch)
-        branchService.getBranchByName(response.data.primaryBranch)
+
+
+
+    if (patientData == null || Object.keys(patientData).length <= 0) {
+      Alert.alert('Note', 'Patient data not found', [
+        {
+          text: 'OK',
+          // onPress: () => router.push({
+          //     pathname: "/BookAppointment",
+          // }),
+          style: 'default'
+        },
+      ],
+      )
+    } else {
+
+      if (patientPolicyData == null || Object.keys(patientPolicyData).length <= 0) {
+        Alert.alert('Note', 'Patient Policy data not found', [
+          {
+            text: 'OK',
+            // onPress: () => router.push({
+            //     pathname: "/BookAppointment",
+            // }),
+            style: 'default'
+          },
+        ],
+        )
+      } else {
+        doctorService.find(id)
           .then((response) => {
-            console.log("\n\n\n\nrrrrrrresponse:  ", response)
-            // setBranchId(response.data.id);
-            // if (department != null && date != null && speciality != null && doctorName != null) {
-            //   let dateString = moment(date).format("YYYY-MM-DD");
-            //   let today = moment().format("YYYY-MM-DD");
-            //   let requestBody: any = [{
-            //     date: dateString,
-            //     day: 2,
-            //     resourceIds: [id],
-            //     wday: "Mon"
-            //   }]
-            //   console.log("branchId: ", branchId)
-            //   console.log("department: ", department)
-            //   console.log("speciality: ", speciality)
-            //   console.log("requestBody: ", requestBody)
-            //   scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
-            //     .then((response) => {
-            //       console.log("rresponse getDoctorSchedule: ", response.data)
-            //       // setAppointmentEntry(true)
-            //       setDoctorScheduleData(response.data)
-            //     })
-            //     .catch((err) => {
-            //       console.log(err);
-            //     })
-            // }
-          })
-          .catch((error) => {
-            console.log("errorrrr: ", error)
-          })
-        setBranchId(response.data.branchId[0]);
-        console.log("\n\n\n\nresponse.data.branchId: ", response.data.branchId)
-        console.log("department: ", department)
-        console.log("speciality: ", speciality)
-        console.log("doctorName: ", doctorName)
-        console.log("date: ", date)
-        if (department != null && date != null && speciality != null && doctorName != null) {
-          let dateString = moment(date).format("YYYY-MM-DD");
-          let today = moment().format("YYYY-MM-DD");
-          let requestBody: any = [{
-            date: dateString,
-            day: 2,
-            resourceIds: [id],
-            wday: "Mon"
-          }]
-          console.log("\n\n\n\nbranchId: ", branchId)
-          console.log("department: ", department)
-          console.log("speciality: ", speciality)
-          console.log("requestBody: ", requestBody)
-          scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
-            .then((response) => {
-              console.log("rresponse getDoctorSchedule: ", response.data)
-              // setAppointmentEntry(true)
-              setDoctorScheduleData(response.data)
-              console.log("doctorScheduleData.length: ", doctorScheduleData.length)
-              console.log("doctorScheduleData[0]: ", doctorScheduleData[0])
-              router.push({
-                pathname: "/ScheduleAppointment/",
-                params: {
-                  branchId: branchId,
-                  department: department,
-                  speciality: speciality,
-                  doctor: doctorName,
-                  date: (new Date(date)).toString(),
-                  params: JSON.stringify(response.data[0]),
-                  patientData: JSON.stringify(patientData),
-                  patientPolicyData: JSON.stringify(patientPolicyData)
+            setSpeciality(response.data.speciality);
+            setDoctorName(response.data.name);
+            setBranchId(response.data.branchId[0]); // set first branchId from patient branch list if below API gives error
+            branchService.getBranchByName(response.data.primaryBranch)
+              .then((response) => {
+                setBranchId(response.data.id);
+                if (department != null && date != null && speciality != null && doctorName != null) {
+                  let dateString = moment(date).format("YYYY-MM-DD");
+                  let today = moment().format("YYYY-MM-DD");
+                  let requestBody: any = [{
+                    date: dateString,
+                    day: 2,
+                    resourceIds: [id],
+                    wday: "Mon"
+                  }]
+                  scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
+                    .then((response) => {
+                      setDoctorScheduleData(response.data)
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    })
                 }
               })
-            })
-            .catch((err) => {
-              console.log(err);
-            })
-        }
-      })
+              .catch((error) => {
+                console.log("errorrrr: ", error)
+              })
+            if (department != null && date != null && speciality != null && doctorName != null) {
+              let dateString = moment(date).format("YYYY-MM-DD");
+              let today = moment().format("YYYY-MM-DD");
+              let requestBody: any = [{
+                date: dateString,
+                day: 2,
+                resourceIds: [id],
+                wday: "Mon"
+              }]
+              scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
+                .then((response) => {
+                  console.log("rresponse getDoctorSchedule: ", response.data)
+                  // setAppointmentEntry(true)
+                  setDoctorScheduleData(response.data)
+                  router.push({
+                    pathname: "/ScheduleAppointment/",
+                    params: {
+                      branchId: branchId,
+                      department: department,
+                      speciality: speciality,
+                      doctor: doctorName,
+                      date: (new Date(date)).toString(),
+                      params: JSON.stringify(response.data[0]),
+                      patientData: JSON.stringify(patientData),
+                      patientPolicyData: JSON.stringify(patientPolicyData)
+                    }
+                  })
+                })
+                .catch((err) => {
+                  Alert.alert('Note', 'Doctor Schedule not found', [
+                    {
+                      text: 'OK',
+                      // onPress: () => router.push({
+                      //     pathname: "/BookAppointment",
+                      // }),
+                      style: 'default'
+                    },
+                  ],
+                  )
+                  console.log(err);
+                })
+            }
+          })
+      }
+
+    }
+
+
+
   }
 
 
@@ -236,6 +257,7 @@ const DoctorCard = ({
       <View className="flex flex-row justify-end ">
         <TouchableOpacity
           onPress={() => {
+            console.log("datePickerOpen")
             setIsDatePickerOpen(true);
           }}
           className="bg-emerald-500 text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-5 py-2 rounded-lg">

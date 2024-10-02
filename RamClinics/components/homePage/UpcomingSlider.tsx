@@ -77,6 +77,7 @@ const UpcomingSlider = () => {
                 promotionName={item.promotionName}
                 description={item.description}
                 photo={item.photo}
+                promotionServices={item.promotionServices}
               />
             );
           }}

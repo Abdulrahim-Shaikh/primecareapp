@@ -50,85 +50,6 @@ const SpecialityListPage = () => {
 
     let dateAux = new Date();
 
-    const searchSchedule = () => {
-        console.log("hereerereeeee")
-        console.log("department: ", department)
-        console.log("selectedDoctor.speciality: ", selectedDoctor.speciality)
-        console.log("doctor: ", doctor)
-        console.log("date: ", date)
-        if (department != null && date != null && selectedDoctor.speciality != null) {
-            console.log("inside")
-            console.log("validateForm", department)
-            console.log("validateForm", selectedDoctor.speciality)
-            let dateString = moment(date).format("YYYY-MM-DD");
-            let today= moment().format("YYYY-MM-DD");
-            console.log("today: ", today)
-            console.log("dateString: ", dateString)
-            let requestBody: any = [{
-                date: dateString,
-                day: 1,
-                resourceIds: [selectedDoctor.id],
-                wday: "Mon"
-            }]
-            scheduleService.getDoctorSchedule(branchId, department, selectedDoctor.speciality, "false", requestBody)
-                .then((response) => {
-                    console.log("rresponse getDoctorSchedule: ", response.data)
-                    resourceService.find(response.data[0].practitionerId)
-                    .then((response) => {
-                        if (response.data.length > 0) {
-                            router.push({
-                                pathname: "/ScheduleAppointment/",
-                                params: {
-                                    branchId: branchId? branchId : "7215165",
-                                    department: department,
-                                    speciality: selectedDoctor.speciality,
-                                    doctor: doctor,
-                                    date: (new Date(date)).toString(),
-                                    params: JSON.stringify(selectedDoctor),
-                                    patientData: JSON.stringify(patientData),
-                                    patientPolicyData: JSON.stringify(patientPolicyData)
-                                }
-                            })
-                            console.log("response: ", response)
-                        }
-                    })
-                    .catch((error) => {
-                        console.log("resourceService.findById() error: ", error)
-                    })
-                    // setAppointmentEntry(true)
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-                            router.push({
-                                pathname: "/ScheduleAppointment/",
-                                params: {
-                                    branchId: branchId? branchId : "7215165",
-                                    department: department,
-                                    speciality: selectedDoctor.speciality,
-                                    doctor: doctor,
-                                    date: (new Date(date)).toString(),
-                                    params: JSON.stringify(selectedDoctor),
-                                    patientData: JSON.stringify(patientData),
-                                    patientPolicyData: JSON.stringify(patientPolicyData)
-                                }
-                            })
-            // router.push({
-            //     pathname: "/ScheduleAppointment",
-            //     params: {
-            //         department: option,
-            //         speciality: speciality,
-            //         doctor: doctor,
-            //         date: (new Date(date)).toString()
-            //     }
-            // })
-            console.log("outside")
-        }
-
-    }
-
-
-
     useEffect(() => {
         doctorService.getAllDoctors().then((res) => {
             console.log("filtered patient..", res.data)
@@ -201,37 +122,8 @@ const SpecialityListPage = () => {
 
                 <View className="pb-16 px-6">
                     {filteredDoctors.map((doctor, idx) => (
-                        <Pressable
-                            onPress={() => {
-                                console.log("\n\n\n\nselectdoctro")
-                                let item = filteredDoctors[idx]
-                                setSelectedDoctor(item)
-                                setIsDatePickerOpen(true)
-                            }}
-                        >
-                            <DoctorCard
-                            onPress={() => {
-                                console.log("\n\n\n\nselectdoctro")
-                                let item = filteredDoctors[idx]
-                                setSelectedDoctor(item)
-                                setIsDatePickerOpen(true)
-                            }}
-                             {...doctor} key={idx} />
-                            {isDatePickerOpen && (
-                                <View>
-                                    <DateTimePicker
-                                        value={dateAux}
-                                        mode="date"
-                                        display="default"
-                                        onChange={(selectedDate: any) => {
-                                            const currentDate = selectedDate.nativeEvent.timestamp || date;
-                                            setDate(currentDate);
-                                            setIsDatePickerOpen(false);
-                                            searchSchedule()
-                                        }}
-                                    />
-                                </View>
-                            )}
+                        <Pressable >
+                            <DoctorCard {...doctor} key={idx} />
                         </Pressable>
                     ))}
                 </View>

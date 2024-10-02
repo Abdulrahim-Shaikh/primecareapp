@@ -1,5 +1,6 @@
 import {
   Alert,
+  FlatList,
   Image,
   ImageBackground,
   Modal,
@@ -16,14 +17,16 @@ import sliderImgBg from "../../assets/images/doctor_img_bg.png";
 import background from "../../assets/images/background.jpg"
 import promotionOrderService from "../../domain/services/PromotionOrderService";
 import { useUserSate } from "../../domain/state/UserState";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 
-type Props = { id: number; promotionName: string; description: string; photo: any };
+type PromotionService = { serviceName: string; totalAmount: number; };
+type Props = { id: number; promotionName: string; description: string; photo: any, promotionServices: PromotionService[] };
 
-const UpcomingSliderItem = ({ id, promotionName, description, photo }: Props) => {
+const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionServices }: Props) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [isServicesModalVisible, setIsServicesModalVisible] = useState(false);
   const { width: SCREEN_WIDTH } = useWindowDimensions();
 
   let userId = useUserSate.getState().userId;
@@ -78,6 +81,14 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo }: Props) =>
       });
   };
 
+  const handleShowServices = () => {
+    setIsServicesModalVisible(true);
+  };
+
+  const handleCloseServicesModal = () => {
+    setIsServicesModalVisible(false);
+  };
+
   return (
     <ImageBackground
     source={background}
@@ -92,6 +103,9 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo }: Props) =>
           </Text>
           <Text className="text-base pt-1">{description}</Text>
         </View>
+        <TouchableOpacity onPress={handleShowServices} className="px-6 py-2">
+              <FontAwesome name="list" size={24} color="#1e1b4b" style={{ marginBottom: 35 }}/>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity 
         className="bg-lime-500 text-primaryColor border-t-[1px] border-x-[1px] border-b-[1px] border-primaryColor px-4 py-2 rounded-lg"
@@ -124,6 +138,30 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo }: Props) =>
             </View>
           </View>
         </Modal>
+        <Modal transparent={true} animationType="slide" visible={isServicesModalVisible} onRequestClose={handleCloseServicesModal}>
+        <View className="flex-1 justify-center items-center bg-transparent">
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <Pressable className="absolute top-3 right-3" onPress={handleCloseServicesModal}>
+              <AntDesign name="closecircle" size={24} color="#78450f" />
+            </Pressable>
+            <Text className="text-xl font-bold text-center mb-4 mt-4">List of Services</Text>
+            <FlatList
+              data={promotionServices}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View className="flex-row border border-amber-900 rounded-lg mb-4 p-4 bg-white shadow-md">
+                  <View className="flex-1">
+                    <Text className="text-base font-bold mb-1">{item.serviceName}</Text>
+                    <Text className="text-sm" style={{ color: '#04522b', fontWeight: '600' }}>
+                      Amount: {item.totalAmount.toFixed(2)} SAR
+                    </Text>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
       </View>
     </ImageBackground>
 
