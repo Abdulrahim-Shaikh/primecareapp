@@ -43,6 +43,8 @@ const Appoinment = () => {
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
 
+  const { user, setUser } = useUserSate();
+
   const onStartDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || fromDate;
     setIsFromDatePickerOpen(false);

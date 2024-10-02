@@ -1,5 +1,5 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { doctorSpecialityData } from "../../constants/data";
@@ -7,12 +7,14 @@ import specialityService from "../../domain/services/SpecialityService";
 
 const DoctorSpeciality = () => {
 
-  // let [specialtyList, setSpecialty] = useState([]);
-  // specialityService.findAll().then((spec) => {
-  //   setSpecialty(spec.data);
-  // })
+  let [specialtyList, setSpecialty] = useState([]);
 
-  
+  useEffect(() => {
+    specialityService.findAll().then((response) => {
+      setSpecialty(response.data);
+    })
+  }, [])
+
   return (
     <View className="pt-8">
       <View className="flex flex-row justify-between items-center w-full px-6">
@@ -21,7 +23,7 @@ const DoctorSpeciality = () => {
           onPress={() => router.push("/DoctorSpecialityPage")}
           className=" font-semibold text-amber-900">
           View All
-        </Text> 
+        </Text>
       </View>
 
       <View className="h-[90px] pt-5">
@@ -29,20 +31,20 @@ const DoctorSpeciality = () => {
           horizontal
           contentContainerStyle={{ gap: 8 }}
           showsHorizontalScrollIndicator={false}
-          data={doctorSpecialityData}
+          data={specialtyList}
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => (
             <View className="">
               <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg"
                 onPress={() => router.push("/CityPage")}>
                 <Text className=" bg-amber-900 rounded-md p-3 flex justify-center items-center">
-                  <Ionicons name={item.icon as any} size={24} color={"white"} />
+                  <Ionicons name={'medical'} size={24} color={"white"} />
                 </Text>
                 <View className="px-3">
-                  <Text className="font-semibold">{item.title} </Text>
+                  <Text className="font-semibold">{item.name} </Text>
                   <View>
                     <Text className="font-bodyText pt-1">
-                      {item.totalDoctors} doctors{" "}
+                      doctors{" "}
                       <AntDesign name="arrowright" />
                     </Text>
                   </View>
