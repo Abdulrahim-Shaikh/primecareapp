@@ -63,7 +63,7 @@ const MyVitalSigns = () => {
             console.error("Failed to fetch branches:", error);
         });
 
-        vitalSignsService.patientEncounterHistory("PNT000028").then((res) => {
+        vitalSignsService.patientEncounterHistory(userId).then((res) => { //"PNT000028"
             console.log("Response data:", res.data);
             setVitalSigns(res.data || []);
             setFilteredVitalSigns(res.data || []);
