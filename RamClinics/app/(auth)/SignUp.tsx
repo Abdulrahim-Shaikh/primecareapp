@@ -88,7 +88,7 @@ const SingUp = () => {
     "firstName": firstName, 
     "middleName": secondName,
     "lastName": lastName,
-    "dob": moment(dob).format("dd-MMM-yy"),
+    "dob": moment(dob).format("YYYY-MM-DD"),
     "country": selectedIdCountry,
     "nationalId": id,
     "passportNo": passport,
