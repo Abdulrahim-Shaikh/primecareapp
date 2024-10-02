@@ -7,6 +7,7 @@ import packageService from "../../domain/services/PackageService";
 import QRCode from "react-native-qrcode-svg";
 import promotionOrderService from "../../domain/services/PromotionOrderService";
 import { useUserSate } from "../../domain/state/UserState";
+import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.png";
 
 const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/servicepackage/file/";
 
@@ -139,20 +140,12 @@ const Packages = () => {
                 <FlatList data={filteredPackages}
                     keyExtractor={(item: any) => item.id.toString()}
                     renderItem={({ item }) => {
-                        const photoUrl = item.photo && item.photo.length > 0 ? item.photo[0] : null;
+                        const photoUrl = (item.photo && Array.isArray(item.photo) && item.photo.length > 0 && item.photo[0])
+                            ? { uri: `${sourceUrl}${encodeURIComponent(item.photo[0])}` }
+                            : emptyOfferImage;
                         return (
                             <View className="flex-row border border-amber-900 rounded-lg mb-4 overflow-hidden">
-                                {photoUrl ? (
-                                    <Image
-                                        source={{ uri: `${sourceUrl}${encodeURIComponent(photoUrl)}` }}
-                                        className="w-32 h-32"
-                                        style={{ width: 128, height: 128 }}
-                                    />
-                                ) : (
-                                    <View className="w-32 h-32 bg-gray-200 flex items-center justify-center">
-                                        <Text className="text-gray-500">No Image</Text>
-                                    </View>
-                                )}
+                                <Image source={photoUrl} style={{ width: 128, height: 128 }} />
                                 <View className="flex-1 p-4">
                                     <Text className="text-base font-bold mb-1">{item.packageName}</Text>
                                     <Text className="text-sm text-gray-500 mb-4">{item.serviceName}</Text>

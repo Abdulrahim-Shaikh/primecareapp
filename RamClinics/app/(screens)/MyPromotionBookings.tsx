@@ -17,7 +17,6 @@ const MyPromotionBookings = () => {
             .then((res) => {
                 setPromotionOrders(res.data);
                 setLoading(false);
-                console.log("Promotion Orders:", res.data);
             })
             .catch((error) => {
                 console.error(error);
