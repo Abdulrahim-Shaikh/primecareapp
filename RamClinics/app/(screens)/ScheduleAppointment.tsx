@@ -92,25 +92,28 @@ const ScheduleAppointment = () => {
 
     useEffect(() => {
         console.log("params: ", params)
-        // console.log("\n\n\n\nObject.values(JSON.parse(params.toString()).slots): ", Object.values(JSON.parse(params.toString()).slots)[0])
-        // console.log("\n\n\n\npatientData: ", patientData)
         let slotsAux: any = Object.values(JSON.parse(params.toString()).slots)[0]
         console.log("\n\n\n\nslotsAux: ", slotsAux)
+        if (slotsAux == null || slotsAux.length <= 0) {
+            Alert.alert('Note', 'No slots found for this date and doctor', [
+                {
+                    text: 'BACK',
+                    onPress: () => router.back(),
+                    style: 'default'
+                },
+            ],
+            )
+        }
         console.log("\n\n\n\n")
         slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
-        // console.log("slotsAux: ", slotsAux)
         setSlots(slotsAux)
         setDoctorScheduleData(JSON.parse(params.toString()))
         setPatientDataJson(JSON.parse(patientData.toString()))
         setPatientPolicyDataJson(JSON.parse(patientPolicyData.toString()))
         console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
-        // let dt = moment(date, "YYYY-MM-DD")
-        // console.log("slllllll: ", JSON.parse(params.toString()).slots["30"])
         branchService.find(Number(branchId))
             .then((response) => {
                 setBranchName(response.data.name)
-                // console.log("response branchService find: ", response.data.name)
-                // console.log("branchName: ", branchName)
             })
             .catch((error) => {
                 console.log("\n\n\nerror: ", error)
