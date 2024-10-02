@@ -42,6 +42,7 @@ const Appoinment = () => {
   const [allAppointments, setAllAppointments] = useState(myAppoinmentData);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   const { user, setUser } = useUserSate();
 
@@ -124,7 +125,7 @@ const Appoinment = () => {
             <Text className="text-2xl font-semibold">My Appointments</Text>
           </View>
           <View className="pt-8">
-            <Searchbox />
+            <Searchbox searchValue={searchValue} setSearchValue={setSearchValue}/>
           </View>
           <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">

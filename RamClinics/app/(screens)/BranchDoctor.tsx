@@ -18,6 +18,7 @@ const categoryList = [
 
 const BranchDoctor = () => {
 
+    const [searchValue, setSearchValue] = useState('');
     const [activeCategory, setActiveCategory] = useState(0);
 
     const { branchId } = useLocalSearchParams();
@@ -38,7 +39,7 @@ const BranchDoctor = () => {
                 </View>
 
                 <View className="pt-8 px-6 ">
-                    <Searchbox />
+                <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View>
 
                 <View className="flex-row pt-5 gap-3 pl-6">

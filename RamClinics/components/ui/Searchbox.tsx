@@ -2,8 +2,15 @@ import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
-const Searchbox = () => {
-  const [searchValue, setSearchValue] = useState("");
+type Props = {
+  searchValue: any;
+  setSearchValue: any;
+};
+
+const Searchbox = ({ searchValue, setSearchValue }: Props) => {
+
+  // const [searchValue, setSearchValue] = useState("");
+
   return (
     <View className="flex flex-row justify-start items-center border border-amber-900 rounded-xl p-3 flex-1 mr-1">
       <Ionicons

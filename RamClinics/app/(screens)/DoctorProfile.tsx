@@ -1,4 +1,4 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { AntDesign, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
@@ -46,18 +46,23 @@ const DoctorProfile = () => {
           <Octicons name="share-android" size={20} color="black" />
         </Text>
       </View>
-
-      <View className="items-center mt-4 mb-6">
-        {doctor.photo && doctor.photo.length > 0 && doctor.photo[0] != null ? (
-          <Image
-            source={{ uri: `${sourceUrl}${encodeURIComponent(doctor.photo[0])}` }}
-            className="w-64 h-64 rounded-full border-4 border-amber-900"
-          />
-        ) : (
-          <Image source={doctorImg} className="w-64 h-64 rounded-full border-4 border-amber-900" />
-        )}
-      </View>
-
+      <TouchableOpacity onPress={() =>
+        router.push({
+          pathname: "/DoctorProfile",
+          params: { id: id },
+        })
+      }>
+        <View className="flex items-center justify-center mt-4 mb-6">
+          {doctor.photo && doctor.photo.length > 0 && doctor.photo[0] != null ? (
+            <Image
+              source={{ uri: `${sourceUrl}${encodeURIComponent(doctor.photo[0])}` }}
+              className="w-64 h-64 rounded-full border-4 border-amber-900 "
+            />
+          ) : (
+            <Image source={doctorImg} className="w-64 h-64 rounded-full border-4 border-amber-900" />
+          )}
+        </View>
+      </TouchableOpacity>
       <View className="bg-amber-900 rounded-t-3xl p-6 mt-5">
         <View className="flex-row justify-between items-start">
           <View>

@@ -10,6 +10,7 @@ import Searchbox from "../../components/ui/Searchbox";
 const BranchPage = () => {
 
     let [branches, setBranches] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
 
     const { city, fromSpeciality } = useLocalSearchParams();
 
@@ -32,7 +33,7 @@ const BranchPage = () => {
             <ScrollView className="p-6">
                 <HeaderWithBackButton title="Select Branch" isPushBack={true} />
                 <View className="pt-8">
-                    <Searchbox />
+                <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View>
                 <View className="flex-1 pt-4 space-y-4 ">
                     <FlatList

@@ -36,12 +36,12 @@ const DoctorSpeciality = () => {
           renderItem={({ item }) => (
             <View className="">
               <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg"
-                onPress={() => 
+                onPress={() =>
                   router.push({
                     pathname: "/BranchPage",
-                    params: { 
+                    params: {
                       branchId: null,
-                      fromSpeciality: 1 
+                      fromSpeciality: 1
                     }
                   })
                 }>

@@ -23,6 +23,7 @@ type Props = {
   rating: string;
   clinicHours: any;
   consultationFee: string;
+  speciality: string;
 };
 
 const DoctorCard = ({
@@ -34,6 +35,7 @@ const DoctorCard = ({
   rating,
   clinicHours,
   consultationFee,
+  speciality
 }: Props) => {
 
   const BASE_URL = "http://16.24.11.104:8080/HISAdmin/api/resource/file/";
@@ -44,7 +46,7 @@ const DoctorCard = ({
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // Control for start date picker modal
   const [date, setDate] = useState(new Date());  // State for start date
-  const [speciality, setSpeciality] = useState("");
+  const [specialityList, setSpeciality] = useState("");
   const [doctorName, setDoctorName] = useState(null);
   const [branchId, setBranchId] = useState("");
   const [doctorScheduleData, setDoctorScheduleData] = useState(myAppoinmentData)
@@ -113,7 +115,7 @@ const DoctorCard = ({
             branchService.getBranchByName(response.data.primaryBranch)
               .then((response) => {
                 setBranchId(response.data.id);
-                if (department != null && date != null && speciality != null && doctorName != null) {
+                if (department != null && date != null && specialityList != null && doctorName != null) {
                   let dateString = moment(date).format("YYYY-MM-DD");
                   let today = moment().format("YYYY-MM-DD");
                   let requestBody: any = [{
@@ -122,7 +124,7 @@ const DoctorCard = ({
                     resourceIds: [id],
                     wday: "Mon"
                   }]
-                  scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
+                  scheduleService.getDoctorSchedule(branchId, department, specialityList, "false", requestBody)
                     .then((response) => {
                       setDoctorScheduleData(response.data)
                     })
@@ -134,7 +136,7 @@ const DoctorCard = ({
               .catch((error) => {
                 console.log("errorrrr: ", error)
               })
-            if (department != null && date != null && speciality != null && doctorName != null) {
+            if (department != null && date != null && specialityList != null && doctorName != null) {
               let dateString = moment(date).format("YYYY-MM-DD");
               let today = moment().format("YYYY-MM-DD");
               let requestBody: any = [{
@@ -143,7 +145,7 @@ const DoctorCard = ({
                 resourceIds: [id],
                 wday: "Mon"
               }]
-              scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
+              scheduleService.getDoctorSchedule(branchId, department, specialityList, "false", requestBody)
                 .then((response) => {
                   console.log("rresponse getDoctorSchedule: ", response.data)
                   // setAppointmentEntry(true)
@@ -153,7 +155,7 @@ const DoctorCard = ({
                     params: {
                       branchId: branchId,
                       department: department,
-                      speciality: speciality,
+                      speciality: specialityList,
                       doctor: doctorName,
                       date: (new Date(date)).toString(),
                       params: JSON.stringify(response.data[0]),
@@ -220,7 +222,7 @@ const DoctorCard = ({
               </Text>
             </TouchableOpacity>
             <Text className="py-2">
-              {department} <Entypo name="dot-single" />
+              {speciality} <Entypo name="dot-single" />
               <Text className="text-[12px] text-amber-900">{primaryBranch}</Text>
             </Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
