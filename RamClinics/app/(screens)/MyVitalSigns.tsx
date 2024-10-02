@@ -15,7 +15,7 @@ const tabNames = [
     { label: "Cancelled", value: "cancelled" }
 ];
 
-const MySickLeaves = () => {
+const MyVitalSigns = () => {
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
     const [fromDate, setFromDate] = useState(new Date());
@@ -25,7 +25,7 @@ const MySickLeaves = () => {
     const [vitalSigns, setVitalSigns] = useState([]);
     const [filteredVitalSigns, setFilteredVitalSigns] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedSickLeaves, setSelectedSickLeaves] = useState<any>(null);
+    const [selectedVitalSigns, setSelectedVitalSigns] = useState<any>(null);
     const [pdfUri, setPdfUri] = useState('');
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
@@ -44,7 +44,7 @@ const MySickLeaves = () => {
 
     const [activeTab, setActiveTab] = useState("in-progress");
 
-    const filterSickLeaves = () => {
+    const filterVitalSigns = () => {
         let filtered = vitalSigns?.filter((item: any) => item.status === activeTab) || [];
         if (selectedValue) {
             filtered = filtered.filter((item: any) => {
@@ -73,11 +73,11 @@ const MySickLeaves = () => {
     }, []);
 
     useEffect(() => {
-        filterSickLeaves();
+        filterVitalSigns();
     }, [fromDate, toDate, selectedValue, activeTab, vitalSigns]);
 
     const openModal = async (sickLeaves: any) => {
-        setSelectedSickLeaves(sickLeaves);
+        setSelectedVitalSigns(sickLeaves);
         const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/patientconsentform/sickLeaveByPatientId/${userId}`;
         setPdfUri(pdfUrl);
         console.log("Opening modal with ID:", sickLeaves.id);
@@ -87,7 +87,7 @@ const MySickLeaves = () => {
 
     const closeModal = () => {
         setIsModalVisible(false);
-        setSelectedSickLeaves(null);
+        setSelectedVitalSigns(null);
         setPdfUri('');
     };
 
@@ -96,7 +96,7 @@ const MySickLeaves = () => {
             <ScrollView>
                 <View className="pb-8 px-6 pt-4">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="My Sick Leaves" />
+                        <HeaderWithBackButton isPushBack={true} title="My Vital Signs" />
                         <MaterialCommunityIcons
                             name="emoticon-sick-outline"
                             size={24}
@@ -147,13 +147,13 @@ const MySickLeaves = () => {
 
                     <View>
                         {filteredVitalSigns.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No sick leaves available for this filter.
+                            <Text className="text-center text-lg text-gray-600 mt-4">No vital sign available for this filter.
                                 Select Correct Branch Name, Date & Tabs</Text>
                         ) : (
                             filteredVitalSigns.map((vitalsign: any) => (
                                 <Pressable key={vitalsign.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
                                     <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Sick Leaves ID: {vitalsign.id}</Text>
+                                        <Text className="font-semibold">Vital Sign ID: {vitalsign.id}</Text>
                                         <AntDesign name="medicinebox" size={24} color="#008080" />
                                     </View>
                                     <Text style={styles.invoiceText}>
@@ -173,7 +173,7 @@ const MySickLeaves = () => {
                     <SickLeavesReport
                         isVisible={isModalVisible}
                         pdfUri={pdfUri}
-                        patientId={selectedSickLeaves?.id}
+                        patientId={selectedVitalSigns?.id}
                         onClose={closeModal}
                     />
                 </View>
@@ -182,7 +182,7 @@ const MySickLeaves = () => {
     );
 };
 
-export default MySickLeaves;
+export default MyVitalSigns;
 
 const styles = StyleSheet.create({
     invoiceText: {
