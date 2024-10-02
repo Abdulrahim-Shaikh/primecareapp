@@ -26,7 +26,7 @@ const UserProfile = () => {
     });
   }, []);
   return (
-    <View className="bg-amber-100 pt-6">
+    <View className="pt-6">
       <View className="h-full justify-between items-start w-full">
         <View className="flex-row justify-between items-center pt-6 px-6 w-full">
           <Text
@@ -56,133 +56,134 @@ const UserProfile = () => {
             <View className="flex-row justify-between items-start">
               <View>
                 <Text className=" text-white">First Name</Text>
-                <Text className="text-white font-semibold text-xl">
+                <Text className="text-lime-500 text-md font-semibold text-xl">
                   {user && user.firstName ? user.firstName : "Unknown"}
                 </Text>
               </View>
               <View>
                 <Text className="text-base text-white">Last Name</Text>
-                <Text className=" text-white font-semibold text-xl">
+                <Text className="text-lime-500 text-md font-semibold text-xl">
                   {user && user.lastName ? user.lastName : "Person"}
                 </Text>
               </View>
               <View>
-                <Text className="bg-white p-[10px] rounded-md">
-                  <AntDesign name="heart" size={16} color="#009281" />
+                <Text className="bg-lime-500 p-[10px] bg-white rounded-md">
+                  <AntDesign name="heart" size={20} color="#84cc16" />
                 </Text>
               </View>
             </View>
-            <View className="flex-row justify-between items-center pt-4 pb-8">
+            <View className="flex-row justify-between items-center pt-12 pb-8">
               <View className="flex-row gap-2">
                 <Text className="p-2 rounded-md bg-white">
                   <MaterialIcons
                     name="list"
-                    size={16}
-                    color="#009281"
+                    size={20}
+                    color="#84cc16"
                   />
                 </Text>
                 <View>
                   <Text className="text-white text-xs">MRN NO </Text>
-                  <View className="bg-amber-500 rounded-md">
-                    <Text className="text-white text-md">{patient && patient.mrno ? patient.mrno : "KHB100105421846"}</Text>
+                  <View className="rounded-md">
+                    <Text className="text-lime-500 text-md font-bold">{patient && patient.mrno ? patient.mrno : "KHB100105421846"}</Text>
                   </View>
+                </View>
                 </View>
                 <View className="flex-row gap-2">
                   <Text className="p-2 rounded-md bg-white">
                     <MaterialIcons
                       name="2k-plus"
-                      size={16}
-                      color="#009281"
+                      size={20}
+                    color="#84cc16"
                     />
                   </Text>
                   <View>
                     <Text className="text-white text-xs">Nationl Id</Text>
-                    <View className="bg-amber-500 rounded-md pl-1">
-                      <Text className="text-white text-md">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
+                    <View className="rounded-md">
+                      <Text className="text-lime-500 text-md font-bold">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
                     </View>
                   </View>
                 </View>
-              </View>
             </View>
-
-            <View className="flex-row justify-between items-center pb-8">
-              <View className="flex-row gap-3">
+            <View className="flex-row justify-between items-center pb-8 pr-3">
+            <View className="flex-row gap-2">
                 <Text className="p-2 rounded-md bg-white">
                   <MaterialIcons
                     name="motion-photos-auto"
-                    size={16}
-                    color="#009281"
+                    size={20}
+                    color="#84cc16"
                   />
                 </Text>
                 <View>
                   <Text className="text-white text-xs">Gender </Text>
-                  <View className="bg-amber-500 rounded-md">
-                    <Text className="text-white text-md font-semibold">{patient && patient.gender ? patient.gender : "Dont Know"}</Text>
+                  <View className="rounded-md ">
+                    <Text className="text-lime-500 text-md font-bold">{patient && patient.gender ? patient.gender : "Dont Know"}</Text>
                   </View>
+                </View>
                 </View>
                 <View className="flex-row gap-2 ml-16">
                   <Text className="p-2 rounded-md bg-white">
                     <MaterialIcons
                       name="people-outline"
-                      size={16}
-                      color="#009281"
+                      size={20}
+                    color="#84cc16"
                     />
                   </Text>
                   <View>
                     <Text className="text-white text-xs">Date Of Birth</Text>
-                    <View className="bg-amber-500 rounded-md">
-                      <Text className="text-white text-xs font-semibold">
+                    <View className="rounded-md">
+                      <Text className="text-lime-500 text-md font-bold">
                         {patient && patient.dob ? new Date(patient.dob).toLocaleDateString() : "05/06/1999"}
                       </Text>
 
                     </View>
                   </View>
                 </View>
-              </View>
+             
             </View>
 
-            <View className="flex-row justify-between items-center pt-4 pb-20">
+            <View className="flex-row justify-between items-center pb-20">
               <View className="flex-row gap-2">
                 <Text className="p-2 rounded-md bg-white">
                   <MaterialIcons
                     name="flag"
-                    size={16}
-                    color="#009281"
+                    size={20}
+                    color="#84cc16"
                   />
                 </Text>
                 <View>
                   <Text className="text-white text-xs">Nationality</Text>
-                  <View className="bg-amber-500 rounded-md">
-                    <Text className="text-white text-md ">{patient && patient.nationality ? patient.nationality : "India"}</Text>
+                  <View className="rounded-md">
+                    <Text className="text-lime-500 text-md font-bold">{patient && patient.nationality ? patient.nationality : "India"}</Text>
                   </View>
                 </View>
-                <View className="flex-row gap-2 ml-14 content-end" >
+                </View>
+                <View className="flex-row gap-2 pr-1">
                   <Text className="p-2 rounded-md bg-white">
                     <MaterialIcons
                       name="mobile-friendly"
-                      size={16}
-                      color="#009281"
+                      size={20}
+                      color="#84cc16"
                     />
                   </Text>
                   <View>
                     <Text className="text-white text-xs">Mobile Number</Text>
-                    <View className="bg-amber-500 rounded-md">
-                      <Text className="text-white text-md ">{user && user.mobile ? user.mobile : "28458625824"}</Text>
+                    <View className="rounded-md">
+                      <Text className="text-lime-500 text-md font-bold">{user && user.mobile ? user.mobile : "28458625824"}</Text>
                     </View>
                   </View>
                 </View>
-              </View>
+              
             </View>
 
           </View>
-          <View className="p-6 rounded-t-2xl bg-white -mt-10">
+          <View className="p-2 rounded-t-2xl bg-white -mt-10">
             {/* <View className="flex-row justify-between items-center pt-4 pb-10">
                 <View className="flex-row gap-9 bg-amber-400 rounded-md justify-center items-center">
                   <Text className="p-2 rounded-md bg-black">
                     <MaterialIcons
                       name="people-outline"
-                      size={25}
-                      color="#009281"
+                      size={20}
+                    color="#84cc16"
                     />
                   </Text>
                   <View>
@@ -194,8 +195,8 @@ const UserProfile = () => {
                   <Text className="p-2 rounded-md bg-white">
                     <MaterialIcons
                       name="people-outline"
-                      size={16}
-                      color="#009281"
+                      size={20}
+                    color="#84cc16"
                     />
                   </Text>
                   <View>
