@@ -45,7 +45,7 @@ const MainMenu = () => {
     {
       icon: "pricetag-outline",
       title: "Promotions",
-      link: "",
+      link: "/MyPromotionBookings",
     },
     {
       icon: "bandage-outline",
