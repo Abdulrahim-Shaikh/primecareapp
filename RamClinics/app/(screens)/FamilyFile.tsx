@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import patientService from "../../domain/services/PatientService";
 import Entypo from '@expo/vector-icons/Entypo';
 import { Picker } from "@react-native-picker/picker";
+import { router, useRouter } from "expo-router";
 
 
 
@@ -23,6 +24,7 @@ const FamilYFile = () => {
 
     const patientId = 'PNT099701'
     const parentId = 'PNT01234'
+    const router = useRouter();
 
     useEffect(() => {
         patientService.find(patientId).then((res) => {
@@ -90,7 +92,8 @@ const FamilYFile = () => {
                             </Text>
                         </Pressable>
                     </View>
-                    <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full">
+                    <Pressable onPress={() => router.push("/FamilyApprovals")}
+                    className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full" >
                         <MaterialIcons name="approval" size={24} color="black" className="mt-2 ml-2" />
                         <Text className="rounded-md p-1 mt-1  text-left ml-10 text-base font-semibold	">
                             Family Approvals
@@ -177,9 +180,9 @@ const FamilYFile = () => {
                                     value={newMember}
                                     onChangeText={setNewMember}
                                     className="border border-gray-300 p-2 rounded-md mb-4"
-                                    
+
                                 />
-                                
+
 
                                 {/* <View className="flex-row justify-between bg-amber-900  rounded-md">
                                     <Pressable onPress={() => {
@@ -195,7 +198,7 @@ const FamilYFile = () => {
                                         <Text style={{ color: 'white' }}>Add Member</Text>
                                     </Pressable>
                                 </View>
-                              
+
                             </View>
                         </View>
                     </Modal>
