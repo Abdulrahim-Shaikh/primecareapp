@@ -86,36 +86,36 @@ const DoctorCard = ({
         setDoctorName(response.data.name);
         console.log("response.data.primaryBranch: ", response.data.primaryBranch)
         branchService.getBranchByName(response.data.primaryBranch)
-        .then((response) => {
-          console.log("\n\n\n\nrrrrrrresponse:  ", response)
-          // setBranchId(response.data.id);
-          // if (department != null && date != null && speciality != null && doctorName != null) {
-          //   let dateString = moment(date).format("YYYY-MM-DD");
-          //   let today = moment().format("YYYY-MM-DD");
-          //   let requestBody: any = [{
-          //     date: dateString,
-          //     day: 2,
-          //     resourceIds: [id],
-          //     wday: "Mon"
-          //   }]
-          //   console.log("branchId: ", branchId)
-          //   console.log("department: ", department)
-          //   console.log("speciality: ", speciality)
-          //   console.log("requestBody: ", requestBody)
-          //   scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
-          //     .then((response) => {
-          //       console.log("rresponse getDoctorSchedule: ", response.data)
-          //       // setAppointmentEntry(true)
-          //       setDoctorScheduleData(response.data)
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     })
-          // }
-        })
-        .catch((error) => {
-          console.log("errorrrr: ", error)
-        })
+          .then((response) => {
+            console.log("\n\n\n\nrrrrrrresponse:  ", response)
+            // setBranchId(response.data.id);
+            // if (department != null && date != null && speciality != null && doctorName != null) {
+            //   let dateString = moment(date).format("YYYY-MM-DD");
+            //   let today = moment().format("YYYY-MM-DD");
+            //   let requestBody: any = [{
+            //     date: dateString,
+            //     day: 2,
+            //     resourceIds: [id],
+            //     wday: "Mon"
+            //   }]
+            //   console.log("branchId: ", branchId)
+            //   console.log("department: ", department)
+            //   console.log("speciality: ", speciality)
+            //   console.log("requestBody: ", requestBody)
+            //   scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
+            //     .then((response) => {
+            //       console.log("rresponse getDoctorSchedule: ", response.data)
+            //       // setAppointmentEntry(true)
+            //       setDoctorScheduleData(response.data)
+            //     })
+            //     .catch((err) => {
+            //       console.log(err);
+            //     })
+            // }
+          })
+          .catch((error) => {
+            console.log("errorrrr: ", error)
+          })
         setBranchId(response.data.branchId[0]);
         console.log("\n\n\n\nresponse.data.branchId: ", response.data.branchId)
         console.log("department: ", department)
@@ -143,17 +143,17 @@ const DoctorCard = ({
               console.log("doctorScheduleData.length: ", doctorScheduleData.length)
               console.log("doctorScheduleData[0]: ", doctorScheduleData[0])
               router.push({
-                  pathname: "/ScheduleAppointment/",
-                  params: {
-                      branchId: branchId,
-                      department: department,
-                      speciality: speciality,
-                      doctor: doctorName,
-                      date: (new Date(date)).toString(),
-                      params: JSON.stringify(response.data[0]),
-                      patientData: JSON.stringify(patientData),
-                      patientPolicyData: JSON.stringify(patientPolicyData)
-                  }
+                pathname: "/ScheduleAppointment/",
+                params: {
+                  branchId: branchId,
+                  department: department,
+                  speciality: speciality,
+                  doctor: doctorName,
+                  date: (new Date(date)).toString(),
+                  params: JSON.stringify(response.data[0]),
+                  patientData: JSON.stringify(patientData),
+                  patientPolicyData: JSON.stringify(patientPolicyData)
+                }
               })
             })
             .catch((err) => {
@@ -181,7 +181,7 @@ const DoctorCard = ({
               <Image source={profilePhotoUrl} style={{ width: 90, height: 120, justifyContent: "center" }} />
 
             ) : (
-              <Image source={emptyImg} className="w-16 h-16 border-4 border-amber-900" />
+              <Image source={emptyImg} className="w-16 h-16 border-4" />
             )}
           </View>
           <View style={{ flex: 1 }}>

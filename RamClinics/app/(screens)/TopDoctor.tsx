@@ -44,7 +44,7 @@ const TopDoctor = () => {
 
   useEffect(() => {
     const selectedSpeciality = specialityList[activeSpeciality];
-    if (selectedSpeciality === "w") {
+    if (selectedSpeciality === "All") {
       setFilteredDoctors(doctor);
     } else {
       const filtered = doctor.filter(doc => doc.speciality === selectedSpeciality);
