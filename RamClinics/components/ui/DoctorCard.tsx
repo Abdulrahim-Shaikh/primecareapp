@@ -63,7 +63,7 @@ const DoctorCard = ({
       if (useUserSate.getState().user != null) {
         setUser(useUserSate.getState().user)
         setPatientData(useUserSate.getState().user)
-        console.log("useUserSate.getState().user: ", useUserSate.getState().user)
+        // console.log("useUserSate.getState().user: ", useUserSate.getState().user)
         if (useUserSate.getState().user.mobile != null) {
           const mobile = useUserSate.getState().user.mobile
           setMobile(useUserSate.getState().user.mobile)
