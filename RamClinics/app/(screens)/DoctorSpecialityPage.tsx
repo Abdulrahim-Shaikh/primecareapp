@@ -66,9 +66,9 @@ const DoctorSpecialityPage = () => {
             <Pressable
               onPress={() =>
                 router.push({
-                  pathname: "/BranchDoctor",
+                  pathname: "/BranchPage",
                   params: {
-                    branchId: branchId,
+                    city: null,
                     fromSpeciality: fromSpeciality,
                     department: department,
                     speciality: name

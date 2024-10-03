@@ -92,6 +92,7 @@ const ScheduleAppointment = () => {
 
     useEffect(() => {
         console.log("params: ", params)
+        console.log("params.length: ", params)
         let slotsAux: any = Object.values(JSON.parse(params.toString()).slots)[0]
         console.log("\n\n\n\nslotsAux: ", slotsAux)
         if (slotsAux == null || slotsAux.length <= 0) {
@@ -103,21 +104,42 @@ const ScheduleAppointment = () => {
                 },
             ],
             )
+        } else {
+            console.log("\n\n\n\n")
+            slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
+            setSlots(slotsAux)
+            setDoctorScheduleData(JSON.parse(params.toString()))
+            if (patientData == null || patientData == "" || patientData.length <= 0) {
+                Alert.alert('Patient Not Found', 'You need to Sign in first', [
+                    {
+                        text: 'BACK',
+                        onPress: () => router.back(),
+                        style: 'default'
+                    },
+                    {
+                        text: 'SIGN IN',
+                        onPress: () => router.push('/SignIn'),
+                        style: 'default'
+                    },
+                ],
+                )
+            } else {
+                setPatientDataJson(JSON.parse(patientData.toString()))
+                if (patientPolicyData == null || patientPolicyData == "" || patientPolicyData.length <= 0) {
+                    Alert.alert("Patient Policy Not Found")
+                } else {
+                    setPatientPolicyDataJson(JSON.parse(patientPolicyData.toString()))
+                    console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
+                    branchService.find(Number(branchId))
+                        .then((response) => {
+                            setBranchName(response.data.name)
+                        })
+                        .catch((error) => {
+                            console.log("\n\n\nerror: ", error)
+                        })
+                }
+            }
         }
-        console.log("\n\n\n\n")
-        slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
-        setSlots(slotsAux)
-        setDoctorScheduleData(JSON.parse(params.toString()))
-        setPatientDataJson(JSON.parse(patientData.toString()))
-        setPatientPolicyDataJson(JSON.parse(patientPolicyData.toString()))
-        console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
-        branchService.find(Number(branchId))
-            .then((response) => {
-                setBranchName(response.data.name)
-            })
-            .catch((error) => {
-                console.log("\n\n\nerror: ", error)
-            })
     }, [])
     
     const bookAppointment = () => {

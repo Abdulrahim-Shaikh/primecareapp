@@ -58,6 +58,7 @@ const DoctorSpeciality = () => {
                         params: { 
                           city: null,
                           fromSpeciality: 1,
+                          department: null,
                           speciality: item.name,
                         }
                       })

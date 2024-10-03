@@ -37,14 +37,25 @@ const BranchDoctor = () => {
                     console.log("error ", error)
                 })
             } else {
-                doctorService.getAllDoctorsByBranch(branchId)
-                .then((response) => {
-                    setDoctors(response.data);
-                    console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
-                })
-                .catch((error) => {
-                    console.log("\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) error", error);
-                })
+                if (branchId == null) {
+                    doctorService.getAllDoctors()
+                        .then((response) => {
+                            console.log("\ndoctorService.getAllDoctors(): \n", response)
+                            setDoctors(response.data);
+                        })
+                        .catch((error) => {
+                            console.log("\ndoctorService.getAllDoctors(): \n", error)
+                        })
+                } else {
+                    doctorService.getAllDoctorsByBranch(branchId)
+                    .then((response) => {
+                        setDoctors(response.data.filter((doctor: any) => doctor.speciality === speciality));
+                        console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
+                    })
+                    .catch((error) => {
+                        console.log("\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) error", error);
+                    })
+                }
             }
         },[])
     )

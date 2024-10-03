@@ -12,10 +12,12 @@ const BranchPage = () => {
     let [branches, setBranches] = useState([]);
     const [searchValue, setSearchValue] = useState('');
 
-    const { city, fromSpeciality, department } = useLocalSearchParams();
+    const { city, fromSpeciality, department, speciality } = useLocalSearchParams();
 
     useEffect(() => {
         if (city == null || city == "" || city.length == 0) {
+            console.log("department: ", department)
+            console.log("speciality: ", speciality)
             branchService.findAll().then((res) => {
                 setBranches(res.data);
             }).catch((error) => {
@@ -55,7 +57,7 @@ const BranchPage = () => {
                                                     branchId: item.id,
                                                     fromSpeciality: fromSpeciality,
                                                     department: null,
-                                                    speciality: null
+                                                    speciality: speciality
                                                 }
                                             })
                                         :
