@@ -9,8 +9,8 @@ class HttpService {
     private divisionCode = 'CHN';    
     private allowedDivisions = 'CHN'//Array<string> = ['CHN'];
 
-    //private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/";//
-    private baseUrl = "https://ramprimecare.com/HISAdmin/api/" ;//
+  private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/";
+//private baseUrl = "https://ramprimecare.com/HISAdmin/api/" ;
 
     getHeaders() {
         return {
