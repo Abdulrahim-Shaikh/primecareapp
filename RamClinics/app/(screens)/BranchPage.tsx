@@ -66,7 +66,8 @@ const BranchPage = () => {
                                                 params: { 
                                                     branchId: item.id,
                                                     fromSpeciality: fromSpeciality,
-                                                    department: department
+                                                    department: department,
+                                                    callCenterFlow: 0
                                                 }
                                             })
                                     }

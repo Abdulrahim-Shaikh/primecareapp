@@ -13,6 +13,14 @@ export class BranchService extends RestService<any> {
     getAllActiveBranchNames(){
         return this.get("getAllActiveBranchNames")
     }
+
+    cityByDept(dept: any){
+        return this.get(`cityByDepartment/${dept}`)
+    }
+
+    branchesByCityAndDept(city: any, dept: any){
+        return this.get(`branchesByCityAndDept/${city}/${dept}`)
+    }
 }
 const branchService = new BranchService('hisbranch');
 export default branchService;

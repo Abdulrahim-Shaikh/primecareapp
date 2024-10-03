@@ -1,6 +1,5 @@
 import {
     Alert,
-    Platform,
     FlatList,
     ScrollView,
     Text,
@@ -9,35 +8,58 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, } from "@expo/vector-icons";
-import { useFocusEffect, useRouter } from "expo-router";
-import { SpecialityService } from "../../domain/services/SpecialityService";
-import { useCallback, useEffect } from "react";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faTooth } from '@fortawesome/free-solid-svg-icons/faTooth'
-import { faHandDots } from '@fortawesome/free-solid-svg-icons/faHandDots'
-import { faSuitcaseMedical } from '@fortawesome/free-solid-svg-icons/faSuitcaseMedical'
+import { faBuildingColumns } from '@fortawesome/free-solid-svg-icons/faBuildingColumns'
+import { faUserDoctor } from '@fortawesome/free-solid-svg-icons/faUserDoctor'
+import { faFileWaveform } from '@fortawesome/free-solid-svg-icons/faFileWaveform'
 
-// get departments by branch
-const serviceData = [
-    {
-        id: 1,
-        icon: faTooth,
-        title: "Dental",
-    },
-    {
-        id: 2,
-        icon: faHandDots,
-        title: "Dermatology",
-    },
-    {
-        id: 3,
-        icon: faSuitcaseMedical,
-        title: "Medical",
-    },
-]
 
-const BookAppointment = () => {
+const BookAppointmentOptions = () => {
     const router = useRouter();
+    const { city, fromSpeciality, department } = useLocalSearchParams();
+
+    // get departments by branch
+    const optionsData = [
+        {
+            id: 1,
+            icon: faBuildingColumns,
+            title: "By Branch",
+            link: "/BranchPage",
+            params: {
+                city: city,
+                fromSpeciality: fromSpeciality,
+                department: department
+            }
+        },
+        {
+            id: 2,
+            icon: faUserDoctor,
+            title: "By Doctor",
+            link: "/SpecialistListPage",
+            params: { department: department }
+        },
+        {
+            id: 3,
+            icon: faFileWaveform,
+            title: "By Service",
+            link: "/ServiceListPage",
+            params: { department: department }
+        },
+        {
+            id: 4,
+            icon: faFileWaveform,
+            title: "By Service2",
+            link: "/DoctorSpecialityPage",
+            params: { 
+                branchId: null,
+                fromSpeciality: fromSpeciality,
+                department: department,
+                callCenterFlow: 1
+            }
+        },
+    ]
 
     // useFocusEffect(
     //     useCallback(() => {
@@ -54,11 +76,11 @@ const BookAppointment = () => {
                             size={24}
                             color={"rgb(132 204 22)"}
                         />
-                        <Text className="text-2xl font-semibold">Book Appointment</Text>
+                        <Text className="text-2xl font-semibold">Search by</Text>
                     </View>
                     <View className="flex-row pt-5 px-4">
                         <FlatList
-                            data={serviceData}
+                            data={optionsData}
                             numColumns={3}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => (
@@ -93,22 +115,16 @@ const BookAppointment = () => {
                                                     }),
                                                     style: 'default'
                                                 },
-                                            ],
-                                            )
+                                            ])
                                         }
                                     }> */}
-
                                     <TouchableOpacity
                                         className="border border-amber-900 p-2 rounded-lg w-full"
                                         onPress={
                                             () => {
                                                 router.push({
-                                                    pathname: "/BookAppointmentOptions",
-                                                    params: {
-                                                        city: null,
-                                                        fromSpeciality: 0,
-                                                        department: item.title
-                                                    }
+                                                    pathname: item.link,
+                                                    params: item.params
                                                 })
                                             }
                                         }>
@@ -131,4 +147,4 @@ const BookAppointment = () => {
     )
 }
 
-export default BookAppointment;
+export default BookAppointmentOptions;
