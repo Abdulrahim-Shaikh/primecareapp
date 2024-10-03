@@ -29,26 +29,33 @@ const Packages = () => {
     let patientName = useUserSate.getState().patientName;
 
     useEffect(() => {
-        branchService.findAll().then((res) => {
-            setBranches(res.data);
-            if (res.data.length > 0) {
-                setSelectedBranch(res.data[0].name);
+        const fetchBranch = async () => {
+            try {
+                const res = await branchService.findAll();
+                setBranches(res.data);
+                if (res.data.length > 0) {
+                    setSelectedBranch(res.data[0].name);
+                }
+            } catch (error) {
+                console.error(error);
             }
-        }).catch((error) => {
-            console.error(error);
-        });
+        };
+        fetchBranch();
     }, []);
 
     useEffect(() => {
-        setIsLoading(true);
-        packageService.getPackages().then((res) => {
-            setPackages(res.data);
-            // setFilteredPackages(res.data);
-            setIsLoading(false);
-        }).catch((error) => {
-            console.error(error);
-            setIsLoading(false);
-        });
+        const fetchPackages = async () => {
+            setIsLoading(true);
+            try {
+                const res = await packageService.getPackages();
+                setPackages(res.data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchPackages();
     }, []);
 
     useEffect(() => {

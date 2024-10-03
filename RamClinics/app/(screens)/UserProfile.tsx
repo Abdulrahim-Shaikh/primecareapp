@@ -17,14 +17,19 @@ const UserProfile = () => {
   const { user, setUser } = useUserSate();
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
   let [patient, setPatient] = useState([]);
+
   useEffect(() => {
-    patientService.find(user.id).then((res) => {
-      // console.log("filtered patient..", res.data)
-      setPatient(res.data);
-    }).catch((error) => {
-      console.error("Failed to fetch labratory:", error);
-    });
+    const fetchPatient = async () => {
+      try {
+        const res = await patientService.find(user.id);
+        setPatient(res.data)
+      } catch (error) {
+        console.error("Filter Error", error)
+      }
+    };
+    fetchPatient();
   }, []);
+
   return (
     <View className="pt-6">
       <View className="h-full justify-between items-start w-full">
@@ -87,25 +92,25 @@ const UserProfile = () => {
                     <Text className="text-lime-500 text-md font-bold">{patient && patient.mrno ? patient.mrno : "KHB100105421846"}</Text>
                   </View>
                 </View>
-                </View>
-                <View className="flex-row gap-2">
-                  <Text className="p-2 rounded-md bg-white">
-                    <MaterialIcons
-                      name="2k-plus"
-                      size={20}
+              </View>
+              <View className="flex-row gap-2">
+                <Text className="p-2 rounded-md bg-white">
+                  <MaterialIcons
+                    name="2k-plus"
+                    size={20}
                     color="#84cc16"
-                    />
-                  </Text>
-                  <View>
-                    <Text className="text-white text-xs">Nationl Id</Text>
-                    <View className="rounded-md">
-                      <Text className="text-lime-500 text-md font-bold">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
-                    </View>
+                  />
+                </Text>
+                <View>
+                  <Text className="text-white text-xs">Nationl Id</Text>
+                  <View className="rounded-md">
+                    <Text className="text-lime-500 text-md font-bold">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
                   </View>
                 </View>
+              </View>
             </View>
             <View className="flex-row justify-between items-center pb-8 pr-3">
-            <View className="flex-row gap-2">
+              <View className="flex-row gap-2">
                 <Text className="p-2 rounded-md bg-white">
                   <MaterialIcons
                     name="motion-photos-auto"
@@ -119,26 +124,26 @@ const UserProfile = () => {
                     <Text className="text-lime-500 text-md font-bold">{patient && patient.gender ? patient.gender : "Dont Know"}</Text>
                   </View>
                 </View>
-                </View>
-                <View className="flex-row gap-2 ml-16">
-                  <Text className="p-2 rounded-md bg-white">
-                    <MaterialIcons
-                      name="people-outline"
-                      size={20}
+              </View>
+              <View className="flex-row gap-2 ml-16">
+                <Text className="p-2 rounded-md bg-white">
+                  <MaterialIcons
+                    name="people-outline"
+                    size={20}
                     color="#84cc16"
-                    />
-                  </Text>
-                  <View>
-                    <Text className="text-white text-xs">Date Of Birth</Text>
-                    <View className="rounded-md">
-                      <Text className="text-lime-500 text-md font-bold">
-                        {patient && patient.dob ? new Date(patient.dob).toLocaleDateString() : "05/06/1999"}
-                      </Text>
+                  />
+                </Text>
+                <View>
+                  <Text className="text-white text-xs">Date Of Birth</Text>
+                  <View className="rounded-md">
+                    <Text className="text-lime-500 text-md font-bold">
+                      {patient && patient.dob ? new Date(patient.dob).toLocaleDateString() : "05/06/1999"}
+                    </Text>
 
-                    </View>
                   </View>
                 </View>
-             
+              </View>
+
             </View>
 
             <View className="flex-row justify-between items-center pb-20">
@@ -156,23 +161,23 @@ const UserProfile = () => {
                     <Text className="text-lime-500 text-md font-bold">{patient && patient.nationality ? patient.nationality : "India"}</Text>
                   </View>
                 </View>
-                </View>
-                <View className="flex-row gap-2 pr-1">
-                  <Text className="p-2 rounded-md bg-white">
-                    <MaterialIcons
-                      name="mobile-friendly"
-                      size={20}
-                      color="#84cc16"
-                    />
-                  </Text>
-                  <View>
-                    <Text className="text-white text-xs">Mobile Number</Text>
-                    <View className="rounded-md">
-                      <Text className="text-lime-500 text-md font-bold">{user && user.mobile ? user.mobile : "28458625824"}</Text>
-                    </View>
+              </View>
+              <View className="flex-row gap-2 pr-1">
+                <Text className="p-2 rounded-md bg-white">
+                  <MaterialIcons
+                    name="mobile-friendly"
+                    size={20}
+                    color="#84cc16"
+                  />
+                </Text>
+                <View>
+                  <Text className="text-white text-xs">Mobile Number</Text>
+                  <View className="rounded-md">
+                    <Text className="text-lime-500 text-md font-bold">{user && user.mobile ? user.mobile : "28458625824"}</Text>
                   </View>
                 </View>
-              
+              </View>
+
             </View>
 
           </View>

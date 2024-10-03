@@ -33,28 +33,34 @@ const Offers = () => {
     let patientName = useUserSate.getState().patientName;
 
     useEffect(() => {
-        branchService.findAll().then((res) => {
-            setBranches(res.data);
-            if (res.data.length > 0) {
-                setSelectedBranch(res.data[0].name);
+        const fetchBranch = async () => {
+            try {
+                const res = await branchService.findAll();
+                setBranches(res.data);
+                if (res.data.length > 0) {
+                    setSelectedBranch(res.data[0].name);
+                }
+            } catch (error) {
+                console.error(error);
             }
-        }).catch((error) => {
-            console.error(error);
-        });
+        };
+        fetchBranch();
     }, []);
 
     useEffect(() => {
-        setIsLoading(true);
-        promotionService.getPromotion().then((res) => {
-            setPromotions(res.data);
-            // setFilteredPromotions(res.data);
-            setIsLoading(false);
-        })
-            .catch((error) => {
+        const fetchPromotion = async () => {
+            setIsLoading(true);
+            try {
+                const res = await promotionService.getPromotion();
+                setPromotions(res.data);
+            } catch (error) {
                 console.error(error);
+            } finally {
                 setIsLoading(false);
-            })
-    }, [])
+            }
+        };
+        fetchPromotion();
+    }, []);
 
     useEffect(() => {
         // if (selectedBranch) {

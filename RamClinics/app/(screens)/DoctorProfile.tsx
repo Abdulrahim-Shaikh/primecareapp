@@ -11,11 +11,24 @@ const DoctorProfile = () => {
   // console.log("doctor>>>>", doctor);
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/resource/file/";
 
+  // useEffect(() => {
+  //   doctorService.find(id).then((doc) => {
+  //     setDoctor(doc.data);
+  //   });
+  // }, [id]);
+
   useEffect(() => {
-    doctorService.find(id).then((doc) => {
-      setDoctor(doc.data);
-    });
-  }, [id]);
+    const fetchDoctor = async () => {
+      try {
+        const doc = await doctorService.find(id);
+        setDoctor(doc.data);
+      } catch (error) {
+        console.log("Error fetching doctor:", error);
+      }
+    };
+
+    fetchDoctor();
+  }, [id])
 
   const renderValue = (value: any, placeholder: any) => {
     return value && value.length > 0 && value[0] !== "" ? value : placeholder;

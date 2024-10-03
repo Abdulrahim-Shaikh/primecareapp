@@ -25,19 +25,22 @@ const Home = () => {
   let userBranch = useUserSate.getState().branch;
   const [branches, setBranchesResp] = useState([]);
   const { userData } = useContext(UserContext)
-  let {setBranches} = useHISSate();
-  let {setCurrentBranch} = useHISSate();
+  let { setBranches } = useHISSate();
+  let { setCurrentBranch } = useHISSate();
   const [showNotification, setShowNotification] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showFavouriteModal, setShowFavouriteModal] = useState(false);
 
   useEffect(() => {
-    branchService.findAll().then((res) => {
-      let branches = res.data;
-      setBranchesResp(branches);
-    }).catch((error) => {
-      console.error("Failed to fetch branches:", error);
-    });
+    const fetchBranch = async () => {
+      try {
+        const branch = await branchService.findAll();
+        setBranchesResp(branch.data);
+      } catch (error) {
+        console.error("Fetch Branch", error)
+      }
+    };
+    fetchBranch();
   }, []);
 
   useEffect(() => {
@@ -48,7 +51,7 @@ const Home = () => {
       setCurrentBranch(userBranch);
     }
   }, [branches, userBranch]);
-  
+
   return (
     <SafeAreaView className="">
       <ScrollView showsVerticalScrollIndicator={false}>

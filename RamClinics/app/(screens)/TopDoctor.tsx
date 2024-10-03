@@ -34,13 +34,16 @@ const TopDoctor = () => {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    doctorService.getAllDoctors().then((res) => {
-      // console.log("filtered patient..", res.data)
-      setDoctor(res.data);
-      setFilteredDoctors(res.data);
-    }).catch((error) => {
-      console.error("Failed to fetch labratory:", error);
-    });
+    const fetchDoctors = async () => {
+      try {
+        const res = await doctorService.getAllDoctors();
+        setDoctor(res.data);
+        setFilteredDoctors(res.data);
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    };
+    fetchDoctors();
   }, []);
 
   useEffect(() => {

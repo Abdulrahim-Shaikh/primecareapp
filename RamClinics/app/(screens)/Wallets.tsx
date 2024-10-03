@@ -15,14 +15,16 @@ const Wallets = () => {
   const { option } = useLocalSearchParams();
 
   useEffect(() => {
-      walletService.getBalance(patientId)
-          .then((response) => {
-              setbalance(response.data)
-          })
-          .catch((error) => {
-              console.log(error)
-          })
-  })
+    const fetchWallet = async () => {
+      try {
+        const res = await walletService.getBalance(patientId);
+        setbalance(res.data);
+      } catch (error) {
+        console.error("Filter error", error)
+      }
+    };
+    fetchWallet();
+  });
   return (
     <SafeAreaView>
       <ScrollView>

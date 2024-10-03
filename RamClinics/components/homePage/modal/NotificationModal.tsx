@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Modal,
   Pressable,
   ScrollView,
@@ -24,6 +25,7 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
   const [show, setShow] = useState(false);
   const [sortBy, setSortBy] = useState(sortByOptions[0]);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   let userId = useUserSate.getState().userId;
 
   useEffect(() => {
@@ -32,6 +34,7 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
       console.log("patientId: ", patientId);
       const branch = useUserSate.getState().branch;
       let branchId;
+      setLoading(true);
       patientService
         .getByPatientId(userId) //"PNT000015"
         .then((response) => {
@@ -44,10 +47,11 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
         .getAppointments(userId, branchId) //"PNT000015"
         .then((response) => {
           setNotifications(response.data);
-          // console.log("appointments: ", response.data);
         })
         .catch((error) => {
           console.error("Error fetching notifications:", error);
+        }).finally(() => {
+          setLoading(false);
         });
     }
   }, [showNotification]);
@@ -136,7 +140,11 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
             </View> */}
           </View>
 
-          {notifications.length > 0 ? (
+          {loading ? (
+            <View className="flex-1 justify-center items-center">
+              <ActivityIndicator size="large" color="#ffcc00" />
+            </View>
+          ) : notifications.length > 0 ? (
             notifications.map(renderNotification)
           ) : (
             <Text className="text-center pt-5">No notifications available.</Text>
