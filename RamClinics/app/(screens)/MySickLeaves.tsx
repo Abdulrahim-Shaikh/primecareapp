@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -8,7 +8,7 @@ import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import sickLeavesService from "../../domain/services/SickLeavesService";
 import { useUserSate } from "../../domain/state/UserState";
 import SickLeavesReport from "./SickLeavesReport";
-
+import PdfViewer from "./PDFViewer";
 const tabNames = ["Pending", "Cancelled", "Completed"];
 
 const MySickLeaves = () => {
@@ -22,7 +22,9 @@ const MySickLeaves = () => {
     const [filteredSickLeaves, setFilteredSickLeaves] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedSickLeaves, setSelectedSickLeaves] = useState<any>(null);
-    const [pdfUri, setPdfUri] = useState('');
+    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
+    const [loading, setLoading] = useState(true);
+    // const [pdfUri, setPdfUri] = useState('');
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
     console.log(userId)
@@ -53,18 +55,21 @@ const MySickLeaves = () => {
     };
 
     useEffect(() => {
+        setLoading(true);
         branchService.findAll().then((res) => {
             setBranches(res.data);
         }).catch((error) => {
             console.error("Failed to fetch branches:", error);
-        });
-
-        sickLeavesService.byPatientId(userId).then((res) => {
-            console.log("Fetched sick leaves:", res.data);
-            setSickLeaves(res.data);
-            setFilteredSickLeaves(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch sick leaves:", error);
+        }).finally(() => {
+            sickLeavesService.byPatientId(userId).then((res) => {
+                console.log("Fetched sick leaves:", res.data);
+                setSickLeaves(res.data);
+                setFilteredSickLeaves(res.data);
+            }).catch((error) => {
+                console.error("Failed to fetch sick leaves:", error);
+            }).finally(() => {
+                setLoading(false);
+            });
         });
     }, []);
 
@@ -75,7 +80,8 @@ const MySickLeaves = () => {
     const openModal = async (sickLeaves: any) => {
         setSelectedSickLeaves(sickLeaves);
         const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/patientconsentform/sickLeaveByPatientId/${userId}`;
-        setPdfUri(pdfUrl);
+        setpdfSource({ uri: pdfUrl, cache: true })
+        // setPdfUri(pdfUrl);
         console.log("Opening modal with ID:", sickLeaves.id);
         console.log("PDF URL:", pdfUrl);
         setIsModalVisible(true);
@@ -84,7 +90,8 @@ const MySickLeaves = () => {
     const closeModal = () => {
         setIsModalVisible(false);
         setSelectedSickLeaves(null);
-        setPdfUri('');
+        setpdfSource({ uri: ``, cache: true })
+        // setPdfUri('');
     };
 
     return (
@@ -142,36 +149,43 @@ const MySickLeaves = () => {
                     </View>
 
                     <View>
-                        {filteredSickLeaves.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No sick leaves available for this filter.
-                                Select Correct Branch Name, Date & Tabs</Text>
-                        ) : (
-                            filteredSickLeaves.map((sickLeave: any) => (
-                                <Pressable key={sickLeave.id} onPress={() => openModal(sickLeave)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Sick Leaves ID: {sickLeave.id}</Text>
-                                        <AntDesign name="medicinebox" size={24} color="#008080" />
-                                    </View>
-                                    <Text style={styles.invoiceText}>
-                                        <Text style={styles.amount}>{sickLeave.consentFormName}</Text>
-                                    </Text>
-                                    <Text style={styles.branchText}>Practitioner Name: {sickLeave.practitionerName}</Text>
-                                    <Text style={styles.branchText}>Branch: {sickLeave.branchName}</Text>
-                                    <Text className="mt-1 text-sm text-gray-600">Date: {new Date(sickLeave.createdDate).toLocaleDateString()}</Text>
-                                </Pressable>
-                            ))
-                        )}
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                        ) :
+                            filteredSickLeaves.length === 0 ? (
+                                <Text className="text-center text-lg text-gray-600 mt-4">No sick leaves available for this filter.
+                                    Select Correct Branch Name, Date & Tabs</Text>
+                            ) : (
+                                filteredSickLeaves.map((sickLeave: any) => (
+                                    <Pressable key={sickLeave.id} onPress={() => openModal(sickLeave)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                        <View className="flex-row justify-between items-center">
+                                            <Text className="font-semibold">Sick Leaves ID: {sickLeave.id}</Text>
+                                            <AntDesign name="medicinebox" size={24} color="#008080" />
+                                        </View>
+                                        <Text style={styles.invoiceText}>
+                                            <Text style={styles.amount}>{sickLeave.consentFormName}</Text>
+                                        </Text>
+                                        <Text style={styles.branchText}>Practitioner Name: {sickLeave.practitionerName}</Text>
+                                        <Text style={styles.branchText}>Branch: {sickLeave.branchName}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">Date: {new Date(sickLeave.createdDate).toLocaleDateString()}</Text>
+                                    </Pressable>
+                                ))
+                            )}
                     </View>
                 </View>
             </ScrollView>
-            <Modal visible={isModalVisible} transparent={true}>
+            <Modal visible={isModalVisible} transparent={false} animationType="slide" onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
-                    <SickLeavesReport
+                    <PdfViewer url={pdfSource.uri} invoiceId={selectedSickLeaves?.id} />
+                    {/* <SickLeavesReport
                         isVisible={isModalVisible}
                         pdfUri={pdfUri}
                         patientId={selectedSickLeaves?.id}
                         onClose={closeModal}
-                    />
+                    /> */}
+                    <Pressable onPress={closeModal} style={styles.closeButton}>
+                        <Text style={styles.closeButtonText}>Close</Text>
+                    </Pressable>
                 </View>
             </Modal>
         </SafeAreaView>
@@ -202,5 +216,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0)',
         borderRadius: 10,
         padding: 20,
+    },
+    pdfView: {
+        width: '100%',
+        height: '80%',
+    },
+    closeButton: {
+        marginTop: 20,
+        padding: 10,
+        backgroundColor: '#007BFF',
+        borderRadius: 5,
+    },
+    closeButtonText: {
+        color: 'white',
     },
 });

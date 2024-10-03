@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, ActivityIndicator } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -26,6 +26,7 @@ const MyApprovals = () => {
     const [pendingApps, setPendingApps] = useState([]);
     const [approvedApps, setApprovedApps] = useState([]);
     const [cancelledApps, setCancelledApps] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("Pending");
 
     const onChangeFrom = (event: DateTimePickerEvent, selectedDate: any) => {
@@ -47,16 +48,19 @@ const MyApprovals = () => {
     }
 
     useEffect(() => {
+        setLoading(true);
         branchService.findAll().then((res) => {
             setBranches(res.data);
         }).catch((error) => {
             console.error("Failed to fetch branches:", error);
-        });
-
-        patientService.getByMobileNo(user.mobile).then((res) => {
-            setPatient(res.data);
-        }).catch((error) => {
-            console.error("Failed to get Patient:", error);
+        }).finally(() => {
+            patientService.getByMobileNo(user.mobile).then((res) => {
+                setPatient(res.data);
+            }).catch((error) => {
+                console.error("Failed to get Patient:", error);
+            }).finally(() => {
+                setLoading(false);
+            });
         });
     }, []);
 
@@ -88,11 +92,11 @@ const MyApprovals = () => {
 
     useEffect(() => {
         const pending = approvals.filter((app: any) => (app.approvalStatus === "Pending" || app.approvalStatus === "In Approval"));
-        setPendingApps(pending); 
-        const approved = approvals.filter((app: any) =>  (app.approvalStatus === "Completed" || app.approvalStatus === "Auto Approved" || app.approvalStatus === "CASH"));
-        setApprovedApps(approved);    
+        setPendingApps(pending);
+        const approved = approvals.filter((app: any) => (app.approvalStatus === "Completed" || app.approvalStatus === "Auto Approved" || app.approvalStatus === "CASH"));
+        setApprovedApps(approved);
         const cancelled = approvals.filter((app: any) => (app.approvalStatus === "Cancelled"));
-        setCancelledApps(cancelled); 
+        setCancelledApps(cancelled);
     }, [approvals]);
 
     return (
@@ -146,28 +150,14 @@ const MyApprovals = () => {
                     </View>
 
                     <View>
-                        {approvals.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No aprrovals available.</Text>
-                        ) : (
-                            activeTab === "Cancelled" ?
-                                cancelledApps.map((apprval: any) => (
-                                    <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                        <View className="flex-row justify-between items-center">
-                                            <Text className="font-semibold">Approval ID: {apprval.id}</Text>
-                                        </View>
-                                        <Text className="mt-1 text-lg text-gray-800">
-                                            Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
-                                        </Text>
-                                        <Text className="mt-1 text-lg text-gray-800">
-                                            Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
-                                        </Text>
-                                        <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
-                                        <Text className="mt-1 text-md text-gray-600"></Text>
-                                    </View>
-                                ))
-                                :
-                                activeTab === "Approved" ?
-                                    approvedApps.map((apprval: any) => (
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                        ) :
+                            approvals.length === 0 ? (
+                                <Text className="text-center text-lg text-gray-600 mt-4">No aprrovals available.</Text>
+                            ) : (
+                                activeTab === "Cancelled" ?
+                                    cancelledApps.map((apprval: any) => (
                                         <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
                                             <View className="flex-row justify-between items-center">
                                                 <Text className="font-semibold">Approval ID: {apprval.id}</Text>
@@ -183,22 +173,39 @@ const MyApprovals = () => {
                                         </View>
                                     ))
                                     :
-                                    pendingApps.map((apprval: any) => (
-                                        <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                            <View className="flex-row justify-between items-center">
-                                                <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                    activeTab === "Approved" ?
+                                        approvedApps.map((apprval: any) => (
+                                            <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                                <View className="flex-row justify-between items-center">
+                                                    <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                                </View>
+                                                <Text className="mt-1 text-lg text-gray-800">
+                                                    Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
+                                                </Text>
+                                                <Text className="mt-1 text-lg text-gray-800">
+                                                    Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                                </Text>
+                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                                <Text className="mt-1 text-md text-gray-600"></Text>
                                             </View>
-                                            <Text className="mt-1 text-lg text-gray-800">
-                                                Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
-                                            </Text>
-                                            <Text className="mt-1 text-lg text-gray-800">
-                                                Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
-                                            </Text>
-                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
-                                            <Text className="mt-1 text-md text-gray-600"></Text>
-                                        </View>
-                                    ))
-                        )
+                                        ))
+                                        :
+                                        pendingApps.map((apprval: any) => (
+                                            <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                                <View className="flex-row justify-between items-center">
+                                                    <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                                </View>
+                                                <Text className="mt-1 text-lg text-gray-800">
+                                                    Status: <Text className="font-bold text-indigo-900">{apprval.approvalStatus}</Text>
+                                                </Text>
+                                                <Text className="mt-1 text-lg text-gray-800">
+                                                    Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
+                                                </Text>
+                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                                <Text className="mt-1 text-md text-gray-600"></Text>
+                                            </View>
+                                        ))
+                            )
                         }
                     </View>
                 </View>

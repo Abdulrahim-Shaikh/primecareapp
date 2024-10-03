@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -8,7 +8,7 @@ import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { useUserSate } from "../../domain/state/UserState";
 import prescriptionService from "../../domain/services/PrescriptionService";
 import PrescriptionReport from "./PrescriptionReport";
-
+import PdfViewer from "./PDFViewer";
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
 
 const MyPrescription = () => {
@@ -22,7 +22,9 @@ const MyPrescription = () => {
     const [filteredPrescription, setFilteredPrescription] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedPrescription, setSelectedPrescription] = useState<any>(null);
-    const [pdfUri, setPdfUri] = useState('');
+    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
+    // const [pdfUri, setPdfUri] = useState('');
+    const [loading, setLoading] = useState(true);
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
     const onChangeFrom = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -52,18 +54,21 @@ const MyPrescription = () => {
     const [activeTab, setActiveTab] = useState("Pending");
 
     useEffect(() => {
+        setLoading(true);
         branchService.findAll().then((res) => {
             setBranches(res.data);
         }).catch((error) => {
             console.error("Failed to fetch branches:", error);
-        });
-
-        prescriptionService.byPatientId(userId).then((res) => {
-            console.log("filtered labratory..", res.data)
-            setPrescription(res.data);
-            setFilteredPrescription(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch labratory:", error);
+        }).finally(() => {
+            prescriptionService.byPatientId(userId).then((res) => {
+                console.log("filtered labratory..", res.data)
+                setPrescription(res.data);
+                setFilteredPrescription(res.data);
+            }).catch((error) => {
+                console.error("Failed to fetch labratory:", error);
+            }).finally(() => {
+                setLoading(false);
+            });
         });
     }, []);
 
@@ -74,7 +79,8 @@ const MyPrescription = () => {
     const openModal = async (prescription: any) => {
         setSelectedPrescription(prescription);
         const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/report/getPrescription/${prescription.orderId}`;
-        setPdfUri(pdfUrl);
+        setpdfSource({ uri: pdfUrl, cache: true })
+        // setPdfUri(pdfUrl);
         console.log("Opening modal with ID:", prescription.id);
         console.log("PDF URL:", pdfUrl);
         setIsModalVisible(true);
@@ -83,7 +89,8 @@ const MyPrescription = () => {
     const closeModal = () => {
         setIsModalVisible(false);
         setSelectedPrescription(null);
-        setPdfUri('');
+        setpdfSource({ uri: ``, cache: true })
+        // setPdfUri('');
     };
 
     return (
@@ -141,38 +148,45 @@ const MyPrescription = () => {
                     </View>
 
                     <View>
-                        {filteredPrescription.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No prescription available for this filter.
-                                Select Correct Branch Name, Date & Tabs</Text>
-                        ) : (
-                            filteredPrescription.map((prescription: any) => (
-                                <Pressable key={prescription.id} onPress={() => openModal(prescription)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Prescription ID: {prescription.id}</Text>
-                                        <AntDesign name="medicinebox" size={24} color="#008080" />
-                                    </View>
-                                    <Text style={styles.invoiceText}>
-                                        <Text style={styles.amount}>{prescription.orderType}</Text>
-                                    </Text>
-                                    <Text style={styles.invoiceText}>
-                                        Total Amount: <Text style={styles.amount}>{prescription.total}</Text>
-                                    </Text>
-                                    <Text style={styles.branchText}>Branch: {prescription.branch}</Text>
-                                    <Text className="mt-1 text-sm text-gray-600">Date: {new Date(prescription.invoiceDate).toLocaleDateString()}</Text>
-                                </Pressable>
-                            ))
-                        )}
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                        ) :
+                            filteredPrescription.length === 0 ? (
+                                <Text className="text-center text-lg text-gray-600 mt-4">No prescription available for this filter.
+                                    Select Correct Branch Name, Date & Tabs</Text>
+                            ) : (
+                                filteredPrescription.map((prescription: any) => (
+                                    <Pressable key={prescription.id} onPress={() => openModal(prescription)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                        <View className="flex-row justify-between items-center">
+                                            <Text className="font-semibold">Prescription ID: {prescription.id}</Text>
+                                            <AntDesign name="medicinebox" size={24} color="#008080" />
+                                        </View>
+                                        <Text style={styles.invoiceText}>
+                                            <Text style={styles.amount}>{prescription.orderType}</Text>
+                                        </Text>
+                                        <Text style={styles.invoiceText}>
+                                            Total Amount: <Text style={styles.amount}>{prescription.total}</Text>
+                                        </Text>
+                                        <Text style={styles.branchText}>Branch: {prescription.branch}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">Date: {new Date(prescription.invoiceDate).toLocaleDateString()}</Text>
+                                    </Pressable>
+                                ))
+                            )}
                     </View>
                 </View>
             </ScrollView>
-            <Modal visible={isModalVisible} transparent={true}>
+            <Modal visible={isModalVisible} transparent={false} animationType="slide" onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
-                    <PrescriptionReport
+                    <PdfViewer url={pdfSource.uri} invoiceId={selectedPrescription?.orderId} />
+                    {/* <PrescriptionReport
                         isVisible={isModalVisible}
                         pdfUri={pdfUri}
                         orderId={selectedPrescription?.orderId}
                         onClose={closeModal}
-                    />
+                    /> */}
+                    <Pressable onPress={closeModal} style={styles.closeButton}>
+                        <Text style={styles.closeButtonText}>Close</Text>
+                    </Pressable>
                 </View>
             </Modal>
         </SafeAreaView>
@@ -203,5 +217,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0)',
         borderRadius: 10,
         padding: 20,
+    },
+    pdfView: {
+        width: '100%',
+        height: '80%',
+    },
+    closeButton: {
+        marginTop: 20,
+        padding: 10,
+        backgroundColor: '#007BFF',
+        borderRadius: 5,
+    },
+    closeButtonText: {
+        color: 'white',
     },
 });

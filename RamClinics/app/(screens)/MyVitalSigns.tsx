@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -26,6 +26,7 @@ const MyVitalSigns = () => {
     const [filteredVitalSigns, setFilteredVitalSigns] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedVitalSigns, setSelectedVitalSigns] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const [pdfUri, setPdfUri] = useState('');
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
@@ -57,18 +58,21 @@ const MyVitalSigns = () => {
     };
 
     useEffect(() => {
+        setLoading(true);
         branchService.findAll().then((res) => {
             setBranches(res.data);
         }).catch((error) => {
             console.error("Failed to fetch branches:", error);
-        });
-
-        vitalSignsService.patientEncounterHistory(userId).then((res) => { //"PNT000028"
-            console.log("Response data:", res.data);
-            setVitalSigns(res.data || []);
-            setFilteredVitalSigns(res.data || []);
-        }).catch((error) => {
-            console.error("Failed to fetch vital signs:", error);
+        }).finally(() => {
+            vitalSignsService.patientEncounterHistory(userId).then((res) => { //"PNT000028"
+                console.log("Response data:", res.data);
+                setVitalSigns(res.data || []);
+                setFilteredVitalSigns(res.data || []);
+            }).catch((error) => {
+                console.error("Failed to fetch vital signs:", error);
+            }).finally(() => {
+                setLoading(false);
+            });
         });
     }, []);
 
@@ -146,25 +150,28 @@ const MyVitalSigns = () => {
                     </View>
 
                     <View>
-                        {filteredVitalSigns.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No vital sign available for this filter.
-                                Select Correct Branch Name, Date & Tabs</Text>
-                        ) : (
-                            filteredVitalSigns.map((vitalsign: any) => (
-                                <Pressable key={vitalsign.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Vital Sign ID: {vitalsign.id}</Text>
-                                        <AntDesign name="medicinebox" size={24} color="#008080" />
-                                    </View>
-                                    <Text style={styles.invoiceText}>
-                                        <Text style={styles.amount}>{vitalsign.mrno}</Text>
-                                    </Text>
-                                    <Text style={styles.branchText}>Practitioner Name: {vitalsign.practitionerName}</Text>
-                                    <Text style={styles.branchText}>Branch: {vitalsign.branchName}</Text>
-                                    <Text className="mt-1 text-sm text-gray-600">Date: {new Date(vitalsign.createdDate).toLocaleDateString()}</Text>
-                                </Pressable>
-                            ))
-                        )}
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                        ) :
+                            filteredVitalSigns.length === 0 ? (
+                                <Text className="text-center text-lg text-gray-600 mt-4">No vital sign available for this filter.
+                                    Select Correct Branch Name, Date & Tabs</Text>
+                            ) : (
+                                filteredVitalSigns.map((vitalsign: any) => (
+                                    <Pressable key={vitalsign.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                        <View className="flex-row justify-between items-center">
+                                            <Text className="font-semibold">Vital Sign ID: {vitalsign.id}</Text>
+                                            <AntDesign name="medicinebox" size={24} color="#008080" />
+                                        </View>
+                                        <Text style={styles.invoiceText}>
+                                            <Text style={styles.amount}>{vitalsign.mrno}</Text>
+                                        </Text>
+                                        <Text style={styles.branchText}>Practitioner Name: {vitalsign.practitionerName}</Text>
+                                        <Text style={styles.branchText}>Branch: {vitalsign.branchName}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">Date: {new Date(vitalsign.createdDate).toLocaleDateString()}</Text>
+                                    </Pressable>
+                                ))
+                            )}
                     </View>
                 </View>
             </ScrollView>

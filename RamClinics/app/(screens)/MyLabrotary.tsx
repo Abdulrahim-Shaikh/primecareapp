@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -9,7 +9,7 @@ import labratoryService from "../../domain/services/LabratoryService";
 import { useUserSate } from "../../domain/state/UserState";
 import LabratoryReport from "./LabratoryReport";
 import WebView from "react-native-webview";
-
+import PdfViewer from "./PDFViewer";
 const tabNames = ["Pending", "Cancelled", "Invoiced"];
 
 const MyLabrotary = () => {
@@ -23,7 +23,9 @@ const MyLabrotary = () => {
     const [filteredLabratory, setFilteredLabratory] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedLabratory, setSelectedLabratory] = useState<any>(null);
-    const [pdfUri, setPdfUri] = useState('');
+    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
+    //  const [pdfUri, setPdfUri] = useState('');
+    const [loading, setLoading] = useState(true);
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
     const onChangeFrom = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -53,18 +55,21 @@ const MyLabrotary = () => {
     };
 
     useEffect(() => {
+        setLoading(true);
         branchService.findAll().then((res) => {
             setBranches(res.data);
         }).catch((error) => {
             console.error("Failed to fetch branches:", error);
-        });
-
-        labratoryService.byPatientId(userId).then((res) => {
-            console.log("filtered labratory..", res.data)
-            setLabratory(res.data);
-            setFilteredLabratory(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch labratory:", error);
+        }).finally(() => {
+            labratoryService.byPatientId(userId).then((res) => {
+                console.log("filtered labratory..", res.data)
+                setLabratory(res.data);
+                setFilteredLabratory(res.data);
+            }).catch((error) => {
+                console.error("Failed to fetch labratory:", error);
+            }).finally(() => {
+                setLoading(false);
+            });
         });
     }, []);
 
@@ -75,7 +80,8 @@ const MyLabrotary = () => {
     const openModal = async (labratory: any) => {
         setSelectedLabratory(labratory);
         const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/report/getLabReport/${labratory.orderId}`;
-        setPdfUri(pdfUrl);
+        setpdfSource({ uri: pdfUrl, cache: true })
+        //  setPdfUri(pdfUrl);
         console.log("Opening modal with ID:", labratory.id);
         console.log("PDF URL:", pdfUrl);
         setIsModalVisible(true);
@@ -84,7 +90,8 @@ const MyLabrotary = () => {
     const closeModal = () => {
         setIsModalVisible(false);
         setSelectedLabratory(null);
-        setPdfUri('');
+        setpdfSource({ uri: ``, cache: true })
+        // setPdfUri('');
     };
 
     return (
@@ -142,38 +149,46 @@ const MyLabrotary = () => {
                     </View>
 
                     <View>
-                        {filteredLabratory.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No labratory available for this filter.
-                                Select Correct Branch Name, Date & Tabs</Text>
-                        ) : (
-                            filteredLabratory.map((labratorys: any) => (
-                                <Pressable key={labratorys.id} onPress={() => openModal(labratorys)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="font-semibold">Labratory ID: {labratorys.id}</Text>
-                                        <AntDesign name="medicinebox" size={24} color="#008080" />
-                                    </View>
-                                    <Text style={styles.invoiceText}>
-                                        <Text style={styles.amount}>{labratorys.serviceName}</Text>
-                                    </Text>
-                                    <Text style={styles.invoiceText}>
-                                        Total Amount: <Text style={styles.amount}>{labratorys.total}</Text>
-                                    </Text>
-                                    <Text style={styles.branchText}>Branch: {labratorys.branch}</Text>
-                                    <Text className="mt-1 text-sm text-gray-600">Date: {new Date(labratorys.orderDate).toLocaleDateString()}</Text>
-                                </Pressable>
-                            ))
-                        )}
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                        ) :
+                            filteredLabratory.length === 0 ? (
+                                <Text className="text-center text-lg text-gray-600 mt-4">No labratory available for this filter.
+                                    Select Correct Branch Name, Date & Tabs</Text>
+                            ) : (
+                                filteredLabratory.map((labratorys: any) => (
+                                    <Pressable key={labratorys.id} onPress={() => openModal(labratorys)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                        <View className="flex-row justify-between items-center">
+                                            <Text className="font-semibold">Labratory ID: {labratorys.id}</Text>
+                                            <AntDesign name="medicinebox" size={24} color="#008080" />
+                                        </View>
+                                        <Text style={styles.invoiceText}>
+                                            <Text style={styles.amount}>{labratorys.serviceName}</Text>
+                                        </Text>
+                                        <Text style={styles.invoiceText}>
+                                            Total Amount: <Text style={styles.amount}>{labratorys.total}</Text>
+                                        </Text>
+                                        <Text style={styles.branchText}>Branch: {labratorys.branch}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">Date: {new Date(labratorys.orderDate).toLocaleDateString()}</Text>
+                                    </Pressable>
+                                ))
+                            )}
                     </View>
                 </View>
             </ScrollView>
-            <Modal visible={isModalVisible} transparent={true}>
+            <Modal visible={isModalVisible} transparent={false} animationType="slide" onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
-                    <LabratoryReport
+                    <PdfViewer url={pdfSource.uri} invoiceId={selectedLabratory?.orderId} />
+                    {/* <LabratoryReport
                         isVisible={isModalVisible}
                         pdfUri={pdfUri}
                         orderId={selectedLabratory?.orderId}
                         onClose={closeModal}
-                    />
+                    /> */}
+
+                    <Pressable onPress={closeModal} style={styles.closeButton}>
+                        <Text style={styles.closeButtonText}>Close</Text>
+                    </Pressable>
                 </View>
             </Modal>
         </SafeAreaView>
@@ -204,5 +219,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0)',
         borderRadius: 10,
         padding: 20,
+    },
+    pdfView: {
+        width: '100%',
+        height: '80%',
+    },
+    closeButton: {
+        marginTop: 20,
+        padding: 10,
+        backgroundColor: '#007BFF',
+        borderRadius: 5,
+    },
+    closeButtonText: {
+        color: 'white',
     },
 });

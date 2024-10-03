@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, Pressable, Modal, StyleSheet } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, Pressable, Modal, StyleSheet, ActivityIndicator } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -23,8 +23,9 @@ const MyInvoices = () => {
     const [activeTab, setActiveTab] = useState("Pending");
     const [modalVisible, setIsModalVisible] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     // const [pdfUri, setPdfUri] = useState('');
-    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });        
+    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
 
@@ -53,18 +54,21 @@ const MyInvoices = () => {
     };
 
     useEffect(() => {
+        setLoading(true);
         branchService.findAll().then((res) => {
             setBranches(res.data);
         }).catch((error) => {
             console.error("Failed to fetch branches:", error);
-        });
-
-        invoiceService.invoicesByPatientId(userId).then((res) => {
-            console.log("Fetched invoices:", res.data);
-            setInvoices(res.data);
-            setFilteredInvoices(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch invoices:", error);
+        }).finally(() => {
+            invoiceService.invoicesByPatientId(userId).then((res) => {
+                console.log("Fetched invoices:", res.data);
+                setInvoices(res.data);
+                setFilteredInvoices(res.data);
+            }).catch((error) => {
+                console.error("Failed to fetch invoices:", error);
+            }).finally(() => {
+                setLoading(false);
+            });
         });
     }, []);
 
@@ -140,7 +144,9 @@ const MyInvoices = () => {
                     </View>
 
                     <View>
-                        {filteredInvoices.length === 0 ? (
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                        ) : filteredInvoices.length === 0 ? (
                             <Text className="text-center text-lg text-gray-600 mt-4">No invoices available for this filter.
                                 Select Correct Branch Name, Date & Tabs</Text>
                         ) : (
@@ -161,14 +167,14 @@ const MyInvoices = () => {
                     </View>
                 </View>
             </ScrollView>
-            <Modal visible={modalVisible} transparent={false}  animationType="slide"  onRequestClose={closeModal}>
+            <Modal visible={modalVisible} transparent={false} animationType="slide" onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
 
-                <PdfViewer url={pdfSource.uri} invoiceId={selectedInvoice?.id}/>
+                    <PdfViewer url={pdfSource.uri} invoiceId={selectedInvoice?.id} />
 
-                <Pressable onPress={closeModal} style={styles.closeButton}>
-                    <Text style={styles.closeButtonText}>Close</Text>
-                </Pressable>
+                    <Pressable onPress={closeModal} style={styles.closeButton}>
+                        <Text style={styles.closeButtonText}>Close</Text>
+                    </Pressable>
                 </View>
             </Modal>
 
