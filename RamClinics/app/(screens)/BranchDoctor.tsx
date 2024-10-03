@@ -100,13 +100,15 @@ const BranchDoctor = () => {
 
                 <View className="pb-16 px-6">
                     {
-                        loader 
-                        ? 
-                        <ActivityIndicator size="large" color="#00ff00" />
-                        :
-                        doctors.map(({ ...props }, idx) => (
-                            <DoctorCard {...props} key={idx} />
-                        ))
+                        doctors.length === 0 || doctors == null
+                        ?  <Text className="text-center text-lg text-gray-600 mt-4">No doctors available for selected speciality</Text>
+                        : loader 
+                            ? 
+                            <ActivityIndicator size="large" color="#00ff00" />
+                            :
+                            doctors.map(({ ...props }, idx) => (
+                                <DoctorCard {...props} key={idx} />
+                            ))
                     }
                 </View>
             </ScrollView>

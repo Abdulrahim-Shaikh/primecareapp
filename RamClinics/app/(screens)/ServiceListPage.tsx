@@ -91,7 +91,7 @@ const ServiceListPage = () => {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // Control for start date picker modal
     const [appointmentEntry, setAppointmentEntry] = useState(false)
     const [doctorScheduleData, setDoctorScheduleData] = useState(myAppoinmentData)
-    const [patientData, setPatientData] = useState({})
+    const [patientData, setPatientData] = useState(useUserSate.getState().user)
     const [patientPolicyData, setPatientPolicyData] = useState({})
     const [resourceId, setResourceId] = useState("")
     const [loggedIn, setLoggedIn] = useState(useUserSate.getState().loggedIn)
@@ -119,52 +119,50 @@ const ServiceListPage = () => {
         },
     });
 
+
+    const fetchPatientPolicyData = async (id: any) => {
+        let response = await patientPolicyService.byPatientId(id)
+        setPatientPolicyData(response.data[0])
+    }
+
+    const setBranchIdAndOptions = async () => {
+        branchService.findAll()
+            .then((response) => {
+                console.log("userBranch: ", user.branch)
+                for (let branch of response.data) {
+                    if (branch.name === user.branch) {
+                        setLoader(false);
+                        setBranchId(branch.id)
+                        console.log("branchId: ", branch.id)
+                    }
+                }
+                setBranchOptions(response.data)
+            })
+            .catch((error) => {
+                console.log("branchService.findAll() error: ", error)
+            })
+    }
+
+    const setSpecialities = async (department: any) => {
+        const response = await specialityService.getByDept(department)
+        setSpecialityOptions(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
+    }
+
+
     useEffect(() => {
         setLoggedIn(useUserSate.getState().loggedIn)
         setUser(useUserSate.getState().user)
+        setPatientData(useUserSate.getState().user)
         if (loggedIn) {
-            console.log(`option: '${department}'`)
             const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
             console.log("mobile: ", mobile)
-            patientService.byMobileNo(mobile)
-                .then((response: any) => {
-                    // console.log("patientService.byMobileNo: ", response)
-                    setPatientData(response.data[0])
-                    patientPolicyService.byPatientId(response.data[0].id)
-                        .then((response: any) => {
-                            setPatientPolicyData(response.data[0])
-                            // patientPolicyData = response.data[0]
-                        })
-                        .catch((error) => {
-                            console.log("patientPolicyService.byPatientId() error: ", error)
-                        })
-                })
-                .catch((error) => {
-                    console.log("error: ", error)
-                })
+
+            fetchPatientPolicyData(patientData.id)
+            setBranchIdAndOptions()
+            setSpecialities(department)
 
             console.log("hereeee")
-            branchService.findAll()
-                .then((response) => {
-                    console.log("userBranch: ", user.branch)
-                    for (let branch of response.data) {
-                        if (branch.name === user.branch) {
-                            setLoader(false);
-                            setBranchId(branch.id)
-                            console.log("branchId: ", branchId)
-                        }
-                    }
-                    setBranchOptions(response.data)
-                })
-                .catch((error) => {
-                    console.log("branchService.findAll() error: ", error)
-                })
 
-            specialityService.getByDept(department)
-                .then((response) => {
-                    // setSpecialities(response.data)
-                    setSpecialityOptions(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
-                })
         } else {
             Alert.alert('Patient Not Found', 'You need to Sign in to book an appointment', [
                 {
@@ -185,8 +183,6 @@ const ServiceListPage = () => {
     const [activeCategory, setActiveCategory] = useState(0);
     let dateAux = new Date();
 
-
-
     const search = () => {
         if (department != null && date != null && speciality != null && doctor != null) {
             console.log("validateForm", department)
@@ -206,16 +202,6 @@ const ServiceListPage = () => {
                     // console.log("rresponse getDoctorSchedule: ", response.data)
                     setAppointmentEntry(true)
                     setDoctorScheduleData(response.data)
-                    resourceService.find(response.data[0].practitionerId)
-                        .then((response) => {
-                            if (response.data[0] && response.data[0].photo.length > 0 && response.data[0].photo[0]) {
-                                setPhotoUrl(`http://16.24.11.104:8080/HISAdmin/api/resource/file/${response.data[0].photo[0]}`)
-                            }
-                        })
-                        .catch((error) => {
-                            console.log("resourceService.findById() error: ", error)
-                        })
-                    // setAppointmentEntry(true)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -337,6 +323,9 @@ const ServiceListPage = () => {
                                             data={specialityOptions}
                                             onSelect={(selectedItem, index) => {
                                                 setSpeciality(selectedItem.name)
+                                                console.log("branchId: ", branchId)
+                                                console.log("department: ", department)
+                                                console.log("selectedItem.name: ", selectedItem.name)
                                                 resourceService.getResourceBySpeciality(branchId, department, selectedItem.name)
                                                     .then((response) => {
                                                         // console.log("response2: ", response.data)

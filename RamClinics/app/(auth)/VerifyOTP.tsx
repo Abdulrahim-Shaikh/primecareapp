@@ -16,6 +16,7 @@ const VerifyOTP = () => {
   let { setUser } = useUserSate();
   const [user, setUserInfo] = useState();
 
+  // hardcoded values
   const [otpResp, setOtpResp] = useState({ otp: '9999' });
   const [otp, setOtp] = useState('');
   // let otp: string = '';
@@ -28,6 +29,7 @@ const VerifyOTP = () => {
   const getData = async () => {
     const response = await loginService.generateOtp(mobileNo);
     setOtpResp(response.data);
+  // hardcoded values?
     if (mobileNo == '0568165257' || mobileNo == '568165257') {
       otpResp.otp = '9999';
       setOtpResp({ ...otpResp, otp: '9999' });
