@@ -85,7 +85,8 @@ const FamilYFile = () => {
                         isPushBack={true}
                     />
                     <View>
-                        <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full 	">
+                        <Pressable onPress={() => router.push("/FamilyMemberFile")}
+                        className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full 	">
                             <MaterialIcons name="family-restroom" size={24} color="black" />
                             <Text className="rounded-md p-0 mt-2 text-left ml-10 text-base font-semibold	">
                                 Family Members Files
