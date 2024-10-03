@@ -109,7 +109,7 @@ const SingUp = () => {
     // console.log(signupForm);
     if (firstName && lastName && dob && mobileNo && selectedBranch && gender) {
       patientService.save(signupForm).then((res)=>{
-        console.log("Patient saved Successfully", res.data);
+        // console.log("Patient saved Successfully", res.data);
       }).catch((error) => {
       console.error("Failed to save Patient:", error);
     });
