@@ -70,7 +70,12 @@ const Appoinment = () => {
       if (useUserSate.getState().loggedIn === false) {
         Alert.alert('Note', 'You must Sign In to view your appointments', [
           {
-            text: 'OK',
+            text: 'BACK',
+            onPress: () => router.back(),
+            style: 'default'
+          },
+          {
+            text: 'SIGN IN',
             onPress: () => router.push({
               pathname: "/SignIn",
             }),
