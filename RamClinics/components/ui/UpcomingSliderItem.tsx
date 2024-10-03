@@ -108,11 +108,11 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
         </TouchableOpacity>
       </View>
       <TouchableOpacity 
-        className="bg-lime-500 text-primaryColor border-t-[1px] border-x-[1px] border-b-[1px] border-primaryColor px-4 py-2 rounded-lg"
+        className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-4 py-2 rounded-lg"
         style={{ position: 'absolute', right: 15, bottom: 20 }}
           onPress={handleBookPress}
         >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Book</Text>
+          <Text style={{ color: 'black', }}>Book</Text>
         </TouchableOpacity>
         <Modal transparent={true} animationType="slide" visible={isModalVisible} onRequestClose={handleCancel}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>

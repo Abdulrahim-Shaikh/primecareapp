@@ -23,7 +23,7 @@ const Promotions = () => {
 
         <View className="pt-6">
             <View className="pt-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
-                <AntDesign name="gift" size={24} color={"#009281"} />
+                <AntDesign name="gift" size={24} color={"rgb(132 204 22)"} />
                 <Text className="text-2xl font-semibold">Promotions</Text>
             </View>
             <View className="flex-row pt-10 px-4 justify-center">

@@ -105,7 +105,7 @@ const MyApprovals = () => {
                 <View className="pb-8 px-6 pt-4">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Approvals" />
-                        <MaterialCommunityIcons name="receipt" size={24} color={"#009281"} />
+                        <MaterialCommunityIcons name="receipt" size={24} color={"rgb(132 204 22)"} />
                     </View>
 
                     <View className="flex-row justify-between my-4">
@@ -134,7 +134,7 @@ const MyApprovals = () => {
                         </Picker>
                     </View>
 
-                    <Pressable onPress={() => search()} className="flex-1 bg-emerald-500 p-3 rounded-lg mt-2 mb-4">
+                    <Pressable onPress={() => search()} className="flex-1 bg-lime-500 p-3 rounded-lg mt-2 mb-4">
                         <Text className="text-lg text-white text-center"> search </Text>
                     </Pressable>
 
@@ -151,7 +151,7 @@ const MyApprovals = () => {
 
                     <View>
                         {loading ? (
-                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                            <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             approvals.length === 0 ? (
                                 <Text className="text-center text-lg text-gray-600 mt-4">No aprrovals available.</Text>
@@ -168,7 +168,7 @@ const MyApprovals = () => {
                                             <Text className="mt-1 text-lg text-gray-800">
                                                 Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
                                             </Text>
-                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
                                             <Text className="mt-1 text-md text-gray-600"></Text>
                                         </View>
                                     ))
@@ -185,7 +185,7 @@ const MyApprovals = () => {
                                                 <Text className="mt-1 text-lg text-gray-800">
                                                     Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
                                                 </Text>
-                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
                                                 <Text className="mt-1 text-md text-gray-600"></Text>
                                             </View>
                                         ))
@@ -201,7 +201,7 @@ const MyApprovals = () => {
                                                 <Text className="mt-1 text-lg text-gray-800">
                                                     Total Amount: <Text className="font-bold text-indigo-900">{apprval.total}</Text>
                                                 </Text>
-                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-emerald-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
                                                 <Text className="mt-1 text-md text-gray-600"></Text>
                                             </View>
                                         ))

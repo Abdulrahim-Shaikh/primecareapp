@@ -29,11 +29,11 @@ const WriteReview = () => {
             How was your experience with Dr. Dianne Johnson
           </Text>
           <View className="flex-row gap-3 pt-4 ">
-            <AntDesign name="star" size={24} color="#009281" />
-            <AntDesign name="star" size={24} color="#009281" />
-            <AntDesign name="star" size={24} color="#009281" />
-            <AntDesign name="star" size={24} color="#009281" />
-            <AntDesign name="staro" size={24} color="#009281" />
+            <AntDesign name="star" size={24} color="rgb(132 204 22)" />
+            <AntDesign name="star" size={24} color="rgb(132 204 22)" />
+            <AntDesign name="star" size={24} color="rgb(132 204 22)" />
+            <AntDesign name="star" size={24} color="rgb(132 204 22)" />
+            <AntDesign name="staro" size={24} color="rgb(132 204 22)" />
           </View>
         </View>
         <View className="pt-6">

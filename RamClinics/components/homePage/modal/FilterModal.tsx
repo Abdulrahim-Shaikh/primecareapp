@@ -184,7 +184,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                   <Text className="text-base font-medium text-amber-900">
                     {item}{" "}
                     <Text>
-                      <AntDesign name="staro" size={16} color="#009281" />
+                      <AntDesign name="staro" size={16} color="rgb(132 204 22)" />
                     </Text>{" "}
                   </Text>
                 </Pressable>

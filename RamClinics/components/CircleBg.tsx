@@ -9,7 +9,7 @@ import Animated, {
 import React, { useEffect } from "react";
 
 const SIZE = 50;
-const COLOR = "#009281";
+const COLOR = "#84cc16";
 
 const CircleBg = ({ index }: { index: number }) => {
   const opacityValue = useSharedValue(2);

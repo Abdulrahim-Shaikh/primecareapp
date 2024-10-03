@@ -19,7 +19,7 @@
 //       <ScrollView>
 //         <View className="px-6">
 //           <View className="flex flex-row justify-start items-center gap-4 pt-6">
-//             <AntDesign name="message1" size={24} color="#009281" />
+//             <AntDesign name="message1" size={24} color="rgb(132 204 22)" />
 //             <Text className="text-2xl font-semibold">Message</Text>
 //           </View>
 //           <View className="pt-8">

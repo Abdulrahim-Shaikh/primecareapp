@@ -6,7 +6,7 @@ import CircleBg from "../../components/CircleBg";
 import LinkButton from "../../components/LinkButton";
 
 const SIZE = 100;
-const COLOR = "#009281";
+const COLOR = "rgb(132 204 22)";
 
 const VerifySuccessfully = () => {
   return (

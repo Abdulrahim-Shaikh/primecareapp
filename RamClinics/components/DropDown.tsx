@@ -26,7 +26,7 @@ const DropDown = () => {
       }}
       showsVerticalScrollIndicator={false}
       dropdownStyle={{
-        backgroundColor: "#009281",
+        backgroundColor: "rgb(132 204 22)",
         padding: 12,
         borderRadius: 12,
 

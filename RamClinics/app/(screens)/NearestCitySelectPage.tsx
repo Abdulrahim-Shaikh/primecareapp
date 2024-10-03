@@ -21,7 +21,7 @@ const NearestCitySelectPage = () => {
                         <MaterialCommunityIcons
                             name="arrow-left"
                             size={24}
-                            color={"#009281"}
+                            color={"rgb(132 204 22)"}
                             onPress={() => router.back()}
                         />
                         <Text className="text-2xl font-semibold">Select your Service</Text>

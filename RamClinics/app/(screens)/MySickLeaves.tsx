@@ -103,7 +103,7 @@ const MySickLeaves = () => {
                         <MaterialCommunityIcons
                             name="emoticon-sick-outline"
                             size={24}
-                            color={"#009281"}
+                            color={"rgb(132 204 22)"}
                         />
                     </View>
 
@@ -150,7 +150,7 @@ const MySickLeaves = () => {
 
                     <View>
                         {loading ? (
-                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                            <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredSickLeaves.length === 0 ? (
                                 <Text className="text-center text-lg text-gray-600 mt-4">No sick leaves available for this filter.

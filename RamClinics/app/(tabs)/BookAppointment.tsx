@@ -51,7 +51,7 @@ const BookAppointment = () => {
                         <MaterialCommunityIcons
                             name="calendar-check-outline"
                             size={24}
-                            color={"#009281"}
+                            color={"rgb(132 204 22)"}
                         />
                         <Text className="text-2xl font-semibold">Book Appointment</Text>
                     </View>

@@ -64,7 +64,7 @@ const ChatBox = () => {
                 className=" flex-row items-center"
               >
                 <View className="p-2 bg-amber-100 border border-amber-900 rounded-full items-center justify-center">
-                  <Ionicons name="call-outline" size={16} color="#009281" />
+                  <Ionicons name="call-outline" size={16} color="rgb(132 204 22)" />
                 </View>
                 <Text className="pl-2 text-base">Audio Call</Text>
               </Pressable>
@@ -73,7 +73,7 @@ const ChatBox = () => {
                 className=" flex-row items-center mt-3 border-b border-dashed border-amber-900 pb-3"
               >
                 <View className="p-2 bg-amber-100 border border-amber-900 rounded-full items-center justify-center">
-                  <Feather name="video" size={16} color="#009281" />
+                  <Feather name="video" size={16} color="rgb(132 204 22)" />
                 </View>
                 <Text className="pl-2 text-base">Video Call</Text>
               </Pressable>
@@ -174,21 +174,21 @@ const ChatBox = () => {
         <View className="flex-row">
           {message ? (
             <Text className="pr-2">
-              <Entypo name="chevron-small-right" size={28} color="#009281" />
+              <Entypo name="chevron-small-right" size={28} color="rgb(132 204 22)" />
             </Text>
           ) : (
             <>
               <Text>
-                <Ionicons name="camera" size={28} color="#009281" />
+                <Ionicons name="camera" size={28} color="rgb(132 204 22)" />
               </Text>
               <Text className="px-1">
-                <MaterialIcons name="image" size={28} color="#009281" />
+                <MaterialIcons name="image" size={28} color="rgb(132 204 22)" />
               </Text>
               <Text>
                 <MaterialCommunityIcons
                   name="microphone"
                   size={28}
-                  color="#009281"
+                  color="rgb(132 204 22)"
                 />
               </Text>
             </>

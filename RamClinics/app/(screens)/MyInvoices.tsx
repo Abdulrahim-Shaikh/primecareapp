@@ -99,7 +99,7 @@ const MyInvoices = () => {
                 <View className="pb-8 px-6 pt-4">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Invoices" />
-                        <MaterialCommunityIcons name="receipt" size={24} color={"#009281"} />
+                        <MaterialCommunityIcons name="receipt" size={24} color={"rgb(132 204 22)"} />
                     </View>
 
                     <View className="flex-row justify-between my-4">
@@ -145,7 +145,7 @@ const MyInvoices = () => {
 
                     <View>
                         {loading ? (
-                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                            <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) : filteredInvoices.length === 0 ? (
                             <Text className="text-center text-lg text-gray-600 mt-4">No invoices available for this filter.
                                 Select Correct Branch Name, Date & Tabs</Text>

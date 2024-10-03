@@ -35,7 +35,7 @@ const HeaderWithBackButton = ({
         >
           <Ionicons
             name="chevron-back"
-            color={isTextWhite ? "#009281" : "white"}
+            color={isTextWhite ? "rgb(132 204 22)" : "white"}
             size={20}
           />
         </Pressable>

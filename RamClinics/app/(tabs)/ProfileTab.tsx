@@ -76,8 +76,8 @@ const ProfileTab = () => {
                   {user && user.mobile ? user.mobile : "mobile"}
                 </Text>
                 <Pressable onPress={() => loggedIn ? router.push("/UserProfile") : router.push("/SignIn")}
-                  className="bg-lime-500 mt-4 p-1 px-3 rounded-lg items-center">
-                  <Text className="text-md text-white font-bold">
+                  className={`bg-lime-500 mt-4 px-3 border-[1px] border-primaryColor rounded-lg items-center ${loggedIn ? " px-2 py-1" : "p-2"}`}>
+                  <Text className={`text-md text-primaryColor ${loggedIn ? "font-medium" : "font-semibold"}`}>
                     {loggedIn ? "View Profile" : "Sign In"}
                   </Text>
                 </Pressable>

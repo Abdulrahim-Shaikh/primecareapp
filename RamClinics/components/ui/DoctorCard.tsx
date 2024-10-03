@@ -242,7 +242,7 @@ const DoctorCard = ({
           </View>
         </View>
         <View className="border border-amber-900 p-2 rounded-md ml-2">
-          <Ionicons name="heart-outline" size={16} color={"#009281"} />
+          <Ionicons name="heart-outline" size={16} color={"rgb(132 204 22)"} />
         </View>
       </View>
 
@@ -267,7 +267,7 @@ const DoctorCard = ({
             console.log("datePickerOpen")
             setIsDatePickerOpen(true);
           }}
-          className="bg-emerald-500 text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-5 py-2 rounded-lg">
+          className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
           <Text>Book</Text>
         </TouchableOpacity>
       </View>

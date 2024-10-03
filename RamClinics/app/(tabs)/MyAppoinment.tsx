@@ -125,7 +125,7 @@ const Appoinment = () => {
             <MaterialCommunityIcons
               name="calendar-check-outline"
               size={24}
-              color={"#009281"}
+              color={"rgb(132 204 22)"}
             />
             <Text className="text-2xl font-semibold">My Appointments</Text>
           </View>
@@ -223,7 +223,7 @@ const Appoinment = () => {
                     <Ionicons
                       name="heart-outline"
                       size={16}
-                      color={"#009281"}
+                      color={"rgb(132 204 22)"}
                     />
                   </View>
                 </View>

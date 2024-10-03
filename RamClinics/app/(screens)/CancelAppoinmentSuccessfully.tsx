@@ -7,7 +7,7 @@ import CircleBg from "../../components/CircleBg";
 import LinkButton from "../../components/LinkButton";
 
 const SIZE = 100;
-const COLOR = "#009281";
+const COLOR = "#84cc16";
 const CancelAppoinmentSuccessfully = () => {
   return (
     <SafeAreaView className="bg-white h-full">

@@ -12,7 +12,7 @@ const CalendarModal = () => {
         <View className=" justify-end items-center flex-row gap-2">
           <Text>January-2024</Text>
           <Text className="p-1 bg-white rounded-full">
-            <Entypo name="chevron-small-right" size={24} color="#009281" />
+            <Entypo name="chevron-small-right" size={24} color="rgb(132 204 22)" />
           </Text>
         </View>
       </Pressable>
@@ -33,7 +33,7 @@ const CalendarModal = () => {
               onPress={() => setShowCalendar(false)}
             >
               <Text className="bg-white p-2 rounded-full">
-                <AntDesign name="close" size={20} color="#009281" />
+                <AntDesign name="close" size={20} color="rgb(132 204 22)" />
               </Text>
             </Pressable>
             <View className="w-full px-4">

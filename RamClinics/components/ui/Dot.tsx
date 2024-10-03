@@ -43,7 +43,7 @@ const Dot = ({ index, x }: { index: number; x: SharedValue<number> }) => {
     const backgroundColor = interpolateColor(
       x.value,
       [0, SCREEN_WIDTH, 2 * SCREEN_WIDTH],
-      ["#009281", "#009281", "#009281"]
+      ["#84cc16", "#84cc16", "#84cc16"]
     );
 
     return {

@@ -57,8 +57,8 @@ const AddCardPage = () => {
               {/* <CheckBox
                 onClick={() => setChecked((prev) => !prev)}
                 isChecked={checked}
-                checkBoxColor="#009281"
-                checkedCheckBoxColor="#009281"
+                checkBoxColor="rgb(132 204 22)"
+                checkedCheckBoxColor="rgb(132 204 22)"
               /> */}
               <Text className="text-base pl-2">
                 Set as your default payment method

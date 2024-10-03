@@ -71,7 +71,7 @@ const DoctorProfile = () => {
           </View>
           <View>
             <Text className="bg-white p-[10px] rounded-md">
-              <AntDesign name="heart" size={16} color="#009281" />
+              <AntDesign name="heart" size={16} color="rgb(132 204 22)" />
             </Text>
           </View>
         </View>
@@ -106,7 +106,7 @@ const DoctorProfile = () => {
 const DetailItem = ({ icon, label, value, isAmber = false }) => (
   <View className="flex-row items-center gap-2">
     <Text className="p-2 rounded-md bg-white">
-      <MaterialIcons name={icon} size={20} color="#009281" />
+      <MaterialIcons name={icon} size={20} color="rgb(132 204 22)" />
     </Text>
     <View>
       <Text className={`text-xs ${isAmber ? 'text-amber-900' : 'text-white'}`}>{label}</Text>

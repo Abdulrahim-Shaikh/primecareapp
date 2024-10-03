@@ -48,7 +48,7 @@ const ChatWithCustomer = () => {
           <View className="pt-8">
             <View className=" justify-start flex-row items-start gap-2">
               <View className=" bg-white rounded-lg p-3">
-                <Feather name="headphones" size={24} color="#009281" />
+                <Feather name="headphones" size={24} color="rgb(132 204 22)" />
               </View>
               <View className="">
                 <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl max-w-[85%]">
@@ -64,7 +64,7 @@ const ChatWithCustomer = () => {
           <View className="pt-8">
             <View className=" justify-start flex-row items-start gap-2">
               <View className=" bg-white rounded-lg p-3">
-                <Feather name="headphones" size={24} color="#009281" />
+                <Feather name="headphones" size={24} color="rgb(132 204 22)" />
               </View>
               <View className="">
                 <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl max-w-[85%]">
@@ -102,21 +102,21 @@ const ChatWithCustomer = () => {
         <View className="flex-row">
           {message ? (
             <Text className="pr-2">
-              <Entypo name="chevron-small-right" size={28} color="#009281" />
+              <Entypo name="chevron-small-right" size={28} color="rgb(132 204 22)" />
             </Text>
           ) : (
             <>
               <Text>
-                <Ionicons name="camera" size={28} color="#009281" />
+                <Ionicons name="camera" size={28} color="rgb(132 204 22)" />
               </Text>
               <Text className="px-1">
-                <MaterialIcons name="image" size={28} color="#009281" />
+                <MaterialIcons name="image" size={28} color="rgb(132 204 22)" />
               </Text>
               <Text>
                 <MaterialCommunityIcons
                   name="microphone"
                   size={28}
-                  color="#009281"
+                  color="rgb(132 204 22)"
                 />
               </Text>
             </>

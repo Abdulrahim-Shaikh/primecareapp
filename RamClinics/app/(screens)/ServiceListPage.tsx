@@ -251,7 +251,7 @@ const ServiceListPage = () => {
                         <MaterialCommunityIcons
                             name="arrow-left"
                             size={24}
-                            color={"#009281"}
+                            color={"rgb(132 204 22)"}
                             onPress={() => router.back()}
                         />
                         <Text className="text-2xl font-semibold">Select your Service</Text>
@@ -282,7 +282,7 @@ const ServiceListPage = () => {
                                                     <MaterialCommunityIcons
                                                         name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
                                                         size={24}
-                                                        color={"#009281"}
+                                                        color={"rgb(132 204 22)"}
                                                     />
                                                 </View>
                                             )
@@ -315,7 +315,7 @@ const ServiceListPage = () => {
                                                     <MaterialCommunityIcons
                                                         name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
                                                         size={24}
-                                                        color={"#009281"}
+                                                        color={"rgb(132 204 22)"}
                                                     />
                                                 </View>
                                             )
@@ -355,7 +355,7 @@ const ServiceListPage = () => {
                                                         <MaterialCommunityIcons
                                                             name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
                                                             size={24}
-                                                            color={"#009281"}
+                                                            color={"rgb(132 204 22)"}
                                                         />
                                                     </View>
                                                 )
@@ -397,7 +397,7 @@ const ServiceListPage = () => {
                                                         <MaterialCommunityIcons
                                                             name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
                                                             size={24}
-                                                            color={"#009281"}
+                                                            color={"rgb(132 204 22)"}
                                                         />
                                                     </View>
                                                 )
@@ -511,7 +511,7 @@ const ServiceListPage = () => {
                                                         <Ionicons
                                                             name="heart-outline"
                                                             size={16}
-                                                            color={"#009281"}
+                                                            color={"rgb(132 204 22)"}
                                                         />
                                                     </View>
                                                 </View>

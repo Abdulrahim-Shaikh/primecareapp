@@ -62,8 +62,8 @@ const Home = () => {
             <View className="py-4 w-full items-center">
               <View className="flex-row justify-between py-2 px-4 bg-amber-900 rounded-2xl w-4/5 h-[4.5rem]">
                 <Text className="text-white pt-5 pl-1">Sign In to get details.. </Text>
-                <Pressable className="bg-lime-500 p-2 my-2 rounded-lg" onPress={() => router.push("/SignIn")}>
-                  <Text className="text-white font-semibold"> Sign In </Text>
+                <Pressable className="bg-lime-500 p-2 my-2 rounded-lg border-[1px] border-primaryColor" onPress={() => router.push("/SignIn")}>
+                  <Text className="text-black font-semibold"> Sign In </Text>
                 </Pressable>
               </View>
             </View>

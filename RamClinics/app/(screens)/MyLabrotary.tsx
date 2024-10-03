@@ -103,7 +103,7 @@ const MyLabrotary = () => {
                         <MaterialCommunityIcons
                             name="store-plus-outline"
                             size={24}
-                            color={"#009281"}
+                            color={"rgb(132 204 22)"}
                         />
                     </View>
 
@@ -150,7 +150,7 @@ const MyLabrotary = () => {
 
                     <View>
                         {loading ? (
-                            <ActivityIndicator size="large" color="#009281" style={{ marginTop: 20 }} />
+                            <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredLabratory.length === 0 ? (
                                 <Text className="text-center text-lg text-gray-600 mt-4">No labratory available for this filter.
