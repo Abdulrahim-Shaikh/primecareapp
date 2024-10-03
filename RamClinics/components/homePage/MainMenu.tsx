@@ -53,7 +53,7 @@ const MainMenu = () => {
       link: "/MySickLeaves",
     },
     {
-      icon: "accessibility-outline",
+      icon: "fitness-outline",
       title: "My Vital Signs",
       link: "/MyVitalSigns",
     },

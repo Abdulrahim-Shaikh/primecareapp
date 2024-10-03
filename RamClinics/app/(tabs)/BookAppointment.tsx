@@ -25,7 +25,7 @@ const serviceData = [
     },
     {
         id: 2,
-        icon: "flask",
+        icon: "finger-print",
         title: "Dermatology",
     },
     {
