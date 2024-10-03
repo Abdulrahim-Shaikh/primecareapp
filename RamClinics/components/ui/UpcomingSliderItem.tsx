@@ -139,29 +139,31 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
           </View>
         </Modal>
         <Modal transparent={true} animationType="slide" visible={isServicesModalVisible} onRequestClose={handleCloseServicesModal}>
-        <View className="flex-1 justify-center items-center bg-transparent">
-          <View className="bg-white p-6 rounded-lg w-4/5 relative">
-            <Pressable className="absolute top-3 right-3" onPress={handleCloseServicesModal}>
-              <AntDesign name="closecircle" size={24} color="#78450f" />
-            </Pressable>
-            <Text className="text-xl font-bold text-center mb-4 mt-4">List of Services</Text>
-            <FlatList
-              data={promotionServices}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <View className="flex-row border border-amber-900 rounded-lg mb-4 p-4 bg-white shadow-md">
-                  <View className="flex-1">
-                    <Text className="text-base font-bold mb-1">{item.serviceName}</Text>
-                    <Text className="text-sm" style={{ color: '#04522b', fontWeight: '600' }}>
-                      Amount: {item.totalAmount.toFixed(2)} SAR
-                    </Text>
-                  </View>
-                </View>
-              )}
-            />
+          <View className="flex-1 justify-center items-center bg-transparent">
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <Pressable className="absolute top-3 right-3" onPress={handleCloseServicesModal}>
+                <AntDesign name="closecircle" size={24} color="#78450f" />
+              </Pressable>
+              <Text className="text-xl font-bold text-center mb-4 mt-4">List of Services</Text>
+              <View style={{ maxHeight: 400 }}>
+                <FlatList
+                  data={promotionServices}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View className="flex-row border border-amber-900 rounded-lg mb-4 p-4 bg-white shadow-md">
+                      <View className="flex-1">
+                        <Text className="text-base font-bold mb-1">{item.serviceName}</Text>
+                        <Text className="text-sm" style={{ color: '#04522b', fontWeight: '600' }}>
+                          Amount: {item.totalAmount.toFixed(2)} SAR
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
       </View>
     </ImageBackground>
 

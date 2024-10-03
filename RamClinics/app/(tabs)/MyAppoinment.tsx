@@ -250,7 +250,16 @@ const Appoinment = () => {
                       Change Date
                     </Text>
                   ) : (
-                    <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center">
+                    <Text onPress={() => {
+                      router.push({
+                        pathname: "/RateDental",
+                        params: {
+                          appointmentId: item.id,
+                          patientName: useUserSate.getState().userName
+                        }
+                      });
+                    }}
+                      className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center">
                       Leave Review
                     </Text>
                   )}

@@ -1,7 +1,7 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
-import { View, Text, FlatList, Image, Pressable, Modal, Alert } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert } from "react-native";
 import branchService from "../../domain/services/BranchService";
 import { useUserSate } from "../../domain/state/UserState";
 import promotionOrderService from "../../domain/services/PromotionOrderService";
@@ -34,9 +34,9 @@ const Offers = () => {
     useEffect(() => {
         branchService.findAll().then((res) => {
             setBranches(res.data);
-            if (res.data.length > 0) {
-                setSelectedBranch(res.data[0].name);
-            }
+            // if (res.data.length > 0) {
+            //     setSelectedBranch(res.data[0].name);
+            // }
         }).catch((error) => {
             console.error(error);
         });
@@ -45,6 +45,7 @@ const Offers = () => {
     useEffect(() => {
         promotionService.getPromotion().then((res) => {
             setPromotions(res.data);
+            // setFilteredPromotions(res.data);
         })
             .catch((error) => {
                 console.error(error);
@@ -52,11 +53,15 @@ const Offers = () => {
     }, [])
 
     useEffect(() => {
+        // if (selectedBranch) {
         const filtered = promotions.filter((promotion: any) => {
             return promotion.promotionBranches.some(
                 (branch: any) => branch.branchName === selectedBranch);
         });
         setFilteredPromotions(filtered);
+        // } else {
+        //     setFilteredPromotions(promotions);
+        // }
     }, [selectedBranch, promotions]);
 
     const handleBookPress = (item: any) => {
@@ -115,11 +120,11 @@ const Offers = () => {
         <View className="flex-1 bg-white p-4">
             <View className="flex-row justify-between items-center mb-4 mt-8">
                 <Text className="text-2xl font-bold">Offers</Text>
-                <View className="border border-amber-900 rounded-lg p-1 w-1/2">
+                <View style={pickerStyles.pickerContainer}>
                     <Picker
                         selectedValue={selectedBranch}
                         onValueChange={(itemValue) => setSelectedBranch(itemValue)}
-                        style={{ height: 40 }}>
+                        style={pickerStyles.picker}>
                         {branches.map((branch: any) => (
                             <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                         ))}
@@ -189,3 +194,20 @@ const Offers = () => {
 };
 
 export default Offers;
+
+const pickerStyles = StyleSheet.create({
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: '#78450f',
+        backgroundColor: '#78450f',
+        borderRadius: 8,
+        width: '45%',
+        height: 45,
+        justifyContent: 'center',
+    },
+    picker: {
+        color: '#fff',
+        height: 50,
+        width: '100%',
+    },
+});

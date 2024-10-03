@@ -1,7 +1,7 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
-import { View, Text, FlatList, Image, Pressable, Modal, Alert, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert, ActivityIndicator } from "react-native";
 import branchService from "../../domain/services/BranchService";
 import packageService from "../../domain/services/PackageService";
 import QRCode from "react-native-qrcode-svg";
@@ -41,17 +41,22 @@ const Packages = () => {
     useEffect(() => {
         packageService.getPackages().then((res) => {
             setPackages(res.data);
+            // setFilteredPackages(res.data);
         }).catch((error) => {
             console.error(error);
         });
     }, []);
 
     useEffect(() => {
+        // if (selectedBranch) {
         const filtered = packages.filter((pack: any) => {
             return pack.packageBranchs.some(
                 (branch: any) => branch.branchName === selectedBranch);
         });
         setFilteredPackages(filtered);
+        // } else {
+        //     setFilteredPackages(packages);
+        // }
     }, [selectedBranch, packages]);
 
     const handleBookPress = (item: any) => {
@@ -125,10 +130,11 @@ const Packages = () => {
         <View className="flex-1 bg-white p-4">
             <View className="flex-row justify-between items-center mb-4 mt-8">
                 <Text className="text-2xl font-bold">Packages</Text>
-                <View className="border border-amber-900 rounded-lg p-1 w-1/2">
+                <View style={pickerStyles.pickerContainer}>
                     <Picker
-                        selectedValue={selectedBranch} onValueChange={(itemValue) => setSelectedBranch(itemValue)}
-                        style={{ height: 40 }}>
+                        selectedValue={selectedBranch}
+                        onValueChange={(itemValue) => setSelectedBranch(itemValue)}
+                        style={pickerStyles.picker}>
                         {branches.map((branch: any) => (
                             <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                         ))}
@@ -202,3 +208,20 @@ const Packages = () => {
 };
 
 export default Packages;
+
+const pickerStyles = StyleSheet.create({
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: '#78450f',
+        backgroundColor: '#78450f',
+        borderRadius: 8,
+        width: '45%',
+        height: 45,
+        justifyContent: 'center',
+    },
+    picker: {
+        color: '#fff',
+        height: 50,
+        width: '100%',
+    },
+});
