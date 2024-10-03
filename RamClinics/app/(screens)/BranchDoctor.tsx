@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ScrollView, FlatList } from 'react-native'
+import { View, Text, Pressable, ScrollView, FlatList, ActivityIndicator } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,14 +24,17 @@ const BranchDoctor = () => {
 
     const { branchId, fromSpeciality, department, speciality } = useLocalSearchParams();
     let [doctors, setDoctors] = useState([]);
+    let [loader, setLoader] = useState(true);
 
     useFocusEffect(
         useCallback(() => {
+            setLoader(true);
             console.log("\n\n\n\nbranchId", branchId);
             if (branchId != null && department != null && speciality != null) {
                 resourceService.getResourceBySpeciality(branchId, department, speciality)
                 .then((response) => {
                     setDoctors(response.data)
+                    setLoader(false);
                 })
                 .catch((error) => {
                     console.log("error ", error)
@@ -42,6 +45,7 @@ const BranchDoctor = () => {
                         .then((response) => {
                             console.log("\ndoctorService.getAllDoctors(): \n", response)
                             setDoctors(response.data);
+                            setLoader(false);
                         })
                         .catch((error) => {
                             console.log("\ndoctorService.getAllDoctors(): \n", error)
@@ -50,6 +54,7 @@ const BranchDoctor = () => {
                     doctorService.getAllDoctorsByBranch(branchId)
                     .then((response) => {
                         setDoctors(response.data.filter((doctor: any) => doctor.speciality === speciality));
+                        setLoader(false);
                         console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
                     })
                     .catch((error) => {
@@ -72,6 +77,7 @@ const BranchDoctor = () => {
                 </View>
 
                 <View className="flex-row pt-5 gap-3 pl-6">
+
                     <FlatList
                         horizontal
                         contentContainerStyle={{ gap: 12 }}
@@ -93,9 +99,15 @@ const BranchDoctor = () => {
                 </View>
 
                 <View className="pb-16 px-6">
-                    {doctors.map(({ ...props }, idx) => (
-                        <DoctorCard {...props} key={idx} />
-                    ))}
+                    {
+                        loader 
+                        ? 
+                        <ActivityIndicator size="large" color="#00ff00" />
+                        :
+                        doctors.map(({ ...props }, idx) => (
+                            <DoctorCard {...props} key={idx} />
+                        ))
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>

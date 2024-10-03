@@ -12,32 +12,36 @@ import {
     Ionicons,
     MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { SpecialityService } from "../../domain/services/SpecialityService";
-import { useEffect } from "react";
-
+import { useCallback, useEffect } from "react";
 
 // get departments by branch
 const serviceData = [
     {
         id: 1,
-        icon: "eye",
+        icon: "medical",
         title: "Dental",
     },
     {
         id: 2,
-        icon: "medical",
+        icon: "flask",
         title: "Dermatology",
     },
     {
         id: 3,
-        icon: "eye",
+        icon: "medkit",
         title: "Medical",
     },
 ]
 
 const BookAppointment = () => {
     const router = useRouter();
+
+    useFocusEffect(
+        useCallback(() => {
+        },[])
+    )
 
     return (
         <SafeAreaView>
@@ -62,6 +66,17 @@ const BookAppointment = () => {
                                         () => {
                                             Alert.alert('Search by Doctor or Service', 'Please select one', [
                                                 {
+                                                    text: 'Flow',
+                                                    onPress: () => router.push({
+                                                        pathname: "/BranchPage",
+                                                        params: { 
+                                                            city: null,
+                                                            fromSpeciality: 0,
+                                                            department: item.title
+                                                        }
+                                                    })
+                                                },
+                                                {
                                                     text: 'Doctor',
                                                     onPress: () => router.push({
                                                         pathname: "/SpecialistListPage",
@@ -77,17 +92,6 @@ const BookAppointment = () => {
                                                     }),
                                                     style: 'default'
                                                 },
-                                                {
-                                                    text: 'Service2',
-                                                    onPress: () => router.push({
-                                                        pathname: "/BranchPage",
-                                                        params: { 
-                                                            city: null,
-                                                            fromSpeciality: 0,
-                                                            department: item.title
-                                                        }
-                                                    })
-                                                }
                                             ],
                                             )
                                         }

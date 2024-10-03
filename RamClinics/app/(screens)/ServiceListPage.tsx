@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, Button, TextInput, ViewToken, Pressable, Alert } from "react-native";
+import { Image, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, Button, TextInput, ViewToken, Pressable, Alert, ActivityIndicator } from "react-native";
 import { StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { myAppoinmentData } from "../../constants/data";
@@ -19,6 +19,7 @@ import moment from 'moment';
 import patientService from "../../domain/services/PatientService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
 import { useUserSate } from "../../domain/state/UserState";
+import { Picker } from "@react-native-picker/picker";
 
 const categoryList = [
     "All",
@@ -84,6 +85,7 @@ const ServiceListPage = () => {
     const [doctorOptions, setDoctorOptions] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
     const [doctor, setDoctor] = useState(null)
+    const [loader, setLoader] = useState(true);
     const { department } = useLocalSearchParams();
     const [date, setDate] = useState(new Date());  // State for start date
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // Control for start date picker modal
@@ -92,7 +94,9 @@ const ServiceListPage = () => {
     const [patientData, setPatientData] = useState({})
     const [patientPolicyData, setPatientPolicyData] = useState({})
     const [resourceId, setResourceId] = useState("")
+    const [loggedIn, setLoggedIn] = useState(useUserSate.getState().loggedIn)
     const [photoUrl, setPhotoUrl] = useState("")
+    const [user, setUser] = useState(useUserSate.getState().user)
     const flatListRef = useAnimatedRef<FlatList<any>>();
     const x = useSharedValue(0);
     const flatListIndex = useSharedValue(0);
@@ -116,40 +120,66 @@ const ServiceListPage = () => {
     });
 
     useEffect(() => {
-        console.log(`option: '${department}'`)
-        const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
-        patientService.byMobileNo(mobile)
-            .then((response: any) => {
-                console.log("patientService.byMobileNo: ", response)
-                setPatientData(response.data[0])
-                patientPolicyService.byPatientId(response.data[0].id)
-                    .then((response: any) => {
-                        setPatientPolicyData(response.data[0])
-                        // patientPolicyData = response.data[0]
-                    })
-                    .catch((error) => {
-                        console.log("patientPolicyService.byPatientId() error: ", error)
-                    })
-            })
-            .catch((error) => {
-                console.log("error: ", error)
-            })
+        setLoggedIn(useUserSate.getState().loggedIn)
+        setUser(useUserSate.getState().user)
+        if (loggedIn) {
+            console.log(`option: '${department}'`)
+            const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
+            console.log("mobile: ", mobile)
+            patientService.byMobileNo(mobile)
+                .then((response: any) => {
+                    console.log("patientService.byMobileNo: ", response)
+                    setPatientData(response.data[0])
+                    patientPolicyService.byPatientId(response.data[0].id)
+                        .then((response: any) => {
+                            setPatientPolicyData(response.data[0])
+                            // patientPolicyData = response.data[0]
+                        })
+                        .catch((error) => {
+                            console.log("patientPolicyService.byPatientId() error: ", error)
+                        })
+                })
+                .catch((error) => {
+                    console.log("error: ", error)
+                })
 
-        branchService.findAll()
-            .then((response) => {
-                setBranchOptions(response.data)
-            })
-            .catch((error) => {
-                console.log("branchService.findAll() error: ", error)
-            })
+            console.log("hereeee")
+            branchService.findAll()
+                .then((response) => {
+                    console.log("userBranch: ", user.branch)
+                    for (let branch of response.data) {
+                        if (branch.name === user.branch) {
+                            setLoader(false);
+                            setBranchId(branch.id)
+                            console.log("branchId: ", branchId)
+                        }
+                    }
+                    setBranchOptions(response.data)
+                })
+                .catch((error) => {
+                    console.log("branchService.findAll() error: ", error)
+                })
 
-        specialityService.getByDept(department)
-            .then((response) => {
-                // setSpecialities(response.data)
-                console.log("getByDept: ", response.data)
-                setSpecialityOptions(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
-                console.log("specialityOptions: ", specialityOptions)
-            })
+            specialityService.getByDept(department)
+                .then((response) => {
+                    // setSpecialities(response.data)
+                    setSpecialityOptions(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
+                })
+        } else {
+            Alert.alert('Patient Not Found', 'You need to Sign in to book an appointment', [
+                {
+                    text: 'BACK',
+                    onPress: () => router.back(),
+                    style: 'default'
+                },
+                {
+                    text: 'SIGN IN',
+                    onPress: () => router.push('/SignIn'),
+                    style: 'default'
+                },
+            ],
+            )
+        }
     }, [])
 
     const [activeCategory, setActiveCategory] = useState(0);
@@ -230,92 +260,24 @@ const ServiceListPage = () => {
                         <Searchbox />
                     </View> */}
                     <View className="py-8 gap-4 flex justify-center">
-                        <View className="mt-4 flex flex-column gap-5">
-                            <View className="flex flex-row justify-center gap-3">
-                                <SelectDropdown
-                                    data={branchOptions}
-                                    onSelect={(selectedItem, index) => {
-                                        setBranchId(selectedItem.id)
-                                        console.log("selectedItemmmmmm: ", selectedItem.id)
-                                    }}
-                                    renderButton={(selectedItem, isOpened) => {
-                                        return (
-                                            <View style={styles.dropdownButtonStyle}>
-                                                <Text style={styles.dropdownButtonTxtStyle}>
-                                                    {(selectedItem && selectedItem.name) || 'Select a Branch'}
-                                                </Text>
-                                                <MaterialCommunityIcons
-                                                    name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
-                                                    size={24}
-                                                    color={"#009281"}
-                                                />
-                                            </View>
-                                        )
-                                    }}
-                                    renderItem={(item, index, isSelected) => {
-                                        return (
-                                            <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
-                                                <Text style={styles.dropdownItemTxtStyle}>{item.name}</Text>
-                                            </View>
-                                        );
-                                    }}
-                                    showsVerticalScrollIndicator={false}
-                                    dropdownStyle={styles.dropdownMenuStyle}
-                                />
-                            </View>
-                            <View className="flex flex-row justify-center gap-3">
-                                <SelectDropdown
-                                    data={[department]}
-                                    defaultValue={department}
-                                    disabled={true}
-                                    onSelect={(selectedItem, index) => {
-                                        console.log("hererere")
-                                    }}
-                                    renderButton={(selectedItem, isOpened) => {
-                                        return (
-                                            <View style={styles.dropdownButtonStyle}>
-                                                <Text style={styles.dropdownButtonTxtStyle}>
-                                                    {(selectedItem) || 'Select a department'}
-                                                </Text>
-                                                <MaterialCommunityIcons
-                                                    name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
-                                                    size={24}
-                                                    color={"#009281"}
-                                                />
-                                            </View>
-                                        )
-                                    }}
-                                    renderItem={(item, index, isSelected) => {
-                                        return (
-                                            <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
-                                                <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
-                                            </View>
-                                        );
-                                    }}
-                                    showsVerticalScrollIndicator={false}
-                                    dropdownStyle={styles.dropdownMenuStyle}
-                                />
-                            </View>
-                            {branchId != "" ?
-                                <View className="flex flex-row justify-center gap-3">
+                        {
+                            loader
+                            ?
+                            <ActivityIndicator className="mt-86" size="large" color="#00ff00" />
+                            : 
+                            <View className="mt-4 flex flex-column gap-5">
+                                {/* <View className="flex flex-row justify-center gap-3">
                                     <SelectDropdown
-                                        data={specialityOptions}
+                                        data={branchOptions}
                                         onSelect={(selectedItem, index) => {
-                                            setSpeciality(selectedItem.name)
-                                            resourceService.getResourceBySpeciality(branchId, department, selectedItem.name)
-                                                .then((response) => {
-                                                    console.log("response2: ", response.data)
-                                                    setDoctorOptions(response.data)
-                                                })
-                                                .catch((error) => {
-                                                    console.log("errrr: ", error)
-                                                })
+                                            setBranchId(selectedItem.id)
+                                            console.log("selectedItemmmmmm: ", selectedItem.id)
                                         }}
                                         renderButton={(selectedItem, isOpened) => {
                                             return (
                                                 <View style={styles.dropdownButtonStyle}>
                                                     <Text style={styles.dropdownButtonTxtStyle}>
-                                                        {(selectedItem && selectedItem.name) || 'Select a service'}
+                                                        {(selectedItem && selectedItem.name) || 'Select a Branch'}
                                                     </Text>
                                                     <MaterialCommunityIcons
                                                         name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
@@ -335,29 +297,20 @@ const ServiceListPage = () => {
                                         showsVerticalScrollIndicator={false}
                                         dropdownStyle={styles.dropdownMenuStyle}
                                     />
-                                </View>
-                                :
-                                <></>
-                            }
-
-                            {branchId != "" ?
-                                <Pressable
-                                    // onPress={() => {
-                                    // }}
-                                    className="flex flex-row justify-center gap-3">
+                                </View> */}
+                                {/* <View className="flex flex-row justify-center gap-3">
                                     <SelectDropdown
-                                        data={doctorOptions}
+                                        data={[department]}
+                                        defaultValue={department}
+                                        disabled={true}
                                         onSelect={(selectedItem, index) => {
-                                            setDoctorScheduleData([])
-                                            setAppointmentEntry(false)
-                                            setDoctor(selectedItem.name)
-                                            setResourceId(selectedItem.id)
+                                            console.log("hererere")
                                         }}
                                         renderButton={(selectedItem, isOpened) => {
                                             return (
                                                 <View style={styles.dropdownButtonStyle}>
                                                     <Text style={styles.dropdownButtonTxtStyle}>
-                                                        {(selectedItem && selectedItem.name) || 'Select a doctor'}
+                                                        {(selectedItem) || 'Select a department'}
                                                     </Text>
                                                     <MaterialCommunityIcons
                                                         name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
@@ -370,175 +323,264 @@ const ServiceListPage = () => {
                                         renderItem={(item, index, isSelected) => {
                                             return (
                                                 <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
-                                                    <Text style={styles.dropdownItemTxtStyle}>{item.name}</Text>
+                                                    <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
                                                 </View>
                                             );
                                         }}
                                         showsVerticalScrollIndicator={false}
                                         dropdownStyle={styles.dropdownMenuStyle}
                                     />
-                                </Pressable>
-                                :
-                                <></>
-                            }
-                            {branchId != "" ?
-                                <View className="flex flex-row justify-center gap-3">
-                                    <View className="flex flex-column justify-center">
-                                        {/* <TouchableOpacity className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
-                                            <Text className="text-white">Select Date</Text>
-                                        </TouchableOpacity> */}
-                                        <Button onPress={() => setIsDatePickerOpen(true)} title="Select Date" />
-                                        <TextInput
-                                            onChangeText={() => setIsDatePickerOpen(true)}
-                                            value={"Selected: " + (new Date(date)).toString()}
+                                </View> */}
+                                {branchId != "" ?
+                                    <View className="flex flex-row justify-center gap-3">
+                                        <SelectDropdown
+                                            data={specialityOptions}
+                                            onSelect={(selectedItem, index) => {
+                                                setSpeciality(selectedItem.name)
+                                                resourceService.getResourceBySpeciality(branchId, department, selectedItem.name)
+                                                    .then((response) => {
+                                                        console.log("response2: ", response.data)
+                                                        setDoctorOptions(response.data)
+                                                    })
+                                                    .catch((error) => {
+                                                        console.log("errrr: ", error)
+                                                    })
+                                            }}
+                                            renderButton={(selectedItem, isOpened) => {
+                                                return (
+                                                    <View style={styles.dropdownButtonStyle}>
+                                                        <Text style={styles.dropdownButtonTxtStyle}>
+                                                            {(selectedItem && selectedItem.name) || 'Select a service'}
+                                                        </Text>
+                                                        <MaterialCommunityIcons
+                                                            name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
+                                                            size={24}
+                                                            color={"#009281"}
+                                                        />
+                                                    </View>
+                                                )
+                                            }}
+                                            renderItem={(item, index, isSelected) => {
+                                                return (
+                                                    <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                                        <Text style={styles.dropdownItemTxtStyle}>{item.name}</Text>
+                                                    </View>
+                                                );
+                                            }}
+                                            showsVerticalScrollIndicator={false}
+                                            dropdownStyle={styles.dropdownMenuStyle}
                                         />
                                     </View>
-                                    {isDatePickerOpen && (
-                                        <View>
-                                            <DateTimePicker
-                                                value={dateAux}
-                                                mode="date"
-                                                display="default"
-                                                onChange={(selectedDate: any) => {
-                                                    console.log("dateeeee: ", selectedDate.nativeEvent.timestamp)
-                                                    const currentDate = selectedDate.nativeEvent.timestamp || date;
-                                                    setDate(currentDate);
-                                                    setIsDatePickerOpen(false);
-                                                }}
+                                    :
+                                    <></>
+                                }
+
+                                {branchId != "" ?
+                                    <Pressable
+                                        // onPress={() => {
+                                        // }}
+                                        className="flex flex-row justify-center gap-3">
+                                        <SelectDropdown
+                                            data={doctorOptions}
+                                            onSelect={(selectedItem, index) => {
+                                                setDoctorScheduleData([])
+                                                setAppointmentEntry(false)
+                                                setDoctor(selectedItem.name)
+                                                setResourceId(selectedItem.id)
+                                            }}
+                                            renderButton={(selectedItem, isOpened) => {
+                                                return (
+                                                    <View style={styles.dropdownButtonStyle}>
+                                                        <Text style={styles.dropdownButtonTxtStyle}>
+                                                            {(selectedItem && selectedItem.name) || 'Select a doctor'}
+                                                        </Text>
+                                                        <MaterialCommunityIcons
+                                                            name={isOpened ? "arrow-up-drop-circle-outline" : "arrow-down-drop-circle-outline"}
+                                                            size={24}
+                                                            color={"#009281"}
+                                                        />
+                                                    </View>
+                                                )
+                                            }}
+                                            renderItem={(item, index, isSelected) => {
+                                                return (
+                                                    <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                                        <Text style={styles.dropdownItemTxtStyle}>{item.name}</Text>
+                                                    </View>
+                                                );
+                                            }}
+                                            showsVerticalScrollIndicator={false}
+                                            dropdownStyle={styles.dropdownMenuStyle}
+                                        />
+                                    </Pressable>
+                                    :
+                                    <></>
+                                }
+                                {branchId != "" ?
+                                    <View className="flex flex-row justify-center gap-3">
+                                        <View className="flex flex-column justify-center">
+                                            {/* <TouchableOpacity className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+                                                <Text className="text-white">Select Date</Text>
+                                            </TouchableOpacity> */}
+                                            <Button onPress={() => setIsDatePickerOpen(true)} title="Select Date" />
+                                            <TextInput
+                                                onChangeText={() => setIsDatePickerOpen(true)}
+                                                value={"Selected: " + (new Date(date)).toString()}
                                             />
                                         </View>
-                                    )}
-                                </View>
-                                :
-                                <></>
-                            }
-                            {branchId != "" ?
-                                <View className="flex flex-row justify-center gap-3">
-                                    <View className="flex flex-column justify-center">
-                                        <TouchableOpacity onPress={() => { search() }}
-                                            className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
-                                            <Text className="text-white">Search</Text>
-                                        </TouchableOpacity>
+                                        {isDatePickerOpen && (
+                                            <View>
+                                                <DateTimePicker
+                                                    value={dateAux}
+                                                    mode="date"
+                                                    display="default"
+                                                    onChange={(selectedDate: any) => {
+                                                        console.log("dateeeee: ", selectedDate.nativeEvent.timestamp)
+                                                        const currentDate = selectedDate.nativeEvent.timestamp || date;
+                                                        setDate(currentDate);
+                                                        setIsDatePickerOpen(false);
+                                                    }}
+                                                />
+                                            </View>
+                                        )}
                                     </View>
-                                </View>
-                                :
-                                <></>
-                            }
-                            {appointmentEntry ?
-                                <View className="">
-                                    {doctorScheduleData.map((item, idx) => (
-                                        <View key={`key: ${item.id}`} className="p-4 border border-amber-900 rounded-2xl w-full mt-4">
-                                            <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
-                                                <View className="flex flex-row justify-start items-center ">
-                                                    <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
-                                                        {/* <Image source={{ uri: photoUrl, }} /> */}
-                                                    </View>
+                                    :
+                                    <></>
+                                }
+                                {branchId != "" ?
+                                    <View className="flex flex-row justify-center gap-3">
+                                        <View className="flex flex-column justify-center">
+                                            <TouchableOpacity onPress={() => { search() }}
+                                                className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+                                                <Text className="text-white">Search</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    :
+                                    <></>
+                                }
+                                {appointmentEntry ?
+                                    <View className="">
+                                        {doctorScheduleData.map((item, idx) => (
+                                            <View key={`key: ${item.id}`} className="p-4 border border-amber-900 rounded-2xl w-full mt-4">
+                                                <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
+                                                    <View className="flex flex-row justify-start items-center ">
+                                                        <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
+                                                            {/* <Image source={{ uri: photoUrl, }} /> */}
+                                                        </View>
 
-                                                    <View>
-                                                        <Text className="text-base font-medium pb-2">
-                                                            {item.name}
-                                                        </Text>
-                                                        <View className="flex-row items-center">
-                                                            <View>
-                                                                <Text className="text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
-                                                                // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
-                                                                //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
-                                                                //     } ${item.sessionStatus === "Completed" &&
-                                                                //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
-                                                                //     } ${item.sessionStatus === "Cancelled" &&
-                                                                //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
-                                                                //     } `}
-                                                                >
-                                                                    {item.speciality}
-                                                                </Text>
+                                                        <View>
+                                                            <Text className="text-base font-medium pb-2">
+                                                                {item.name}
+                                                            </Text>
+                                                            <View className="flex-row items-center">
+                                                                <View>
+                                                                    <Text className="text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
+                                                                    // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
+                                                                    //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
+                                                                    //     } ${item.sessionStatus === "Completed" &&
+                                                                    //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
+                                                                    //     } ${item.sessionStatus === "Cancelled" &&
+                                                                    //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
+                                                                    //     } `}
+                                                                    >
+                                                                        {item.speciality}
+                                                                    </Text>
+                                                                </View>
+                                                                <View>
+                                                                    <Text className="ml-2 text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
+                                                                    // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
+                                                                    //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
+                                                                    //     } ${item.sessionStatus === "Completed" &&
+                                                                    //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
+                                                                    //     } ${item.sessionStatus === "Cancelled" &&
+                                                                    //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
+                                                                    //     } `}
+                                                                    >
+                                                                        {
+                                                                            Object.keys(item.slots).length == 0?
+                                                                            'No Slots found': 'Slots Available'
+                                                                        }
+                                                                    </Text>
+                                                                </View>
                                                             </View>
                                                         </View>
                                                     </View>
-                                                </View>
 
-                                                <View className=" border border-amber-900 p-2 rounded-md ">
-                                                    <Ionicons
-                                                        name="heart-outline"
-                                                        size={16}
-                                                        color={"#009281"}
-                                                    />
+                                                    <View className=" border border-amber-900 p-2 rounded-md ">
+                                                        <Ionicons
+                                                            name="heart-outline"
+                                                            size={16}
+                                                            color={"#009281"}
+                                                        />
+                                                    </View>
                                                 </View>
-                                            </View>
-                                            <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        console.log("item: ", item)
-                                                    }}
-                                                >
-                                                    <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center" >
-                                                        Cancel
+                                                <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
+                                                    <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center"
+                                                        onPress={() => {
+                                                            Object.keys(item.slots).length == 0
+                                                            ?
+                                                            Alert.alert('Note', 'No slots available for appointment', [
+                                                                {
+                                                                    text: 'OK',
+                                                                    // onPress: () => router.push({
+                                                                    //     pathname: "/BookAppointment",
+                                                                    // }),
+                                                                    style: 'default'
+                                                                },
+                                                            ],
+                                                            )
+                                                            :
+                                                            router.push({
+                                                                pathname: "/ScheduleAppointment/",
+                                                                params: {
+                                                                    branchId: branchId,
+                                                                    department: department,
+                                                                    speciality: speciality,
+                                                                    doctor: doctor,
+                                                                    date: (new Date(date)).toString(),
+                                                                    params: JSON.stringify(item),
+                                                                    patientData: JSON.stringify(patientData),
+                                                                    patientPolicyData: JSON.stringify(patientPolicyData)
+                                                                }
+                                                            })
+                                                        }
+                                                        }
+                                                    >
+                                                        Schedule Appointment
                                                     </Text>
-                                                </TouchableOpacity>
-                                                <Text>{item.slots.length}</Text>
-                                                <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center"
-                                                    onPress={() => {
-                                                        Object.keys(item.slots).length == 0
-                                                        ?
-                                                        Alert.alert('Note', 'No slots available for appointment', [
-                                                            {
-                                                                text: 'OK',
-                                                                // onPress: () => router.push({
-                                                                //     pathname: "/BookAppointment",
-                                                                // }),
-                                                                style: 'default'
-                                                            },
-                                                        ],
-                                                        )
-                                                        :
-                                                        router.push({
-                                                            pathname: "/ScheduleAppointment/",
-                                                            params: {
-                                                                branchId: branchId,
-                                                                department: department,
-                                                                speciality: speciality,
-                                                                doctor: doctor,
-                                                                date: (new Date(date)).toString(),
-                                                                params: JSON.stringify(item),
-                                                                patientData: JSON.stringify(patientData),
-                                                                patientPolicyData: JSON.stringify(patientPolicyData)
-                                                            }
-                                                        })
-                                                    }
-                                                    }
-                                                >
-                                                    Schedule Appointment
-                                                </Text>
 
+                                                </View>
                                             </View>
-                                        </View>
-                                    ))}
-                                </View>
-                                // <View className="mt-8 flex flex-row justify-center">
-                                //     <View className="flex flex-col justify-center">
-                                //         <Text className="flex justify-center justify-self-center">{doctor}</Text>
-                                //         <View className="flex flex-row">
-                                //             <TouchableOpacity
-                                //                 onPress={() => {
-                                //                     router.push({
-                                //                         pathname: "/ScheduleAppointment",
-                                //                         params: {
-                                //                             department: department,
-                                //                             speciality: speciality,
-                                //                             doctor: doctor,
-                                //                             date: (new Date(date)).toString(),
-                                //                             data: JSON.stringify(doctorScheduleData)
-                                //                         }
-                                //                     })
-                                //                 }}
-                                //                 className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
-                                //                 <Text className="text-white">Book Appointment</Text>
-                                //             </TouchableOpacity>
-                                //         </View>
-                                //     </View>
-                                // </View>
-                                : <></>
-                            }
-                        </View>
+                                        ))}
+                                    </View>
+                                    // <View className="mt-8 flex flex-row justify-center">
+                                    //     <View className="flex flex-col justify-center">
+                                    //         <Text className="flex justify-center justify-self-center">{doctor}</Text>
+                                    //         <View className="flex flex-row">
+                                    //             <TouchableOpacity
+                                    //                 onPress={() => {
+                                    //                     router.push({
+                                    //                         pathname: "/ScheduleAppointment",
+                                    //                         params: {
+                                    //                             department: department,
+                                    //                             speciality: speciality,
+                                    //                             doctor: doctor,
+                                    //                             date: (new Date(date)).toString(),
+                                    //                             data: JSON.stringify(doctorScheduleData)
+                                    //                         }
+                                    //                     })
+                                    //                 }}
+                                    //                 className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+                                    //                 <Text className="text-white">Book Appointment</Text>
+                                    //             </TouchableOpacity>
+                                    //         </View>
+                                    //     </View>
+                                    // </View>
+                                    : <></>
+                                }
+                            </View>
+                        }
                     </View>
                 </View>
             </ScrollView>

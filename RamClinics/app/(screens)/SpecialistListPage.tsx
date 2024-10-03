@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text, FlatList, Pressable, ViewToken, Alert } from "react-native";
+import { SafeAreaView, ScrollView, View, Text, FlatList, Pressable, ViewToken, Alert, ActivityIndicator } from "react-native";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import Searchbox from "../../components/ui/Searchbox";
 import React, { useEffect, useState } from "react";
@@ -46,16 +46,19 @@ const SpecialityListPage = () => {
     const x = useSharedValue(0);
     const flatListIndex = useSharedValue(0);
     const [searchValue, setSearchValue] = useState('');
+    let [loader, setLoader] = useState(true);
     // let patientData = {}
     // let patientPolicyData = {}
 
     let dateAux = new Date();
 
     useEffect(() => {
+        setLoader(true)
         doctorService.getAllDoctors().then((res) => {
             console.log("filtered patient..", res.data)
             setDoctor(res.data);
             setFilteredDoctors(res.data);
+            setLoader(false)
         }).catch((error) => {
             console.error("Failed to fetch labratory:", error);
         });
@@ -122,11 +125,17 @@ const SpecialityListPage = () => {
                 </View>
 
                 <View className="pb-16 px-6">
-                    {filteredDoctors.map((doctor, idx) => (
-                        <Pressable >
-                            <DoctorCard {...doctor} key={idx} />
-                        </Pressable>
-                    ))}
+                    {
+                        loader 
+                        ?
+                            <ActivityIndicator className="mt-80" size="large" color="#00ff00" />
+                        :
+                        filteredDoctors.map((doctor, idx) => (
+                            <Pressable >
+                                <DoctorCard {...doctor} key={idx} />
+                            </Pressable>
+                        ))
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>

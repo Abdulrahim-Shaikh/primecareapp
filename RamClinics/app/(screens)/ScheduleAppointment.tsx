@@ -436,7 +436,7 @@ const ScheduleAppointment = () => {
                         }
                     }
                         className="flex flex-row justify-self-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
-                        <Text className="text-white">Book Appointment</Text>
+                        <Text className="text-white">Confirm Book</Text>
                     </TouchableOpacity>
                 </View>
             </View>

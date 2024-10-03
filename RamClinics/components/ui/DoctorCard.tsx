@@ -88,7 +88,7 @@ const DoctorCard = ({
         Alert.alert('Patient Not Found', 'You need to Sign in first', [
             {
                 text: 'BACK',
-                onPress: () => router.back(),
+                // onPress: () => router.back(),
                 style: 'default'
             },
             {
