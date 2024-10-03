@@ -21,15 +21,19 @@ const VerifyOTP = () => {
   // let otp: string = '';
 
   useEffect(() => {
-    loginService.generateOtp(mobileNo).then((resp: any) => {
-      console.log(resp.data);
-      setOtpResp(resp.data);
-      if (mobileNo == '0568165257' || mobileNo == '568165257') {
-        otpResp.otp = '9999';
-        setOtpResp({ ...otpResp, otp: '9999' });
-      }
-    });
+    getData();    
   }, [])
+
+
+  const getData = async () => {
+    const response = await loginService.generateOtp(mobileNo);
+    setOtpResp(response.data);
+    if (mobileNo == '0568165257' || mobileNo == '568165257') {
+      otpResp.otp = '9999';
+      setOtpResp({ ...otpResp, otp: '9999' });
+    }
+    console.log('API response ..... ', response);
+  }
 
   useEffect(() => {
     if (user) {

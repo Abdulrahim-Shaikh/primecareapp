@@ -46,7 +46,7 @@ const SignIn = () => {
             experience.
           </Text>
           <View className="w-full pt-8 pb-8">
-            <FormField name="Mobile No" placeholder="05..." onChangeText={onChangeText} onEnter={sendOtp} />
+            <FormField name="Mobile No" placeholder="05..." onChangeText={onChangeText} onEnter={sendOtp}  keyboardType="numeric"/>
             {/* <FormField name="Password" placeholder="*******" otherStyle="mt-4" /> */}
           </View>
           {/* <View className="text-amber-500 flex items-end w-full pt-2 pb-7">

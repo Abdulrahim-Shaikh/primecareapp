@@ -7,8 +7,8 @@ type PropsType = {
   otherStyle?: string;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
   value?: string;
-  onChangeText(value: any): void;
-  onEnter(value: any): void;
+  onChangeText?(value: any): void;
+  onEnter?(value: any): void;
 };
 
 const FormField = ({  
