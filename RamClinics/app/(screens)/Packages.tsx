@@ -23,6 +23,7 @@ const Packages = () => {
 
     const [qrCodeData, setQrCodeData] = useState<any>();
     const [isLoadingQr, setIsLoadingQr] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
@@ -39,11 +40,14 @@ const Packages = () => {
     }, []);
 
     useEffect(() => {
+        setIsLoading(true);
         packageService.getPackages().then((res) => {
             setPackages(res.data);
             // setFilteredPackages(res.data);
+            setIsLoading(false);
         }).catch((error) => {
             console.error(error);
+            setIsLoading(false);
         });
     }, []);
 
@@ -142,7 +146,11 @@ const Packages = () => {
                 </View>
             </View>
 
-            {filteredPackages.length > 0 ? (
+            {isLoading ? (
+                <View className="flex-1 items-center justify-center">
+                    <ActivityIndicator size="large" color="#78450f" />
+                </View>
+            ) : filteredPackages.length > 0 ? (
                 <FlatList data={filteredPackages}
                     keyExtractor={(item: any) => item.id.toString()}
                     renderItem={({ item }) => {

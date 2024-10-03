@@ -1,7 +1,7 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert, ActivityIndicator } from "react-native";
 import branchService from "../../domain/services/BranchService";
 import { useUserSate } from "../../domain/state/UserState";
 import promotionOrderService from "../../domain/services/PromotionOrderService";
@@ -27,6 +27,7 @@ const Offers = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedPromotion, setSelectedPromotion] = useState<any>(null);
     const [confirmationMessage, setConfirmationMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
@@ -34,21 +35,24 @@ const Offers = () => {
     useEffect(() => {
         branchService.findAll().then((res) => {
             setBranches(res.data);
-            // if (res.data.length > 0) {
-            //     setSelectedBranch(res.data[0].name);
-            // }
+            if (res.data.length > 0) {
+                setSelectedBranch(res.data[0].name);
+            }
         }).catch((error) => {
             console.error(error);
         });
     }, []);
 
     useEffect(() => {
+        setIsLoading(true);
         promotionService.getPromotion().then((res) => {
             setPromotions(res.data);
             // setFilteredPromotions(res.data);
+            setIsLoading(false);
         })
             .catch((error) => {
                 console.error(error);
+                setIsLoading(false);
             })
     }, [])
 
@@ -132,7 +136,11 @@ const Offers = () => {
                 </View>
             </View>
 
-            {filteredPromotions.length > 0 ? (
+            {isLoading ? (
+                <View className="flex-1 items-center justify-center">
+                    <ActivityIndicator size="large" color="#78450f" />
+                </View>
+            ) : filteredPromotions.length > 0 ? (
                 <FlatList
                     data={filteredPromotions}
                     keyExtractor={(item: any) => item.id.toString()}
