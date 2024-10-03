@@ -485,13 +485,13 @@ export const profileSettings = [
   // },
   {
     id: 2,
-    icon: "person-circle-outline",
+    icon: "receipt-outline",
     name: "My Invoices",
     link: "/MyInvoices",
   },
   {
     id: 3,
-    icon: "tablet-portrait-outline",
+    icon: "document-text-outline",
     name: "My Prescription",
     link: "/MyPrescription",
   },

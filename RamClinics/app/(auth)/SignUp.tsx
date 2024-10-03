@@ -166,7 +166,7 @@ const SingUp = () => {
               </>
             )}
             {selectedOption === 1 && (
-              <FormField name="Passport" placeholder="Passport" otherStyle="" onChangeText={(e) => { setPassport(e) }} />
+              <FormField name="Passport" placeholder="Passport" otherStyle="mb-2" onChangeText={(e) => { setPassport(e) }} />
             )}
             
             <FormField name="Mobile No. *" placeholder="Mobile Number" otherStyle="" onChangeText={(e) => { setMobileNo(e) }} />
@@ -179,7 +179,7 @@ const SingUp = () => {
 
             <Text className="my-2 font-medium">Date of Birth *</Text>
             <View className="flex-row justify-between my-2">
-              <Pressable onPress={() => setShowPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg mr-2">
+              <Pressable onPress={() => setShowPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-xl py-4">
                 <Text className="text-lg">{moment(dob).format("YYYY-MM-DD")}</Text>
               </Pressable>
               {showDatePicker && (
@@ -235,7 +235,7 @@ const SingUp = () => {
             </View>
 
             <Text className="my-2 font-medium">Referred By</Text>
-            <View className="border rounded-xl">
+            <View className="border rounded-xl mb-6">
               <Picker
                 selectedValue={referredBy} onValueChange={(r) => { setReferredBy(r) }} className="text-slate-800">
                 <Picker.Item label="Referred By" value="" style={{ color: 'grey', fontSize: 14 }} />
@@ -255,7 +255,7 @@ const SingUp = () => {
               otherStyle="mt-4"
             /> */}
           </View>
-          <NASButton title="Register" onPress={savePatient}  />
+          <NASButton title="Register" onPress={savePatient} />
 
           <View className="pt-8">
             {/* <View>

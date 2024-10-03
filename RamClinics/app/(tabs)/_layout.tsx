@@ -17,10 +17,15 @@ const TabIcon = ({
   return (
     <View className="flex items-center justify-center gap-2">
       <Text
-        className={`p-3 rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`}
+        className={`p-2 justify-center justify-items-center rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`}
       >
         {iconName === "home" && (
-          <Entypo name="home" size={20} color={focused ? "white" : "rgb(120 53 15)"} />
+          <>
+            <View className="flex flex-col justify-center justify-items-center justif-self-center">
+              <Entypo name="home" size={24} color={focused ? "white" : "rgb(120 53 15)"} />
+              {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>Home</Text> */}
+            </View>
+          </>
         )}
         {/* {iconName === "message" && (
           <AntDesign
@@ -29,38 +34,59 @@ const TabIcon = ({
             color={focused ? "white" : "rgb(120 53 15)"}
           />
         )} */}
-        {iconName === "book-clock-outline" && (
-          <MaterialCommunityIcons
-            name="book-clock-outline"
-            size={20}
-            color={focused ? "white" : "rgb(120 53 15)"}
-          />
-        )}
         {iconName === "calendar-check-outline" && (
-          <MaterialCommunityIcons
-            name="calendar-check-outline"
-            size={20}
-            color={focused ? "white" : "rgb(120 53 15)"}
-          />
+          <>
+            <View className="flex flex-col justify-center justify-items-center justif-self-center">
+              <MaterialCommunityIcons
+                name="calendar-check-outline"
+                size={24}
+                color={focused ? "white" : "rgb(120 53 15)"}
+              />
+              {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>My{"\n"}Appointments</Text> */}
+            </View>
+          </>
+        )}
+        {iconName === "book-clock-outline" && (
+          <>
+            <View className="flex flex-col justify-center justify-items-center justif-self-center">
+              <MaterialCommunityIcons
+                name="book-clock-outline"
+                size={44}
+                color={focused ? "white" : "rgb(120 53 15)"}
+              />
+              {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>Book{"\n"}Appointment</Text> */}
+            </View>
+
+          </>
         )}
         {iconName === "gift" && (
-          <FontAwesome
-            name="gift"
-            size={20}
-            color={focused ? "white" : "rgb(120 53 15)"}
-          />
+          <>
+            <View className="flex flex-col justify-center justify-items-center justif-self-center">
+              <FontAwesome
+                name="gift"
+                size={24}
+                color={focused ? "white" : "rgb(120 53 15)"}
+              />
+
+              {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>Promotions</Text> */}
+            </View>
+          </>
         )}
         {iconName === "user" && (
-          <AntDesign
-            name="user"
-            size={20}
-            color={focused ? "white" : "rgb(120 53 15)"}
-          />
+          <>
+            <View className="flex flex-col justify-center justify-items-center justif-self-center"><AntDesign
+              name="user"
+              size={24}
+              color={focused ? "white" : "rgb(120 53 15)"}
+            />
+              {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>Profile</Text> */}
+            </View>
+          </>
         )}
       </Text>
-      {focused && (
+      {/* {focused && (
         <View className="w-2 h-2 rounded-full bg-lime-500 absolute top-[50px] left-[18px] z-50"></View>
-      )}
+      )} */}
     </View>
   );
 };
@@ -70,14 +96,26 @@ const TabLayout = () => {
     <>
       <Tabs
         screenOptions={{
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
+          tabBarLabelStyle: {
+            fontSize: 11,
+            color: "white",
+            paddingTop: -4,
+            paddingBottom: 6,
+          },
+
+          tabBarBadgeStyle: {
+            alignItems: "center",
+            justifyContent: "center",
+          },
 
           tabBarStyle: {
             backgroundColor: "rgb(120 53 15)",
-            height: 80,
+            height: 90,
             borderTopEndRadius: 15,
             borderTopLeftRadius: 15,
             borderTopWidth: 0,
+
           },
         }}
       >
@@ -90,6 +128,7 @@ const TabLayout = () => {
             ),
           }}
         />
+
         {/* <Tabs.Screen
           name="Chat"
           options={{
@@ -100,6 +139,20 @@ const TabLayout = () => {
           }}
         /> */}
 
+        {/* {
+            useUserSate.getState().loggedIn && ( */}
+        <Tabs.Screen
+          name="MyAppoinment"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon iconName="calendar-check-outline" focused={focused} />
+            ),
+          }}
+        />
+        {/* )
+          } */}
+
         <Tabs.Screen
           name="BookAppointment"
           options={{
@@ -109,21 +162,6 @@ const TabLayout = () => {
             ),
           }}
         />
-
-
-          {/* {
-            useUserSate.getState().loggedIn && ( */}
-              <Tabs.Screen
-                name="MyAppoinment"
-                options={{
-                  headerShown: false,
-                  tabBarIcon: ({ color, focused }) => (
-                    <TabIcon iconName="calendar-check-outline" focused={focused} />
-                  ),
-                }}
-              />
-            {/* )
-          } */}
 
 
         <Tabs.Screen
@@ -152,4 +190,9 @@ const TabLayout = () => {
 
 export default TabLayout;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  icon: {
+    justifyContent: 'center',
+    paddingLeft: 20
+  }
+});
