@@ -60,7 +60,7 @@ const VerifyOTP = () => {
       loginService.byMobileNo(mobileNo)
       .then(res => {
         // console.log("loginService.byMobileNo(mobileNo) res", res);
-        // let user = res.data;
+        let user = res.data;
         setUserInfo(user);
         setUserData(user);
       })

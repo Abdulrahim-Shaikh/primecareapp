@@ -71,15 +71,6 @@ const MyApprovals = () => {
         }
     };
 
-    // const filterApprovals = () => {
-    //     let pending = approvals?.filter((item: any) =>{ item.status=="Pending" || item.status=="In Approval"});
-    //     setPending(pending);
-    //     let approved = approvals?.filter((item: any) => {item.status=="Completed" || item.status=="Auto Approved" || item.status=="CASH"});
-    //     setApproved(approved);
-    //     let cancelled = approvals?.filter((item: any) => {item.status=="Cancelled"});
-    //     setCancelled(cancelled);
-    // }
-
     const search = () => {
         setMrNo();
         let fDate = moment(fromDate).format("YYYY-MM-DD");
