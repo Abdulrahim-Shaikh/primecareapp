@@ -72,7 +72,7 @@ const MyVitalSigns = () => {
 
         try {
             const vitalSignsResponse = await vitalSignsService.patientEncounterHistory(userId); //"PNT000028"
-            console.log("Fetched vital signs:", vitalSignsResponse.data);
+            // console.log("Fetched vital signs:", vitalSignsResponse.data);
             setVitalSigns(vitalSignsResponse.data);
             setFilteredVitalSigns(vitalSignsResponse.data);
         } catch (error) {

@@ -48,7 +48,7 @@ const ProfileTab = () => {
       setUser(useUserSate.getState().user)
       setPatientName(useUserSate.getState().patientName)
       console.log("loggedIn ?: ",loggedIn);
-      console.log("userState: ", useUserSate.getState());
+      // console.log("userState: ", useUserSate.getState());
     }, [])  
   )
 

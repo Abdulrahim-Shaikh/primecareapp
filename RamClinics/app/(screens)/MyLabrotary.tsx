@@ -69,7 +69,7 @@ const MyLabrotary = () => {
 
         try {
             const labratoryResponse = await labratoryService.byPatientId(userId);
-            console.log("Fetched labratory:", labratoryResponse.data);
+            // console.log("Fetched labratory:", labratoryResponse.data);
             setLabratory(labratoryResponse.data);
             setFilteredLabratory(labratoryResponse.data);
         } catch (error) {

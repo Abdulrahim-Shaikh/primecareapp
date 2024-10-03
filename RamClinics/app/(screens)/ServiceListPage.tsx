@@ -128,7 +128,7 @@ const ServiceListPage = () => {
             console.log("mobile: ", mobile)
             patientService.byMobileNo(mobile)
                 .then((response: any) => {
-                    console.log("patientService.byMobileNo: ", response)
+                    // console.log("patientService.byMobileNo: ", response)
                     setPatientData(response.data[0])
                     patientPolicyService.byPatientId(response.data[0].id)
                         .then((response: any) => {
@@ -203,7 +203,7 @@ const ServiceListPage = () => {
             }]
             scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
                 .then((response) => {
-                    console.log("rresponse getDoctorSchedule: ", response.data)
+                    // console.log("rresponse getDoctorSchedule: ", response.data)
                     setAppointmentEntry(true)
                     setDoctorScheduleData(response.data)
                     resourceService.find(response.data[0].practitionerId)
@@ -339,7 +339,7 @@ const ServiceListPage = () => {
                                                 setSpeciality(selectedItem.name)
                                                 resourceService.getResourceBySpeciality(branchId, department, selectedItem.name)
                                                     .then((response) => {
-                                                        console.log("response2: ", response.data)
+                                                        // console.log("response2: ", response.data)
                                                         setDoctorOptions(response.data)
                                                     })
                                                     .catch((error) => {

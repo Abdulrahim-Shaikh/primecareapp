@@ -151,7 +151,7 @@ const DoctorCard = ({
               }]
               scheduleService.getDoctorSchedule(branchId, department, specialityList, "false", requestBody)
                 .then((response) => {
-                  console.log("rresponse getDoctorSchedule: ", response.data)
+                  // console.log("rresponse getDoctorSchedule: ", response.data)
                   // setAppointmentEntry(true)
                   setDoctorScheduleData(response.data)
                   router.push({

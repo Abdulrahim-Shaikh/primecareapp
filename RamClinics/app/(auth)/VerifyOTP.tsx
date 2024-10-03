@@ -32,7 +32,6 @@ const VerifyOTP = () => {
       otpResp.otp = '9999';
       setOtpResp({ ...otpResp, otp: '9999' });
     }
-    console.log('OTP response ..... ', otpResp);
     console.log('OTP response ..... ', response.data);
   }
 
@@ -60,8 +59,8 @@ const VerifyOTP = () => {
       console.log("otpResp and otp are same")
       loginService.byMobileNo(mobileNo)
       .then(res => {
-        console.log("loginService.byMobileNo(mobileNo) res", res);
-        let user = res.data;
+        // console.log("loginService.byMobileNo(mobileNo) res", res);
+        // let user = res.data;
         setUserInfo(user);
         setUserData(user);
       })

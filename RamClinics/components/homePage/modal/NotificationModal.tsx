@@ -44,7 +44,7 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
         .getAppointments(userId, branchId) //"PNT000015"
         .then((response) => {
           setNotifications(response.data);
-          console.log("appointments: ", response.data);
+          // console.log("appointments: ", response.data);
         })
         .catch((error) => {
           console.error("Error fetching notifications:", error);

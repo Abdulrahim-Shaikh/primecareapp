@@ -69,7 +69,7 @@ const MyRadialogy = () => {
 
         try {
             const radialogyResponse = await radialogyService.byPatientId(userId); //"PNT000034"
-            console.log("Fetched radialogy:", radialogyResponse.data);
+            // console.log("Fetched radialogy:", radialogyResponse.data);
             setRadialogy(radialogyResponse.data);
             setFilteredRadialogy(radialogyResponse.data);
         } catch (error) {

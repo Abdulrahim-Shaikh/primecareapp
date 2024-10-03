@@ -28,8 +28,8 @@ const FamilYFile = () => {
 
     useEffect(() => {
         patientService.find(patientId).then((res) => {
-            console.log("fetch familyFile", res.data);
-            console.log("fetch familyMember", res.data);
+            // console.log("fetch familyFile", res.data);
+            // console.log("fetch familyMember", res.data);
             setFamilyFile(res.data);
             setFamilyMember(res.data);
         }).catch((error) => {

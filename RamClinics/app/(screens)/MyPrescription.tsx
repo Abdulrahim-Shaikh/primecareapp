@@ -68,7 +68,7 @@ const MyPrescription = () => {
 
         try {
             const prescriptionResponse = await prescriptionService.byPatientId(userId);
-            console.log("Fetched prescription:", prescriptionResponse.data);
+            // console.log("Fetched prescription:", prescriptionResponse.data);
             setPrescription(prescriptionResponse.data);
             setFilteredPrescription(prescriptionResponse.data);
         } catch (error) {

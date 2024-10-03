@@ -68,7 +68,7 @@ const MyInvoices = () => {
 
         try {
             const invoicesResponse = await invoiceService.invoicesByPatientId(userId);
-            console.log("Fetched invoices:", invoicesResponse.data);
+            // console.log("Fetched invoices:", invoicesResponse.data);
             setInvoices(invoicesResponse.data);
             setFilteredInvoices(invoicesResponse.data);
         } catch (error) {

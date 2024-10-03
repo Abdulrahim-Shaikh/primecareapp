@@ -18,7 +18,7 @@ const ChangePassword = () => {
 
   useEffect(() => {
     patientService.find(user.id).then((res) => {
-      console.log("patientid", res.data)
+      // console.log("patientid", res.data)
       setPatient(res.data);
     });
   }, [user.id]);

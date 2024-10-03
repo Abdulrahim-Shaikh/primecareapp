@@ -55,7 +55,7 @@ const SpecialityListPage = () => {
     useEffect(() => {
         setLoader(true)
         doctorService.getAllDoctors().then((res) => {
-            console.log("filtered patient..", res.data)
+            // console.log("filtered patient..", res.data)
             setDoctor(res.data);
             setFilteredDoctors(res.data);
             setLoader(false)
@@ -65,7 +65,7 @@ const SpecialityListPage = () => {
         console.log(`option: '${department}'`)
         patientService.byMobileNo(useUserSate.getState().user.mobile)
             .then((response: any) => {
-                console.log("patientService.byMobileNo: ", response)
+                // console.log("patientService.byMobileNo: ", response)
                 setPatientData(response.data[0])
 
 
@@ -105,7 +105,7 @@ const SpecialityListPage = () => {
         specialityService.getByDept(department)
             .then((response) => {
                 // setSpecialities(response.data)
-                console.log("getByDept: ", response.data)
+                // console.log("getByDept: ", response.data)
                 setSpecialityOptions(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
             })
     }, [])

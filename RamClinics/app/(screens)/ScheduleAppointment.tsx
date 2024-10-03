@@ -129,7 +129,7 @@ const ScheduleAppointment = () => {
                     Alert.alert("Patient Policy Not Found")
                 } else {
                     setPatientPolicyDataJson(JSON.parse(patientPolicyData.toString()))
-                    console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
+                    // console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
                     branchService.find(Number(branchId))
                         .then((response) => {
                             setBranchName(response.data.name)
@@ -199,7 +199,7 @@ const ScheduleAppointment = () => {
             walkIn: null
         }
 
-        console.log("\n\n\ntemporaryPayloadd: ", temporaryPayload)
+        // console.log("\n\n\ntemporaryPayloadd: ", temporaryPayload)
         console.log("\n\n\n")
 
         let temporaryPayload2 = { 
@@ -240,12 +240,12 @@ const ScheduleAppointment = () => {
             "cardNo": "0", 
             "createdDate": "2024-09-30T17:52:21" 
         }
-        console.log("\n\n\ntemporaryPayload2: ", temporaryPayload2)
+        // console.log("\n\n\ntemporaryPayload2: ", temporaryPayload2)
         console.log("\n\n\n")
 
         appointmentService.save(temporaryPayload)
         .then((response) => {
-            console.log("response appointmentService save: ", response)
+            // console.log("response appointmentService save: ", response)
 
             Alert.alert('Success', 'Appointment has been booked successfully', [
                 {
@@ -260,7 +260,7 @@ const ScheduleAppointment = () => {
             // router.push({
             //     pathname: "/BookAppointment",
             // })
-            console.log("appointmentService response: ", response)
+            // console.log("appointmentService response: ", response)
         })
         .catch((error) => {
             // router.push({

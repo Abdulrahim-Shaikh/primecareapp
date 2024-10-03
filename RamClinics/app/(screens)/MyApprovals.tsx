@@ -82,14 +82,11 @@ const MyApprovals = () => {
 
     const search = () => {
         setMrNo();
-        console.log("\n\n---------> mrno: ", mrno, "\tfromdate:", fromDate, "\ttoDate:", toDate, "\tbranchID:", selectedValue);
         let fDate = moment(fromDate).format("YYYY-MM-DD");
         let tDate = moment(toDate).format("YYYY-MM-DD");
-        console.log('\ndates --->', fDate, tDate);
 
         invoiceService.invoiceApprovals(selectedValue, fDate, tDate, mrno)
             .then((res) => {
-                console.log("\n\nFetching approvals:", res.data);
                 setApprovals(res.data);
             })
             .catch((error) => {

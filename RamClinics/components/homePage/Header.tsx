@@ -23,8 +23,8 @@ const Header = ({
 
   const profilePhotoUrl = user.profileImg && user.profileImg.length>0 && user.profileImg[0].length>0 ? {uri: `${BASE_URL}${encodeURIComponent(user.profileImg[0])}`} : emptyProfileImg;
 
-  console.log("User Data:", user);
-  console.log("Profile Photo URL:", profilePhotoUrl);
+  // console.log("User Data:", user);
+  // console.log("Profile Photo URL:", profilePhotoUrl);
 
   return (
     <View className="w-full flex flex-row justify-between items-center px-6">

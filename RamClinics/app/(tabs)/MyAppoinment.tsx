@@ -60,7 +60,7 @@ const Appoinment = () => {
   };
 
   const changeTab = (tab: string) => {
-    console.log("here")
+    // console.log("here")
     setAppointments(allAppointments.filter((item) => item.hisStatus === tab))
     setActiveTab(tab)
   }
@@ -83,7 +83,7 @@ const Appoinment = () => {
           },
         ])
       }
-      console.log("here")
+      // console.log("here")
       const patientId = useUserSate.getState().userId;
       console.log("patientId: ", patientId)
       const branch = useUserSate.getState().branch;
@@ -99,9 +99,9 @@ const Appoinment = () => {
         .then((response) => {
           setAllAppointments(response.data);
           for (let i of response.data) {
-            console.log("\n\n\n\ni: ", i)
+            // console.log("\n\n\n\ni: ", i)
           }
-          console.log("appointments: ", response)
+          // console.log("appointments: ", response)
         })
         .catch((error) => {
           console.log(error);

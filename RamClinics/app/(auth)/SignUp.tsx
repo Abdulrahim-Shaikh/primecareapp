@@ -106,7 +106,7 @@ const SingUp = () => {
   }
 
   const savePatient = () => {
-    console.log(signupForm);
+    // console.log(signupForm);
     if (firstName && lastName && dob && mobileNo && selectedBranch && gender) {
       patientService.save(signupForm).then((res)=>{
         console.log("Patient saved Successfully", res.data);

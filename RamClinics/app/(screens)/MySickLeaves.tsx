@@ -69,7 +69,7 @@ const MySickLeaves = () => {
 
         try {
             const sickLeavesResponse = await sickLeavesService.byPatientId(userId);
-            console.log("Fetched sick leaves:", sickLeavesResponse.data);
+            // console.log("Fetched sick leaves:", sickLeavesResponse.data);
             setSickLeaves(sickLeavesResponse.data);
             setFilteredSickLeaves(sickLeavesResponse.data);
         } catch (error) {

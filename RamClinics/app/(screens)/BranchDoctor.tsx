@@ -29,7 +29,7 @@ const BranchDoctor = () => {
     useFocusEffect(
         useCallback(() => {
             setLoader(true);
-            console.log("\n\n\n\nbranchId", branchId);
+            console.log("\n\n\n\nbranchId: ", branchId);
             if (branchId != null && department != null && speciality != null) {
                 resourceService.getResourceBySpeciality(branchId, department, speciality)
                 .then((response) => {
@@ -43,7 +43,7 @@ const BranchDoctor = () => {
                 if (branchId == null) {
                     doctorService.getAllDoctors()
                         .then((response) => {
-                            console.log("\ndoctorService.getAllDoctors(): \n", response)
+                            // console.log("\ndoctorService.getAllDoctors(): \n", response)
                             setDoctors(response.data);
                             setLoader(false);
                         })
@@ -55,7 +55,7 @@ const BranchDoctor = () => {
                     .then((response) => {
                         setDoctors(response.data.filter((doctor: any) => doctor.speciality === speciality));
                         setLoader(false);
-                        console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
+                        // console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
                     })
                     .catch((error) => {
                         console.log("\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) error", error);

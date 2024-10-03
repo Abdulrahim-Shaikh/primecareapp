@@ -35,7 +35,7 @@ const TopDoctor = () => {
 
   useEffect(() => {
     doctorService.getAllDoctors().then((res) => {
-      console.log("filtered patient..", res.data)
+      // console.log("filtered patient..", res.data)
       setDoctor(res.data);
       setFilteredDoctors(res.data);
     }).catch((error) => {

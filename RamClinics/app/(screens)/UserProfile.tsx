@@ -19,7 +19,7 @@ const UserProfile = () => {
   let [patient, setPatient] = useState([]);
   useEffect(() => {
     patientService.find(user.id).then((res) => {
-      console.log("filtered patient..", res.data)
+      // console.log("filtered patient..", res.data)
       setPatient(res.data);
     }).catch((error) => {
       console.error("Failed to fetch labratory:", error);

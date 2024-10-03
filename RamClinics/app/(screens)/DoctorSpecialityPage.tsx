@@ -28,12 +28,12 @@ const DoctorSpecialityPage = () => {
     // })
 
     if (branchId != null) {
-      console.log("department: ", department)
+      // console.log("department: ", department)
       specialityService.getByDept(department)
         .then((response) => {
-          console.log("getByDept: ", response.data)
+          // console.log("getByDept: ", response.data)
           setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
-          console.log("\n\n\nspecialtyList: ", specialityList)
+          // console.log("\n\n\nspecialtyList: ", specialityList)
         })
     } else {
       specialityService.findAll().then((response) => {

@@ -8,7 +8,7 @@ import doctorImg from "../../assets/images/doctorProfile.jpg";
 const DoctorProfile = () => {
   const { id } = useLocalSearchParams();
   const [doctor, setDoctor] = useState({});
-  console.log("doctor>>>>", doctor);
+  // console.log("doctor>>>>", doctor);
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/resource/file/";
 
   useEffect(() => {
