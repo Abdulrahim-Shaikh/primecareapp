@@ -30,7 +30,7 @@ const Searchbox = ({ searchValue, setSearchValue }: Props) => {
       {searchValue && (
         <Pressable
           onPress={() => setSearchValue("")}
-          className="p-1 ml-2 rounded-full bg-[#96d2cb]"
+          className="p-1 ml-2 rounded-full bg-lime-300"
         >
           <AntDesign name="close" />
         </Pressable>

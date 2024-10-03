@@ -98,7 +98,7 @@ const MyVitalSigns = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="pb-8 px-6 pt-4">
+                <View className="py-8 px-6">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Vital Signs" />
                         <MaterialCommunityIcons

@@ -102,7 +102,7 @@ const MyApprovals = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="pb-8 px-6 pt-4">
+                <View className="py-8 px-6">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Approvals" />
                         <MaterialCommunityIcons name="receipt" size={24} color={"rgb(132 204 22)"} />
@@ -134,7 +134,7 @@ const MyApprovals = () => {
                         </Picker>
                     </View>
 
-                    <Pressable onPress={() => search()} className="flex-1 bg-lime-500 p-3 rounded-lg mt-2 mb-4">
+                    <Pressable onPress={() => search()} className="flex-1 bg-amber-900 p-3 rounded-lg mt-2 mb-4">
                         <Text className="text-lg text-white text-center"> search </Text>
                     </Pressable>
 

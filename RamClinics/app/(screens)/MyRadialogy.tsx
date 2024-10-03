@@ -97,7 +97,7 @@ const MyRadialogy = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="pb-8 px-6 pt-4">
+                <View className="py-8 px-6">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Radialogy" />
                         <MaterialCommunityIcons
@@ -140,7 +140,7 @@ const MyRadialogy = () => {
 
                     <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
-                            <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-yellow-500" : "border-transparent"}`}>
+                            <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-amber-900" : "border-transparent"}`}>
                                 <Text className={`text-center font-semibold ${activeTab === item ? "text-yellow-500" : "text-gray-700"}`}>
                                     {item}
                                 </Text>
