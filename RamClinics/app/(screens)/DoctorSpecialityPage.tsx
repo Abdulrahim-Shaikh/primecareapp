@@ -64,17 +64,29 @@ const DoctorSpecialityPage = () => {
         <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
           {specialityList.map(({ name }, idx) => (
             <Pressable
-              onPress={() =>
-                router.push({
-                  pathname: "/BranchPage",
-                  params: {
-                    city: null,
-                    fromSpeciality: fromSpeciality,
-                    department: department,
-                    speciality: name
-                  }
-                })
-              }
+              onPress={() => {
+                +fromSpeciality
+                  ?
+                  router.push({
+                    pathname: "/BranchPage",
+                    params: {
+                      city: null,
+                      fromSpeciality: fromSpeciality,
+                      department: department,
+                      speciality: name
+                    }
+                  })
+                  :
+                  router.push({
+                    pathname: "/BranchDoctor",
+                    params: {
+                      branchId: branchId,
+                      fromSpeciality: fromSpeciality,
+                      department: department,
+                      speciality: name
+                    }
+                  })
+              }}
               className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
               key={idx}
             >
@@ -99,7 +111,7 @@ const DoctorSpecialityPage = () => {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 

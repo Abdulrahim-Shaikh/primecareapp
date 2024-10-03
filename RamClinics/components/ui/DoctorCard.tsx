@@ -85,16 +85,18 @@ const DoctorCard = ({
   const bookAppointment = () => {
 
     if (patientData == null || Object.keys(patientData).length <= 0) {
-      Alert.alert('Note', 'Patient data not found', [
-        {
-          text: 'OK',
-          // onPress: () => router.push({
-          //     pathname: "/BookAppointment",
-          // }),
-          style: 'default'
-        },
-      ],
-      )
+        Alert.alert('Patient Not Found', 'You need to Sign in first', [
+            {
+                text: 'BACK',
+                onPress: () => router.back(),
+                style: 'default'
+            },
+            {
+                text: 'SIGN IN',
+                onPress: () => router.push('/SignIn'),
+                style: 'default'
+            },
+        ])
     } else {
 
       if (patientPolicyData == null || Object.keys(patientPolicyData).length <= 0) {
