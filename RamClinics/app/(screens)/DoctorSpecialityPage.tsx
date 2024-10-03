@@ -35,6 +35,10 @@ const DoctorSpecialityPage = () => {
           setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
           console.log("\n\n\nspecialtyList: ", specialityList)
         })
+    } else {
+      specialityService.findAll().then((response) => {
+        setSpecialityList(response.data);
+      })
     }
 
   }, [])

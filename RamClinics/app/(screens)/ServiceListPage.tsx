@@ -117,23 +117,23 @@ const ServiceListPage = () => {
 
     useEffect(() => {
         console.log(`option: '${department}'`)
-        const mobile = useUserSate.getState().user.mobile? useUserSate.getState().user.mobile: "0594951370"
+        const mobile = useUserSate.getState().user.mobile ? useUserSate.getState().user.mobile : "0594951370"
         patientService.byMobileNo(mobile)
-        .then((response: any) => {
-            console.log("patientService.byMobileNo: ", response)
-            setPatientData(response.data[0])
-            patientPolicyService.byPatientId(response.data[0].id)
             .then((response: any) => {
-                setPatientPolicyData(response.data[0])
-                // patientPolicyData = response.data[0]
+                console.log("patientService.byMobileNo: ", response)
+                setPatientData(response.data[0])
+                patientPolicyService.byPatientId(response.data[0].id)
+                    .then((response: any) => {
+                        setPatientPolicyData(response.data[0])
+                        // patientPolicyData = response.data[0]
+                    })
+                    .catch((error) => {
+                        console.log("patientPolicyService.byPatientId() error: ", error)
+                    })
             })
             .catch((error) => {
-                console.log("patientPolicyService.byPatientId() error: ", error)
+                console.log("error: ", error)
             })
-        })
-        .catch((error) => {
-            console.log("error: ", error)
-        })
 
         branchService.findAll()
             .then((response) => {
@@ -162,7 +162,7 @@ const ServiceListPage = () => {
             console.log("validateForm", department)
             console.log("validateForm", speciality)
             let dateString = moment(date).format("YYYY-MM-DD");
-            let today= moment().format("YYYY-MM-DD");
+            let today = moment().format("YYYY-MM-DD");
             console.log("today: ", today)
             console.log("dateString: ", dateString)
             let requestBody: any = [{
@@ -177,14 +177,14 @@ const ServiceListPage = () => {
                     setAppointmentEntry(true)
                     setDoctorScheduleData(response.data)
                     resourceService.find(response.data[0].practitionerId)
-                    .then((response) => {
-                        if (response.data[0] && response.data[0].photo.length > 0 && response.data[0].photo[0]) {
-                            setPhotoUrl(`http://16.24.11.104:8080/HISAdmin/api/resource/file/${response.data[0].photo[0]}`)
-                        }
-                    })
-                    .catch((error) => {
-                        console.log("resourceService.findById() error: ", error)
-                    })
+                        .then((response) => {
+                            if (response.data[0] && response.data[0].photo.length > 0 && response.data[0].photo[0]) {
+                                setPhotoUrl(`http://16.24.11.104:8080/HISAdmin/api/resource/file/${response.data[0].photo[0]}`)
+                            }
+                        })
+                        .catch((error) => {
+                            console.log("resourceService.findById() error: ", error)
+                        })
                     // setAppointmentEntry(true)
                 })
                 .catch((err) => {
@@ -341,10 +341,10 @@ const ServiceListPage = () => {
                             }
 
                             {branchId != "" ?
-                                <Pressable 
-                                // onPress={() => {
-                                // }}
-                                className="flex flex-row justify-center gap-3">
+                                <Pressable
+                                    // onPress={() => {
+                                    // }}
+                                    className="flex flex-row justify-center gap-3">
                                     <SelectDropdown
                                         data={doctorOptions}
                                         onSelect={(selectedItem, index) => {
@@ -441,13 +441,13 @@ const ServiceListPage = () => {
                                                         <View className="flex-row items-center">
                                                             <View>
                                                                 <Text className="text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
-                                                                    // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
-                                                                    //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
-                                                                    //     } ${item.sessionStatus === "Completed" &&
-                                                                    //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
-                                                                    //     } ${item.sessionStatus === "Cancelled" &&
-                                                                    //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
-                                                                    //     } `}
+                                                                // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
+                                                                //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
+                                                                //     } ${item.sessionStatus === "Completed" &&
+                                                                //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
+                                                                //     } ${item.sessionStatus === "Cancelled" &&
+                                                                //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
+                                                                //     } `}
                                                                 >
                                                                     {item.speciality}
                                                                 </Text>
@@ -466,9 +466,9 @@ const ServiceListPage = () => {
                                             </View>
                                             <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
                                                 <TouchableOpacity
-                                                onPress={() => {
-                                                    console.log("item: ", item)
-                                                }}
+                                                    onPress={() => {
+                                                        console.log("item: ", item)
+                                                    }}
                                                 >
                                                     <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center" >
                                                         Cancel
@@ -476,34 +476,34 @@ const ServiceListPage = () => {
                                                 </TouchableOpacity>
                                                 <Text>{item.slots.length}</Text>
                                                 <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center"
-                                                    onPress={() => 
-                                                    { Object.keys(item.slots).length == 0
+                                                    onPress={() => {
+                                                        Object.keys(item.slots).length == 0
                                                         ?
-                                                            Alert.alert('Note', 'No slots available for appointment', [
-                                                                {
-                                                                    text: 'OK',
-                                                                    // onPress: () => router.push({
-                                                                    //     pathname: "/BookAppointment",
-                                                                    // }),
-                                                                    style: 'default'
-                                                                },
-                                                            ],
-                                                            )
+                                                        Alert.alert('Note', 'No slots available for appointment', [
+                                                            {
+                                                                text: 'OK',
+                                                                // onPress: () => router.push({
+                                                                //     pathname: "/BookAppointment",
+                                                                // }),
+                                                                style: 'default'
+                                                            },
+                                                        ],
+                                                        )
                                                         :
-                                                            router.push({
-                                                                pathname: "/ScheduleAppointment/",
-                                                                params: {
-                                                                    branchId: branchId,
-                                                                    department: department,
-                                                                    speciality: speciality,
-                                                                    doctor: doctor,
-                                                                    date: (new Date(date)).toString(),
-                                                                    params: JSON.stringify(item),
-                                                                    patientData: JSON.stringify(patientData),
-                                                                    patientPolicyData: JSON.stringify(patientPolicyData)
-                                                                }
-                                                            })
-                                                        }
+                                                        router.push({
+                                                            pathname: "/ScheduleAppointment/",
+                                                            params: {
+                                                                branchId: branchId,
+                                                                department: department,
+                                                                speciality: speciality,
+                                                                doctor: doctor,
+                                                                date: (new Date(date)).toString(),
+                                                                params: JSON.stringify(item),
+                                                                patientData: JSON.stringify(patientData),
+                                                                patientPolicyData: JSON.stringify(patientPolicyData)
+                                                            }
+                                                        })
+                                                    }
                                                     }
                                                 >
                                                     Schedule Appointment
