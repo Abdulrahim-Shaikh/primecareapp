@@ -54,24 +54,30 @@ const MyPrescription = () => {
     const [activeTab, setActiveTab] = useState("Pending");
 
     useEffect(() => {
-        setLoading(true);
-        branchService.findAll().then((res) => {
-            setBranches(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch branches:", error);
-        }).finally(() => {
-            prescriptionService.byPatientId(userId).then((res) => {
-                console.log("filtered labratory..", res.data)
-                setPrescription(res.data);
-                setFilteredPrescription(res.data);
-            }).catch((error) => {
-                console.error("Failed to fetch labratory:", error);
-            }).finally(() => {
-                setLoading(false);
-            });
-        });
+        fetchData();
     }, []);
 
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+
+        try {
+            const prescriptionResponse = await prescriptionService.byPatientId(userId);
+            console.log("Fetched prescription:", prescriptionResponse.data);
+            setPrescription(prescriptionResponse.data);
+            setFilteredPrescription(prescriptionResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch prescription:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     useEffect(() => {
         filterPrescription();
     }, [fromDate, toDate, selectedValue, activeTab, prescription]);

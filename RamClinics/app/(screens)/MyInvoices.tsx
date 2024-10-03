@@ -54,23 +54,48 @@ const MyInvoices = () => {
     };
 
     useEffect(() => {
-        setLoading(true);
-        branchService.findAll().then((res) => {
-            setBranches(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch branches:", error);
-        }).finally(() => {
-            invoiceService.invoicesByPatientId(userId).then((res) => {
-                console.log("Fetched invoices:", res.data);
-                setInvoices(res.data);
-                setFilteredInvoices(res.data);
-            }).catch((error) => {
-                console.error("Failed to fetch invoices:", error);
-            }).finally(() => {
-                setLoading(false);
-            });
-        });
+        fetchData();
     }, []);
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+
+        try {
+            const invoicesResponse = await invoiceService.invoicesByPatientId(userId);
+            console.log("Fetched invoices:", invoicesResponse.data);
+            setInvoices(invoicesResponse.data);
+            setFilteredInvoices(invoicesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch invoices:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // useEffect(() => {
+    //     setLoading(true);
+    //     branchService.findAll().then((res) => {
+    //         setBranches(res.data);
+    //     }).catch((error) => {
+    //         console.error("Failed to fetch branches:", error);
+    //     }).finally(() => {
+    //         invoiceService.invoicesByPatientId(userId).then((res) => {
+    //             console.log("Fetched invoices:", res.data);
+    //             setInvoices(res.data);
+    //             setFilteredInvoices(res.data);
+    //         }).catch((error) => {
+    //             console.error("Failed to fetch invoices:", error);
+    //         }).finally(() => {
+    //             setLoading(false);
+    //         });
+    //     });
+    // }, []);
 
     useEffect(() => {
         filterInvoices();

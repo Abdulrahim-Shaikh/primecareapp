@@ -48,21 +48,28 @@ const MyApprovals = () => {
     }
 
     useEffect(() => {
-        setLoading(true);
-        branchService.findAll().then((res) => {
-            setBranches(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch branches:", error);
-        }).finally(() => {
-            patientService.getByMobileNo(user.mobile).then((res) => {
-                setPatient(res.data);
-            }).catch((error) => {
-                console.error("Failed to get Patient:", error);
-            }).finally(() => {
-                setLoading(false);
-            });
-        });
+        fetchData();
     }, []);
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+
+        try {
+            const approvalsResponse = await patientService.getByMobileNo(user.mobile);
+            console.log("Fetched approvals:", approvalsResponse.data);
+            setPatient(approvalsResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch approvals:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // const filterApprovals = () => {
     //     let pending = approvals?.filter((item: any) =>{ item.status=="Pending" || item.status=="In Approval"});

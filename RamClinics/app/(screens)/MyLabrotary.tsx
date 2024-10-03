@@ -55,23 +55,29 @@ const MyLabrotary = () => {
     };
 
     useEffect(() => {
-        setLoading(true);
-        branchService.findAll().then((res) => {
-            setBranches(res.data);
-        }).catch((error) => {
-            console.error("Failed to fetch branches:", error);
-        }).finally(() => {
-            labratoryService.byPatientId(userId).then((res) => {
-                console.log("filtered labratory..", res.data)
-                setLabratory(res.data);
-                setFilteredLabratory(res.data);
-            }).catch((error) => {
-                console.error("Failed to fetch labratory:", error);
-            }).finally(() => {
-                setLoading(false);
-            });
-        });
+        fetchData();
     }, []);
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+
+        try {
+            const labratoryResponse = await labratoryService.byPatientId(userId);
+            console.log("Fetched labratory:", labratoryResponse.data);
+            setLabratory(labratoryResponse.data);
+            setFilteredLabratory(labratoryResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch labratory:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         filterLabratory();

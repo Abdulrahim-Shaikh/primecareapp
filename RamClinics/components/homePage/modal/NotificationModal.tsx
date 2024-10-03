@@ -126,14 +126,14 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
 
           <View className="pt-8 pb-5 border-b border-dashed border-amber-900 flex flex-row justify-between items-center">
             <Text className="text-lg font-semibold">Latest Update</Text>
-            <View className="flex flex-row gap-2 items-center">
+            {/* <View className="flex flex-row gap-2 items-center">
               <Text className="text-[12px]">Sort By{":"}</Text>
               <Pressable className="z-50 border border-amber-900 rounded-lg">
                 <Text className="px-4 py-2" onPress={() => setShow((prev) => !prev)}>
                   {sortBy} <Feather name="chevron-down" size={18} />
                 </Text>
               </Pressable>
-            </View>
+            </View> */}
           </View>
 
           {notifications.length > 0 ? (
