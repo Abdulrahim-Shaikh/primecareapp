@@ -32,7 +32,7 @@ const VerifyOTP = () => {
       otpResp.otp = '9999';
       setOtpResp({ ...otpResp, otp: '9999' });
     }
-    console.log('API response ..... ', response);
+    console.log('OTP response ..... ', otpResp);
   }
 
   useEffect(() => {
