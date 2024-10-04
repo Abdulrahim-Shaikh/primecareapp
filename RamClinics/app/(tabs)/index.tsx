@@ -5,16 +5,11 @@ import UpcomingSlider from "../../components/homePage/UpcomingSlider";
 import DoctorSpeciality from "../../components/homePage/DoctorSpeciality";
 import TopDoctor from "../(screens)/TopDoctor";
 import NotificationModal from "../../components/homePage/modal/NotificationModal";
-import FilterModal from "../../components/homePage/modal/FilterModal";
 import FavouriteModal from "../../components/homePage/modal/FavouriteModal";
 import Header from "../../components/homePage/Header";
-import userService from "../../domain/services/UserService";
-import SearchSection from "../../components/homePage/SearchSection";
-import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import MainMenu from "../../components/homePage/MainMenu";
 import { useUserSate } from "../../domain/state/UserState";
-import NASButton from "../../components/NASButton";
 import branchService from "../../domain/services/BranchService";
 import { useHISSate } from "../../domain/state/HISState";
 import { UserContext } from "../../domain/contexts/UserContext";
@@ -82,7 +77,7 @@ const Home = () => {
           showNotification={showNotification}
           setShowNotification={setShowNotification}
         />
-        <FilterModal showFilter={showFilter} setShowFilter={setShowFilter} />
+        {/* <FilterModal showFilter={showFilter} setShowFilter={setShowFilter} /> */}
         <FavouriteModal
           showFavouriteModal={showFavouriteModal}
           setShowFavouriteModal={setShowFavouriteModal}
