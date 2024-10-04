@@ -9,29 +9,24 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, } from "@expo/vector-icons";
-import { useFocusEffect, useRouter } from "expo-router";
-import { SpecialityService } from "../../domain/services/SpecialityService";
-import { useCallback, useEffect } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faTooth } from '@fortawesome/free-solid-svg-icons/faTooth'
-import { faHandDots } from '@fortawesome/free-solid-svg-icons/faHandDots'
-import { faSuitcaseMedical } from '@fortawesome/free-solid-svg-icons/faSuitcaseMedical'
+import { useRouter } from "expo-router";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 // get departments by branch
 const serviceData = [
     {
         id: 1,
-        icon: faTooth,
+        icon: 'tooth',
         title: "Dental",
     },
     {
         id: 2,
-        icon: faHandDots,
+        icon: 'hand-dots',
         title: "Dermatology",
     },
     {
         id: 3,
-        icon: faSuitcaseMedical,
+        icon: 'suitcase-medical',
         title: "Medical",
     },
 ]
@@ -113,7 +108,8 @@ const BookAppointment = () => {
                                             }
                                         }>
                                         <View className="py-2 items-center">
-                                            <FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} />
+                                            <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} />
+                                            {/* <!--<FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
                                             {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
                                             {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
                                             {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}

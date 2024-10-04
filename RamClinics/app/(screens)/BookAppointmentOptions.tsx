@@ -9,12 +9,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faBuildingColumns } from '@fortawesome/free-solid-svg-icons/faBuildingColumns'
-import { faUserDoctor } from '@fortawesome/free-solid-svg-icons/faUserDoctor'
-import { faFileWaveform } from '@fortawesome/free-solid-svg-icons/faFileWaveform'
-
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const BookAppointmentOptions = () => {
     const router = useRouter();
@@ -24,7 +19,7 @@ const BookAppointmentOptions = () => {
     const optionsData = [
         {
             id: 1,
-            icon: faBuildingColumns,
+            icon: 'building-columns',
             title: "By Branch",
             link: "/BranchPage",
             params: {
@@ -35,21 +30,21 @@ const BookAppointmentOptions = () => {
         },
         {
             id: 2,
-            icon: faUserDoctor,
+            icon: 'user-doctor',
             title: "By Doctor",
             link: "/SpecialistListPage",
             params: { department: department }
         },
         {
             id: 3,
-            icon: faFileWaveform,
+            icon: 'file-waveform',
             title: "By Service",
             link: "/ServiceListPage",
             params: { department: department }
         },
         {
             id: 4,
-            icon: faFileWaveform,
+            icon: 'file-waveform',
             title: "By Service2",
             link: "/DoctorSpecialityPage",
             params: { 
@@ -129,7 +124,8 @@ const BookAppointmentOptions = () => {
                                             }
                                         }>
                                         <View className="py-2 items-center">
-                                            <FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} />
+                                            {/* <FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
+                                            <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} />
                                             {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
                                             {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
                                             {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
