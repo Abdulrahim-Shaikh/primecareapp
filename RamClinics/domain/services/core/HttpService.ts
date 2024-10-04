@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { PROD_LINK } from '@env';
+import { UAT_LINK } from '@env';
 
 class HttpService {
 
@@ -9,8 +11,8 @@ class HttpService {
     private divisionCode = 'CHN';    
     private allowedDivisions = 'CHN'//Array<string> = ['CHN'];
 
-  private baseUrl = "http://16.24.11.104:8080/HISAdmin/api/";
-//private baseUrl = "https://ramprimecare.com/HISAdmin/api/" ;
+    // private baseUrl = PROD_LINK;
+    private baseUrl = UAT_LINK;
 
     getHeaders() {
         return {
@@ -27,6 +29,8 @@ class HttpService {
     }
 
     getAPI(path: string) {
+        // console.log("PROD: ", PROD_LINK);
+        // console.log("UAT: ", UAT_LINK);
         return axios.get(this.baseUrl + path, this.getHeaders());
     }
 

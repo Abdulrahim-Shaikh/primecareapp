@@ -20,20 +20,17 @@ const DoctorSpecialityPage = () => {
 
   let [specialityList, setSpecialityList] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
-  const { branchId, fromSpeciality, department } = useLocalSearchParams();
+  const {branchId, fromSpeciality, department, callCenterFlow} = useLocalSearchParams();
 
   useEffect(() => {
-    // specialityService.findAll().then((response) => {
-    //   setSpecialityList(response.data);
-    // })
-
-    if (branchId != null) {
-      // console.log("department: ", department)
+    if (department != null) {
       specialityService.getByDept(department)
         .then((response) => {
-          // console.log("getByDept: ", response.data)
-          setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
-          // console.log("\n\n\nspecialtyList: ", specialityList)
+          setSpecialityList(
+            +callCenterFlow
+            ? response.data
+            : response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both"))
+          )
         })
     } else {
       specialityService.findAll().then((response) => {
@@ -42,6 +39,7 @@ const DoctorSpecialityPage = () => {
     }
 
   }, [])
+
 
   // useEffect(() => {
   //   if (searchValue) {
@@ -65,27 +63,40 @@ const DoctorSpecialityPage = () => {
           {specialityList.map(({ name }, idx) => (
             <Pressable
               onPress={() => {
-                +fromSpeciality
-                  ?
-                  router.push({
-                    pathname: "/BranchPage",
-                    params: {
-                      city: null,
-                      fromSpeciality: fromSpeciality,
-                      department: department,
-                      speciality: name
-                    }
-                  })
-                  :
-                  router.push({
-                    pathname: "/BranchDoctor",
-                    params: {
-                      branchId: branchId,
-                      fromSpeciality: fromSpeciality,
-                      department: department,
-                      speciality: name
-                    }
-                  })
+                +callCenterFlow
+                ? 
+                    router.push({
+                      pathname: "/CityPage",
+                      params: {
+                        city: null,
+                        fromSpeciality: fromSpeciality,
+                        department: department,
+                        callCenterFlow: callCenterFlow,
+                        speciality: name
+                      }
+                    })
+                :
+                  +fromSpeciality
+                    ?
+                    router.push({
+                      pathname: "/BranchPage",
+                      params: {
+                        city: null,
+                        fromSpeciality: fromSpeciality,
+                        department: department,
+                        speciality: name
+                      }
+                    })
+                    :
+                    router.push({
+                      pathname: "/BranchDoctor",
+                      params: {
+                        branchId: branchId,
+                        fromSpeciality: fromSpeciality,
+                        department: department,
+                        speciality: name
+                      }
+                    })
               }}
               className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
               key={idx}

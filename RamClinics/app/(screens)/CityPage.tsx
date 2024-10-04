@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
@@ -9,14 +9,26 @@ import branchService from "../../domain/services/BranchService";
 
 const CityPage = () => {
 
-    let [cities, setCity] = useState([]);
+    const {branchId, fromSpeciality, department, callCenterFlow, speciality} = useLocalSearchParams();
+    const [cities, setCities] = useState([]);
+    const [branchCounts, setBranchCounts] = useState(Object());
+
     useEffect(() => {
-        cityMasterService.findAll().then((res) => {
-            setCity(res.data);
-        });
+        if (+callCenterFlow) {
+            const cityByBranch = async () => {
+                const response = await branchService.cityByDept(department)
+                console.log("response cities: ", response.data)
+                setCities(response.data);
+            }
+            cityByBranch()
+
+        } else {
+            cityMasterService.findAll().then((res) => {
+                setCities(res.data);
+            });
+        }
     }, []);
 
-    const [branchCounts, setBranchCounts] = useState({});
 
     useEffect(() => {
         const fetchBranchCounts = async () => {
@@ -49,7 +61,12 @@ const CityPage = () => {
                                         onPress={() =>
                                             router.push({
                                                 pathname: "/BranchPage",
-                                                params: { city: item.city },
+                                                params: { 
+                                                    city: item,
+                                                    fromSpeciality: fromSpeciality,
+                                                    department: department,
+                                                    speciality: speciality
+                                                },
                                             })
                                         }
                                     >
@@ -58,7 +75,7 @@ const CityPage = () => {
                                         </View>
                                         <View className="px-4 flex justify-center">
                                             <Text className="font-semibold text-lg text-gray-800">
-                                                {item.city}
+                                                {item}
                                             </Text>
                                             <Text className="text-gray-600 pt-1">
                                                 {noOfBranches} Branches

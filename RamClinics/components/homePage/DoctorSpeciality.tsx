@@ -26,7 +26,8 @@ const DoctorSpeciality = () => {
               params: { 
                 branchId: null,
                 fromSpeciality: 1,
-                department: null
+                department: null,
+                callCenterFlow: 0
               }
             })
           }
