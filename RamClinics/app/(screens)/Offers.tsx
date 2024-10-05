@@ -10,7 +10,7 @@ import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+
 
 type Props = {
     id: number;

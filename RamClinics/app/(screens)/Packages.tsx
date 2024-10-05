@@ -10,7 +10,6 @@ import { useUserSate } from "../../domain/state/UserState";
 import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.png";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import React from "react";
-import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/servicepackage/file/";
