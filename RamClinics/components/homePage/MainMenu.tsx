@@ -15,7 +15,7 @@ const MainMenu = () => {
     {
       icon: "people-outline",
       title: "Family Members",
-      link: "",
+      link: "/FamilyFile",
     },
     {
       icon: "shield-checkmark-outline",

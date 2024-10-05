@@ -110,7 +110,7 @@ const MyLabrotary = () => {
                         <MaterialCommunityIcons
                             name="store-plus-outline"
                             size={24}
-                            color={"rgb(132 204 22)"}
+                            color={"rgb(120 53 15)"}
                         />
                     </View>
 

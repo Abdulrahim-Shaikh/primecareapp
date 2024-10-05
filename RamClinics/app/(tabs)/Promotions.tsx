@@ -4,6 +4,7 @@ import React from "react";
 import { View, Text, FlatList, Pressable, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { serviceData } from "../../constants/data";
 import { SafeAreaView } from "react-native-safe-area-context";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const Promotions = () => {
     const router = useRouter();
@@ -26,8 +27,8 @@ const Promotions = () => {
             <ScrollView>
                 <View className="">
                     <View className="px-6 flex flex-row justify-start items-center gap-4 pt-6">
+                    <HeaderWithBackButton isPushBack={true} title="Promotions" />
                         <AntDesign name="gift" size={24} color={"rgb(120 53 15)"} />
-                        <Text className="text-2xl font-semibold">Promotions</Text>
                     </View>
                     <View className="flex-row pt-10 px-4 justify-center">
                         <FlatList

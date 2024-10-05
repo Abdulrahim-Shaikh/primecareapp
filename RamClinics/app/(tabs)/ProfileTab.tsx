@@ -22,6 +22,7 @@ import { profileSettings } from "../../constants/data";
 import CustomSwitch from "../../components/CustomSwitch";
 import { useUserSate } from "../../domain/state/UserState";
 import { UserContext } from "../../domain/contexts/UserContext";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const ProfileTab = () => {
   const [logoutModal, setLogoutModal] = useState(false);
@@ -58,8 +59,9 @@ const ProfileTab = () => {
       <ScrollView>
         <View className=" pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
+          <HeaderWithBackButton isPushBack={true} title="User Settings" />
             <AntDesign name="user" size={24} color={"rgb(120 53 15)"} />
-            <Text className="text-2xl font-semibold">User Settings</Text>
+            
           </View>
           <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">
             <View className="flex-row gap-4">
@@ -85,7 +87,7 @@ const ProfileTab = () => {
               </View>
             </View>
             <Pressable
-              onPress={() => loggedIn ? router.push("/EditProfile") : router.push("/SignIn")}
+              onPress={() => loggedIn ? router.push("/SignIn") : router.push("/SignIn")}
               className="bg-white p-3 rounded-full"
             >
               <MaterialCommunityIcons

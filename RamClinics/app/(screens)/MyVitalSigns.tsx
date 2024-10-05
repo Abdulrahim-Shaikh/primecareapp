@@ -111,7 +111,7 @@ const MyVitalSigns = () => {
                         <MaterialCommunityIcons
                             name="emoticon-sick-outline"
                             size={24}
-                            color={"rgb(132 204 22)"}
+                            color={"rgb(120 53 15)"}
                         />
                     </View>
 

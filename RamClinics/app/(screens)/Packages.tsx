@@ -8,6 +8,7 @@ import QRCode from "react-native-qrcode-svg";
 import promotionOrderService from "../../domain/services/PromotionOrderService";
 import { useUserSate } from "../../domain/state/UserState";
 import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.png";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import React from "react";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { SafeAreaView } from "react-native-safe-area-context";

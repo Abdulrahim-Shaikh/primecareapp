@@ -1,9 +1,10 @@
-import { FlatList, Modal, Pressable, View } from "react-native"
+import { FlatList, Modal, Pressable, View, ScrollView } from "react-native"
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton"
 import { Text } from "react-native-elements"
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const FamilyApprovals = () => {
@@ -25,6 +26,8 @@ const FamilyApprovals = () => {
         setModalVisible(false);
     }
     return (
+        <SafeAreaView >
+            <ScrollView>
         <View>
             <View className="w-screen">
                 <HeaderWithBackButton
@@ -32,14 +35,15 @@ const FamilyApprovals = () => {
                     isPushBack={true}  
                 />
             </View>
-            <View>
+            <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
                 <View className="flex-row border border-amber-900 rounded-lg mb-4 overflow-hidden">
-                    <View className="flex-1 p-4">
-                        <Text className="text-base font-bold mb-1">
+                    <View className="flex-1 p-2">
+                        <Text className="text-base font-bold ">
                             Approve to as add Family Member with relation
                             <View>
                                 <Text>Added Family Member</Text>
                             </View>
+                        </Text>
                             <View className="flex-row justify-between items-center w-full">
                                 <Pressable
                                     onPress={handleConfirmationRelation}
@@ -94,13 +98,15 @@ const FamilyApprovals = () => {
                                 </View>
 
                             </Modal>
-                        </Text>
+                       
 
                     </View>
 
                 </View>
             </View>
         </View>
+        </ScrollView>
+        </SafeAreaView>
     )
 }
 export default FamilyApprovals

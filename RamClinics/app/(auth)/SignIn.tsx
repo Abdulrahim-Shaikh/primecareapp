@@ -5,6 +5,7 @@ import FormField from "../../components/FormField";
 import { router } from "expo-router";
 import NASButton from "../../components/NASButton";
 import logo from "../../assets/logo/logo-ram-clinic.png";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const SignIn = () => {
 
@@ -36,7 +37,12 @@ const SignIn = () => {
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
+        <View className="px-4">
+        <HeaderWithBackButton isPushBack={true}/>
+        </View>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
+        
+
           <View className="items-center pb-6">
             <Image source={logo} style={{ maxHeight: 140, maxWidth: 200}}/>
           </View>

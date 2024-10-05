@@ -7,6 +7,7 @@ import { useLocalSearchParams } from "expo-router";
 import specialityService from "../../domain/services/SpecialityService";
 import walletService from "../../domain/services/WalletService";
 import { useUserSate } from "../../domain/state/UserState";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Wallets = () => {
 
@@ -28,8 +29,15 @@ const Wallets = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View className="p-6">
-          <HeaderWithBackButton isPushBack={true} title="Wallets" />
+        <View className="px-3">
+        <View className="flex flex-row justify-start items-center gap-4 pt-6">
+                        <HeaderWithBackButton isPushBack={true} title="Your Wallet" />
+                        <MaterialCommunityIcons
+                            name="wallet"
+                            size={24}
+                            color={"rgb(120 53 15)"}
+                        />
+                    </View>
           <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
             <Text className="text-base font-semibold text-amber-900">
               Your Wallet

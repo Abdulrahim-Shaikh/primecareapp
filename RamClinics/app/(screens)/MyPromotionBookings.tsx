@@ -31,7 +31,7 @@ const MyPromotionBookings = () => {
                 <View className="px-6">
                     <View className="px-6 flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Promotion Bookings" />
-                        <MaterialCommunityIcons name="tag" size={24} color={"rgb(132 204 22)"} />
+                        <MaterialCommunityIcons name="tag" size={24} color={"rgb(120 53 15)"} />
                     </View>
 
                     <View className="flex-row justify-between my-4">

@@ -1,4 +1,4 @@
-import { Alert, Modal, Pressable, SafeAreaView, Text, TextInput, View } from "react-native"
+import { Alert, Modal, Pressable,  Text, TextInput, View,  ScrollView, } from "react-native"
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton"
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -7,6 +7,7 @@ import patientService from "../../domain/services/PatientService";
 import Entypo from '@expo/vector-icons/Entypo';
 import { Picker } from "@react-native-picker/picker";
 import { router, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -77,8 +78,9 @@ const FamilYFile = () => {
     }
 
     return (
-        <SafeAreaView className="h-full justify-between items-start p-4">
-            <View>
+        <SafeAreaView >
+            <ScrollView>
+            <View className="px-4">
                 <View className="w-screen">
                     <HeaderWithBackButton
                         title="Family File"
@@ -224,6 +226,7 @@ const FamilYFile = () => {
 
                 </View>
             </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }

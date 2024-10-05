@@ -4,6 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import logo from "../../assets/images/logo_transparent.png";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 
 
@@ -13,10 +14,10 @@ const TermsAndConditions = () => {
 
         <SafeAreaView>
             <ScrollView className="bg-gray px-2">
-                <View className="px-6 ">
-                    <View className="flex flex-row justify-start items-center gap-4 pt-1 pb-6">
-                        <AntDesign name="exclamationcircleo" size={20} color={"rgb(132 204 22)"} />
-                        <Text className="text-2xl font-semibold text-gray-500">Terms & Conditions</Text>
+                <View className="px- ">
+                    <View className="flex flex-row justify-start items-center gap-4 pb-6">
+                    <HeaderWithBackButton isPushBack={true} title="Terms & Conditions" />
+                        <AntDesign name="exclamationcircleo" size={20} color={"rgb(120 53 15)"} />
                     </View>
                 </View>
                 <View className="flex pt-4 items-start justify-between">

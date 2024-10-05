@@ -28,6 +28,7 @@ import { useUserSate } from "../../domain/state/UserState";
 import branchService from "../../domain/services/BranchService";
 import patientService from "../../domain/services/PatientService";
 import moment from "moment";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 
 const tabNames = ["Booked", "Checked In"];
@@ -123,12 +124,9 @@ const Appoinment = () => {
       <ScrollView>
         <View className="pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6">
-            <MaterialCommunityIcons
-              name="calendar-check-outline"
-              size={24}
-              color={"rgb(120 53 15)"}
+            <HeaderWithBackButton isPushBack={true} title="My Appointments" />
+            <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(120 53 15)" }
             />
-            <Text className="text-2xl font-semibold">My Appointments</Text>
           </View>
           <View className="pt-8">
             <Searchbox searchValue={searchValue} setSearchValue={setSearchValue}/>
