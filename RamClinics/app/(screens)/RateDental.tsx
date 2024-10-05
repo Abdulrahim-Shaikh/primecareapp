@@ -17,11 +17,10 @@ const RateDental = () => {
 
     const handleSubmit = async () => {
         let ratingData = {
-            id: null,
             appointmentId: appointmentId,
             bookedOn: Date.now(),
             appointmentDate: Date.now(),
-            username: patientName,
+            consultantName: patientName,
             score: score,
             review: review,
             reviewedDate: Date.now(),
@@ -29,9 +28,8 @@ const RateDental = () => {
         try {
             await doctorRatingsService.save(ratingData);
             Alert.alert("Success", "Ratings Submitted!");
-        } catch (error) {
+        } catch (error: any) {
             Alert.alert("Failed to submit rating. Please try again.");
-            console.error(error);
         }
     };
 
