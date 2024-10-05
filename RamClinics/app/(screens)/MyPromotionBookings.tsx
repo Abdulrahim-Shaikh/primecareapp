@@ -28,7 +28,7 @@ const MyPromotionBookings = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
+                <View className="px-6">
                     <View className="px-6 flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Promotion Bookings" />
                         <MaterialCommunityIcons name="tag" size={24} color={"rgb(132 204 22)"} />

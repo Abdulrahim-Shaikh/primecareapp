@@ -61,9 +61,9 @@ const DoctorSpecialityPage = () => {
     <SafeAreaView>
       <ScrollView className="p-6">
         <HeaderWithBackButton title="Doctor Speciality" isPushBack={true} />
-        <View className="pt-8 ">
+        {/* <View className="pt-8 pb-4">
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
-        </View>
+        </View> */}
         {loading ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
             <ActivityIndicator size="large" color="#FF9900" />

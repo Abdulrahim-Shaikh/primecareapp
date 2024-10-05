@@ -1,12 +1,15 @@
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert, ActivityIndicator, ScrollView } from "react-native";
 import branchService from "../../domain/services/BranchService";
 import { useUserSate } from "../../domain/state/UserState";
 import promotionOrderService from "../../domain/services/PromotionOrderService";
 import promotionService from "../../domain/services/PromotionSerivce";
 import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.png";
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 type Props = {
     id: number;
@@ -127,83 +130,88 @@ const Offers = () => {
 
 
     return (
-        <View className="flex-1 bg-white p-4">
-            <View className="flex-row justify-between items-center mb-4 mt-8">
-                <Text className="text-2xl font-bold">Offers</Text>
-                <View style={pickerStyles.pickerContainer}>
-                    <Picker
-                        selectedValue={selectedBranch}
-                        onValueChange={(itemValue) => setSelectedBranch(itemValue)}
-                        style={pickerStyles.picker}>
-                        {branches.map((branch: any) => (
-                            <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
-                        ))}
-                    </Picker>
-                </View>
-            </View>
-
-            {isLoading ? (
-                <View className="flex-1 items-center justify-center">
-                    <ActivityIndicator size="large" color="#78450f" />
-                </View>
-            ) : filteredPromotions.length > 0 ? (
-                <FlatList
-                    data={filteredPromotions}
-                    keyExtractor={(item: any) => item.id.toString()}
-                    renderItem={({ item }) => {
-                        const photoUrl = (item.photo && Array.isArray(item.photo) && item.photo.length > 0 && item.photo[0])
-                            ? { uri: `${sourceUrl}${encodeURIComponent(item.photo[0])}` }
-                            : emptyOfferImage;
-                        return (
-                            <View className="flex-row border border-amber-900 rounded-lg mb-4 overflow-hidden">
-                                <Image source={photoUrl} style={{ width: 128, height: 128 }} />
-                                <View className="flex-1 p-4">
-                                    <Text className="text-base font-bold mb-1">{item.promotionName}</Text>
-                                    <Text className="text-sm text-gray-500 mb-4">{item.description}</Text>
-                                    <Pressable
-                                        className="bg-amber-900 flex-row items-center justify-center rounded-md py-2 px-4"
-                                        onPress={() => handleBookPress(item)}
-                                        style={{ alignSelf: 'flex-start' }}
-                                    >
-                                        <FontAwesome name="calendar" size={14} color="white" className="mr-2" />
-                                        <Text className="text-white font-bold">Book</Text>
-                                    </Pressable>
-                                </View>
-                            </View>
-                        );
-                    }}
-                />
-            ) : (
-                <View className="flex-1 items-center justify-center p-4">
-                    <Text className="text-gray-500 text-lg">No available offers for the branch!</Text>
-                </View>
-            )}
-
-            <Modal transparent={true} animationType="slide" visible={isModalVisible} onRequestClose={handleCancel}>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                    <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                        <Pressable className="absolute top-3 right-3" onPress={handleCancel}>
-                            <AntDesign name="closecircle" size={24} color="#78450f" />
-                        </Pressable>
-                        {confirmationMessage ? (
-                            <Text className="text-xl font-bold text-center mb-4 mt-7">{confirmationMessage}</Text>
-                        ) : (
-                            <>
-                                <Text className="text-xl font-bold text-center mb-4 mt-7">Do you want to book this service?</Text>
-                                <View className="flex-row justify-between">
-                                    <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
-                                        <Text className="text-center text-black font-bold">Cancel</Text>
-                                    </Pressable>
-                                    <Pressable className="flex-1 bg-amber-900 py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
-                                        <Text className="text-center text-white font-bold">Confirm</Text>
-                                    </Pressable>
-                                </View>
-                            </>
-                        )}
+        <SafeAreaView>
+            <ScrollView>
+                <View className="flex-1 p-4 pt-2">
+                    <View className="flex flex-row justify-start items-center gap-4">
+                        <HeaderWithBackButton isPushBack={true} title="Offers" />
+                        <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(132 204 22)"} />
                     </View>
+                    <View className="border border-amber-900 rounded-lg my-4">
+                        <Picker
+                            selectedValue={selectedBranch} onValueChange={(itemValue) => { setSelectedBranch(itemValue); }} className="h-12">
+                            <Picker.Item label="Select Branch" value="" />
+                            {branches.map((branch: any) => (
+                                <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
+                            ))}
+                        </Picker>
+                    </View>
+
+                    {isLoading ? (
+                        <View className="flex-1 items-center justify-center">
+                            <ActivityIndicator size="large" color="#78450f" />
+                        </View>
+                    ) : filteredPromotions.length > 0 ? (
+                        <FlatList
+                            data={filteredPromotions}
+                            keyExtractor={(item: any) => item.id.toString()}
+                            renderItem={({ item }) => {
+                                const photoUrl = (item.photo && Array.isArray(item.photo) && item.photo.length > 0 && item.photo[0])
+                                    ? { uri: `${sourceUrl}${encodeURIComponent(item.photo[0])}` }
+                                    : emptyOfferImage;
+                                return (
+                                    <View className="flex-row border border-amber-900 rounded-lg mb-4 overflow-hidden">
+                                        <Image source={photoUrl} style={{ width: 128, height: 128 }} />
+                                        <View className="flex-1 p-4">
+                                            <Text className="text-base font-bold mb-1">{item.promotionName}</Text>
+                                            <Text className="text-sm text-gray-500 mb-4">{item.description}</Text>
+                                            <Pressable
+                                                className="bg-amber-900 flex-row items-center justify-center rounded-md py-2 px-4"
+                                                onPress={() => handleBookPress(item)}
+                                                style={{ alignSelf: 'flex-start' }}
+                                            >
+                                                <FontAwesome name="calendar" size={14} color="white" className="mr-2" />
+                                                <Text className="text-white font-bold">Book</Text>
+                                            </Pressable>
+                                        </View>
+                                    </View>
+                                );
+                            }}
+                        />
+                    ) : (
+                        <View className="flex-1 items-center justify-center p-4">
+                            <Text className="text-gray-500 text-lg">No available offers for the branch!</Text>
+                        </View>
+                    )}
+
+                    <Modal transparent={true} animationType="slide" visible={isModalVisible} onRequestClose={handleCancel}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <Pressable className="absolute top-3 right-3" onPress={handleCancel}>
+                                    <AntDesign name="closecircle" size={24} color="#78450f" />
+                                </Pressable>
+                                {confirmationMessage ? (
+                                    <Text className="text-xl font-bold text-center mb-4 mt-7">{confirmationMessage}</Text>
+                                ) : (
+                                    <>
+                                        <Text className="text-xl font-bold text-center mb-4 mt-7">Do you want to book this service?</Text>
+                                        <View className="flex-row justify-between">
+                                            <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
+                                                <Text className="text-center text-black font-bold">Cancel</Text>
+                                            </Pressable>
+                                            <Pressable className="flex-1 bg-amber-900 py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
+                                                <Text className="text-center text-white font-bold">Confirm</Text>
+                                            </Pressable>
+                                        </View>
+                                    </>
+                                )}
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
-            </Modal>
-        </View>
+            </ScrollView>
+        </SafeAreaView>
+
     );
 };
 

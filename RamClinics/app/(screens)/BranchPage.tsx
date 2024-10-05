@@ -35,10 +35,10 @@ const BranchPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title="Select Branch" isPushBack={true} />
-                <View className="pt-8">
+                {/* <View className="pt-8">
                     <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
-                </View>
-                <View className="flex-1 pt-4 space-y-4 ">
+                </View> */}
+                <View className="flex-1 pt-6 space-y-4 ">
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
                         data={branches}
