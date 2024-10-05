@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -7,10 +6,10 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { doctorSpecialityData2 } from "../../constants/data";
 import specialityService from "../../domain/services/SpecialityService";
@@ -19,120 +18,128 @@ import Searchbox from "../../components/ui/Searchbox";
 
 const DoctorSpecialityPage = () => {
 
-  let [specialityList, setSpecialityList] = useState([]);
-  const [searchValue, setSearchValue] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { branchId, fromSpeciality, department, callCenterFlow } = useLocalSearchParams();
+  const [ specialityList, setSpecialityList ] = useState([]);
+  const [ searchValue, setSearchValue ] = useState([]);
 
-  useEffect(() => {
+  const fetchSpecialities = async () => {
     if (department != null) {
-      setLoading(true);
-      specialityService.getByDept(department)
-        .then((response) => {
-          setSpecialityList(
-            +callCenterFlow
-              ? response.data
-              : response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both"))
-          )
-        })
-        .finally(() => setLoading(false));
+      if (+callCenterFlow) {
+        const response = await specialityService.getSpecialityServiceByDepartmentTest(department)
+        setSpecialityList(response.data)
+        console.log("response.data: ", response.data)
+      } else {
+        const response = await specialityService.getByDept(department)
+        setSpecialityList(
+          +callCenterFlow
+            ? response.data
+            : response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both"))
+        )
+      }
     } else {
-      specialityService.findAll().then((response) => {
-        setSpecialityList(response.data);
-      })
-      .finally(() => setLoading(false));
+      const response = await specialityService.findAll()
+      setSpecialityList(response.data)
     }
+  }
 
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      fetchSpecialities()
+    }, [])
+  )
 
 
-  // useEffect(() => {
-  //   if (searchValue) {
-  //     const filtered = specialtyList.filter((doc) =>
-  //       doc.name.toLowerCase().includes(searchValue.toLowerCase())
-  //     );
-  //     setSpecialty(filtered); 
-  //   } else {
-  //     setSpecialty(specialtyList); 
-  //   }
-  // }, []);
+  function selectSpeciality(code: any, speciality: any, services: any) {
+    console.log("fromSpeciality: ", fromSpeciality)
+    console.log("")
+    if (+callCenterFlow) {
+      router.push({
+        pathname: "/ServicesListPage",
+        params: {
+          city: null,
+          fromSpeciality: fromSpeciality,
+          department: department,
+          callCenterFlow: callCenterFlow,
+          specialityCode: code,
+          speciality: speciality,
+          services: JSON.stringify(services)
+        }
+      })
+      // router.push({
+      //   pathname: "/CityPage",
+      //   params: {
+      //     city: null,
+      //     fromSpeciality: fromSpeciality,
+      //     department: department,
+      //     callCenterFlow: callCenterFlow,
+      //     speciality: speciality
+      //   }
+      // })
+    } else {
+      if (+fromSpeciality) {
+        router.push({
+          pathname: "/BranchPage",
+          params: {
+            city: null,
+            fromSpeciality: fromSpeciality,
+            department: department,
+            speciality: speciality,
+            specialityCode: code,
+            callCenterFlow: callCenterFlow,
+            devices: JSON.stringify(""),
+            responsible: "",
+            callOrReception: ""
+          }
+        })
+      } else {
+        router.push({
+          pathname: "/BranchDoctor",
+          params: {
+            branchId: branchId,
+            fromSpeciality: fromSpeciality,
+            department: department,
+            speciality: speciality
+          }
+        })
+      }
+    }
+  }
+
 
   return (
     <SafeAreaView>
       <ScrollView className="p-6">
         <HeaderWithBackButton title="Doctor Speciality" isPushBack={true} />
-        {/* <View className="pt-8 pb-4">
+        <View className="pt-8 ">
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
-        </View> */}
-        {loading ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
-            <ActivityIndicator size="large" color="#FF9900" />
-            <Text className="mt-2">Loading Specialties...</Text>
-          </View>
-        ) : (
-          <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
-            {specialityList.map(({ name }, idx) => (
-              <Pressable
-                onPress={() => {
-                  +callCenterFlow
-                    ?
-                    router.push({
-                      pathname: "/CityPage",
-                      params: {
-                        city: null,
-                        fromSpeciality: fromSpeciality,
-                        department: department,
-                        callCenterFlow: callCenterFlow,
-                        speciality: name
-                      }
-                    })
-                    :
-                    +fromSpeciality
-                      ?
-                      router.push({
-                        pathname: "/BranchPage",
-                        params: {
-                          city: null,
-                          fromSpeciality: fromSpeciality,
-                          department: department,
-                          speciality: name
-                        }
-                      })
-                      :
-                      router.push({
-                        pathname: "/BranchDoctor",
-                        params: {
-                          branchId: branchId,
-                          fromSpeciality: fromSpeciality,
-                          department: department,
-                          speciality: name
-                        }
-                      })
-                }}
-                className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
-                key={idx}
-              >
-                <View className="p-3 rounded-md border border-amber-900">
-                  <Image source={specialityIcon} />
-                </View>
-                <Text className="text-base font-semibold pt-3">{name}</Text>
-                {
-                  +fromSpeciality
-                    ?
-                    <Text className="item-center flex-row text-amber-900 pt-1">
-                      Select branch {" "}
-                      <Feather name="arrow-right" size={14} color="#454567" />{" "}
-                    </Text>
-                    :
-                    <Text className="item-center flex-row text-amber-900 pt-1">
-                      Select doctor {" "}
-                      <Feather name="arrow-right" size={14} color="#454567" />{" "}
-                    </Text>
-                }
-              </Pressable>
-            ))}
-          </View>
-        )}
+        </View>
+        <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
+          {specialityList.map(({ code, name, services }, idx) => (
+            <Pressable
+              onPress={() => { selectSpeciality(code, name, services) }}
+              className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
+              key={idx}
+            >
+              <View className="p-3 rounded-md border border-amber-900">
+                <Image source={specialityIcon} />
+              </View>
+              <Text className="text-base font-semibold pt-3">{name}</Text>
+              {
+                +fromSpeciality
+                  ?
+                  <Text className="item-center flex-row text-amber-900 pt-1">
+                    Select branch {" "}
+                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                  </Text>
+                  :
+                  <Text className="item-center flex-row text-amber-900 pt-1">
+                    Select doctor {" "}
+                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                  </Text>
+              }
+            </Pressable>
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView >
   );

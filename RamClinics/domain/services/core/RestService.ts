@@ -20,7 +20,6 @@ export class RestService<T> {
   }
 
   findAll() {
-    console.log('>>>>> ' + this.entityName)
     return http.getAPI(this.entityName);
   }
 

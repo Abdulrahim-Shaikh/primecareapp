@@ -25,7 +25,13 @@ const BookAppointmentOptions = () => {
             params: {
                 city: city,
                 fromSpeciality: fromSpeciality,
-                department: department
+                department: department,
+                speciality: null,
+                specialityCode: null,
+                callCenterFlow: 0,
+                devices: JSON.stringify(""),
+                responsible: "",
+                callOrReception: ""
             }
         },
         {
@@ -39,13 +45,13 @@ const BookAppointmentOptions = () => {
             id: 3,
             icon: 'file-waveform',
             title: "By Service",
-            link: "/ServiceListPage",
+            link: "/NormalFlow",
             params: { department: department }
         },
         {
             id: 4,
             icon: 'file-waveform',
-            title: "By Service2",
+            title: "Call Center",
             link: "/DoctorSpecialityPage",
             params: { 
                 branchId: null,

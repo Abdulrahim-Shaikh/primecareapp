@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { PROD_LINK } from '@env';
 import { UAT_LINK } from '@env';
+import { CLAIMS_LINK } from '@env';
 
 class HttpService {
 
@@ -29,8 +30,6 @@ class HttpService {
     }
 
     getAPI(path: string) {
-        console.log("PROD: ", PROD_LINK);
-        console.log("UAT: ", UAT_LINK);
         return axios.get(this.baseUrl + path, this.getHeaders());
     }
 
