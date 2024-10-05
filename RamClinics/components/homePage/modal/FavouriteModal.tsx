@@ -1,5 +1,6 @@
 import {
   Modal,
+  Platform,
   ScrollView,
   StyleSheet, View
 } from "react-native";
@@ -24,11 +25,12 @@ const FavouriteModal = ({
 
   return (
     <Modal visible={showFavouriteModal} animationType="slide">
-      <ScrollView className="p-6">
+      <View className={Platform.OS === 'ios' ? "pt-20 px-6" : "pt-8 px-6"}>
         <HeaderWithBackButton
           setModal={setShowFavouriteModal}
-          title="Favourite Modal"
-        />
+          title="Favourite Modal" />
+      </View>
+      <ScrollView className="p-6">
 
         <View className="flex flex-row justify-between items-center pt-6 w-full">
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />

@@ -284,7 +284,7 @@ const SingUp = () => {
               <Text className="text-base text-amber-900 text-center">
                 Already have an account?{" "}
                 <Text
-                  className="text-indigo-950 underline underline-offset-8"
+                  className="text-lime-600 underline underline-offset-8"
                   onPress={() => router.push("/SignIn")}
                 >
                   Login

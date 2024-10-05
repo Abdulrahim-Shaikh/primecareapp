@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
 import NASButton from "../../components/NASButton";
-import logo from "../../assets/images/logo_transparent.png";
+import logo from "../../assets/logo/logo-ram-clinic.png";
 
 const SignIn = () => {
 
@@ -38,7 +38,7 @@ const SignIn = () => {
       <ScrollView>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
           <View className="items-center pb-6">
-            <Image source={logo} style={{ maxHeight: 160, maxWidth: 240}}/>
+            <Image source={logo} style={{ maxHeight: 140, maxWidth: 200}}/>
           </View>
           <Text className="text-2xl font-bold text-center">Sign In</Text>
           <Text className="text-[14px] text-amber-900 text-center pt-3">
@@ -86,7 +86,7 @@ const SignIn = () => {
               <Text className="text-base text-amber-900 text-center">
                 Don't have an account?{" "}
                 <Text
-                  className="text-indigo-950 underline underline-offset-8"
+                  className="text-lime-600 underline underline-offset-8"
                   onPress={() => router.push("/SignUp")}
                 >
                   Sign up
