@@ -63,12 +63,12 @@ const TopDoctor =  ({ showBackButton = false }) => {
 
   return (
     <SafeAreaView>
-      <ScrollView className="pt-6">
+      <ScrollView className="">
         <View className="px-6">
         {showBackButton ? (
             <HeaderWithBackButton isPushBack={true} title="Top Doctor" />
           ) : (
-            <Text className="text-4xl font-bold text-amber-900 text-start">
+            <Text className="text-xl font-semibold text-start">
               Top Doctor
             </Text>
           )}
