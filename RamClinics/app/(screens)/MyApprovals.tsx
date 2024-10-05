@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, ActivityIndicator, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -97,7 +97,7 @@ const MyApprovals = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="py-8 px-6">
+                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Approvals" />
                         <MaterialCommunityIcons name="receipt" size={24} color={"rgb(132 204 22)"} />
@@ -105,14 +105,14 @@ const MyApprovals = () => {
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {moment(fromDate).format("YYYY-MM-DD")}</Text>
+                            <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {moment(toDate).format("YYYY-MM-DD")}</Text>
+                            <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />

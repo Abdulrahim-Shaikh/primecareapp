@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -8,6 +8,7 @@ import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { useUserSate } from "../../domain/state/UserState";
 import SickLeavesReport from "./SickLeavesReport";
 import vitalSignsService from "../../domain/services/VitalSignsService";
+import moment from "moment";
 
 const tabNames = [
     { label: "In Progress", value: "in-progress" },
@@ -104,7 +105,7 @@ const MyVitalSigns = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="py-8 px-6">
+                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Vital Signs" />
                         <MaterialCommunityIcons
@@ -116,14 +117,14 @@ const MyVitalSigns = () => {
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {fromDate.toLocaleDateString()}</Text>
+                            <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {toDate.toLocaleDateString()}</Text>
+                            <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
@@ -147,8 +148,8 @@ const MyVitalSigns = () => {
 
                     <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
-                            <Pressable key={idx} onPress={() => setActiveTab(item.value)} className={`flex-1 border-b-2 pb-2 ${activeTab === item.value ? "border-yellow-500" : "border-transparent"}`}>
-                                <Text className={`text-center font-semibold ${activeTab === item.value ? "text-yellow-500" : "text-gray-700"}`}>
+                            <Pressable key={idx} onPress={() => setActiveTab(item.value)} className={`flex-1 border-b-2 pb-2 ${activeTab === item.value ? "border-amber-900" : "border-transparent"}`}>
+                                <Text className={`text-center font-semibold ${activeTab === item.value ? "text-amber-900" : "text-gray-700"}`}>
                                     {item.label}
                                 </Text>
                             </Pressable>

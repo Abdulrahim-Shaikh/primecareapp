@@ -27,6 +27,7 @@ import appointmentService from "../../domain/services/AppointmentService";
 import { useUserSate } from "../../domain/state/UserState";
 import branchService from "../../domain/services/BranchService";
 import patientService from "../../domain/services/PatientService";
+import moment from "moment";
 
 
 const tabNames = ["Booked", "Checked In"];
@@ -120,12 +121,12 @@ const Appoinment = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View className=" pb-8 px-6">
+        <View className="pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6">
             <MaterialCommunityIcons
               name="calendar-check-outline"
               size={24}
-              color={"rgb(132 204 22)"}
+              color={"rgb(120 53 15)"}
             />
             <Text className="text-2xl font-semibold">My Appointments</Text>
           </View>
@@ -134,13 +135,13 @@ const Appoinment = () => {
           </View>
           <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-              <Text className="text-lg">From: {fromDate.toLocaleDateString()}</Text>
+              <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
             </Pressable>
             {isFromDatePickerOpen && (
               <DateTimePicker value={fromDate} mode="date" display="default" onChange={onStartDateChange} />
             )}
             <Pressable onPress={() => setIsToDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-              <Text className="text-lg">To: {(new Date(toDate)).toLocaleDateString()}</Text>
+              <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
             </Pressable>
             {isToDatePickerOpen && (
               <DateTimePicker value={toDate} mode="date" display="default" onChange={onEndDateChange} />

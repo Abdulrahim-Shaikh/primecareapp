@@ -31,7 +31,6 @@ class HttpService {
     getAPI(path: string) {
         console.log("PROD: ", PROD_LINK);
         console.log("UAT: ", UAT_LINK);
-        // console.log("UAT: ", Base);
         return axios.get(this.baseUrl + path, this.getHeaders());
     }
 

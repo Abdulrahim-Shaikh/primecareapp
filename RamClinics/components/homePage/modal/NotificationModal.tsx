@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -13,6 +14,7 @@ import HeaderWithBackButton from "../../ui/HeaderWithBackButton";
 import appointmentService from "../../../domain/services/AppointmentService";
 import { useUserSate } from "../../../domain/state/UserState";
 import patientService from "../../../domain/services/PatientService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const sortByOptions = ["All Time", "Last 7 Days", "Last 1 Month", "Last 6 Month"];
 
@@ -124,33 +126,33 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
 
   return (
     <Modal visible={showNotification} animationType="slide">
-      <ScrollView>
-        <View className="p-6">
-          <HeaderWithBackButton setModal={setShowNotification} title="Notification" />
-
-          <View className="pt-8 pb-5 border-b border-dashed border-amber-900 flex flex-row justify-between items-center">
-            <Text className="text-lg font-semibold">Latest Update</Text>
-            {/* <View className="flex flex-row gap-2 items-center">
-              <Text className="text-[12px]">Sort By{":"}</Text>
-              <Pressable className="z-50 border border-amber-900 rounded-lg">
-                <Text className="px-4 py-2" onPress={() => setShow((prev) => !prev)}>
-                  {sortBy} <Feather name="chevron-down" size={18} />
-                </Text>
-              </Pressable>
-            </View> */}
-          </View>
-
-          {loading ? (
-            <View className="flex-1 justify-center items-center">
-              <ActivityIndicator size="large" color="#ffcc00" />
+      <SafeAreaView>
+        <ScrollView>
+          <View className={Platform.OS === 'ios' ? "py-20 px-6" : "py-8 px-6"}>
+            <HeaderWithBackButton setModal={setShowNotification} title="Notification" />
+            <View className="pt-8 pb-5 border-b border-dashed border-amber-900 flex flex-row justify-between items-center">
+              <Text className="text-lg font-semibold">Latest Update</Text>
+              {/* <View className="flex flex-row gap-2 items-center">
+                      <Text className="text-[12px]">Sort By{":"}</Text>
+                      <Pressable className="z-50 border border-amber-900 rounded-lg">
+                        <Text className="px-4 py-2" onPress={() => setShow((prev) => !prev)}>
+                          {sortBy} <Feather name="chevron-down" size={18} />
+                        </Text>
+                      </Pressable>
+                    </View> */}
             </View>
-          ) : notifications.length > 0 ? (
-            notifications.map(renderNotification)
-          ) : (
-            <Text className="text-center pt-5">No notifications available.</Text>
-          )}
-        </View>
-      </ScrollView>
+            {loading ? (
+              <View className="flex-1 justify-center items-center">
+                <ActivityIndicator size="large" color="#ffcc00" />
+              </View>
+            ) : notifications.length > 0 ? (
+              notifications.map(renderNotification)
+            ) : (
+              <Text className="text-center pt-5">No notifications available.</Text>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </Modal>
   );
 };

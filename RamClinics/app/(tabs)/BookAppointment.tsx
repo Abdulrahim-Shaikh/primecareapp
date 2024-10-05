@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import React from "react";
 
 // get departments by branch
 const serviceData = [
@@ -47,7 +48,7 @@ const BookAppointment = () => {
                         <MaterialCommunityIcons
                             name="calendar-check-outline"
                             size={24}
-                            color={"rgb(132 204 22)"}
+                            color={"rgb(120 53 15)"}
                         />
                         <Text className="text-2xl font-semibold">Book Appointment</Text>
                     </View>

@@ -58,7 +58,7 @@ const ProfileTab = () => {
       <ScrollView>
         <View className=" pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
-            <AntDesign name="user" size={24} color={"rgb(132 204 22)"} />
+            <AntDesign name="user" size={24} color={"rgb(120 53 15)"} />
             <Text className="text-2xl font-semibold">User Settings</Text>
           </View>
           <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">

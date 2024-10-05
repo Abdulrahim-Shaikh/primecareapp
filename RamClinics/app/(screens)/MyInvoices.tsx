@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, Pressable, Modal, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, Pressable, Modal, StyleSheet, ActivityIndicator, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -8,6 +8,7 @@ import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import invoiceService from "../../domain/services/InvoiceService";
 import { useUserSate } from "../../domain/state/UserState";
 import PdfViewer from "./PDFViewer";
+import moment from "moment";
 
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
 
@@ -121,7 +122,7 @@ const MyInvoices = () => {
     return (
         <SafeAreaView className="flex-1 bg-gray-100">
             <ScrollView>
-                <View className="py-8 px-6">
+                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Invoices" />
                         <MaterialCommunityIcons name="receipt" size={24} color={"rgb(132 204 22)"} />
@@ -129,14 +130,14 @@ const MyInvoices = () => {
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {fromDate.toLocaleDateString()}</Text>
+                            <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {toDate.toLocaleDateString()}</Text>
+                            <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
