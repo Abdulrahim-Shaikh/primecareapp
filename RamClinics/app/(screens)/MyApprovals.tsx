@@ -61,11 +61,11 @@ const MyApprovals = () => {
         }
 
         try {
-            const approvalsResponse = await patientService.getByMobileNo(user.mobile);
-            // console.log("Fetched approvals:", approvalsResponse.data);
-            setPatient(approvalsResponse.data);
+            const patientRes = await patientService.getByMobileNo(user.mobile);
+            // console.log("Fetched approvals:", patientRes.data);
+            setPatient(patientRes.data);
         } catch (error) {
-            console.error("Failed to fetch approvals:", error);
+            console.error("Failed to fetch patient:", error);
         } finally {
             setLoading(false);
         }
