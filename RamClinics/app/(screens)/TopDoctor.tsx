@@ -26,7 +26,7 @@ const specialityList = [
   "Machine"
 ];
 
-const TopDoctor = () => {
+const TopDoctor =  ({ showBackButton = false }) => {
   const { user, setUser } = useUserSate();
   const [doctor, setDoctor] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
@@ -65,7 +65,13 @@ const TopDoctor = () => {
     <SafeAreaView>
       <ScrollView className="pt-6">
         <View className="px-6">
-          <HeaderWithBackButton isPushBack={true} title="Top Doctor" />
+        {showBackButton ? (
+            <HeaderWithBackButton isPushBack={true} title="Top Doctor" />
+          ) : (
+            <Text className="text-4xl font-bold text-amber-900 text-start">
+              Top Doctor
+            </Text>
+          )}
         </View>
         <View className="pt-8 px-6 ">
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />

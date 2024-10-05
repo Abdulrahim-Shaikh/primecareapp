@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -20,22 +21,26 @@ const DoctorSpecialityPage = () => {
 
   let [specialityList, setSpecialityList] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
-  const {branchId, fromSpeciality, department, callCenterFlow} = useLocalSearchParams();
+  const [loading, setLoading] = useState(true);
+  const { branchId, fromSpeciality, department, callCenterFlow } = useLocalSearchParams();
 
   useEffect(() => {
     if (department != null) {
+      setLoading(true);
       specialityService.getByDept(department)
         .then((response) => {
           setSpecialityList(
             +callCenterFlow
-            ? response.data
-            : response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both"))
+              ? response.data
+              : response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both"))
           )
         })
+        .finally(() => setLoading(false));
     } else {
       specialityService.findAll().then((response) => {
         setSpecialityList(response.data);
       })
+      .finally(() => setLoading(false));
     }
 
   }, [])
@@ -59,12 +64,18 @@ const DoctorSpecialityPage = () => {
         <View className="pt-8 ">
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View>
-        <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
-          {specialityList.map(({ name }, idx) => (
-            <Pressable
-              onPress={() => {
-                +callCenterFlow
-                ? 
+        {loading ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
+            <ActivityIndicator size="large" color="#FF9900" />
+            <Text className="mt-2">Loading Specialties...</Text>
+          </View>
+        ) : (
+          <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
+            {specialityList.map(({ name }, idx) => (
+              <Pressable
+                onPress={() => {
+                  +callCenterFlow
+                    ?
                     router.push({
                       pathname: "/CityPage",
                       params: {
@@ -75,52 +86,53 @@ const DoctorSpecialityPage = () => {
                         speciality: name
                       }
                     })
-                :
+                    :
+                    +fromSpeciality
+                      ?
+                      router.push({
+                        pathname: "/BranchPage",
+                        params: {
+                          city: null,
+                          fromSpeciality: fromSpeciality,
+                          department: department,
+                          speciality: name
+                        }
+                      })
+                      :
+                      router.push({
+                        pathname: "/BranchDoctor",
+                        params: {
+                          branchId: branchId,
+                          fromSpeciality: fromSpeciality,
+                          department: department,
+                          speciality: name
+                        }
+                      })
+                }}
+                className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
+                key={idx}
+              >
+                <View className="p-3 rounded-md border border-amber-900">
+                  <Image source={specialityIcon} />
+                </View>
+                <Text className="text-base font-semibold pt-3">{name}</Text>
+                {
                   +fromSpeciality
                     ?
-                    router.push({
-                      pathname: "/BranchPage",
-                      params: {
-                        city: null,
-                        fromSpeciality: fromSpeciality,
-                        department: department,
-                        speciality: name
-                      }
-                    })
+                    <Text className="item-center flex-row text-amber-900 pt-1">
+                      Select branch {" "}
+                      <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                    </Text>
                     :
-                    router.push({
-                      pathname: "/BranchDoctor",
-                      params: {
-                        branchId: branchId,
-                        fromSpeciality: fromSpeciality,
-                        department: department,
-                        speciality: name
-                      }
-                    })
-              }}
-              className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
-              key={idx}
-            >
-              <View className="p-3 rounded-md border border-amber-900">
-                <Image source={specialityIcon} />
-              </View>
-              <Text className="text-base font-semibold pt-3">{name}</Text>
-              {
-                +fromSpeciality
-                  ?
-                  <Text className="item-center flex-row text-amber-900 pt-1">
-                    Select branch {" "}
-                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
-                  </Text>
-                  :
-                  <Text className="item-center flex-row text-amber-900 pt-1">
-                    Select doctor {" "}
-                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
-                  </Text>
-              }
-            </Pressable>
-          ))}
-        </View>
+                    <Text className="item-center flex-row text-amber-900 pt-1">
+                      Select doctor {" "}
+                      <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                    </Text>
+                }
+              </Pressable>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView >
   );

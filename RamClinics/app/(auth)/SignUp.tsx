@@ -109,13 +109,17 @@ const SingUp = () => {
     // console.log(signupForm);
     if (firstName && lastName && dob && mobileNo && selectedBranch && gender) {
       patientService.save(signupForm).then((res)=>{
+        Alert.alert("Success", "Registered Successfully!", [
+          { text: "OK", onPress: () => router.push("/SignIn") }
+        ]);
         // console.log("Patient saved Successfully", res.data);
       }).catch((error) => {
       console.error("Failed to save Patient:", error);
+      Alert.alert("Error", "Please try again later.");
     });
     } else {
       console.log("Mandatory Fields Missing!");
-      Alert.alert("Mandatory Fields Missing!");
+      Alert.alert("Mandatory Fields Missing!", "Please fill in all required fields.");
     }
   };
 

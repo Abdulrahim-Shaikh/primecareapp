@@ -70,7 +70,7 @@ const Home = () => {
           <UpcomingSlider />
           <DoctorSpeciality />
           {loggedIn && (<MainMenu />)}
-          <TopDoctor />
+          <TopDoctor showBackButton={false} />
         </View>
 
         <NotificationModal

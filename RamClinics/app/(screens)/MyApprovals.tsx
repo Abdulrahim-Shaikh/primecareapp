@@ -149,7 +149,7 @@ const MyApprovals = () => {
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             approvals.length === 0 ? (
-                                <Text className="text-center text-lg text-gray-600 mt-4">No aprrovals available.</Text>
+                                <Text className="text-center text-lg text-gray-600 mt-4">No approvals available.</Text>
                             ) : (
                                 activeTab === "Cancelled" ?
                                     cancelledApps.map((apprval: any) => (
