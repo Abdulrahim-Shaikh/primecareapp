@@ -531,6 +531,18 @@ export const profileSettings = [
     name: "Help Center",
     link: "/HelpSupport",
   },
+  {
+    id: 8,
+    icon: "list",
+    name: "Terms & Conditions",
+    link: "/TermsAndConditions",
+  },
+  {
+    id: 9,
+    icon: "globe-outline",
+    name: "Our Website",
+    link: "https://ramclinics.net/?lang=en",
+  },
 ];
 
 export const scheduleDates = [
