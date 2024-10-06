@@ -10,8 +10,8 @@ const AboutUs = () => {
         <SafeAreaView>
             <ScrollView className="bg-gray-100 p-5">
                 <View className="bg-gray-100 pb-10">
-                <HeaderWithBackButton isPushBack={true}/>
-                    <Text className="text-3xl font-bold text-center text-teal-600 mb-5 mt-5">About Us</Text>
+                <HeaderWithBackButton isPushBack={true} title="About Us" />
+                    {/* <Text className="text-3xl font-bold text-center text-teal-600 mb-5 mt-5">About Us</Text> */}
                     <Text className="text-4xl font-bold text-gray-800 mb-5 mt-5">
                         <Text className="text-amber-500">Quality</Text>, <Text className="text-teal-500">Safety</Text>,
                         <Text className="text-amber-500"> Customer Satisfaction</Text>, and Finally <Text className="text-teal-500">Credibility</Text>.

@@ -6,6 +6,10 @@ export class SickLeavesService extends RestService<any> {
         return this.get("byPatientId/" + patientId);
     }
 
+    byPatientIds(patientId: any) {
+        return this.getQuery("byPatientId/" + patientId);
+    }
+
 }
 const sickLeavesService = new SickLeavesService('patientconsentform');
 export default sickLeavesService;

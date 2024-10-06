@@ -42,6 +42,16 @@ const MyInvoices = () => {
         setToDate(currentDate);
     };
 
+    const { data, status, isLoading } = invoiceService.invoicesByPatientIds(userId);
+
+    useEffect(() => {
+        console.log('API response', data, status);
+        if (data && status === "success") {
+            setInvoices(data);
+            setFilteredInvoices(data);
+        }
+    }, [data, status]);
+
     const filterInvoices = () => {
         let filtered = invoices?.filter((item: any) => item.invoiceStatus === activeTab) || [];
         if (selectedValue) {
@@ -54,30 +64,30 @@ const MyInvoices = () => {
         setFilteredInvoices(filtered);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch branches:", error);
-        }
+    // const fetchData = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const branchesResponse = await branchService.findAll();
+    //         setBranches(branchesResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch branches:", error);
+    //     }
 
-        try {
-            const invoicesResponse = await invoiceService.invoicesByPatientId(userId);
-            // console.log("Fetched invoices:", invoicesResponse.data);
-            setInvoices(invoicesResponse.data);
-            setFilteredInvoices(invoicesResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch invoices:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     try {
+    //         const invoicesResponse = await invoiceService.invoicesByPatientId(userId);
+    //         // console.log("Fetched invoices:", invoicesResponse.data);
+    //         setInvoices(invoicesResponse.data);
+    //         setFilteredInvoices(invoicesResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch invoices:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     // useEffect(() => {
     //     setLoading(true);
@@ -122,7 +132,7 @@ const MyInvoices = () => {
     return (
         <SafeAreaView className="flex-1 bg-gray-100">
             <ScrollView>
-                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
+                <View className={Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Invoices" />
                         <MaterialCommunityIcons name="receipt" size={24} color={"rgb(120 53 15)"} />
@@ -170,7 +180,7 @@ const MyInvoices = () => {
                     </View>
 
                     <View>
-                        {loading ? (
+                        {isLoading ? (
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) : filteredInvoices.length === 0 ? (
                             <Text className="text-center text-lg text-gray-600 mt-4">No invoices available for this filter.
