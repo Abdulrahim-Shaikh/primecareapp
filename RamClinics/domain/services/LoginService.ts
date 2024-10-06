@@ -7,6 +7,12 @@ export class LoginService extends RestService<any> {
         return this.get("generateAndSendOtp/" + mobileNo);
     }
 
+
+    useGenerateOtp(mobileNo: any) {
+        mobileNo = this.formateMobileNo(mobileNo);
+        return this.getQuery("generateOtp/" + mobileNo);
+    }
+
     byMobileNo(mobileNo: any) {
         mobileNo = this.formateMobileNo(mobileNo);
         return this.get("byMobileNo/" + mobileNo);

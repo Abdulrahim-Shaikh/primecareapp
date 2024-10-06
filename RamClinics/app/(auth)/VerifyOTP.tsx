@@ -20,15 +20,22 @@ const VerifyOTP = () => {
   const [otpResp, setOtpResp] = useState({ otp: '9999' });
   const [otp, setOtp] = useState('');
   const [loader, setLoader] = useState(false);
+
+  const {data, status} = loginService.useGenerateOtp(mobileNo);
   // let otp: string = '';
 
   useEffect(() => {
+    console.log( 'API res', data, status)
     getData();    
   }, [])
 
+  useEffect(() => {
+    console.log( 'API res', data, status)     
+  }, [data])
 
   const getData = async () => {
     const response = await loginService.generateOtp(mobileNo);
+    const resp = loginService.useGenerateOtp(mobileNo);
     setOtpResp(response.data);
   // hardcoded values?
     if (mobileNo == '0568165257' || mobileNo == '568165257') {
@@ -88,7 +95,7 @@ const VerifyOTP = () => {
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
           <Text className="text-2xl font-bold text-center">Verify OTP</Text>
           <Text className="text-[14px] text-amber-900 text-center pt-3">
-            Enter OTP code received to authenticate your identity and complete verification
+            Enter OTP code received to authenticate your identity and complete verification - {status}
           </Text>
           <View className="w-full pt-8 pb-4 ">
             <OtpInputField disabled={false} onPress={onPressOtp} />

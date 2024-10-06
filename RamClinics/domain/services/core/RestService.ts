@@ -35,6 +35,10 @@ export class RestService<T> {
     return http.getAPI(this.entityName + '/' + path);
   }
 
+  getQuery(path: string) {
+    return http.getAPIQuery(this.entityName + '/' + path, {});
+  }
+
   put(path: string, entity: any) {
     return http.putAPI(this.entityName + '/' + path, entity);
   }

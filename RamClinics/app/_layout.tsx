@@ -3,9 +3,14 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import "../global.css";
 import { UserProvider } from "../domain/contexts/UserContext";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+
+  const client = new QueryClient();
+
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -26,6 +31,7 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
   return (
 
+  <QueryClientProvider client={client}>
     <UserProvider>
       <Stack initialRouteName="(tabs)">
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -55,6 +61,7 @@ const RootLayout = () => {
         <Stack.Screen name="(screens)" options={{ headerShown: false }} />
       </Stack>
     </UserProvider>
+    </QueryClientProvider>
   );
 };
 

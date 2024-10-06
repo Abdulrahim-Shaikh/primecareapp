@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { PROD_LINK } from '@env';
 import { UAT_LINK } from '@env';
-import { CLAIMS_LINK } from '@env';
-
+import {
+    useQuery
+} from "@tanstack/react-query";
 class HttpService {
 
     private userId: string = '';
@@ -30,7 +30,13 @@ class HttpService {
     }
 
     getAPI(path: string) {
+        console.log(path);
         return axios.get(this.baseUrl + path, this.getHeaders());
+    }
+
+    getAPIQuery(path: string,options: any) {
+        console.log(path);
+        return useQuery({queryKey: [path], queryFn:  async () => (await this.getAPI(path)).data,...options});
     }
 
     postAPI(path: string, entity: any) {
