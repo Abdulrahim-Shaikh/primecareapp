@@ -31,7 +31,7 @@ const DoctorSpeciality = () => {
               }
             })
           }
-          className=" font-semibold text-amber-900">
+          className=" font-semibold text-pc-primary">
           View All
         </Text>
       </View>
@@ -52,7 +52,7 @@ const DoctorSpeciality = () => {
               keyExtractor={(item, index) => "key" + index}
               renderItem={({ item }) => (
                 <View className="">
-                  <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg"
+                  <Pressable className="flex flex-row border border-pc-primary p-2 rounded-lg"
                     onPress={() =>
                       router.push({
                         pathname: "/BranchPage",
@@ -70,7 +70,7 @@ const DoctorSpeciality = () => {
                       })
                     }
                     >
-                    <Text className=" bg-amber-900 rounded-md p-3 flex justify-center items-center">
+                    <Text className=" bg-[rgb(59,35,20)] rounded-md p-3 flex justify-center items-center">
                       <Ionicons name={'medical'} size={24} color={"white"} />
                     </Text>
                     <View className="px-3">

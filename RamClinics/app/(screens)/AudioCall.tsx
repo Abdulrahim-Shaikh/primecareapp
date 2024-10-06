@@ -32,7 +32,7 @@ const AudioCall = () => {
           </Pressable>
           <Pressable
             onPress={() => router.push("/VideoCall")}
-            className="p-5 rounded-full bg-amber-900"
+            className="p-5 rounded-full bg-[rgb(59,35,20)]"
           >
             <Feather name="video" size={24} color="white" />
           </Pressable>

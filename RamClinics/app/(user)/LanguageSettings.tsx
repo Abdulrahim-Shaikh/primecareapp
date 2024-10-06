@@ -26,8 +26,8 @@ const LanguageSettings = () => {
       <ScrollView>
         <View className="p-6">
           <HeaderWithBackButton isPushBack={true} title="Language" />
-          {/* <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
-            <Text className="text-base font-semibold text-amber-900">
+          {/* <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
+            <Text className="text-base font-semibold text-pc-primary">
               Suggested
             </Text>
 
@@ -39,7 +39,7 @@ const LanguageSettings = () => {
                   className={`flex-row justify-between items-center pt-4 ${
                     suggestedLanguage.length === idx + 1
                       ? ""
-                      : "border-b border-dashed border-amber-900 pb-4"
+                      : "border-b border-dashed border-pc-primary pb-4"
                   }`}
                 >
                   <Text className="text-base font-medium">{item}</Text>
@@ -48,8 +48,8 @@ const LanguageSettings = () => {
               ))}
             </View>
           </View> */}
-          <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
-            <Text className="text-base font-semibold text-amber-900">
+          <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
+            <Text className="text-base font-semibold text-pc-primary">
               Select Language
             </Text>
 
@@ -61,7 +61,7 @@ const LanguageSettings = () => {
                   className={`flex-row justify-between items-center pt-4 ${
                     LanguageList.length === idx + 1
                       ? ""
-                      : "border-b border-dashed border-amber-900 pb-4"
+                      : "border-b border-dashed border-pc-primary pb-4"
                   }`}
                 >
                   <Text className="text-base font-medium">{item}</Text>

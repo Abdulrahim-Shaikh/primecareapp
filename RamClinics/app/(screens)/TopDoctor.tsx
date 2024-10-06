@@ -88,7 +88,7 @@ const TopDoctor =  ({ showBackButton = false }) => {
               <Pressable>
                 <Text
                   onPress={() => setActiveSpeciality(index)}
-                  className={`text-base border border-amber-900 rounded-md py-1 px-3 ${index === activeSpeciality ? "text-white bg-amber-900" : ""
+                  className={`text-base border border-pc-primary rounded-md py-1 px-3 ${index === activeSpeciality ? "text-white bg-[rgb(59,35,20)]" : ""
                     }`}
                 >
                   {item}

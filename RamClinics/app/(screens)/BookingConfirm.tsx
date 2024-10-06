@@ -14,13 +14,13 @@ const BookingConfirm = () => {
           <HeaderWithBackButton isPushBack={true} />
 
           <View className=" justify-center items-center pt-4">
-            <Text className="p-6 rounded-full bg-amber-900">
+            <Text className="p-6 rounded-full bg-[rgb(59,35,20)]">
               <Feather name="check" size={40} color="white" />
             </Text>
             <Text className="text-2xl font-semibold pt-4">
               Booking Confirmed
             </Text>
-            <Text className="text-amber-900 pt-3 text-center">
+            <Text className="text-pc-primary pt-3 text-center">
               Dr. Jenny Wilson is a highly skilled cardiologist dedicated to
               providing exceptional cardiac care. With{" "}
             </Text>
@@ -33,40 +33,40 @@ const BookingConfirm = () => {
             style={styles.boxShadow}
           >
             <View className=" justify-between items-center flex-row">
-              <Text className="text-amber-900">ID : 656352165</Text>
-              <View className="h-8 w-8 rounded-full border border-amber-900 justify-center items-center">
+              <Text className="text-pc-primary">ID : 656352165</Text>
+              <View className="h-8 w-8 rounded-full border border-pc-primary justify-center items-center">
                 <Text>
                   <AntDesign name="edit" size={16} color="#c3c3ce" />
                 </Text>
               </View>
             </View>
-            <View className="flex-row justify-start items-center pt-3 pb-8 border-b border-dashed border-amber-900">
+            <View className="flex-row justify-start items-center pt-3 pb-8 border-b border-dashed border-pc-primary">
               <View>
                 <Image source={profileImg} />
               </View>
               <View className="pl-4">
                 <Text className="text-xl font-semibold">Dr. Jenny Wilson</Text>
-                <Text className="text-amber-900 pt-1">Online</Text>
+                <Text className="text-pc-primary pt-1">Online</Text>
               </View>
             </View>
             <View className="pt-8 gap-3">
               <View className="flex-row justify-between items-center">
-                <Text className="text-amber-900">Name:</Text>
+                <Text className="text-pc-primary">Name:</Text>
                 <Text className="text-sm font-semibold">Dr. Jenny Wilson</Text>
               </View>
               <View className="flex-row justify-between items-center">
-                <Text className="text-amber-900">Time:</Text>
+                <Text className="text-pc-primary">Time:</Text>
                 <Text className="text-sm font-semibold">11.30 Am</Text>
               </View>
               <View className="flex-row justify-between items-center">
-                <Text className="text-amber-900">Date:</Text>
+                <Text className="text-pc-primary">Date:</Text>
                 <Text className="text-sm font-semibold">
                   02/02/{new Date().getFullYear()}
                 </Text>
               </View>
               <View className="flex-row justify-between items-center">
-                <Text className="text-amber-900">Total:</Text>
-                <Text className="text-sm font-semibold text-amber-900">
+                <Text className="text-pc-primary">Total:</Text>
+                <Text className="text-sm font-semibold text-pc-primary">
                   $85
                 </Text>
               </View>

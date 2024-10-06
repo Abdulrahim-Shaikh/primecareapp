@@ -49,7 +49,7 @@ const BookAppointment = () => {
         serviceDataRender.push(
             <View className="w-32">
                 <TouchableOpacity
-                    className="border border-amber-900 p-2 rounded-lg w-full"
+                    className="border border-pc-primary p-2 rounded-lg w-full"
                     onPress={
                         () => {
                             router.push({
@@ -70,7 +70,7 @@ const BookAppointment = () => {
                         {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
                         {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
                     </View>
-                    <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item.title}</Text>
+                    <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.title}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -87,7 +87,7 @@ const BookAppointment = () => {
                         <MaterialCommunityIcons
                             name="calendar-check-outline"
                             size={24}
-                            color={"rgb(120 53 15)"}
+                            color={"rgb(59,35,20)"}
                         />
                     </View>
                     <View className="flex flex-row justify-evenly">

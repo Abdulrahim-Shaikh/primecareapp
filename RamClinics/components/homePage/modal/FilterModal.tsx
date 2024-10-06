@@ -50,7 +50,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
         <View className="mt-8">
           <Text className="text-lg font-semibold pb-5">Sort Option</Text>
 
-          <View className="px-5 rounded-xl border border-amber-900">
+          <View className="px-5 rounded-xl border border-pc-primary">
             {sortOption.map((item, idx) => (
               <TouchableOpacity
                 activeOpacity={1}
@@ -66,15 +66,15 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                 <View
                   className={`border  w-5 h-5 rounded-full justify-center items-center ${
                     sortBy === idx
-                      ? "border-amber-900"
+                      ? "border-pc-primary"
                       : " text-amber-500"
                   }`}
                 >
                   <View
                     className={`w-3 h-3 border  rounded-full ${
                       sortBy === idx
-                        ? "border-amber-900 bg-amber-900"
-                        : "border-amber-900"
+                        ? "border-pc-primary bg-[rgb(59,35,20)]"
+                        : "border-pc-primary"
                     } `}
                   ></View>
                 </View>
@@ -93,10 +93,10 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                 key={idx}
               >
                 <Text
-                  className={`text-center  py-4 px-8 rounded-lg border border-amber-900 text-base font-medium ${
+                  className={`text-center  py-4 px-8 rounded-lg border border-pc-primary text-base font-medium ${
                     item === activeGenter
-                      ? "bg-amber-900 text-white"
-                      : "text-amber-900"
+                      ? "bg-[rgb(59,35,20)] text-white"
+                      : "text-pc-primary"
                   }`}
                 >
                   {item}
@@ -118,10 +118,10 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
                 key={idx}
               >
                 <Text
-                  className={`text-center  py-4 px-8 rounded-lg border border-amber-900 text-base font-medium ${
+                  className={`text-center  py-4 px-8 rounded-lg border border-pc-primary text-base font-medium ${
                     idx === activeExperience
-                      ? "bg-amber-900 text-white"
-                      : "text-amber-900"
+                      ? "bg-[rgb(59,35,20)] text-white"
+                      : "text-pc-primary"
                   }`}
                 >
                   {item}
@@ -136,7 +136,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
             <Text className="text-lg font-semibold ">Schedules</Text>
             <CalendarModal />
           </View>
-          <View className="border border-amber-900 rounded-xl p-5 flex-row -mr-20">
+          <View className="border border-pc-primary rounded-xl p-5 flex-row -mr-20">
             <FlatList
               horizontal
               style={{ marginRight: 60 }}
@@ -145,14 +145,14 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
               data={scheduleDates}
               keyExtractor={(item, index) => "key" + index}
               renderItem={({ item, index }) => (
-                <Pressable className=" items-center p-3 rounded-lg border border-amber-900">
+                <Pressable className=" items-center p-3 rounded-lg border border-pc-primary">
                   <Text className="text-base font-semibold">{item.date}</Text>
                   <Text className="text-[12px]">{item.day}</Text>
                 </Pressable>
               )}
             />
           </View>
-          <View className="border border-amber-900 rounded-xl p-5 flex-row -mr-20 mt-5">
+          <View className="border border-pc-primary rounded-xl p-5 flex-row -mr-20 mt-5">
             <FlatList
               horizontal
               style={{ marginRight: 60 }}
@@ -161,7 +161,7 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
               data={["10.00Am", "11.00Am", "12.00Pm", "01.00Pm"]}
               keyExtractor={(item, index) => "key" + index}
               renderItem={({ item, index }) => (
-                <Pressable className=" items-center py-2 px-3 rounded-lg border border-amber-900">
+                <Pressable className=" items-center py-2 px-3 rounded-lg border border-pc-primary">
                   <Text className="text-base font-semibold">{item}</Text>
                 </Pressable>
               )}
@@ -180,8 +180,8 @@ const FilterModal = ({ showFilter, setShowFilter }: PropsType) => {
               data={["2.5", "3.0", "3.5", "4.0", "4.5", "5.0"]}
               keyExtractor={(item, index) => "key" + index}
               renderItem={({ item, index }) => (
-                <Pressable className=" items-center py-2 px-4 rounded-lg border border-amber-900">
-                  <Text className="text-base font-medium text-amber-900">
+                <Pressable className=" items-center py-2 px-4 rounded-lg border border-pc-primary">
+                  <Text className="text-base font-medium text-pc-primary">
                     {item}{" "}
                     <Text>
                       <AntDesign name="staro" size={16} color="rgb(132 204 22)" />

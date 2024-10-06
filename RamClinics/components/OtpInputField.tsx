@@ -46,7 +46,7 @@ const OtpInputField = ({ disabled, onPress }: PropsType) => {
       {[...new Array(4)].map((_, idx) => (
         <View
           key={idx}
-          className="border border-amber-900 py-3 px-5 rounded-lg flex justify-center items-center"
+          className="border border-pc-primary py-3 px-5 rounded-lg flex justify-center items-center"
         >
           <TextInput
             ref={(ref) => {

@@ -28,7 +28,7 @@ const Promotions = () => {
                 <View className="">
                     <View className="px-6 flex flex-row justify-start items-center gap-4 pt-6">
                     <HeaderWithBackButton isPushBack={true} title="Promotions" />
-                        <AntDesign name="gift" size={24} color={"rgb(120 53 15)"} />
+                        <AntDesign name="gift" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
                     <View className="flex-row pt-10 px-4 justify-center">
                         <FlatList
@@ -39,7 +39,7 @@ const Promotions = () => {
                             renderItem={({ item }) => (
                                 <View className="flex flex-row justify-center items-center p-1 m-1 w-32 h-32">
                                     <Pressable
-                                        className="border border-amber-900 p-2 rounded-lg w-full items-center"
+                                        className="border border-pc-primary p-2 rounded-lg w-full items-center"
                                         onPress={() => {
                                             if (item.title === "Offers") {
                                                 router.push({ pathname: "/Offers", params: { offer: item.title } });
@@ -49,9 +49,9 @@ const Promotions = () => {
                                         }}
                                     >
                                         <View className="py-2 items-center">
-                                            <MaterialCommunityIcons name={item.icon as any} size={36} color={'#78350f'} />
+                                            <MaterialCommunityIcons name={item.icon as any} size={36} color={'rgb(59,35,20)'} />
                                         </View>
-                                        <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">
+                                        <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">
                                             {item.title}
                                         </Text>
                                     </Pressable>

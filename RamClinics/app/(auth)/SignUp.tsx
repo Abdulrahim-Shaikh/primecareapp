@@ -130,14 +130,14 @@ const SingUp = () => {
           <Text className="text-2xl font-bold text-center">
             Create an Account
           </Text>
-          <Text className="text-[14px] text-amber-900 text-center pt-3">
+          <Text className="text-[14px] text-pc-primary text-center pt-3">
             Sign up today for personalized health insights and exclusive member
             perks!
           </Text>
           <View className="w-full pt-1 pb-6">
 
             <Text className="pt-4 font-medium">Document Type</Text>
-            <View className="text-amber-900 flex justify-evenly flex-row items-center">
+            <View className="text-pc-primary flex justify-evenly flex-row items-center">
               <View className="flex-row">
                 <CheckBox checked={selectedOption === 0} onPress={() => setOption(0)} iconType="material-community"
                   checkedIcon="radiobox-marked" uncheckedIcon="radiobox-blank" />
@@ -269,19 +269,19 @@ const SingUp = () => {
             </View>
 
             <View className="flex flex-row gap-4 pt-8 justify-center items-center">
-              <View className="border border-amber-900 rounded-full p-3">
+              <View className="border border-pc-primary rounded-full p-3">
                 <Image source={fb} />
               </View>
-              <View className="border border-amber-900 rounded-full p-3">
+              <View className="border border-pc-primary rounded-full p-3">
                 <Image source={google} />
               </View>
-              <View className="border border-amber-900 rounded-full p-3">
+              <View className="border border-pc-primary rounded-full p-3">
                 <Image source={apple} />
               </View>
             </View> */}
 
             <View className="pt-4">
-              <Text className="text-base text-amber-900 text-center">
+              <Text className="text-base text-pc-primary text-center">
                 Already have an account?{" "}
                 <Text
                   className="text-lime-600 underline underline-offset-8"

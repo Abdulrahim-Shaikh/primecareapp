@@ -71,7 +71,7 @@ const CityPage = () => {
                             return (
                                 <View className="w-full">
                                     <Pressable
-                                        className="flex flex-row border border-amber-900 rounded-lg p-2 shadow-sm bg-white"
+                                        className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
                                         onPress={() =>
                                             router.push({
                                                 pathname: "/BranchPage",

@@ -38,10 +38,10 @@ const RateDental = () => {
             <View className="flex flex-row justify-start items-center gap-4 py-6 mt-4">
                 <HeaderWithBackButton title="Rate Dental Doctor" isPushBack={true} />
             </View>
-            <TextInput placeholder="Provide Your Review" className="mt-4 p-2 border border-amber-900"
+            <TextInput placeholder="Provide Your Review" className="mt-4 p-2 border border-pc-primary"
                 value={review}
                 onChangeText={setReview}></TextInput>
-            <TextInput placeholder="Provide Your Experience" className="mt-4 mb-5 p-2 border border-amber-900"></TextInput>
+            <TextInput placeholder="Provide Your Experience" className="mt-4 mb-5 p-2 border border-pc-primary"></TextInput>
             <View className="flex flex-row items-center mt-4 mb-5">
                 <Rating
                     type="star"
@@ -58,7 +58,7 @@ const RateDental = () => {
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity
                     onPress={handleSubmit}
-                    className="bg-amber-900 w-2/4 py-2 rounded-lg items-center">
+                    className="bg-[rgb(59,35,20)] w-2/4 py-2 rounded-lg items-center">
                     <Text className="text-white">Submit Ratings</Text>
                 </TouchableOpacity>
             </View>

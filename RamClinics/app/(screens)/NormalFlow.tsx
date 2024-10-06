@@ -408,7 +408,7 @@ const NormalFlow = () => {
                                 {branchId != "" ?
                                     <View className="flex flex-row justify-center gap-3">
                                         <View className="flex flex-column justify-center">
-                                            {/* <TouchableOpacity className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+                                            {/* <TouchableOpacity className="flex flex-row justify-center bg-[rgb(59,35,20)] border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
                                                 <Text className="text-white">Select Date</Text>
                                             </TouchableOpacity> */}
                                             <Button onPress={() => setIsDatePickerOpen(true)} title="Select Date" />
@@ -440,7 +440,7 @@ const NormalFlow = () => {
                                     <View className="flex flex-row justify-center gap-3">
                                         <View className="flex flex-column justify-center">
                                             <TouchableOpacity onPress={() => { search() }}
-                                                className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+                                                className="flex flex-row justify-center bg-[rgb(59,35,20)] border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
                                                 <Text className="text-white">Search</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -451,8 +451,8 @@ const NormalFlow = () => {
                                 {appointmentEntry ?
                                     <View className="">
                                         {doctorScheduleData.map((item, idx) => (
-                                            <View key={`key: ${item.id}`} className="p-4 border border-amber-900 rounded-2xl w-full mt-4">
-                                                <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
+                                            <View key={`key: ${item.id}`} className="p-4 border border-pc-primary rounded-2xl w-full mt-4">
+                                                <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-pc-primary pb-4">
                                                     <View className="flex flex-row justify-start items-center ">
                                                         <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
                                                             {/* <Image source={{ uri: photoUrl, }} /> */}
@@ -468,7 +468,7 @@ const NormalFlow = () => {
                                                                     // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
                                                                     //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
                                                                     //     } ${item.sessionStatus === "Completed" &&
-                                                                    //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
+                                                                    //     "text-pc-primary bg-amber-100 px-2 py-1 rounded-md"
                                                                     //     } ${item.sessionStatus === "Cancelled" &&
                                                                     //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
                                                                     //     } `}
@@ -481,7 +481,7 @@ const NormalFlow = () => {
                                                                     // className={`text-[12px] ${item.sessionStatus === "Upcoming" &&
                                                                     //     "text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md"
                                                                     //     } ${item.sessionStatus === "Completed" &&
-                                                                    //     "text-amber-900 bg-amber-100 px-2 py-1 rounded-md"
+                                                                    //     "text-pc-primary bg-amber-100 px-2 py-1 rounded-md"
                                                                     //     } ${item.sessionStatus === "Cancelled" &&
                                                                     //     "text-[#f75555] bg-[#feeeee] px-2 py-1 rounded-md"
                                                                     //     } `}
@@ -496,7 +496,7 @@ const NormalFlow = () => {
                                                         </View>
                                                     </View>
 
-                                                    <View className=" border border-amber-900 p-2 rounded-md ">
+                                                    <View className=" border border-pc-primary p-2 rounded-md ">
                                                         <Ionicons
                                                             name="heart-outline"
                                                             size={16}
@@ -505,7 +505,7 @@ const NormalFlow = () => {
                                                     </View>
                                                 </View>
                                                 <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                                                    <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center"
+                                                    <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center"
                                                         onPress={() => {
                                                             Object.keys(item.slots).length == 0
                                                             ?
@@ -560,7 +560,7 @@ const NormalFlow = () => {
                                     //                         }
                                     //                     })
                                     //                 }}
-                                    //                 className="flex flex-row justify-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+                                    //                 className="flex flex-row justify-center bg-[rgb(59,35,20)] border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
                                     //                 <Text className="text-white">Book Appointment</Text>
                                     //             </TouchableOpacity>
                                     //         </View>

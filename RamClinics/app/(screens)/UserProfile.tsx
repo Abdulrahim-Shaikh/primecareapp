@@ -37,7 +37,7 @@ const UserProfile = () => {
         <View className="flex-row justify-between items-center pt-6 px-6 w-full">
           <Text
             onPress={() => router.back()}
-            className="bg-amber-900 rounded-full p-2"
+            className="bg-[rgb(59,35,20)] rounded-full p-2"
           >
             <Ionicons name="chevron-back" color={"white"} size={20} />
           </Text>
@@ -58,7 +58,7 @@ const UserProfile = () => {
           </View>
         </View>
         <View className="w-full">
-          <View className="bg-amber-900 rounded-t-3xl p-6 ">
+          <View className="bg-[rgb(59,35,20)] rounded-t-3xl p-6 ">
             <View className="flex-row justify-between items-start">
               <View>
                 <Text className="bg-lime-500 p-[10px] bg-white rounded-md">
@@ -67,19 +67,19 @@ const UserProfile = () => {
               </View>
               <View>
                 <Text className=" text-white">First Name</Text>
-                <Text className="text-lime-500 text-md font-semibold text-xl">
+                <Text className="text-lime-600 text-md font-semibold text-xl">
                   {user && user.firstName ? user.firstName : "-"}
                 </Text>
               </View>
               <View>
                 <Text className=" text-white">Middle Name</Text>
-                <Text className="text-lime-500 text-md font-semibold text-xl">
+                <Text className="text-lime-600 text-md font-semibold text-xl">
                   {user && user.middleName ? user.middleName : "-"}
                 </Text>
               </View>
               <View>
                 <Text className=" text-white">Last Name</Text>
-                <Text className="text-lime-500 text-md font-semibold text-xl">
+                <Text className="text-lime-600 text-md font-semibold text-xl">
                   {user && user.lastName ? user.lastName : "-"}
                 </Text>
               </View>
@@ -96,7 +96,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">MRN NO </Text>
                   <View className="rounded-md">
-                    <Text className="text-lime-500 text-md font-bold">{patient && patient.mrno ? patient.mrno : "KHB100105421846"}</Text>
+                    <Text className="text-lime-600 text-md font-bold">{patient && patient.mrno ? patient.mrno : "KHB100105421846"}</Text>
                   </View>
                 </View>
               </View>
@@ -111,7 +111,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">Nationl Id</Text>
                   <View className="rounded-md">
-                    <Text className="text-lime-500 text-md font-bold">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
+                    <Text className="text-lime-600 text-md font-bold">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
                   </View>
                 </View>
               </View>
@@ -128,7 +128,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">Gender </Text>
                   <View className="rounded-md ">
-                    <Text className="text-lime-500 text-md font-bold">{patient && patient.gender ? patient.gender : "Dont Know"}</Text>
+                    <Text className="text-lime-600 text-md font-bold">{patient && patient.gender ? patient.gender : "Dont Know"}</Text>
                   </View>
                 </View>
               </View>
@@ -143,7 +143,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">Date Of Birth</Text>
                   <View className="rounded-md">
-                    <Text className="text-lime-500 text-md font-bold">
+                    <Text className="text-lime-600 text-md font-bold">
                       {patient && patient.dob ? new Date(patient.dob).toLocaleDateString() : "05/06/1999"}
                     </Text>
 
@@ -165,7 +165,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">Nationality</Text>
                   <View className="rounded-md">
-                    <Text className="text-lime-500 text-md font-bold">{patient && patient.nationality ? patient.nationality : "India"}</Text>
+                    <Text className="text-lime-600 text-md font-bold">{patient && patient.nationality ? patient.nationality : "India"}</Text>
                   </View>
                 </View>
               </View>
@@ -180,7 +180,7 @@ const UserProfile = () => {
                 <View>
                   <Text className="text-white text-xs">Mobile Number</Text>
                   <View className="rounded-md">
-                    <Text className="text-lime-500 text-md font-bold">{user && user.mobile ? user.mobile : "28458625824"}</Text>
+                    <Text className="text-lime-600 text-md font-bold">{user && user.mobile ? user.mobile : "28458625824"}</Text>
                   </View>
                 </View>
               </View>

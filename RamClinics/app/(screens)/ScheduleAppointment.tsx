@@ -285,8 +285,8 @@ const ScheduleAppointment = () => {
             </View>
             <View className="py-8 gap-4 flex justify-center">
                 <View className="pl-2 pr-2">
-                    <View className="p-4 border border-amber-900 rounded-2xl w-full mt-4" >
-                        <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
+                    <View className="p-4 border border-pc-primary rounded-2xl w-full mt-4" >
+                        <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-pc-primary pb-4">
                             <View className="flex flex-row justify-start items-center ">
                                 <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
                                     {/* <Image source={item.img} /> */}
@@ -314,7 +314,7 @@ const ScheduleAppointment = () => {
                                         {/* <Text>
                                             <Entypo name="dot-single" />
                                         </Text> */}
-                                        <Text className="text-amber-900">
+                                        <Text className="text-pc-primary">
                                             <AntDesign name="clockcircle" />
                                             {patientPolicyDataJson.startDate != null ? " " + new Date(patientPolicyDataJson.startDate).toLocaleTimeString() : ' No start date'} -
                                             {patientPolicyDataJson.endDate != null ? " " + new Date(patientPolicyDataJson.endDate).toLocaleTimeString() : ' No end date'}
@@ -324,7 +324,7 @@ const ScheduleAppointment = () => {
                                 </View>
                             </View>
 
-                            <View className=" border border-amber-900 p-2 rounded-md ">
+                            <View className=" border border-pc-primary p-2 rounded-md ">
                                 <MaterialCommunityIcons
                                     name="check"
                                     size={24}
@@ -435,7 +435,7 @@ const ScheduleAppointment = () => {
                             )
                         }
                     }
-                        className="flex flex-row justify-self-center bg-amber-900 border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
+                        className="flex flex-row justify-self-center bg-[rgb(59,35,20)] border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg">
                         <Text className="text-white">Confirm Book</Text>
                     </TouchableOpacity>
                 </View>

@@ -55,26 +55,26 @@ const ServicesListPage = () => {
                     {servicesList.map(({ serviceNameEn, serviceNameAr, subServices }, idx) => (
                         <Pressable
                             onPress={() => { selectService(serviceNameEn, subServices) }}
-                            className="w-[45%] border border-amber-900 rounded-lg justify-center items-center p-4"
+                            className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4"
                             key={idx}
                         >
-                            <View className="p-3 rounded-md border border-amber-900">
+                            <View className="p-3 rounded-md border border-pc-primary">
                                 <Image source={specialityIcon} />
                             </View>
                             <Text className="text-base font-semibold pt-3">{serviceNameEn} {serviceNameAr}</Text>
-                            <Text className="item-center flex-row text-amber-900 pt-1">
+                            <Text className="item-center flex-row text-pc-primary pt-1">
                                 Select branch {" "}
                                 <Feather name="arrow-right" size={14} color="#454567" />{" "}
                             </Text>
                             {/* {
                                 +fromSpeciality
                                     ?
-                                    <Text className="item-center flex-row text-amber-900 pt-1">
+                                    <Text className="item-center flex-row text-pc-primary pt-1">
                                         Select branch {" "}
                                         <Feather name="arrow-right" size={14} color="#454567" />{" "}
                                     </Text>
                                     :
-                                    <Text className="item-center flex-row text-amber-900 pt-1">
+                                    <Text className="item-center flex-row text-pc-primary pt-1">
                                         Select doctor {" "}
                                         <Feather name="arrow-right" size={14} color="#454567" />{" "}
                                     </Text>

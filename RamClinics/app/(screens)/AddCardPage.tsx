@@ -53,7 +53,7 @@ const AddCardPage = () => {
             <View className="pt-6">
               <FormField placeholder="United States" name="Country" />
             </View>
-            <View className="text-amber-900 flex justify-start flex-row items-center w-full pt-2 pb-7">
+            <View className="text-pc-primary flex justify-start flex-row items-center w-full pt-2 pb-7">
               {/* <CheckBox
                 onClick={() => setChecked((prev) => !prev)}
                 isChecked={checked}

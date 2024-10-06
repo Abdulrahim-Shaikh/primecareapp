@@ -105,7 +105,7 @@ const BranchPage = () => {
                         renderItem={({ item }) => (
                             <View className="w-full">
                                 <Pressable
-                                    className="flex flex-row border border-amber-900 rounded-lg p-4 shadow-sm bg-white"
+                                    className="flex flex-row border border-pc-primary rounded-lg p-4 shadow-sm bg-white"
                                     onPress={() => selectCity(item)}>
                                     <View className="rounded-smg bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <Image source={logoRamClinic} style={{ width: 50, height: 50 }} />

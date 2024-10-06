@@ -40,10 +40,10 @@ const CancelAppoinment = () => {
               <Pressable
                 onPress={() => setReason(idx)}
                 key={idx}
-                className="flex-row justify-start items-center w-full px-4 py-3 border border-amber-900 rounded-lg mt-4"
+                className="flex-row justify-start items-center w-full px-4 py-3 border border-pc-primary rounded-lg mt-4"
               >
                 <RadioButton isActive={reason === idx} />
-                <Text className="text-amber-900 text-base pl-2">{item}</Text>
+                <Text className="text-pc-primary text-base pl-2">{item}</Text>
               </Pressable>
             ))}
           </View>

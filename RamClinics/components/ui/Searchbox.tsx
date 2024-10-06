@@ -12,7 +12,7 @@ const Searchbox = ({ searchValue, setSearchValue }: Props) => {
   // const [searchValue, setSearchValue] = useState("");
 
   return (
-    <View className="flex flex-row justify-start items-center border border-amber-900 rounded-xl p-3 flex-1 mr-1">
+    <View className="flex flex-row justify-start items-center border border-pc-primary rounded-xl p-3 flex-1 mr-1">
       <Ionicons
         color={"#c3c3ce"}
         name="search"

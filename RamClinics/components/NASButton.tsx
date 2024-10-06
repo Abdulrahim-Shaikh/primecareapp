@@ -9,7 +9,7 @@ type PropsType = {
 
 const NASButton = ({ title , onPress}: PropsType) => {
   return (
-    <Pressable onPress={onPress} className="  w-full py-4 rounded-lg bg-amber-900 ">
+    <Pressable onPress={onPress} className="  w-full py-4 rounded-lg bg-[rgb(59,35,20)] ">
       <Text className="text-white text-base font-medium text-center">
         {title}
       </Text>

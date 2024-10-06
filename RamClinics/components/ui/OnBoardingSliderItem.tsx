@@ -23,9 +23,9 @@ const OnBoardingSliderItem = ({ item, idx }: Props) => {
       >
         <Text className="text-4xl font-semibold text-center">
           {item.title}{" "}
-          <Text className=" text-amber-900">{item.colorTitle}</Text>
+          <Text className=" text-pc-primary">{item.colorTitle}</Text>
         </Text>
-        <Text className="text-center pt-5 text-base text-amber-900">
+        <Text className="text-center pt-5 text-base text-pc-primary">
           {item.description}
         </Text>
       </View>

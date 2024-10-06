@@ -47,7 +47,7 @@ const OnBoardingSlider = () => {
   });
 
   return (
-    <SafeAreaView className="bg-amber-900">
+    <SafeAreaView className="bg-[rgb(59,35,20)]">
       <View className=" absolute pt-8  w-full ">
         <View className="flex-row justify-between items-start w-full px-6">
           <View className="gap-4">
@@ -107,7 +107,7 @@ const OnBoardingSlider = () => {
           </View>
           <View className="flex justify-between items-center flex-row px-6">
             <Pressable onPress={() => router.push("/SignIn")}>
-              <Text className="font-semibold text-amber-900">Skip</Text>
+              <Text className="font-semibold text-pc-primary">Skip</Text>
             </Pressable>
             <SliderButton
               flatListRef={flatListRef}

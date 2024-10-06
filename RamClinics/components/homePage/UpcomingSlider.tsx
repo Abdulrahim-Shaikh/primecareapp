@@ -60,7 +60,7 @@ const UpcomingSlider = () => {
         <Text className=" text-xl font-semibold">Upcoming Offers</Text>
         <Text
           onPress={() => router.push("/Offers")}
-          className=" font-semibold text-amber-900">
+          className=" font-semibold text-pc-primary">
           View All
         </Text>
       </View>
@@ -93,7 +93,7 @@ const UpcomingSlider = () => {
           }}
         />
 
-        <View className="text-lime-500">
+        <View className="text-lime-600">
           <Pagination onbordingSliderData={promotionList} x={x} />
         </View>
       </View>

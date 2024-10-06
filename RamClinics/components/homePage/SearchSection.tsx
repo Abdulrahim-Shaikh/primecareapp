@@ -11,12 +11,12 @@ const SearchSection = ({
   const [searchValue, setSearchValue] = useState('');
   return (
     <View className="pt-8 px-6">
-      <Text className="text-amber-900 font-semibold pb-2">Friday, July 15</Text>
+      <Text className="text-pc-primary font-semibold pb-2">Friday, July 15</Text>
       <Text className="text-[24px] font-semibold">Let’s Find Your Doctor</Text>
       <View className="flex flex-row justify-between items-center pt-6 w-full">
         <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         <TouchableOpacity
-          className="p-3 rounded-lg bg-amber-900 "
+          className="p-3 rounded-lg bg-[rgb(59,35,20)] "
           onPress={() => setShowFilter(true)}
         >
           <MaterialIcons name="tune" size={28} color={"white"} />

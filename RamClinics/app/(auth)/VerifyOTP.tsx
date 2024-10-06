@@ -94,7 +94,7 @@ const VerifyOTP = () => {
       <ScrollView>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
           <Text className="text-2xl font-bold text-center">Verify OTP</Text>
-          <Text className="text-[14px] text-amber-900 text-center pt-3">
+          <Text className="text-[14px] text-pc-primary text-center pt-3">
             Enter OTP code received to authenticate your identity and complete verification - {status}
           </Text>
           <View className="w-full pt-8 pb-4 ">
@@ -102,10 +102,10 @@ const VerifyOTP = () => {
           </View>
 
           <View className=" pb-32">
-            <Text className="text-base text-amber-900 text-center ">
+            <Text className="text-base text-pc-primary text-center ">
               Didn’t receive OTP?{" "}
               <Text
-                className=" text-amber-900"
+                className=" text-pc-primary"
                 onPress={() => router.push("/SignUp")}
               >
                 Resend

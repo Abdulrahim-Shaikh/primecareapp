@@ -60,10 +60,10 @@ const ProfileTab = () => {
         <View className=" pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
             <HeaderWithBackButton isPushBack={true} title="User Settings" />
-            <AntDesign name="user" size={24} color={"rgb(120 53 15)"} />
+            <AntDesign name="user" size={24} color={"rgb(59, 35, 20)"} />
 
           </View>
-          <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">
+          <View className="bg-[rgb(59,35,20)] rounded-[20px] p-6 flex flex-row justify-between items-center">
             <View className="flex-row gap-4">
               {user && user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
                 <Image source={{ uri: `${sourceUrl}${encodeURIComponent(user.profileImg[0])}` }} className="w-16 h-16 rounded-lg" />
@@ -93,7 +93,7 @@ const ProfileTab = () => {
               <MaterialCommunityIcons
                 name="pencil-outline"
                 size={24}
-                color={"rgb(120 53 15)"}
+                color={"rgb(59, 35, 20)"}
               />
             </Pressable>
           </View>
@@ -128,10 +128,10 @@ const ProfileTab = () => {
                 <View className="flex-row items-center gap-4">
                   <View className="rounded-full p-3">
                     <Text className="">
-                      <MaterialIcons name="logout" size={26} color="rgb(120 53 15)" />
+                      <MaterialIcons name="logout" size={26} color="rgb(59, 35, 20)" />
                     </Text>
                   </View>
-                  <Text className="text-lg font-semibold text-amber-900">
+                  <Text className="text-lg font-semibold text-pc-primary">
                     Logout
                   </Text>
                 </View>
@@ -150,7 +150,7 @@ const ProfileTab = () => {
                   Log Out
                 </Text>
               </View>
-              <Text className="text-lg pt-4 text-center text-amber-900">
+              <Text className="text-lg pt-4 text-center text-pc-primary">
                 Are you sure you want to log out?
               </Text>
               <View className="pt-8 flex-row gap-4">
@@ -158,7 +158,7 @@ const ProfileTab = () => {
                   onPress={() => setLogoutModal(false)}
                   className="flex-1"
                 >
-                  <Text className="text-amber-900 border border-amber-900 rounded-lg py-4 bg-amber-100 text-center font-medium ">
+                  <Text className="text-pc-primary border border-pc-primary rounded-lg py-4 bg-amber-100 text-center font-medium ">
                     Cancel
                   </Text>
                 </Pressable>
@@ -166,7 +166,7 @@ const ProfileTab = () => {
                   onPress={() => { setLogoutModal(false); setLoggedOut(); router.push("/(tabs)") }}
                   className="flex-1"
                 >
-                  <Text className="text-white border border-amber-900 rounded-lg py-4 bg-amber-900 text-center font-medium ">
+                  <Text className="text-white border border-pc-primary rounded-lg py-4 bg-[rgb(59,35,20)] text-center font-medium ">
                     Logout
                   </Text>
                 </Pressable>

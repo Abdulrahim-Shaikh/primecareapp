@@ -11,7 +11,7 @@ const AboutUs = () => {
             <ScrollView className="bg-gray-100 p-5">
                 <View className="bg-gray-100 pb-10">
                 <HeaderWithBackButton isPushBack={true} title="About Us" />
-                    {/* <Text className="text-3xl font-bold text-center text-teal-600 mb-5 mt-5">About Us</Text> */}
+                    {/* <Text className="text-3xl font-bold text-center text-lime-600 mb-5 mt-5">About Us</Text> */}
                     <Text className="text-4xl font-bold text-gray-800 mb-5 mt-5">
                         <Text className="text-amber-500">Quality</Text>, <Text className="text-teal-500">Safety</Text>,
                         <Text className="text-amber-500"> Customer Satisfaction</Text>, and Finally <Text className="text-teal-500">Credibility</Text>.
@@ -30,7 +30,7 @@ const AboutUs = () => {
                         </Text>
                     </View>
 
-                    <View className="bg-amber-900 rounded-lg shadow-md p-5 mb-5 mt-5">
+                    <View className="bg-[rgb(59,35,20)] rounded-lg shadow-md p-5 mb-5 mt-5">
                         <View className="flex flex-row items-center">
                             <View className="flex-1 mx-3 text-left">
                                 <Text className="text-2xl font-bold text-white">More than</Text>
@@ -41,7 +41,7 @@ const AboutUs = () => {
                         </View>
                     </View>
 
-                    <View className="bg-amber-900 rounded-lg shadow-md p-5 mb-5 mt-5">
+                    <View className="bg-[rgb(59,35,20)] rounded-lg shadow-md p-5 mb-5 mt-5">
                         <View className="flex flex-row items-center">
                             <View className="flex-1 mx-3 text-left">
                                 <Text className="text-2xl font-bold text-white">More than</Text>
@@ -52,7 +52,7 @@ const AboutUs = () => {
                         </View>
                     </View>
 
-                    <View className="bg-amber-900 rounded-lg shadow-md p-5 mb-5 mt-5">
+                    <View className="bg-[rgb(59,35,20)] rounded-lg shadow-md p-5 mb-5 mt-5">
                         <View className="flex flex-row items-center">
                             <View className="flex-1 mx-3 text-left">
                                 <Text className="text-2xl font-bold text-white">More than</Text>
@@ -65,7 +65,7 @@ const AboutUs = () => {
 
                     <View className="bg-white rounded-lg shadow-md p-5 mb-5 mt-5 border border-gray-300">
                         <View className="flex items-center mb-3">
-                            <Ionicons name="eye" size={48} color="#78350F" />
+                            <Ionicons name="eye" size={48} color="rgb(59,35,20)" />
                         </View>
                         <Text className="text-2xl font-bold text-amber-500 text-center mb-2">Vision</Text>
                         <Text className="text-lg text-gray-600 text-center">
@@ -75,7 +75,7 @@ const AboutUs = () => {
 
                     <View className="bg-white rounded-lg shadow-md p-5 mb-5 mt-5 border border-gray-300">
                         <View className="flex items-center mb-3">
-                            <Ionicons name="chatbubble-ellipses" size={48} color="#78350F" />
+                            <Ionicons name="chatbubble-ellipses" size={48} color="rgb(59,35,20)" />
                         </View>
                         <Text className="text-2xl font-bold text-amber-500 text-center mb-2">Message</Text>
                         <Text className="text-lg text-gray-600 text-center">
@@ -85,7 +85,7 @@ const AboutUs = () => {
 
                     <View className="bg-white rounded-lg shadow-md p-5 mb-5 mt-5 border border-gray-300">
                         <View className="flex items-center mb-3">
-                            <Ionicons name="star" size={48} color="#78350F" />
+                            <Ionicons name="star" size={48} color="rgb(59,35,20)" />
                         </View>
                         <Text className="text-2xl font-bold text-amber-500 text-center mb-2">Values</Text>
                         <Text className="text-lg text-gray-600 text-center">
