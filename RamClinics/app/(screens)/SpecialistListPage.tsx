@@ -113,16 +113,16 @@ const SpecialityListPage = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="pt-8 pb-8 px-6">
+                <View className="pt-8 pb-4 px-6">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <View className="px-6">
                             <HeaderWithBackButton isPushBack={true} title="Find your specialist" />
                         </View>
                     </View>
                 </View>
-                <View className="px-6 ">
+                {/* <View className="px-6 ">
                 <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
-                </View>
+                </View> */}
 
                 <View className="pb-16 px-6">
                     {

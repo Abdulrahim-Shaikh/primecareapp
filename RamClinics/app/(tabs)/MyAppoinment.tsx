@@ -128,9 +128,9 @@ const Appoinment = () => {
             <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(120 53 15)" }
             />
           </View>
-          <View className="pt-8">
+          {/* <View className="pt-8">
             <Searchbox searchValue={searchValue} setSearchValue={setSearchValue}/>
-          </View>
+          </View> */}
           <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
               <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
