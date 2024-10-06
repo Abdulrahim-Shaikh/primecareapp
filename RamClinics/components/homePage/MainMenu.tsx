@@ -13,6 +13,11 @@ const MainMenu = () => {
       link: "/MyAppoinment",
     },
     {
+      icon: "calendar-outline",
+      title: "Book Appoinment",
+      link: "/BookAppointment",
+    },
+    {
       icon: "people-outline",
       title: "Family Members",
       link: "/FamilyFile",

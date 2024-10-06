@@ -18,7 +18,7 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
               {/* <Entypo name="home" size={Platform.OS === 'ios' ? 32 : 28} color={focused ? "white" : "rgb(120 53 15)"} /> */}
-              <FontAwesome name="home" size={Platform.OS === 'ios' ? 32 : 28} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />
+              <FontAwesome name="home" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />
               {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>Home</Text> */}
             </View>
           </View>
@@ -34,7 +34,7 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
               {/* <MaterialCommunityIcons name="calendar-check-outline" size={Platform.OS === 'ios' ? 32 : 28} color={focused ? "white" : "rgb(120 53 15)"} /> */}
-              <FontAwesome name="calendar-check-o" size={28} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />
+              <FontAwesome name="calendar-check-o" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />
               {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>My{"\n"}Appointments</Text> */}
             </View>
           </View>
@@ -43,7 +43,7 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
         iconName === "book-app" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              <FontAwesome name="calendar-plus-o" size={46} color={focused?"rgb(132 204 22)":"white"} />
+              <FontAwesome name="calendar-plus-o" size={54} color={focused?"rgb(132 204 22)":"white"} />
               {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-amber-900"}`}>Promotions</Text> */}
             </View>
           </View>
@@ -51,8 +51,8 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
         :
         iconName === "book-app" && (
           <>
-            <View className="flex flex-col justify-center justify-items-center justif-self-center mt-4" >
-              <FontAwesome className="text-center" name="calendar-plus-o" size={28} color={focused?"white":"rgb(120 53 15)"} />
+            <View className="flex flex-col justify-center justify-items-center justif-self-center" >
+              <FontAwesome className="text-center" name="calendar-plus-o" size={36} color={focused?"white":"rgb(120 53 15)"} />
               <Text className={`text-xs text-center pt-1 ${focused ? " text-white" : "text-amber-900"}`}>Book{"\n"}Appointment</Text>
             </View>
           </>
@@ -61,14 +61,14 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
         {iconName === "gift" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              <FontAwesome name="gift" size={Platform.OS === 'ios' ? 32 : 28} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />
+              <FontAwesome name="gift" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />
             </View>
           </View>
         )}
         {iconName === "user" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              <AntDesign name="user" size={Platform.OS === 'ios' ? 30 : 28} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />              
+              <AntDesign name="user" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(120 53 15)")} />              
             </View>
           </View>
         )}
@@ -89,7 +89,7 @@ const TabLayout = () => {
           tabBarLabelStyle: {
             fontSize: 11,
             color: "white",
-            paddingBottom: 6,
+            paddingBottom: 8,
           },
 
           tabBarBadgeStyle: {
@@ -97,7 +97,7 @@ const TabLayout = () => {
 
           tabBarStyle: {
             backgroundColor:"rgb(120 53 15)",
-            height: Platform.OS === 'ios' ? 115 : 100, 
+            height: Platform.OS === 'ios' ? 115 : 106, 
             marginTop: Platform.OS === 'ios' ? -35 : 0,
             borderTopEndRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopLeftRadius: Platform.OS === 'ios' ? 0 : 15,

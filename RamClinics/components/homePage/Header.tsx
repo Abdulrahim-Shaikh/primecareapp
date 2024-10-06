@@ -51,12 +51,12 @@ const Header = ({
           <MaterialCommunityIcons name="bell-outline" size={20} />
           <View className="w-[8px] h-[8px] rounded-full bg-[#b91c1c] absolute top-2 right-2"></View>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => setShowFavouriteModal(true)}
           className="border border-amber-900 rounded-lg p-2"
         >
           <MaterialCommunityIcons name="heart-outline" size={20} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
