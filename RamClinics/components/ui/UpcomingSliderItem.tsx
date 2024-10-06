@@ -129,7 +129,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
                     <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
                       <Text className="text-center text-black font-bold">Cancel</Text>
                     </Pressable>
-                    <Pressable className="flex-1 bg-amber-900 py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
+                    <Pressable className="flex-1 bg-[rgb(59,35,20)] py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
                       <Text className="text-center text-white font-bold">Confirm</Text>
                     </Pressable>
                   </View>
@@ -150,7 +150,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
                   data={promotionServices}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
-                    <View className="flex-row border border-amber-900 rounded-lg mb-4 p-4 bg-white shadow-md">
+                    <View className="flex-row border border-pc-primary rounded-lg mb-4 p-4 bg-white shadow-md">
                       <View className="flex-1">
                         <Text className="text-base font-bold mb-1">{item.serviceName}</Text>
                         <Text className="text-sm" style={{ color: '#04522b', fontWeight: '600' }}>

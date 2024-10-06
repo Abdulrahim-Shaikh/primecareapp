@@ -35,11 +35,11 @@ const Wallets = () => {
                         <MaterialCommunityIcons
                             name="wallet"
                             size={24}
-                            color={"rgb(120 53 15)"}
+                            color={"rgb(59, 35, 20)"}
                         />
                     </View>
-          <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
-            <Text className="text-base font-semibold text-amber-900">
+          <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
+            <Text className="text-base font-semibold text-pc-primary">
               Your Wallet
             </Text>
             <View className=" flex-row justify-between items-center py-6 border-b border-dashed text-amber-500">
@@ -51,8 +51,8 @@ const Wallets = () => {
               <Button title="Refill" color="green" /> */}
             </View>
           </View>
-          {/* <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-xl">
-            <Text className="text-base font-semibold text-amber-900">
+          {/* <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
+            <Text className="text-base font-semibold text-pc-primary">
               Doctor Wallet
             </Text>
             <View className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500">

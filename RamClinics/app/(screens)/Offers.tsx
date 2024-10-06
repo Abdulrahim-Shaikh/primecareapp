@@ -136,9 +136,9 @@ const Offers = () => {
                 <View className="flex-1 p-4 pt-2">
                     <View className="flex flex-row justify-start items-center gap-4">
                         <HeaderWithBackButton isPushBack={true} title="Offers" />
-                        <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(120 53 15)"} />
+                        <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
-                    <View className="border border-amber-900 rounded-lg my-4">
+                    <View className="border border-pc-primary rounded-lg my-4">
                         <Picker
                             selectedValue={selectedBranch} onValueChange={(itemValue) => { setSelectedBranch(itemValue); }} className="h-12">
                             <Picker.Item label="Select Branch" value="" />
@@ -161,13 +161,13 @@ const Offers = () => {
                                     ? { uri: `${sourceUrl}${encodeURIComponent(item.photo[0])}` }
                                     : emptyOfferImage;
                                 return (
-                                    <View className="flex-row border border-amber-900 rounded-lg mb-4 overflow-hidden">
+                                    <View className="flex-row border border-pc-primary rounded-lg mb-4 overflow-hidden">
                                         <Image source={photoUrl} style={{ width: 128, height: 128 }} />
                                         <View className="flex-1 p-4">
                                             <Text className="text-base font-bold mb-1">{item.promotionName}</Text>
                                             <Text className="text-sm text-gray-500 mb-4">{item.description}</Text>
                                             <Pressable
-                                                className="bg-amber-900 flex-row items-center justify-center rounded-md py-2 px-4"
+                                                className="bg-[rgb(59,35,20)] flex-row items-center justify-center rounded-md py-2 px-4"
                                                 onPress={() => handleBookPress(item)}
                                                 style={{ alignSelf: 'flex-start' }}
                                             >
@@ -200,7 +200,7 @@ const Offers = () => {
                                             <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
                                                 <Text className="text-center text-black font-bold">Cancel</Text>
                                             </Pressable>
-                                            <Pressable className="flex-1 bg-amber-900 py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
+                                            <Pressable className="flex-1 bg-[rgb(59,35,20)] py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
                                                 <Text className="text-center text-white font-bold">Confirm</Text>
                                             </Pressable>
                                         </View>

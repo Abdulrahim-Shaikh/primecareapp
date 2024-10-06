@@ -100,7 +100,7 @@ const MyApprovals = () => {
                 <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Approvals" />
-                        <MaterialCommunityIcons name="receipt" size={24} color={"rgb(120 53 15)"} />
+                        <MaterialCommunityIcons name="receipt" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
 
                     <View className="flex-row justify-between my-4">
@@ -129,14 +129,14 @@ const MyApprovals = () => {
                         </Picker>
                     </View>
 
-                    <Pressable onPress={() => search()} className="flex-1 bg-amber-900 p-3 rounded-lg mt-2 mb-4">
+                    <Pressable onPress={() => search()} className="flex-1 bg-[rgb(59,35,20)] p-3 rounded-lg mt-2 mb-4">
                         <Text className="text-lg text-white text-center"> search </Text>
                     </Pressable>
 
                     <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
-                            <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-amber-900" : "border-transparent"}`}>
-                                <Text className={`text-center font-semibold ${activeTab === item ? "text-amber-900" : "text-gray-700"}`}>
+                            <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-lime-600" : "border-transparent"}`}>
+                                <Text className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : "text-gray-700"}`}>
                                     {item}
                                 </Text>
 
@@ -153,50 +153,50 @@ const MyApprovals = () => {
                             ) : (
                                 activeTab === "Cancelled" ?
                                     cancelledApps.map((apprval: any) => (
-                                        <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                        <View key={apprval.id} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                             <View className="flex-row justify-between items-center">
                                                 <Text className="font-semibold">Approval ID: {apprval.id}</Text>
                                             </View>
                                             <Text className="mt-1 text-lg text-gray-800">
-                                                Status: <Text className="font-bold text-indigo-800">{apprval.approvalStatus}</Text>
+                                                Status: <Text className="font-bold text-lime-600">{apprval.approvalStatus}</Text>
                                             </Text>
                                             <Text className="mt-1 text-lg text-gray-800">
-                                                Total Amount: <Text className="font-bold text-indigo-800">{apprval.total}</Text>
+                                                Total Amount: <Text className="font-bold text-lime-600">{apprval.total}</Text>
                                             </Text>
-                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-indigo-800">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
                                             <Text className="mt-1 text-md text-gray-600"></Text>
                                         </View>
                                     ))
                                     :
                                     activeTab === "Approved" ?
                                         approvedApps.map((apprval: any) => (
-                                            <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                            <View key={apprval.id} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                                 <View className="flex-row justify-between items-center">
                                                     <Text className="font-semibold">Approval ID: {apprval.id}</Text>
                                                 </View>
                                                 <Text className="mt-1 text-lg text-gray-800">
-                                                    Status: <Text className="font-bold text-indigo-800">{apprval.approvalStatus}</Text>
+                                                    Status: <Text className="font-bold text-lime-600">{apprval.approvalStatus}</Text>
                                                 </Text>
                                                 <Text className="mt-1 text-lg text-gray-800">
-                                                    Total Amount: <Text className="font-bold text-indigo-800">{apprval.total}</Text>
+                                                    Total Amount: <Text className="font-bold text-lime-600">{apprval.total}</Text>
                                                 </Text>
-                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-indigo-800">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
                                                 <Text className="mt-1 text-md text-gray-600"></Text>
                                             </View>
                                         ))
                                         :
                                         pendingApps.map((apprval: any) => (
-                                            <View key={apprval.id} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                            <View key={apprval.id} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                                 <View className="flex-row justify-between items-center">
                                                     <Text className="font-semibold">Approval ID: {apprval.id}</Text>
                                                 </View>
                                                 <Text className="mt-1 text-lg text-gray-800">
-                                                    Status: <Text className="font-bold text-indigo-800">{apprval.approvalStatus}</Text>
+                                                    Status: <Text className="font-bold text-lime-600">{apprval.approvalStatus}</Text>
                                                 </Text>
                                                 <Text className="mt-1 text-lg text-gray-800">
-                                                    Total Amount: <Text className="font-bold text-indigo-800">{apprval.total}</Text>
+                                                    Total Amount: <Text className="font-bold text-lime-600">{apprval.total}</Text>
                                                 </Text>
-                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-indigo-800">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
+                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {new Date(apprval.invoiceDate).toLocaleDateString()}</Text>
                                                 <Text className="mt-1 text-md text-gray-600"></Text>
                                             </View>
                                         ))

@@ -119,7 +119,7 @@ const MyPrescription = () => {
                         <MaterialCommunityIcons
                             name="medical-bag"
                             size={24}
-                            color={"rgb(120 53 15)"}
+                            color={"rgb(59, 35, 20)"}
                         />
                     </View>
 
@@ -156,8 +156,8 @@ const MyPrescription = () => {
 
                     <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
-                            <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-amber-900" : "border-transparent"}`}>
-                                <Text className={`text-center font-semibold ${activeTab === item ? "text-amber-900" : "text-gray-700"}`}>
+                            <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-lime-600" : "border-transparent"}`}>
+                                <Text className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : "text-gray-700"}`}>
                                     {item}
                                 </Text>
                             </Pressable>
@@ -173,10 +173,10 @@ const MyPrescription = () => {
                                     Select Correct Branch Name, Date & Tabs</Text>
                             ) : (
                                 filteredPrescription.map((prescription: any) => (
-                                    <Pressable key={prescription.id} onPress={() => openModal(prescription)} className="p-4 border border-amber-900 rounded-2xl w-full mt-4 bg-white">
+                                    <Pressable key={prescription.id} onPress={() => openModal(prescription)} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                         <View className="flex-row justify-between items-center">
                                             <Text className="font-semibold">Prescription ID: {prescription.id}</Text>
-                                            <AntDesign name="medicinebox" size={24} color="#008080" />
+                                            <AntDesign name="medicinebox" size={24} color=" rgb(132 204 22)" />
                                         </View>
                                         <Text style={styles.invoiceText}>
                                             <Text style={styles.amount}>{prescription.orderType}</Text>
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     },
     amount: {
         fontWeight: 'bold',
-        color: '#008080',
+        color: ' rgb(132 204 22)',
     },
     branchText: {
         marginTop: 2,

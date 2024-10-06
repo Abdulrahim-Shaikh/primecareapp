@@ -31,7 +31,7 @@ const MyPromotionBookings = () => {
                 <View className="px-6">
                     <View className="px-6 flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="My Promotion Bookings" />
-                        <MaterialCommunityIcons name="tag" size={24} color={"rgb(120 53 15)"} />
+                        <MaterialCommunityIcons name="tag" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
 
                     <View className="flex-row justify-between my-4">
@@ -46,7 +46,7 @@ const MyPromotionBookings = () => {
                                 data={promotionOrders}
                                 keyExtractor={(item: any) => item.id.toString()}
                                 renderItem={({ item }) => (
-                                    <View className="flex-row border border-amber-900 rounded-lg mb-4 p-4 bg-white shadow-md">
+                                    <View className="flex-row border border-pc-primary rounded-lg mb-4 p-4 bg-white shadow-md">
                                         <View className="flex-1">
                                             <Text className="text-base font-bold mb-1">
                                                 {item.promotionName}

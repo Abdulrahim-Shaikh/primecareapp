@@ -88,7 +88,7 @@ const FamilYFile = () => {
                     />
                     <View>
                         <Pressable onPress={() => router.push("/FamilyMemberFile")}
-                        className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full 	">
+                        className="flex flex-row border border-pc-primary p-2 rounded-lg mt-4 w-full 	">
                             <MaterialIcons name="family-restroom" size={24} color="black" />
                             <Text className="rounded-md p-0 mt-2 text-left ml-10 text-base font-semibold	">
                                 Family Members Files
@@ -96,7 +96,7 @@ const FamilYFile = () => {
                         </Pressable>
                     </View>
                     <Pressable onPress={() => router.push("/FamilyApprovals")}
-                    className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full" >
+                    className="flex flex-row border border-pc-primary p-2 rounded-lg mt-4 w-full" >
                         <MaterialIcons name="approval" size={24} color="black" className="mt-2 ml-2" />
                         <Text className="rounded-md p-1 mt-1  text-left ml-10 text-base font-semibold	">
                             Family Approvals
@@ -108,7 +108,7 @@ const FamilYFile = () => {
                         visible={modalVisible} 
                         onRequestClose={handleCancel}>    
                         </Modal>
-                    <Pressable className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full"
+                    <Pressable className="flex flex-row border border-pc-primary p-2 rounded-lg mt-4 w-full"
                         onPress={() => handleAddMember()} style={{ alignSelf: 'flex-start' }}>
                         <AntDesign name="plus" size={20} color="black" className="mt-2 ml-2 " />
                         <Text className="rounded-md p-1 mt-1  text-left ml-14 text-base font-semibold">
@@ -116,7 +116,7 @@ const FamilYFile = () => {
                         </Text>
                     </Pressable> */}
                     <Pressable
-                        className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full"
+                        className="flex flex-row border border-pc-primary p-2 rounded-lg mt-4 w-full"
                         onPress={handleAddMember}
                         style={{ alignSelf: 'flex-start' }}
                     >
@@ -139,7 +139,7 @@ const FamilYFile = () => {
                                         {/* <Text style={{ color: 'black' }}>X</Text> */}
                                         <Entypo name="circle-with-cross" size={22} color="black" />
                                     </Pressable>
-                                    <View className="w-12 h-12 rounded-full bg-amber-900 justify-center items-center">
+                                    <View className="w-12 h-12 rounded-full bg-[rgb(59,35,20)] justify-center items-center">
                                         <MaterialIcons name="family-restroom" size={24} color="white" />
                                     </View>
 
@@ -151,7 +151,7 @@ const FamilYFile = () => {
 
                                 <View className="flex-row">
                                     <Text className="mx-0	">Relation</Text>
-                                    <Picker className="bg-amber-900  rounded-md	 flex-1" style={{ marginLeft: 30, width: 90, color: 'white' }}
+                                    <Picker className="bg-[rgb(59,35,20)]  rounded-md	 flex-1" style={{ marginLeft: 30, width: 90, color: 'white' }}
                                         selectedValue={selectedValue}
                                         onValueChange={(itemValue) => setSelectedValue(itemValue)}
                                     >
@@ -187,7 +187,7 @@ const FamilYFile = () => {
                                 />
 
 
-                                {/* <View className="flex-row justify-between bg-amber-900  rounded-md">
+                                {/* <View className="flex-row justify-between bg-[rgb(59,35,20)]  rounded-md">
                                     <Pressable onPress={() => {
                                         console.log("New member added:", newMember);
                                         setModalVisible(false);
@@ -195,7 +195,7 @@ const FamilYFile = () => {
                                         <Text style={{ color: 'white' }}>Add Member</Text>
                                     </Pressable>
                                 </View> */}
-                                <View className="flex-row justify-between bg-amber-900  rounded-md">
+                                <View className="flex-row justify-between bg-[rgb(59,35,20)]  rounded-md">
                                     <Pressable onPress={handleNewAddedMember}
                                         style={{ padding: 10 }}>
                                         <Text style={{ color: 'white' }}>Add Member</Text>
@@ -206,7 +206,7 @@ const FamilYFile = () => {
                         </View>
                     </Modal>
                     {/* <Pressable
-                        className="flex flex-row border border-amber-900 p-2 rounded-lg mt-4 w-full"
+                        className="flex flex-row border border-pc-primary p-2 rounded-lg mt-4 w-full"
                         onPress={handleAddMember}
                         style={{ alignSelf: 'flex-start' }}
                     >
@@ -217,7 +217,7 @@ const FamilYFile = () => {
                     </Pressable> */}
                     {message ? (
                         <View className="my-9	justify-center items-center">
-                            <Text className="w-60 h-12 my-9 pt-4 pl-4 rounded-md bg-amber-900 justify-center items-center" style={{ color: 'white' }}>
+                            <Text className="w-60 h-12 my-9 pt-4 pl-4 rounded-md bg-[rgb(59,35,20)] justify-center items-center" style={{ color: 'white' }}>
                                 {message}
                             </Text>
 

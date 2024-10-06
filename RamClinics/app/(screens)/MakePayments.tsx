@@ -23,24 +23,24 @@ const MakePayments = () => {
           <View className="w-full">
             <HeaderWithBackButton title="Make Payment" isPushBack={true} />
 
-            <View className="p-6 border border-amber-900 rounded-xl mt-8 bg-amber-100">
+            <View className="p-6 border border-pc-primary rounded-xl mt-8 bg-amber-100">
               <View className="border-b border-dashed pb-4">
                 <View className=" flex-row justify-between items-center">
-                  <Text className="text-amber-900">Consulting</Text>
+                  <Text className="text-pc-primary">Consulting</Text>
                   <Text className="text-base">$30.00</Text>
                 </View>
                 <View className=" flex-row justify-between items-center py-4">
-                  <Text className="text-amber-900">Other Manipulation</Text>
+                  <Text className="text-pc-primary">Other Manipulation</Text>
                   <Text className="text-base">$35.00</Text>
                 </View>
                 <View className=" flex-row justify-between items-center">
-                  <Text className="text-amber-900">Other Service</Text>
+                  <Text className="text-pc-primary">Other Service</Text>
                   <Text className="text-base">$20.00</Text>
                 </View>
               </View>
               <View className=" flex-row justify-between items-center pt-4">
                 <Text className=" font-semibold">Total</Text>
-                <Text className="font-semibold text-amber-900 text-base">
+                <Text className="font-semibold text-pc-primary text-base">
                   $85.00
                 </Text>
               </View>
@@ -53,7 +53,7 @@ const MakePayments = () => {
                   <Pressable
                     onPress={() => setSelectPayment(idx)}
                     key={idx}
-                    className=" w-[45%] justify-center items-center border border-amber-900 py-3 rounded-lg"
+                    className=" w-[45%] justify-center items-center border border-pc-primary py-3 rounded-lg"
                   >
                     <View className="p-2 rounded-full bg-white">
                       <Image source={img} />
@@ -66,12 +66,12 @@ const MakePayments = () => {
                 ))}
                 <Pressable
                   onPress={() => router.push("/AddCardPage")}
-                  className=" w-[45%] justify-center items-center border border-amber-900 py-3 rounded-lg"
+                  className=" w-[45%] justify-center items-center border border-pc-primary py-3 rounded-lg"
                 >
-                  <View className="h-10 w-10 justify-center items-center rounded-full bg-amber-900">
+                  <View className="h-10 w-10 justify-center items-center rounded-full bg-[rgb(59,35,20)]">
                     <Text className="text-2xl text-white ">+</Text>
                   </View>
-                  <Text className="text-base pt-3 font-semibold text-amber-900">
+                  <Text className="text-base pt-3 font-semibold text-pc-primary">
                     Add Card
                   </Text>
                 </Pressable>

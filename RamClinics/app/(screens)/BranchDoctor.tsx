@@ -88,7 +88,7 @@ const BranchDoctor = () => {
                             <Pressable>
                                 <Text
                                     onPress={() => setActiveCategory(index)}
-                                    className={`text-base border border-amber-900 rounded-md py-1 px-3 ${index === activeCategory ? "text-white bg-amber-900" : ""
+                                    className={`text-base border border-pc-primary rounded-md py-1 px-3 ${index === activeCategory ? "text-white bg-[rgb(59,35,20)]" : ""
                                         }`}
                                 >
                                     {item}

@@ -54,7 +54,7 @@ const DoctorProfile = () => {
       <ScrollView>
         <View className="flex-1 bg-amber-100 pt-16">
           <View className="flex-row justify-between items-center px-6">
-            <Text onPress={() => router.back()} className="bg-amber-900 rounded-full p-2">
+            <Text onPress={() => router.back()} className="bg-[rgb(59,35,20)] rounded-full p-2">
               <Ionicons name="chevron-back" color={"white"} size={20} />
             </Text>
             <Text>
@@ -71,14 +71,14 @@ const DoctorProfile = () => {
               {doctor.photo && doctor.photo.length > 0 && doctor.photo[0] != null ? (
                 <Image
                   source={{ uri: `${sourceUrl}${encodeURIComponent(doctor.photo[0])}` }}
-                  className="w-64 h-64 rounded-full border-4 border-amber-900 "
+                  className="w-64 h-64 rounded-full border-4 border-pc-primary "
                 />
               ) : (
-                <Image source={doctorImg} className="w-64 h-64 rounded-full border-4 border-amber-900" />
+                <Image source={doctorImg} className="w-64 h-64 rounded-full border-4 border-pc-primary" />
               )}
             </View>
           </TouchableOpacity>
-          <View className="bg-amber-900 rounded-t-3xl p-6 mt-5">
+          <View className="bg-[rgb(59,35,20)] rounded-t-3xl p-6 mt-5">
             <View className="flex-row justify-between items-start">
               <View>
                 <Text className="text-white font-semibold">Doctor Name</Text>
@@ -133,8 +133,8 @@ const DoctorProfile = () => {
             <MaterialIcons name={icon} size={25} color="rgb(132 204 22)" />
           </Text>
           <View>
-            <Text className={`text-xs ${isAmber ? 'text-amber-900' : 'text-white'}`}>{label}</Text>
-            <Text className={`text-md font-semibold ${isAmber ? 'text-amber-900' : 'text-white'}`}>{value}</Text>
+            <Text className={`text-xs ${isAmber ? 'text-pc-primary' : 'text-white'}`}>{label}</Text>
+            <Text className={`text-md font-semibold ${isAmber ? 'text-pc-primary' : 'text-white'}`}>{value}</Text>
           </View>
         </View>
      

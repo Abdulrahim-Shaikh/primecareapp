@@ -97,7 +97,7 @@ const ChangePassword = () => {
             <TouchableOpacity
               onPress={handleSave}
               style={{
-                backgroundColor: '#78350F',
+                backgroundColor: 'rgb(59,35,20)',
                 padding: 15,
                 borderRadius: 5,
                 alignItems: 'center',

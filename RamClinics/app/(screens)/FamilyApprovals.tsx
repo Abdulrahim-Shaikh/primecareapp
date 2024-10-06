@@ -36,7 +36,7 @@ const FamilyApprovals = () => {
                 />
             </View>
             <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
-                <View className="flex-row border border-amber-900 rounded-lg mb-4 overflow-hidden">
+                <View className="flex-row border border-pc-primary rounded-lg mb-4 overflow-hidden">
                     <View className="flex-1 p-2">
                         <Text className="text-base font-bold ">
                             Approve to as add Family Member with relation
@@ -50,7 +50,7 @@ const FamilyApprovals = () => {
                                     style={{ alignSelf: 'flex-start' }}
                                 >
 
-                                    <Text className="rounded-md p-1 mt-5 bg-amber-900 text-left ml-1 text-base font-semibold" style={{ color: 'white' }}>
+                                    <Text className="rounded-md p-1 mt-5 bg-[rgb(59,35,20)] text-left ml-1 text-base font-semibold" style={{ color: 'white' }}>
                                         <AntDesign name="check" size={24} color="white" style={{ paddingRight: 4 }} />
                                         Confirm Relation
                                     </Text>
@@ -70,7 +70,7 @@ const FamilyApprovals = () => {
                                             <Pressable onPress={handleCancelButton} style={{ position: 'absolute', top: 0, right: 5, padding: 1 }}>
                                                 <Entypo name="circle-with-cross" size={22} color="black" />
                                             </Pressable>
-                                            <View className="w-12 h-12 rounded-full bg-amber-900 justify-center items-center">
+                                            <View className="w-12 h-12 rounded-full bg-[rgb(59,35,20)] justify-center items-center">
                                                 <MaterialIcons name="family-restroom" size={24} color="white" />
                                             </View>
                                         </View>
@@ -83,13 +83,13 @@ const FamilyApprovals = () => {
                                         <View className="flex-row justify-between w-full">
                                             <Pressable
                                                 onPress={handleCancelButton}
-                                                style={{ backgroundColor: '#78350F', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
+                                                style={{ backgroundColor: 'rgb(59,35,20)', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
                                                 <Text style={{ color: 'white' }}>Cancel</Text>
                                             </Pressable>
 
                                             <Pressable
                                                 onPress={handleConfirmButton}
-                                                style={{ backgroundColor: '#78350F', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
+                                                style={{ backgroundColor: 'rgb(59,35,20)', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
                                                 <Text style={{ color: 'white' }}>Confirm</Text>
                                             </Pressable>
                                         </View>

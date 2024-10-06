@@ -20,7 +20,7 @@ const Appoinment = () => {
             <Text className="text-lg font-semibold ">Schedules</Text>
             <CalendarModal />
           </View>
-          <View className="border border-amber-900 rounded-xl p-5 flex-row -mr-20">
+          <View className="border border-pc-primary rounded-xl p-5 flex-row -mr-20">
             <FlatList
               horizontal
               style={{ marginRight: 60 }}
@@ -29,14 +29,14 @@ const Appoinment = () => {
               data={scheduleDates}
               keyExtractor={(item, index) => "key" + index}
               renderItem={({ item, index }) => (
-                <Pressable className=" items-center p-3 rounded-lg border border-amber-900">
+                <Pressable className=" items-center p-3 rounded-lg border border-pc-primary">
                   <Text className="text-base font-semibold">{item.date}</Text>
                   <Text className="text-[12px]">{item.day}</Text>
                 </Pressable>
               )}
             />
           </View>
-          <View className="border border-amber-900 rounded-xl p-5 flex-row -mr-20 mt-5">
+          <View className="border border-pc-primary rounded-xl p-5 flex-row -mr-20 mt-5">
             <FlatList
               horizontal
               style={{ marginRight: 60 }}
@@ -45,7 +45,7 @@ const Appoinment = () => {
               data={["10.00Am", "11.00Am", "12.00Pm", "01.00Pm"]}
               keyExtractor={(item, index) => "key" + index}
               renderItem={({ item, index }) => (
-                <Pressable className=" items-center py-2 px-3 rounded-lg border border-amber-900">
+                <Pressable className=" items-center py-2 px-3 rounded-lg border border-pc-primary">
                   <Text className="text-base font-semibold">{item}</Text>
                 </Pressable>
               )}
@@ -66,11 +66,11 @@ const Appoinment = () => {
 
                   <View className="pl-3">
                     <Text className="text-base font-medium">{name}</Text>
-                    <Text className="text-xs text-amber-900">{desc}</Text>
+                    <Text className="text-xs text-pc-primary">{desc}</Text>
                   </View>
                 </View>
                 <View>
-                  <Text className="text-base font-medium text-amber-900 p-2 bg-amber-100 rounded-lg">
+                  <Text className="text-base font-medium text-pc-primary p-2 bg-amber-100 rounded-lg">
                     ${price}
                   </Text>
                 </View>

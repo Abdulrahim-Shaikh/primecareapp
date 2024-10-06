@@ -169,9 +169,9 @@ const DoctorSelect = () => {
                     {doctors.map((item: any) => (
                         <View
                             key={`key: ${item.id}`}
-                            className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
+                            className="p-4 border border-pc-primary rounded-2xl w-full mt-4"
                         >
-                            <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
+                            <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-pc-primary pb-4">
                                 <View className="flex flex-row justify-start items-center ">
                                     <View>
                                         <Text className="text-base font-medium pb-2">
@@ -204,14 +204,14 @@ const DoctorSelect = () => {
                                             <Text>
                                                 <Entypo name="dot-single" />
                                             </Text>
-                                            <Text className="text-amber-900">
+                                            <Text className="text-pc-primary">
                                                 <AntDesign name="clockcircle" /> from {selectedSlot}
                                             </Text>
                                         </Text>
                                     </View>
                                 </View>
 
-                                <View className=" border border-amber-900 p-2 rounded-md ">
+                                <View className=" border border-pc-primary p-2 rounded-md ">
                                     <Ionicons
                                         name="heart-outline"
                                         size={16}

@@ -39,7 +39,7 @@ const WriteReview = () => {
         <View className="pt-6">
           <View className="flex-row justify-between items-center pb-3">
             <Text className="text-base font-semibold ">Write your review</Text>
-            <Text className="text-xs text-amber-900">Max 250 words</Text>
+            <Text className="text-xs text-pc-primary">Max 250 words</Text>
           </View>
           <View className="px-4 py-3  border rounded-xl w-full text-amber-500">
             <TextInput
@@ -60,14 +60,14 @@ const WriteReview = () => {
               className="flex-row justify-start items-center"
             >
               <RadioButton isActive={isRecommend} />
-              <Text className="text-amber-900 pl-2">Yes</Text>
+              <Text className="text-pc-primary pl-2">Yes</Text>
             </Pressable>
             <Pressable
               onPress={() => setIsRecommend(false)}
               className="flex-row justify-start items-center"
             >
               <RadioButton isActive={!isRecommend} />
-              <Text className="text-amber-900 pl-2">No</Text>
+              <Text className="text-pc-primary pl-2">No</Text>
             </Pressable>
           </View>
         </View>

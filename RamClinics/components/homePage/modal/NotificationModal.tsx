@@ -104,9 +104,9 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
 
     return (
       <View className="pt-5" key={notification.id}>
-        <View className="p-4 rounded-2xl border bg-white border-amber-900 flex flex-row justify-start items-center">
+        <View className="p-4 rounded-2xl border bg-white border-pc-primary flex flex-row justify-start items-center">
           <View>
-            <Text className="text-amber-900 p-4 rounded-full bg-amber-100 mr-4">
+            <Text className="text-pc-primary p-4 rounded-full bg-amber-100 mr-4">
               {status === 'Cancelled' ? (
                 <MaterialCommunityIcons name="close-box" size={24} />
               ) : (
@@ -116,8 +116,8 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
           </View>
           <View className="flex-1">
             <Text className="text-base font-semibold">Appointment {capitalizeFirstLetter(status)}</Text>
-            <Text className="text-[12px] text-amber-900">{formattedDate}</Text>
-            <Text className="text-[12px] text-amber-900">{notificationMessage}</Text>
+            <Text className="text-[12px] text-pc-primary">{formattedDate}</Text>
+            <Text className="text-[12px] text-pc-primary">{notificationMessage}</Text>
           </View>
         </View>
       </View>
@@ -130,11 +130,11 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
         <ScrollView>
           <View className={Platform.OS === 'ios' ? "py-20 px-6" : "py-8 px-6"}>
             <HeaderWithBackButton setModal={setShowNotification} title="Notification" />
-            <View className="pt-8 pb-5 border-b border-dashed border-amber-900 flex flex-row justify-between items-center">
+            <View className="pt-8 pb-5 border-b border-dashed border-pc-primary flex flex-row justify-between items-center">
               <Text className="text-lg font-semibold">Latest Update</Text>
               {/* <View className="flex flex-row gap-2 items-center">
                       <Text className="text-[12px]">Sort By{":"}</Text>
-                      <Pressable className="z-50 border border-amber-900 rounded-lg">
+                      <Pressable className="z-50 border border-pc-primary rounded-lg">
                         <Text className="px-4 py-2" onPress={() => setShow((prev) => !prev)}>
                           {sortBy} <Feather name="chevron-down" size={18} />
                         </Text>

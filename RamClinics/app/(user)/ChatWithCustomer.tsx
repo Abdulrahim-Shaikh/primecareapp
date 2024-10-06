@@ -16,7 +16,7 @@ const ChatWithCustomer = () => {
   const [message, setMessage] = useState(false);
   return (
     <SafeAreaView>
-      <ScrollView className="bg-amber-900 ">
+      <ScrollView className="bg-[rgb(59,35,20)] ">
         <View className="px-6 pt-6 pb-20">
           <HeaderWithBackButton
             isPushBack={true}
@@ -26,21 +26,21 @@ const ChatWithCustomer = () => {
         </View>
         <View className="p-6 bg-amber-100 rounded-t-3xl -mt-12 pb-24">
           <View className=" justify-center items-center">
-            <Text className="text-xs font-semibold px-8 py-2 border border-amber-900 rounded-full">
+            <Text className="text-xs font-semibold px-8 py-2 border border-pc-primary rounded-full">
               10 June, 2023
             </Text>
           </View>
           <View className="pt-8">
             <View className=" justify-end flex-row items-end gap-2">
               <View className=" max-w-[85%]">
-                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl">
+                <Text className="text-base text-pc-primary p-4 bg-white border border-pc-primary rounded-t-xl rounded-bl-xl">
                   Hi, good afternoon Dr. Jenny Wilson
                 </Text>
-                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl mt-2">
+                <Text className="text-base text-pc-primary p-4 bg-white border border-pc-primary rounded-t-xl rounded-bl-xl mt-2">
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
-              <View className="p-1 bg-amber-900 rounded-full">
+              <View className="p-1 bg-[rgb(59,35,20)] rounded-full">
                 <Feather name="check" size={12} color="white" />
               </View>
             </View>
@@ -51,10 +51,10 @@ const ChatWithCustomer = () => {
                 <Feather name="headphones" size={24} color="rgb(132 204 22)" />
               </View>
               <View className="">
-                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-[rgb(59,35,20)]  rounded-b-xl rounded-tr-xl max-w-[85%]">
                   Hello, good afternoon Andrew
                 </Text>
-                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-[rgb(59,35,20)]  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
                   Can you tell me the problem you are having? So that I can
                   identify it
                 </Text>
@@ -67,10 +67,10 @@ const ChatWithCustomer = () => {
                 <Feather name="headphones" size={24} color="rgb(132 204 22)" />
               </View>
               <View className="">
-                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-[rgb(59,35,20)]  rounded-b-xl rounded-tr-xl max-w-[85%]">
                   Hello, good afternoon Andrew
                 </Text>
-                <Text className="text-base text-white p-4 bg-amber-900  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
+                <Text className="text-base text-white p-4 bg-[rgb(59,35,20)]  rounded-b-xl rounded-tr-xl mt-2 max-w-[85%]">
                   Can you tell me the problem you are having? So that I can
                   identify it
                 </Text>
@@ -80,14 +80,14 @@ const ChatWithCustomer = () => {
           <View className="pt-8">
             <View className=" justify-end flex-row items-end gap-2">
               <View className=" max-w-[85%]">
-                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl">
+                <Text className="text-base text-pc-primary p-4 bg-white border border-pc-primary rounded-t-xl rounded-bl-xl">
                   Hi, good afternoon Dr. Jenny Wilson
                 </Text>
-                <Text className="text-base text-amber-900 p-4 bg-white border border-amber-900 rounded-t-xl rounded-bl-xl mt-2">
+                <Text className="text-base text-pc-primary p-4 bg-white border border-pc-primary rounded-t-xl rounded-bl-xl mt-2">
                   I'm Andrew. I have a problem with my immune system
                 </Text>
               </View>
-              <View className="p-1 bg-amber-900 rounded-full">
+              <View className="p-1 bg-[rgb(59,35,20)] rounded-full">
                 <Feather name="check" size={12} color="white" />
               </View>
             </View>
@@ -123,7 +123,7 @@ const ChatWithCustomer = () => {
           )}
         </View>
         <View
-          className={`flex-row px-4 py-2 rounded-[28px] border border-amber-900 flex-1 justify-between ${
+          className={`flex-row px-4 py-2 rounded-[28px] border border-pc-primary flex-1 justify-between ${
             message ? "items-end" : "items-center"
           }`}
         >
@@ -144,7 +144,7 @@ const ChatWithCustomer = () => {
           </Text>
         </View>
         <View>
-          <Text className="p-3 bg-amber-900 rounded-full">
+          <Text className="p-3 bg-[rgb(59,35,20)] rounded-full">
             <Ionicons name="paper-plane-outline" size={20} color="white" />
           </Text>
         </View>

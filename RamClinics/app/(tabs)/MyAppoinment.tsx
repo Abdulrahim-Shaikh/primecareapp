@@ -125,7 +125,7 @@ const Appoinment = () => {
         <View className="pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6">
             <HeaderWithBackButton isPushBack={true} title="My Appointments" />
-            <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(120 53 15)" }
+            <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(59, 35, 20)" }
             />
           </View>
           {/* <View className="pt-8">
@@ -151,12 +151,12 @@ const Appoinment = () => {
                 key={idx}
                 onPress={() => changeTab(item)}
                 className={`flex-1 border-b  pb-2 ${activeTab === item
-                  ? "border-amber-900"
+                  ? "border-pc-primary"
                   : "text-amber-500"
                   }`}
               >
                 <Text
-                  className={`text-center font-semibold ${activeTab === item ? "text-amber-900" : ""
+                  className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : ""
                     }`}
                 >
                   {item}
@@ -172,9 +172,9 @@ const Appoinment = () => {
             {appointments.map((item) => (
               <View
                 key={`key: ${item.id}`}
-                className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
+                className="p-4 border border-pc-primary rounded-2xl w-full mt-4"
               >
-                <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-amber-900 pb-4">
+                <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-pc-primary pb-4">
                   <View className="flex flex-row justify-start items-center ">
                     {/* <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
                       <Image source={item.img} />
@@ -211,14 +211,14 @@ const Appoinment = () => {
                         <Text>
                           <Entypo name="dot-single" />
                         </Text>
-                        <Text className="text-amber-900">
+                        <Text className="text-pc-primary">
                           <AntDesign name="clockcircle" /> {item.startTime} - {item.endTime}
                         </Text>
                       </Text>
                     </View>
                   </View>
 
-                  <View className=" border border-amber-900 p-2 rounded-md ">
+                  <View className=" border border-pc-primary p-2 rounded-md ">
                     <Ionicons
                       name="heart-outline"
                       size={16}
@@ -245,7 +245,7 @@ const Appoinment = () => {
                   )}
 
                   {item.sessionStatus === "Upcoming" ? (
-                    <Text className="flex-1 text-white border border-amber-900	 px-4 py-2 rounded-lg bg-amber-900 text-center">
+                    <Text className="flex-1 text-white border border-pc-primary	 px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center">
                       Change Date
                     </Text>
                   ) : (
@@ -258,7 +258,7 @@ const Appoinment = () => {
                         }
                       });
                     }}
-                      className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center">
+                      className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center">
                       Leave Review
                     </Text>
                   )}
@@ -280,7 +280,7 @@ const Appoinment = () => {
                 Cancel Appointment
               </Text>
             </View>
-            <Text className="text-lg pt-4 text-center text-amber-900">
+            <Text className="text-lg pt-4 text-center text-pc-primary">
               Are you sure you want to cancel?
             </Text>
 
@@ -289,7 +289,7 @@ const Appoinment = () => {
                 onPress={() => setCancelModal(false)}
                 className="flex-1"
               >
-                <Text className="text-amber-900	border border-bg-amber-900 rounded-lg py-4 bg-amber-100 text-center font-medium ">
+                <Text className="text-pc-primary	border border-bg-[rgb(59,35,20)] rounded-lg py-4 bg-amber-100 text-center font-medium ">
                   Cancel
                 </Text>
               </Pressable>
@@ -297,7 +297,7 @@ const Appoinment = () => {
                 onPress={() => router.push("/CancelAppoinment")}
                 className="flex-1"
               >
-                <Text className="text-white border border-bg-amber-900 rounded-lg py-4 bg-amber-900 text-center font-medium ">
+                <Text className="text-white border border-bg-[rgb(59,35,20)] rounded-lg py-4 bg-[rgb(59,35,20)] text-center font-medium ">
                   Confirm
                 </Text>
               </Pressable>

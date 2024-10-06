@@ -246,7 +246,7 @@ const DoctorCard = ({
         })
       }}
       activeOpacity={0.7}
-      className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
+      className="p-4 border border-pc-primary rounded-2xl w-full mt-4"
     >
       <View className="flex flex-row w-full justify-between items-start">
         <View className="flex flex-row justify-start items-center flex-1">
@@ -273,21 +273,21 @@ const DoctorCard = ({
             </TouchableOpacity>
             <Text className="py-2">
               {speciality} <Entypo name="dot-single" />
-              <Text className="text-[12px] text-amber-900">{primaryBranch}</Text>
+              <Text className="text-[12px] text-pc-primary">{primaryBranch}</Text>
             </Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               <Text style={{ maxWidth: '80%' }} className="text-[12px]">
                 <AntDesign name="star" color={"#ffab00"} />
                 {rating}
                 <Entypo name="dot-single" />
-                <Text className="text-amber-900">
+                <Text className="text-pc-primary">
                   <AntDesign name="clockcircle" /> {clinicHours}
                 </Text>
               </Text>
             </View>
           </View>
         </View>
-        <View className="border border-amber-900 p-2 rounded-md ml-2">
+        <View className="border border-pc-primary p-2 rounded-md ml-2">
           <Ionicons name="heart-outline" size={16} color={"rgb(132 204 22)"} />
         </View>
       </View>

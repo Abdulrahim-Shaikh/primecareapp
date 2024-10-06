@@ -149,11 +149,11 @@ const SlotsConfirmationPage = () => {
                         console.log("selected item: ", [key,value])
                         selectSlot([key,value])
                     }}
-                    className="border border-amber-900 p-2 rounded-lg w-full">
+                    className="border border-pc-primary p-2 rounded-lg w-full">
                     <View className="py-2 items-center">
                         <Ionicons name="time" size={36} color={"maroon"} />
                     </View>
-                    <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{key}</Text>
+                    <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{key}</Text>
                 </Pressable>
             </View>
         )
@@ -169,7 +169,7 @@ const SlotsConfirmationPage = () => {
                     <TouchableOpacity
                         onPress={() => setIsDatePickerOpen(true)}
                         className="flex flex-row justify-between items-center pt-2 gap-4 ">
-                        <Text className="flex-1 text-white border border-amber-900 px-4 py-2 rounded-lg bg-amber-900 text-center" >
+                        <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center" >
                             On: {slotSearchDate.toLocaleDateString()}
                         </Text>
                     </TouchableOpacity>
@@ -194,11 +194,11 @@ const SlotsConfirmationPage = () => {
                                         console.log("selected item: ", item)
                                         selectSlot(item)
                                     }}
-                                    className="border border-amber-900 p-2 rounded-lg w-full">
+                                    className="border border-pc-primary p-2 rounded-lg w-full">
                                     <View className="py-2 items-center">
                                         <Ionicons name="time" size={36} color={"maroon"} />
                                     </View>
-                                    <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item[0]}</Text>
+                                    <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item[0]}</Text>
                                 </Pressable>
                             </View>
                         )}

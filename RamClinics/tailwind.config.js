@@ -20,6 +20,7 @@ module.exports = {
     },
     colors: {
       white: "rgba(255, 255, 255, 1)",
+      'pc-primary': '#3B2314',
       primaryColor:  platformSelect({ default: "green" }),
       secondaryBg: "rgba(230, 244, 242, 1)",
       neutralColor: "rgba(14, 13, 57, 1)",

@@ -11,8 +11,8 @@ const HelpSupport = () => {
       <ScrollView>
         <View className="p-6">
           <HeaderWithBackButton isPushBack={true} title="Help & Support" />
-          <View className="mt-8 p-6 border border-amber-900 bg-amber-100 rounded-2xl">
-            <Text className="text-2xl py-1 font-bold text-amber-900">
+          <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-2xl">
+            <Text className="text-2xl py-1 font-bold text-pc-primary">
               Always Here to Help!
             </Text>
             <Text className="text-lg py-3">
@@ -23,7 +23,7 @@ const HelpSupport = () => {
               className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500"
             >
               <Text className="text-md font-medium">FAQ</Text>
-              <Text className="bg-amber-900 rounded-full p-1 justify-center items-center">
+              <Text className="bg-[rgb(59,35,20)] rounded-full p-1 justify-center items-center">
                 <Ionicons name="chevron-forward" color={"white"} size={20} />
               </Text>
             </Pressable>
@@ -32,7 +32,7 @@ const HelpSupport = () => {
               className=" flex-row justify-between items-center py-4 border-b border-dashed text-amber-500"
             >
               <Text className="text-base font-medium">Contact Us</Text>
-              <Text className="bg-amber-900 rounded-full p-1 justify-center items-center">
+              <Text className="bg-[rgb(59,35,20)] rounded-full p-1 justify-center items-center">
                 <Ionicons name="chevron-forward" color={"white"} size={20} />
               </Text>
             </Pressable>
@@ -41,13 +41,13 @@ const HelpSupport = () => {
               className=" flex-row justify-between items-center pt-4 "
             >
               <Text className="text-base font-medium">Terms & Conditions</Text>
-              <Text className="bg-amber-900 rounded-full p-1 justify-center items-center">
+              <Text className="bg-[rgb(59,35,20)] rounded-full p-1 justify-center items-center">
                 <Ionicons name="chevron-forward" color={"white"} size={20} />
               </Text>
             </Pressable> */}
           </View>
 
-          <View className="mt-8 p-6 border border-amber-900 bg-amber-900 rounded-2xl">
+          <View className="mt-8 p-6 border border-pc-primary bg-[rgb(59,35,20)] rounded-2xl">
             <Text className="text-2xl py-1 font-bold text-lime-400">
               Contact Us
             </Text>
@@ -55,7 +55,7 @@ const HelpSupport = () => {
               <View className="flex flex-row items-center p-2">
                 <Ionicons name="call" size={24} color="rgb(132 204 22)" />
                 <View className="flex-1">
-                  <Text className="text-lg font-bold text-amber-900 text-center">920020011</Text>
+                  <Text className="text-lg font-bold text-pc-primary text-center">920020011</Text>
                 </View>
               </View>
             </View>
@@ -63,7 +63,7 @@ const HelpSupport = () => {
               <View className="flex flex-row items-center p-2">
                 <Ionicons name="call" size={24} color="rgb(132 204 22)" />
                 <View className="flex-1">
-                  <Text className="text-lg font-bold text-amber-900 text-center">0133334050</Text>
+                  <Text className="text-lg font-bold text-pc-primary text-center">0133334050</Text>
                 </View>
               </View>
             </View>
@@ -71,14 +71,14 @@ const HelpSupport = () => {
               <View className="flex flex-row items-center p-2">
                 <Ionicons name="mail" size={24} color="rgb(132 204 22)" />
                 <View className="flex-1">
-                  <Text className="text-lg font-bold text-amber-900 text-center">ramsupport@ramclinics.com</Text>
+                  <Text className="text-lg font-bold text-pc-primary text-center">ramsupport@ramclinics.com</Text>
                 </View>
               </View>
             </View>
           </View>
 
-          <View className="mt-8 p-4 border border-amber-900 rounded-2xl bg-indigo-950">
-            <Text className="text-2xl pl-4 py-1 font-bold text-lime-500">
+          <View className="mt-8 p-4 border border-pc-primary rounded-2xl bg-indigo-950">
+            <Text className="text-2xl pl-4 py-1 font-bold text-lime-600">
               Timings
             </Text>
             <View className="rounded-lg mt-5 mb-3">
