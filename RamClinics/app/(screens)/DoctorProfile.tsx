@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { AntDesign, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
@@ -51,9 +51,8 @@ const DoctorProfile = () => {
   };
 
   return (
-    <SafeAreaView>
       <ScrollView>
-        <View className="flex-1 bg-amber-100 pt-8 mt-2">
+        <View className="flex-1 bg-amber-100 pt-16">
           <View className="flex-row justify-between items-center px-6">
             <Text onPress={() => router.back()} className="bg-amber-900 rounded-full p-2">
               <Ionicons name="chevron-back" color={"white"} size={20} />
@@ -118,12 +117,13 @@ const DoctorProfile = () => {
               <DetailItem icon="reviews" label="Reviews" value={renderValue(doctor.reviews, "No reviews yet")} isAmber />
             </View>
           </View>
-          <View className="p-2 rounded-t-2xl bg-white mt-10">
+          <View className={`p-2 bg-slate-50 ${Platform.OS === 'ios' ? 'pb-10' : 'pb-4'}`}>
+            <View className="p-2 rounded-t-2xl">
             <LinkButton link="/Appoinment" text="Make an appointment" />
+            </View>
           </View>
         </View>
         </ScrollView>
-        </SafeAreaView>
         );
 };
 
