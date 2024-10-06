@@ -163,7 +163,7 @@ const ProfileTab = () => {
                   </Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => { setLoggedOut(); router.push("/(tabs)") }}
+                  onPress={() => { setLogoutModal(false); setLoggedOut(); router.push("/(tabs)") }}
                   className="flex-1"
                 >
                   <Text className="text-white border border-amber-900 rounded-lg py-4 bg-amber-900 text-center font-medium ">
