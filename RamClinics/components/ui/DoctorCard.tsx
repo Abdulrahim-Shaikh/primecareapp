@@ -240,6 +240,10 @@ const DoctorCard = ({
     <TouchableOpacity
       onPress={() => {
         console.log("DoctorCard Clicked");
+        router.push({
+          pathname: "/DoctorProfile",
+          params: { id: id },
+        })
       }}
       activeOpacity={0.7}
       className="p-4 border border-amber-900 rounded-2xl w-full mt-4"
