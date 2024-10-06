@@ -15,6 +15,7 @@ const BookAppointmentOptions = () => {
     const router = useRouter();
     const { city, fromSpeciality, department } = useLocalSearchParams();
 
+
     // get departments by branch
     const optionsData = [
         {
@@ -41,25 +42,26 @@ const BookAppointmentOptions = () => {
             link: "/SpecialistListPage",
             params: { department: department }
         },
-        {
-            id: 3,
-            icon: 'file-waveform',
-            title: "By Service",
-            link: "/NormalFlow",
-            params: { department: department }
-        },
+        // {
+        //     id: 3,
+        //     icon: 'file-waveform',
+        //     title: "By Service",
+        //     link: "/NormalFlow",
+        //     params: { department: department }
+        // },
         {
             id: 4,
             icon: 'file-waveform',
             title: "Call Center",
             link: "/DoctorSpecialityPage",
-            params: { 
+            params: {
                 branchId: null,
                 fromSpeciality: fromSpeciality,
                 department: department,
                 callCenterFlow: 1
             }
         },
+
     ]
 
     // useFocusEffect(
@@ -67,26 +69,12 @@ const BookAppointmentOptions = () => {
     //     }, [])
     // )
 
-    return (
-        <SafeAreaView>
-            <ScrollView>
-                <View className="">
-                    <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
-                        <MaterialCommunityIcons
-                            name="calendar-check-outline"
-                            size={24}
-                            color={"rgb(132 204 22)"}
-                        />
-                        <Text className="text-2xl font-semibold">Search by</Text>
-                    </View>
-                    <View className="flex-row pt-5 px-4">
-                        <FlatList
-                            data={optionsData}
-                            numColumns={3}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                                <View className="flex flex-row p-1 m-1 w-32 h-32">
-                                    {/* <TouchableOpacity className="border border-amber-900 p-2 rounded-lg w-full" onPress={
+    var serviceDataRender = []
+
+    for (let item of optionsData) {
+        serviceDataRender.push(
+            <View className="w-32">
+                {/* <TouchableOpacity className="border border-amber-900 p-2 rounded-lg w-full" onPress={
                                         () => {
                                             Alert.alert('Search by Doctor or Service', 'Please select one', [
                                                 {
@@ -119,29 +107,57 @@ const BookAppointmentOptions = () => {
                                             ])
                                         }
                                     }> */}
-                                    <TouchableOpacity
-                                        className="border border-amber-900 p-2 rounded-lg w-full"
-                                        onPress={
-                                            () => {
-                                                router.push({
-                                                    pathname: item.link,
-                                                    params: item.params
-                                                })
-                                            }
-                                        }>
-                                        <View className="py-2 items-center">
-                                            {/* <FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
-                                            <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} />
-                                            {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
-                                            {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
-                                            {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
-                                            {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
-                                        </View>
-                                        <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item.title}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
+                <TouchableOpacity
+                    className="border border-amber-900 p-2 rounded-lg w-full"
+                    onPress={
+                        () => {
+                            router.push({
+                                pathname: item.link,
+                                params: item.params
+                            })
+                        }
+                    }>
+                    <View className="py-2 items-center">
+                        {/* <FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
+                        <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} />
+                        {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
+                        {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
+                        {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
+                        {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
+                    </View>
+                    <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{item.title}</Text>
+                </TouchableOpacity>
+            </View>
+
+        )
+    }
+
+
+
+    return (
+        <SafeAreaView>
+            <ScrollView>
+                <View className="">
+                    <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
+                        <MaterialCommunityIcons
+                            name="calendar-check-outline"
+                            size={24}
+                            color={"rgb(132 204 22)"}
                         />
+                        <Text className="text-2xl font-semibold">Search by</Text>
+                    </View>
+                    <View className="flex-row pt-5">
+                        {/* <FlatList
+                            data={optionsData}
+                            numColumns={3}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) => (
+                               
+                            )}
+                        /> */}
+                    </View>
+                    <View className="flex flex-row justify-evenly">
+                        {serviceDataRender}
                     </View>
                 </View>
             </ScrollView>
