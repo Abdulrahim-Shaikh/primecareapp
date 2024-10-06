@@ -146,7 +146,7 @@ const Packages = () => {
                 <View className="flex-1 p-4 pt-2">
                     <View className="flex flex-row justify-start items-center gap-4">
                         <HeaderWithBackButton isPushBack={true} title="Packages" />
-                        <MaterialCommunityIcons name="tag-heart" size={24} color={"rgb(120 53 15"} />
+                        <MaterialCommunityIcons name="tag-heart" size={24} color={"rgb(120 53 15)"} />
                     </View>
                     <View className="border border-amber-900 rounded-lg my-4">
                         <Picker
