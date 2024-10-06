@@ -28,7 +28,7 @@ const ProfileTab = () => {
   const [logoutModal, setLogoutModal] = useState(false);
   const [user, setUser] = useState(null);
   const { userData } = useContext(UserContext);
-  const [ patientName, setPatientName ] = useState("");
+  const [patientName, setPatientName] = useState("");
   // let user = useUserSate.getState().user;
   // let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
@@ -36,10 +36,10 @@ const ProfileTab = () => {
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
   function onPressFunction(name: string, link: string) {
     if (name === "Dark Mode") return;
-    if ( !loggedIn && (name === "My Invoices" || name == "My Prescription" || name == "Security")) {
+    if (!loggedIn && (name === "My Invoices" || name == "My Prescription" || name == "Security")) {
       router.push("/SignIn");
     } else {
-    router.push(link);
+      router.push(link);
     }
 
   }
@@ -48,9 +48,9 @@ const ProfileTab = () => {
     useCallback(() => {
       setUser(useUserSate.getState().user)
       setPatientName(useUserSate.getState().patientName)
-      console.log("loggedIn ?: ",loggedIn);
+      console.log("loggedIn ?: ", loggedIn);
       // console.log("userState: ", useUserSate.getState());
-    }, [])  
+    }, [])
   )
 
 
@@ -59,9 +59,9 @@ const ProfileTab = () => {
       <ScrollView>
         <View className=" pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
-          <HeaderWithBackButton isPushBack={true} title="User Settings" />
+            <HeaderWithBackButton isPushBack={true} title="User Settings" />
             <AntDesign name="user" size={24} color={"rgb(120 53 15)"} />
-            
+
           </View>
           <View className="bg-amber-900 rounded-[20px] p-6 flex flex-row justify-between items-center">
             <View className="flex-row gap-4">
@@ -120,29 +120,30 @@ const ProfileTab = () => {
                 </View>
               </Pressable>
             ))}
-            <Pressable
-              onPress={() => setLogoutModal(true)}
-              className="flex-row justify-between items-center pt-3"
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="rounded-full p-3">
-                  <Text className="">
-                    <MaterialIcons name="logout" size={26} color="rgb(120 53 15)" />
+            {loggedIn && (
+              <Pressable
+                onPress={() => setLogoutModal(true)}
+                className="flex-row justify-between items-center pt-3"
+              >
+                <View className="flex-row items-center gap-4">
+                  <View className="rounded-full p-3">
+                    <Text className="">
+                      <MaterialIcons name="logout" size={26} color="rgb(120 53 15)" />
+                    </Text>
+                  </View>
+                  <Text className="text-lg font-semibold text-amber-900">
+                    Logout
                   </Text>
                 </View>
-                <Text className="text-lg font-semibold text-amber-900">
-                  Logout
-                </Text>
-              </View>
-            </Pressable>
+              </Pressable>
+            )}
           </View>
         </View>
 
         <Modal visible={logoutModal} transparent={true}>
           <View
             className="h-full justify-end items-center"
-            style={{ backgroundColor: "rgba(52, 52, 52, 0.5)" }}
-          >
+            style={{ backgroundColor: "rgba(52, 52, 52, 0.5)" }}>
             <View className="bg-white w-full pt-16 px-6 pb-6 rounded-t-[60px] ">
               <View className="pb-4 border-b border-dashed text-amber-500">
                 <Text className="text-[#ff5630] text-2xl text-center font-semibold ">
@@ -152,7 +153,6 @@ const ProfileTab = () => {
               <Text className="text-lg pt-4 text-center text-amber-900">
                 Are you sure you want to log out?
               </Text>
-
               <View className="pt-8 flex-row gap-4">
                 <Pressable
                   onPress={() => setLogoutModal(false)}
@@ -174,6 +174,7 @@ const ProfileTab = () => {
             </View>
           </View>
         </Modal>
+
       </ScrollView>
     </SafeAreaView>
   );
