@@ -19,6 +19,8 @@ const SlotsConfirmationPage = () => {
     const [doctorListPageRoute, setDoctorListPageRoute] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState("");
 
+    var slotsRender = [];
+
     useEffect(() => {
         // setDevicesList(JSON.parse(devices.toString()))
         let today = moment().format("YYYY-MM-DD");
@@ -51,6 +53,11 @@ const SlotsConfirmationPage = () => {
                 doctorList: JSON.stringify(slot[1])
             }
         })
+    }
+
+    function checkSlots() {
+        console.log("slotsAvailable: ", slotsAvailable)
+        // console.log("slotsAvailable.size: ", slotsAvailable.size)
     }
 
     const search = (date: any) => {
@@ -132,6 +139,28 @@ const SlotsConfirmationPage = () => {
         search(moment(slotSearchDate).format("YYYY-MM-DD"))
     };
 
+
+
+    for (let [key, value] of slotsAvailable) {
+        slotsRender.push(
+            <View className="flex flex-row p-1 m-1 w-32 h-32">
+                <Pressable
+                    onPress={() => {
+                        console.log("selected item: ", [key,value])
+                        selectSlot([key,value])
+                    }}
+                    className="border border-amber-900 p-2 rounded-lg w-full">
+                    <View className="py-2 items-center">
+                        <Ionicons name="time" size={36} color={"maroon"} />
+                    </View>
+                    <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{key}</Text>
+                </Pressable>
+            </View>
+        )
+    }
+
+
+
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
@@ -150,7 +179,9 @@ const SlotsConfirmationPage = () => {
                             <DateTimePicker value={slotSearchDate} mode="date" display="default" onChange={onDateChange} />
                         )}
                     </View>
-                    <Text>{slotsAvailable.size}</Text>
+                    {/* <Text>{slotsAvailable.size}</Text>
+                    <Pressable onPress={() => checkSlots()}><Text>Click me</Text></Pressable> */}
+                    {/* {slotsRender} */}
                     <FlatList
                         data={Array.from(slotsAvailable)}
                         numColumns={3}

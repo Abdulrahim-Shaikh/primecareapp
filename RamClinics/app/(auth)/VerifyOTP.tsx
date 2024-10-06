@@ -1,4 +1,4 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
@@ -19,6 +19,7 @@ const VerifyOTP = () => {
   // hardcoded values
   const [otpResp, setOtpResp] = useState({ otp: '9999' });
   const [otp, setOtp] = useState('');
+  const [loader, setLoader] = useState(false);
   // let otp: string = '';
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const VerifyOTP = () => {
 
   useEffect(() => {
     if (otp && otp.length == 4) {
+      setLoader(true);
       verifyOtp();
     }
   }, [otp]);
@@ -68,7 +70,10 @@ const VerifyOTP = () => {
       })
       //   console.log("loginService.byMobileNo(mobileNo) err", err);
       // })
-      .then(data => router.navigate('/(tabs)'));
+      .then(data => {
+        setLoader(false);
+        router.navigate('/(tabs)')
+      });
 
     } else {
       Alert.alert("Invalid OTP!")
@@ -98,6 +103,9 @@ const VerifyOTP = () => {
               >
                 Resend
               </Text>
+        {
+          loader && <ActivityIndicator size="large" color="#0000ff" />
+        }
             </Text>
           </View>
 
