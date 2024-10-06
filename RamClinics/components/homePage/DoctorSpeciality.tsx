@@ -61,6 +61,11 @@ const DoctorSpeciality = () => {
                           fromSpeciality: 1,
                           department: null,
                           speciality: item.name,
+                          specialityCode: item.code,
+                          callCenterFlow: 0,
+                          devices: JSON.stringify(""),
+                          responsible: "",
+                          callOrReception: ""
                         }
                       })
                     }

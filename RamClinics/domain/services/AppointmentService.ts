@@ -9,6 +9,8 @@ export class AppointmentService extends RestService<any> {
     getAppointments(patientId: any, branchId: any) {
         return this.get(`getAppointments/${patientId}/${branchId}`);
     }
+
+    // getAppointmentsBySlotId()
 }
 
 const appointmentService = new AppointmentService('appointment');

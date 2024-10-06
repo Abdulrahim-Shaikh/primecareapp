@@ -182,43 +182,7 @@ const UserProfile = () => {
 
           </View>
           <View className="p-2 rounded-t-2xl bg-white -mt-10">
-            {/* <View className="flex-row justify-between items-center pt-4 pb-10">
-                <View className="flex-row gap-9 bg-amber-400 rounded-md justify-center items-center">
-                  <Text className="p-2 rounded-md bg-black">
-                    <MaterialIcons
-                      name="people-outline"
-                      size={20}
-                    color="#84cc16"
-                    />
-                  </Text>
-                  <View>
-                    <Text className="text-white text-xs">Patient</Text>
-                    <Text className="text-white text-xs font-semibold">520</Text>
-                  </View>
-                </View>
-                <View className="flex-row gap-2">
-                  <Text className="p-2 rounded-md bg-white">
-                    <MaterialIcons
-                      name="people-outline"
-                      size={20}
-                    color="#84cc16"
-                    />
-                  </Text>
-                  <View>
-                    <Text className="text-white text-xs">Years experience</Text>
-                    <Text className="text-white text-xs font-semibold">10+</Text>
-                  </View>
-                </View>
-                
-              </View> */}
-            {/* <Text className="text-amber-900 py-5">
-              Dr. Dianne Johnson is a dedicated gynecologist committed to
-              women's health and well-being. With expertise in obstetrics and
-              gynecology, she provides compassionate care, emphasizing
-              preventive measures and personalized treatment.
-            </Text> */}
-
-            <LinkButton link="/Appoinment" text="Make an appoinment" />
+            <LinkButton link="/Appoinment" text="Make an appointment" />
           </View>
         </View>
       </View>

@@ -1,27 +1,41 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
+import { FlatList, Linking, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import cityMasterService from "../../domain/services/CityMasterService";
 import { useEffect, useState } from "react";
 import cityImg from "../../assets/images/Building.png";
 import branchService from "../../domain/services/BranchService";
+import resourceService from "../../domain/services/ResourceService";
 
 const CityPage = () => {
 
-    const {branchId, fromSpeciality, department, callCenterFlow, speciality} = useLocalSearchParams();
-    const [cities, setCities] = useState([]);
-    const [branchCounts, setBranchCounts] = useState(Object());
+    const { branchId, fromSpeciality, department, callCenterFlow, specialityCode, speciality, responsible, devices, callOrReception } = useLocalSearchParams();
+    const [ cities, setCities ] = useState([]);
+    const [ branchCounts, setBranchCounts ] = useState(Object());
+    const [ devicesList, setDevicesList ] = useState(JSON.parse(devices.toString()));
 
     useEffect(() => {
+        console.log(`devices: '${devices}'`)
+        setDevicesList(JSON.parse(devices.toString()))
         if (+callCenterFlow) {
-            const cityByBranch = async () => {
-                const response = await branchService.cityByDept(department)
-                console.log("response cities: ", response.data)
-                setCities(response.data);
+            let deviceCode: any = ""
+            for (let device of devicesList) {
+                deviceCode += device.deviceCode + ","
             }
-            cityByBranch()
-
+            const getCitiesBySpeciality = async () => {
+                let response = await resourceService.getCityBySpeciality(specialityCode, deviceCode)
+                setCities(response.data)
+            }
+            getCitiesBySpeciality()
+            // resourceService.getCityBySpeciality(specialityCode, deviceCode)
+            //     .then((response) => {
+            //         console.log("resource.getCityBySpeciality: ", response.data)
+            //         setCities(response.data);
+            //     })
+            //     .catch((error) => {
+            //         console.log("resource.getCityBySpeciality error: ", error)
+            //     })
         } else {
             cityMasterService.findAll().then((res) => {
                 setCities(res.data);
@@ -61,11 +75,16 @@ const CityPage = () => {
                                         onPress={() =>
                                             router.push({
                                                 pathname: "/BranchPage",
-                                                params: { 
+                                                params: {
                                                     city: item,
                                                     fromSpeciality: fromSpeciality,
                                                     department: department,
-                                                    speciality: speciality
+                                                    speciality: speciality,
+                                                    specialityCode: specialityCode,
+                                                    callCenterFlow: callCenterFlow,
+                                                    devices: devices,
+                                                    responsible: responsible,
+                                                    callOrReception: callOrReception
                                                 },
                                             })
                                         }

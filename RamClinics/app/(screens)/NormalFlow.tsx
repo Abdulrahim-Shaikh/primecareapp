@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ServiceListPage = () => {
+const NormalFlow = () => {
     const [branchOptions, setBranchOptions] = useState([])
     const [branchId, setBranchId] = useState("")
     const [specialityOptions, setSpecialityOptions] = useState([])
@@ -577,4 +577,4 @@ const ServiceListPage = () => {
     )
 }
 
-export default ServiceListPage;
+export default NormalFlow;
