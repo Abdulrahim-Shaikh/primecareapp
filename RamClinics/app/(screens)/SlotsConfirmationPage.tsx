@@ -56,8 +56,8 @@ const SlotsConfirmationPage = () => {
     }
 
     function checkSlots() {
+        console.log("slotsAvailable.size: ", slotsAvailable.size)
         console.log("slotsAvailable: ", slotsAvailable)
-        // console.log("slotsAvailable.size: ", slotsAvailable.size)
     }
 
     const search = (date: any) => {
@@ -79,87 +79,63 @@ const SlotsConfirmationPage = () => {
                     // let doctorsAvailableAgainstSlots: Map<number, Array<any>> = new Map<number, Array<any>>()
                     let slotsAvailableAux: Map<string, Array<any>> = new Map<string, Array<number>>()
                     let pastSlotLimit: Map<number, any> = new Map<number, any>()
+                    let pastSlotLimitAux: Map<number, any> = new Map<number, any>()
                     const timeSlots = Object.keys(slots);
                     const sortedTimeSlots = timeSlots.sort((a, b) => {
                         return moment(`${date} ${a.trim()}`, "YYYY-MM-DD hh:mm A").diff(moment(`${date} ${b.trim()}`, "YYYY-MM-DD hh:mm A"))
                     })
 
+                    let slotsAvailableAux2: Map<string, Array<any>> = new Map<string, Array<number>>()
+
                     for (let slot of sortedTimeSlots) {
                         const slotTimeInstance = moment(`${date} ${slot.trim()}`, "YYYY-MM-DD hh:mm A");
-                        // console.log("\n\n\n")
-                        // console.log("slotTimeInstance   : ", slotTimeInstance, "\n")
-                        // console.log("currentTimeInstance: ", currentTimeInstance, "\n\n\n\n")
                         if (moment(slotTimeInstance).isSameOrAfter(moment(currentTimeInstance))) {
                             let schedules = slots[slot]
-                            // console.log("schedules.length: ", schedules.length)
                             if (schedules != null && schedules.length > 0) {
                                 for (let doctorSchedule of schedules) {
                                     if (pastSlotLimit.has(doctorSchedule.id)) {
+                                        let previousSlotString = pastSlotLimitAux.get(doctorSchedule.id)
                                         let upperLimitTimeInstance = pastSlotLimit.get(doctorSchedule.id)
-                                        // console.log("slotTimeInstance.diff(upperLimitTimeInstance, 'minutes'): ", slotTimeInstance.diff(upperLimitTimeInstance, 'minutes'), slot)
                                         if (slotTimeInstance.diff(upperLimitTimeInstance, 'minutes') >= subServiceSlotInterval) {
-                                            if (slotsAvailableAux.has(slot)) {
-                                                slotsAvailableAux.set(slot, [...(slotsAvailableAux.get(slot) || []), doctorSchedule])
-                                                console.log("setting")
-                                                setSlotsAvailable(slotsAvailableAux)
+                                            if (slotsAvailableAux.has(previousSlotString)) {
+                                                slotsAvailableAux.set(previousSlotString, [...(slotsAvailableAux.get(slot) || []), doctorSchedule])
+                                                slotsAvailableAux2 = slotsAvailableAux;
                                             } else {
-                                                slotsAvailableAux.set(slot, [doctorSchedule])
-                                                console.log("setting2")
-                                                setSlotsAvailable(slotsAvailableAux)
+                                                slotsAvailableAux.set(previousSlotString, [doctorSchedule])
+                                                slotsAvailableAux2 = slotsAvailableAux;
                                             }
                                             if (doctorSchedule.status == null || (doctorSchedule.status != null && doctorSchedule.status != 'Busy')) {
                                                 pastSlotLimit.set(doctorSchedule.id, slotTimeInstance)
+                                                pastSlotLimitAux.set(doctorSchedule.id, slot)
                                                 continue;
                                             }
                                         }
                                         if (doctorSchedule.status != null && doctorSchedule.status == 'Busy') {
+                                            pastSlotLimitAux.delete(doctorSchedule.id)
                                             pastSlotLimit.delete(doctorSchedule.id)
                                         }
                                     } else {
-                                        // console.log("not pastSlotLimit.has(doctorSchedule.id)")
                                         if (doctorSchedule.status == null || (doctorSchedule.status != null && doctorSchedule.status != 'Busy')) {
+                                            pastSlotLimitAux.set(doctorSchedule.id, slot)
                                             pastSlotLimit.set(doctorSchedule.id, slotTimeInstance)
                                         }
                                     }
                                 }
                             }
                         } else {
-                            console.log("coming before")
                         }
                     }
+                    setSlotsAvailable(slotsAvailableAux2)
                 })
         }
     }
 
     function onDateChange(event: DateTimePickerEvent, selectedDate?: Date) {
-        console.log("here")
         const currentDate = selectedDate || slotSearchDate;
         setIsDatePickerOpen(false);
         setSlotSearchDate(currentDate);
         search(moment(slotSearchDate).format("YYYY-MM-DD"))
     };
-
-
-
-    for (let [key, value] of slotsAvailable) {
-        slotsRender.push(
-            <View className="flex flex-row p-1 m-1 w-32 h-32">
-                <Pressable
-                    onPress={() => {
-                        console.log("selected item: ", [key,value])
-                        selectSlot([key,value])
-                    }}
-                    className="border border-amber-900 p-2 rounded-lg w-full">
-                    <View className="py-2 items-center">
-                        <Ionicons name="time" size={36} color={"maroon"} />
-                    </View>
-                    <Text className="text-sm font-semibold text-center text-amber-900 pt-3 pb-2">{key}</Text>
-                </Pressable>
-            </View>
-        )
-    }
-
-
 
     return (
         <SafeAreaView>
@@ -179,9 +155,7 @@ const SlotsConfirmationPage = () => {
                             <DateTimePicker value={slotSearchDate} mode="date" display="default" onChange={onDateChange} />
                         )}
                     </View>
-                    {/* <Text>{slotsAvailable.size}</Text>
-                    <Pressable onPress={() => checkSlots()}><Text>Click me</Text></Pressable> */}
-                    {/* {slotsRender} */}
+
                     <FlatList
                         data={Array.from(slotsAvailable)}
                         numColumns={3}
@@ -191,7 +165,6 @@ const SlotsConfirmationPage = () => {
                             <View className="flex flex-row p-1 m-1 w-32 h-32">
                                 <Pressable
                                     onPress={() => {
-                                        console.log("selected item: ", item)
                                         selectSlot(item)
                                     }}
                                     className="border border-amber-900 p-2 rounded-lg w-full">
