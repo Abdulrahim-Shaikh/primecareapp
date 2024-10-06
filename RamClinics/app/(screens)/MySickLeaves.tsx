@@ -43,6 +43,16 @@ const MySickLeaves = () => {
 
     const [activeTab, setActiveTab] = useState("Pending");
 
+    const { data, status, isLoading } = sickLeavesService.byPatientIds(userId);
+  
+    useEffect(() => {
+        console.log('API response', data, status);
+        if (data && status === "success") {
+            setSickLeaves(data);
+            setFilteredSickLeaves(data);
+        }
+    }, [data, status]);
+
     const filterSickLeaves = () => {
         let filtered = sickLeaves?.filter((item: any) => item.status === activeTab) || [];
         if (selectedValue) {
@@ -55,30 +65,30 @@ const MySickLeaves = () => {
         setFilteredSickLeaves(filtered);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch branches:", error);
-        }
+    // const fetchData = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const branchesResponse = await branchService.findAll();
+    //         setBranches(branchesResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch branches:", error);
+    //     }
 
-        try {
-            const sickLeavesResponse = await sickLeavesService.byPatientId(userId);
-            // console.log("Fetched sick leaves:", sickLeavesResponse.data);
-            setSickLeaves(sickLeavesResponse.data);
-            setFilteredSickLeaves(sickLeavesResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch sick leaves:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     try {
+    //         const sickLeavesResponse = await sickLeavesService.byPatientId(userId);
+    //         // console.log("Fetched sick leaves:", sickLeavesResponse.data);
+    //         setSickLeaves(sickLeavesResponse.data);
+    //         setFilteredSickLeaves(sickLeavesResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch sick leaves:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     useEffect(() => {
         filterSickLeaves();
@@ -156,7 +166,7 @@ const MySickLeaves = () => {
                     </View>
 
                     <View>
-                        {loading ? (
+                        {isLoading ? (
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredSickLeaves.length === 0 ? (

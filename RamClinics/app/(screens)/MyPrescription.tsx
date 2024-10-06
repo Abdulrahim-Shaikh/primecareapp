@@ -54,30 +54,40 @@ const MyPrescription = () => {
 
     const [activeTab, setActiveTab] = useState("Pending");
 
+    const { data, status, isLoading } = prescriptionService.byPatientIds(userId);
+
     useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch branches:", error);
+        console.log('API response', data, status);
+        if (data && status === "success") {
+            setPrescription(data);
+            setFilteredPrescription(data);
         }
+    }, [data, status]);
 
-        try {
-            const prescriptionResponse = await prescriptionService.byPatientId(userId);
-            // console.log("Fetched prescription:", prescriptionResponse.data);
-            setPrescription(prescriptionResponse.data);
-            setFilteredPrescription(prescriptionResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch prescription:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
+
+    // const fetchData = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const branchesResponse = await branchService.findAll();
+    //         setBranches(branchesResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch branches:", error);
+    //     }
+
+    //     try {
+    //         const prescriptionResponse = await prescriptionService.byPatientId(userId);
+    //         // console.log("Fetched prescription:", prescriptionResponse.data);
+    //         setPrescription(prescriptionResponse.data);
+    //         setFilteredPrescription(prescriptionResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch prescription:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
     
     useEffect(() => {
         filterPrescription();
@@ -155,7 +165,7 @@ const MyPrescription = () => {
                     </View>
 
                     <View>
-                        {loading ? (
+                        {isLoading ? (
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredPrescription.length === 0 ? (

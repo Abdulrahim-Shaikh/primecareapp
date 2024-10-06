@@ -24,7 +24,7 @@ const MyRadialogy = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedRadialogy, setSelectedRadialogy] = useState<any>(null);
     const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
-    const [loading, setLoading] = useState(true);
+  //  const [loading, setLoading] = useState(true);
     // const [pdfUri, setPdfUri] = useState('');
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
@@ -43,6 +43,16 @@ const MyRadialogy = () => {
 
     const [activeTab, setActiveTab] = useState("Pending");
 
+    const { data, status, isLoading } = radialogyService.byPatientIds(userId);
+  
+    useEffect(() => {
+        console.log('API response', data, status);
+        if (data && status === "success") {
+            setRadialogy(data);
+            setFilteredRadialogy(data);
+        }
+    }, [data, status]);
+
     const filterRadialogy = () => {
         let filtered = radialogy?.filter((item: any) => item.status === activeTab) || [];
         if (selectedValue) {
@@ -55,12 +65,12 @@ const MyRadialogy = () => {
         setFilteredRadialogy(filtered);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
     const fetchData = async () => {
-        setLoading(true);
+        //setLoading(true);
         try {
             const branchesResponse = await branchService.findAll();
             setBranches(branchesResponse.data);
@@ -76,7 +86,7 @@ const MyRadialogy = () => {
         } catch (error) {
             console.error("Failed to fetch radialogy:", error);
         } finally {
-            setLoading(false);
+           // setLoading(false);
         }
     };
 
@@ -156,7 +166,7 @@ const MyRadialogy = () => {
                     </View>
 
                     <View>
-                        {loading ? (
+                        {isLoading ? (
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredRadialogy.length === 0 ? (

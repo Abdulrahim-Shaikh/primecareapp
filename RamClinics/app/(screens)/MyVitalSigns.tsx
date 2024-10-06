@@ -46,6 +46,16 @@ const MyVitalSigns = () => {
 
     const [activeTab, setActiveTab] = useState("in-progress");
 
+    const { data, status, isLoading } = vitalSignsService.vitalSignsByPatientIds(userId);
+  
+    useEffect(() => {
+        console.log('API response', data, status);
+        if (data && status === "success") {
+            setVitalSigns(data);
+            setFilteredVitalSigns(data);
+        }
+    }, [data, status]);
+
     const filterVitalSigns = () => {
         let filtered = vitalSigns?.filter((item: any) => item.status === activeTab) || [];
         if (selectedValue) {
@@ -58,30 +68,30 @@ const MyVitalSigns = () => {
         setFilteredVitalSigns(filtered);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch branches:", error);
-        }
+    // const fetchData = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const branchesResponse = await branchService.findAll();
+    //         setBranches(branchesResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch branches:", error);
+    //     }
 
-        try {
-            const vitalSignsResponse = await vitalSignsService.patientEncounterHistory(userId); //"PNT000028"
-            // console.log("Fetched vital signs:", vitalSignsResponse.data);
-            setVitalSigns(vitalSignsResponse.data);
-            setFilteredVitalSigns(vitalSignsResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch vital signs:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     try {
+    //         const vitalSignsResponse = await vitalSignsService.patientEncounterHistory(userId); //"PNT000028"
+    //         // console.log("Fetched vital signs:", vitalSignsResponse.data);
+    //         setVitalSigns(vitalSignsResponse.data);
+    //         setFilteredVitalSigns(vitalSignsResponse.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch vital signs:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     useEffect(() => {
         filterVitalSigns();
@@ -157,7 +167,7 @@ const MyVitalSigns = () => {
                     </View>
 
                     <View>
-                        {loading ? (
+                        {isLoading ? (
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredVitalSigns.length === 0 ? (

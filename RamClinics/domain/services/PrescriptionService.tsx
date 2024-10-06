@@ -6,6 +6,10 @@ export class PrescriptionService extends RestService<any> {
         return this.get("byPatientId/" + patientId);
     }
 
+    byPatientIds(patientId: any) {
+        return this.getQuery("byPatientId/" + patientId);
+    }
+
 }
 const prescriptionService = new PrescriptionService('pharmacyorder');
 export default prescriptionService;
