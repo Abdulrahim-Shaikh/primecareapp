@@ -87,7 +87,7 @@ const ProfileTab = () => {
               </View>
             </View>
             <Pressable
-              onPress={() => loggedIn ? router.push("/SignIn") : router.push("/SignIn")}
+              onPress={() => loggedIn ? router.push("/EditProfile") : router.push("/SignIn")}
               className="bg-white p-3 rounded-full"
             >
               <MaterialCommunityIcons

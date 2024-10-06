@@ -50,7 +50,7 @@ const DoctorProfile = () => {
   };
 
   return (
-    <View className="flex-1 bg-amber-100 pt-6 mt-2">
+    <View className="flex-1 bg-amber-100 pt-14 mt-2">
       <View className="flex-row justify-between items-center px-6">
         <Text onPress={() => router.back()} className="bg-amber-900 rounded-full p-2">
           <Ionicons name="chevron-back" color={"white"} size={20} />

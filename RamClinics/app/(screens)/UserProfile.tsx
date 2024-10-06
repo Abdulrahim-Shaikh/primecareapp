@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import {
@@ -12,6 +12,7 @@ import LinkButton from "../../components/LinkButton";
 import { useUserSate } from "../../domain/state/UserState";
 import emptyProfileImg from "../../assets/images/avatar.png";
 import patientService from "../../domain/services/PatientService";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const UserProfile = () => {
   const { user, setUser } = useUserSate();
@@ -31,7 +32,7 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <View className="pt-6">
+    <View className="pt-12">
       <View className="h-full justify-between items-start w-full">
         <View className="flex-row justify-between items-center pt-6 px-6 w-full">
           <Text
@@ -60,20 +61,26 @@ const UserProfile = () => {
           <View className="bg-amber-900 rounded-t-3xl p-6 ">
             <View className="flex-row justify-between items-start">
               <View>
+                <Text className="bg-lime-500 p-[10px] bg-white rounded-md">
+                  <AntDesign name="user" size={20} color="#84cc16" />
+                </Text>
+              </View>
+              <View>
                 <Text className=" text-white">First Name</Text>
                 <Text className="text-lime-500 text-md font-semibold text-xl">
-                  {user && user.firstName ? user.firstName : "Unknown"}
+                  {user && user.firstName ? user.firstName : "-"}
                 </Text>
               </View>
               <View>
-                <Text className="text-base text-white">Last Name</Text>
+                <Text className=" text-white">Middle Name</Text>
                 <Text className="text-lime-500 text-md font-semibold text-xl">
-                  {user && user.lastName ? user.lastName : "Person"}
+                  {user && user.middleName ? user.middleName : "-"}
                 </Text>
               </View>
               <View>
-                <Text className="bg-lime-500 p-[10px] bg-white rounded-md">
-                  <AntDesign name="heart" size={20} color="#84cc16" />
+                <Text className=" text-white">Last Name</Text>
+                <Text className="text-lime-500 text-md font-semibold text-xl">
+                  {user && user.lastName ? user.lastName : "-"}
                 </Text>
               </View>
             </View>
@@ -181,9 +188,9 @@ const UserProfile = () => {
             </View>
 
           </View>
-          <View className="p-2 rounded-t-2xl bg-white -mt-10">
-            <LinkButton link="/Appoinment" text="Make an appointment" />
-          </View>
+          {/* <View className="p-2 rounded-t-2xl bg-white -mt-10">
+                <LinkButton link="/Appoinment" text="Make an appointment" />
+              </View> */}
         </View>
       </View>
     </View>
