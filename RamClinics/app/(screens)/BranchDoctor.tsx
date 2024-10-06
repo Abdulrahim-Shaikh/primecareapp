@@ -30,9 +30,13 @@ const BranchDoctor = () => {
         useCallback(() => {
             setLoader(true);
             console.log("\n\n\n\nbranchId: ", branchId);
+            console.log("branchId: ", branchId);
+            console.log("department: ", department);
+            console.log("speciality: ", speciality);
             if (branchId != null && department != null && speciality != null) {
                 resourceService.getResourceBySpeciality(branchId, department, speciality)
                 .then((response) => {
+                    console.log("response: ", response.data)
                     setDoctors(response.data)
                     setLoader(false);
                 })

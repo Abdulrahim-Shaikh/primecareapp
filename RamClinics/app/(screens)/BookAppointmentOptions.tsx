@@ -7,9 +7,10 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialCommunityIcons, } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons, } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const BookAppointmentOptions = () => {
     const router = useRouter();
@@ -20,15 +21,15 @@ const BookAppointmentOptions = () => {
     const optionsData = [
         {
             id: 1,
-            icon: 'building-columns',
+            icon: 'hospital-building',
             title: "By Branch",
             link: "/BranchPage",
             params: {
                 city: city,
                 fromSpeciality: fromSpeciality,
                 department: department,
-                speciality: null,
-                specialityCode: null,
+                speciality: "",
+                specialityCode: "",
                 callCenterFlow: 0,
                 devices: JSON.stringify(""),
                 responsible: "",
@@ -37,7 +38,7 @@ const BookAppointmentOptions = () => {
         },
         {
             id: 2,
-            icon: 'user-doctor',
+            icon: 'doctor',
             title: "By Doctor",
             link: "/SpecialistListPage",
             params: { department: department }
@@ -50,12 +51,13 @@ const BookAppointmentOptions = () => {
         //     params: { department: department }
         // },
         {
-            id: 4,
-            icon: 'file-waveform',
-            title: "Call Center",
+            // id: 4,
+            id: 3,
+            icon: 'hospital-marker',
+            title: "By Service",
             link: "/DoctorSpecialityPage",
             params: {
-                branchId: null,
+                branchId: "",
                 fromSpeciality: fromSpeciality,
                 department: department,
                 callCenterFlow: 1
@@ -69,44 +71,20 @@ const BookAppointmentOptions = () => {
     //     }, [])
     // )
 
-    var serviceDataRender = []
-
-    for (let item of optionsData) {
-        serviceDataRender.push(
-            <View className="w-32">
-                {/* <TouchableOpacity className="border border-pc-primary p-2 rounded-lg w-full" onPress={
-                                        () => {
-                                            Alert.alert('Search by Doctor or Service', 'Please select one', [
-                                                {
-                                                    text: 'By Branch',
-                                                    onPress: () => router.push({
-                                                        pathname: "/BranchPage",
-                                                        params: {
-                                                            city: null,
-                                                            fromSpeciality: 0,
-                                                            department: item.title
-                                                        }
-                                                    })
-                                                },
-                                                {
-                                                    text: 'Doctor',
-                                                    onPress: () => router.push({
-                                                        pathname: "/SpecialistListPage",
-                                                        params: { department: item.title }
-                                                    }),
-                                                    style: 'default'
-                                                },
-                                                {
-                                                    text: 'Service',
-                                                    onPress: () => router.push({
-                                                        pathname: "/ServiceListPage",
-                                                        params: { department: item.title }
-                                                    }),
-                                                    style: 'default'
-                                                },
-                                            ])
-                                        }
-                                    }> */}
+    return (
+        <SafeAreaView>
+            <ScrollView>
+                <View className="">
+                    <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
+                        <HeaderWithBackButton isPushBack={true} title="Search By" />
+                    </View>
+                    <View className="flex-row px-4">
+                        <FlatList
+                            data={optionsData}
+                            numColumns={3}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) => (
+                                <View className="flex flex-row p-1 m-1 w-32 h-32">
                                     <TouchableOpacity
                                         className="border border-pc-primary p-2 rounded-lg w-full"
                                         onPress={
@@ -119,18 +97,19 @@ const BookAppointmentOptions = () => {
                                         }>
                                         <View className="py-2 items-center">
                                             {/* <FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
-                                            <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} />
+                                            {/* <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} /> */}
                                             {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
                                             {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
                                             {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
                                             {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
+                                            <MaterialCommunityIcons name={item.icon as any} size={36} color={'#3B2314'} />
                                         </View>
                                         <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.title}</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
                         />
-                        <Text className="text-2xl font-semibold">Search by</Text>
+                        {/* <Text className="text-2xl font-semibold">Search by</Text> */}
                     </View>
                     <View className="flex-row pt-5">
                         {/* <FlatList
@@ -142,9 +121,9 @@ const BookAppointmentOptions = () => {
                             )}
                         /> */}
                     </View>
-                    <View className="flex flex-row justify-evenly">
+                    {/* <View className="flex flex-row justify-evenly">
                         {serviceDataRender}
-                    </View>
+                    </View> */}
                 </View>
             </ScrollView>
         </SafeAreaView>

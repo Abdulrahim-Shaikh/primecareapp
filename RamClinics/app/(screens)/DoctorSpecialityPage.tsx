@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -19,26 +20,40 @@ import Searchbox from "../../components/ui/Searchbox";
 const DoctorSpecialityPage = () => {
 
   const { branchId, fromSpeciality, department, callCenterFlow } = useLocalSearchParams();
-  const [ specialityList, setSpecialityList ] = useState([]);
-  const [ searchValue, setSearchValue ] = useState([]);
+  const [specialityList, setSpecialityList] = useState([]);
+  const [searchValue, setSearchValue] = useState([]);
+  const [loader, setLoader] = useState(false);
 
-  const fetchSpecialities = async () => {
+  const fetchSpecialities = () => {
+    setLoader(true)
     if (department != null) {
       if (+callCenterFlow) {
-        const response = await specialityService.getSpecialityServiceByDepartmentTest(department)
-        setSpecialityList(response.data)
-        console.log("response.data: ", response.data)
+        specialityService.getSpecialityServiceByDepartmentTest(department)
+          .then((response) => {
+            setSpecialityList(response.data)
+            setLoader(false)
+          })
+          .catch((error) => {
+            setLoader(false)
+          })
       } else {
-        const response = await specialityService.getByDept(department)
-        setSpecialityList(
-          +callCenterFlow
-            ? response.data
-            : response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both"))
-        )
+        specialityService.getByDept(department)
+          .then((response) => {
+            setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
+            setLoader(false)
+          })
+          .catch((error) => {
+            setLoader(false)
+          })
       }
     } else {
-      const response = await specialityService.findAll()
-      setSpecialityList(response.data)
+      specialityService.findAll()
+        .then((response) => {
+          setSpecialityList(response.data)
+        })
+        .catch((error) => {
+          console.log("error: ", error)
+        })
     }
   }
 
@@ -92,6 +107,7 @@ const DoctorSpecialityPage = () => {
           }
         })
       } else {
+        console.log("going from doctorSpeciality page to branchdoctor page")
         router.push({
           pathname: "/BranchDoctor",
           params: {
@@ -114,6 +130,16 @@ const DoctorSpecialityPage = () => {
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View> */}
         <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
+            {
+              loader && 
+                <View className="flex-1 items-center justify-center">
+                  <ActivityIndicator size="large" color="#3B2314" style={{ marginTop: 20 }} />
+                </View>
+            }
+          {
+            (specialityList == null || specialityList.length === 0) && !loader && 
+            <Text>No specialities found</Text>
+          }
           {specialityList.map(({ code, name, services }, idx) => (
             <Pressable
               onPress={() => { selectSpeciality(code, name, services) }}

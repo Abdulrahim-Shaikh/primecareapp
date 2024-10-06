@@ -76,6 +76,7 @@ const BranchPage = () => {
                     }
                 })
             } else {
+                console.log("\n\n\ngoing from branch page to doctorSpeciality page")
                 router.push({
                     pathname: "/DoctorSpecialityPage",
                     params: {

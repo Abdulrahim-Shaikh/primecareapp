@@ -21,23 +21,23 @@ const VerifyOTP = () => {
   const [otp, setOtp] = useState('');
   const [loader, setLoader] = useState(false);
 
-  const {data, status} = loginService.useGenerateOtp(mobileNo);
+  const { data, status } = loginService.useGenerateOtp(mobileNo);
   // let otp: string = '';
 
   useEffect(() => {
-    console.log( 'API res', data, status)
-    getData();    
+    console.log('API res', data, status)
+    getData();
   }, [])
 
   useEffect(() => {
-    console.log( 'API res', data, status)     
+    console.log('API res', data, status)
   }, [data])
 
   const getData = async () => {
     const response = await loginService.generateOtp(mobileNo);
     const resp = loginService.useGenerateOtp(mobileNo);
     setOtpResp(response.data);
-  // hardcoded values?
+    // hardcoded values?
     if (mobileNo == '0568165257' || mobileNo == '568165257') {
       otpResp.otp = '9999';
       setOtpResp({ ...otpResp, otp: '9999' });
@@ -69,18 +69,18 @@ const VerifyOTP = () => {
     if (otpResp && otpResp.otp && otpResp.otp == otp) {
       console.log("otpResp and otp are same")
       loginService.byMobileNo(mobileNo)
-      .then(res => {
-        // console.log("loginService.byMobileNo(mobileNo) res", res);
-        let user = res.data;
-        setUserInfo(user);
-        setUserData(user);
-      })
-      //   console.log("loginService.byMobileNo(mobileNo) err", err);
-      // })
-      .then(data => {
-        setLoader(false);
-        router.navigate('/(tabs)')
-      });
+        .then(res => {
+          // console.log("loginService.byMobileNo(mobileNo) res", res);
+          let user = res.data;
+          setUserInfo(user);
+          setUserData(user);
+        })
+        //   console.log("loginService.byMobileNo(mobileNo) err", err);
+        // })
+        .then(data => {
+          setLoader(false);
+          router.navigate('/(tabs)')
+        });
 
     } else {
       Alert.alert("Invalid OTP!")
@@ -110,11 +110,14 @@ const VerifyOTP = () => {
               >
                 Resend
               </Text>
-        {
-          loader && <ActivityIndicator size="large" color="#0000ff" />
-        }
             </Text>
           </View>
+          {
+            loader &&
+                <View className="flex-1 items-center justify-center">
+                  <ActivityIndicator size="large" color="#3B2314" style={{ marginTop: 20 }} />
+                </View>
+          }
 
 
           <NASButton title="Verify" onPress={verifyOtp} />
