@@ -150,7 +150,6 @@ const SlotsConfirmationPage = () => {
                             <DateTimePicker value={slotSearchDate} mode="date" display="default" onChange={onDateChange} />
                         )}
                     </View>
-                    <Text>{slotsAvailable.size}</Text>
                     <FlatList
                         data={Array.from(slotsAvailable)}
                         numColumns={3}
