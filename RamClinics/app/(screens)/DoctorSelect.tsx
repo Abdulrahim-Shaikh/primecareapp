@@ -43,8 +43,8 @@ const DoctorSelect = () => {
     const bookAppointment = async () => {
 
         let branchResponse = await branchService.findAll();
-        let branchId = branchResponse.data.find((branch: any) => branch.name === selectedDoctor?.primaryBranch);
-        let slotGroupIds = doctors.value.flat().filter((slotDoc: any) => slotDoc.id == selectedDoctor?.id).map((slot: any) => slot.slotId).join('$')
+        let branchId = branchResponse.data.find((branch: any) => branch.name === selectedDoctor?.primaryBranch)?.id;
+        let slotGroupIds = doctors.flat().filter((slotDoc: any) => slotDoc.id == selectedDoctor?.id).map((slot: any) => slot.slotId).join('$')
 
         slotService.slotsByIds(slotGroupIds)
             .then((response) => {
@@ -75,8 +75,8 @@ const DoctorSelect = () => {
                 app.endTime = end;
                 app.policyNo = "C0001";
                 app.policyName = "Cash Plan"
-                let today = moment().locale('en').zone('Asia/Riyadh').format().slice(0, 19);
-                app.appointmentDate = moment(searchDate).locale('en').zone('Asia/Riyadh').format().slice(0, 19);
+                let today = moment().locale('en').utcOffset('Asia/Riyadh').format().slice(0, 19);
+                app.appointmentDate = moment(searchDate).locale('en').utcOffset('Asia/Riyadh').format().slice(0, 19);
                 let slots: any = [];
                 if (app.hisStatus !== 'Waiting') {
                     app.slots.forEach((slot: any) => {
@@ -104,17 +104,33 @@ const DoctorSelect = () => {
                 slots.forEach((slot: any) => {
                     slotsApi.push(slot.slotName);
                 })
-                // appointmentService.getAppointmentsBySlotId(slotsApi, app.branchId, this.datePipe.transform(app.appointmentDate, "yyyy-MM-dd"), app.practitionerId)
-                // .then((response: any) => {
-                //     if (Object.keys(response.data).length > 0) {
-                //         Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!')
-                //     } else {
-                //         appointmentService.save(app)
-                //         .then((response: any) => {
-                //             Alert.alert('Appointment booked', 'Appointment has booked successfully!')
-                //         })
-                //     }
-                // })
+
+                console.log("slotsApi: ", slotsApi)
+                console.log("app.branchId: ", app.branchId)
+                console.log("moment(app.appointmentDate).format('yyyy-MM-DD'): ", moment(app.appointmentDate).format("yyyy-MM-DD"))
+                console.log("app.practitionerId: ", app.practitionerId)
+                appointmentService.getAppointmentsBySlotId(slotsApi, app.branchId, moment(app.appointmentDate).format("yyyy-MM-DD"), app.practitionerId)
+                .then((response: any) => {
+                    if (Object.keys(response.data).length > 0) {
+                        Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!')
+                    } else {
+                        appointmentService.save(app)
+                        .then((response: any) => {
+                            console.log("appointmentService.save: ", response)
+                            Alert.alert('Appointment booked', 'Appointment has booked successfully!')
+            Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
+                { text: 'OK', onPress: () => router.push('/index'), style: 'default' },
+            ])
+                        })
+                        .catch((error: any) => {
+                            console.log("appointmentService.save error: ", error)
+                            Alert.alert('Appointment booking failed', 'Failed to book appointment!')
+                        })
+                    }
+                })
+                .catch((error: any) => {
+                    console.log("getAppointmentsBySlotId error: ", error)
+                })
             })
 
     }
