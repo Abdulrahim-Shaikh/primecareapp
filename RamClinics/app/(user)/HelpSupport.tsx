@@ -82,12 +82,12 @@ const HelpSupport = () => {
               Timings
             </Text>
             <View className="rounded-lg mt-5 mb-3">
-              <View className="flex flex-row items-center">
+              <View className="flex items-center">
                 <View className="rounded-lg bg-indigo-100 mr-1 p-2">
                   <Text className="text-lg font-bold text-indigo-950 text-center">Saturday to Thursday:</Text>
                   <Text className="text-lg font-bold text-indigo-950 text-center">8:00 AM to 10:00 PM</Text>
                 </View>
-                <View className="rounded-lg bg-indigo-100 ml-1 p-2">
+                <View className="rounded-lg bg-indigo-100 ml-1 p-2 mt-4">
                   <Text className="text-lg font-bold text-indigo-950 text-center">Friday:</Text>
                   <Text className="text-lg font-bold text-indigo-950 text-center">4:00 AM to 10:00 PM</Text>
                 </View>

@@ -136,7 +136,7 @@ const Offers = () => {
                 <View className="flex-1 p-4 pt-2">
                     <View className="flex flex-row justify-start items-center gap-4">
                         <HeaderWithBackButton isPushBack={true} title="Offers" />
-                        <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(132 204 22)"} />
+                        <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(120 53 15)"} />
                     </View>
                     <View className="border border-amber-900 rounded-lg my-4">
                         <Picker

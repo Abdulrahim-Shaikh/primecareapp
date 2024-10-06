@@ -74,13 +74,13 @@ const TermsAndConditions = () => {
                             All of the defined and capitalized terms in these User Terms will have the meaning assigned to them
                             here belowd
                         </Text>
-                        <Text className="block mt-4 ml-4 text-justify text-amber-500 text-md">(1) “Account“ : <Text className=" text-justify text-amber-900 ml-1 mr-1 mt-4 text-sm">shall mean the account created by the Customer on the Application for availing the
+                        <Text className="block mt-4 ml-4 text-justify text-amber-500 text-md">(1) “Account” : <Text style={styles.italic} className=" text-justify text-amber-900 ml-1 mr-1 mt-4 text-sm">shall mean the account created by the Customer on the Application for availing the
                             Services provided/facilitated by RAM Clinics. </Text></Text>
 
-                        <Text className="block mt-4 ml-4 text-justify text-yellow-500 text-md">(2) “Applicable Laws“ : <Text style={styles.italic} className="text-justify text-amber-900 ml-1 mr-1 text-sm mt-4">shall mean the account created by the Customer on the Application for availing the
+                        <Text className="block mt-4 ml-4 text-justify text-yellow-500 text-md">(2) “Applicable Laws” : <Text style={styles.italic} className="text-justify text-amber-900 ml-1 mr-1 text-sm mt-4">shall mean the account created by the Customer on the Application for availing the
                             Services provided/facilitated by RAM Clinics. </Text></Text>
 
-                        <Text className="block mt-4 ml-4 text-justify text-yellow-500 text-md">(3) “Application“ : <Text style={styles.italic} className="text-justify text-amber-900 ml-1 mr-1 text-sm mt-4 text-sm"> shall mean our mobile application and/or website as updated by RAM Clinics from
+                        <Text className="block mt-4 ml-4 text-justify text-yellow-500 text-md">(3) “Application” : <Text style={styles.italic} className="text-justify text-amber-900 ml-1 mr-1 text-sm mt-4 text-sm"> shall mean our mobile application and/or website as updated by RAM Clinics from
                             time to time.  </Text></Text>
 
                         <Text className="block mt-4 ml-4 text-justify text-yellow-500 text-md text-md">(4) “Customer/ You/User" shall mean and include :<Text style={styles.italic} className="text-justify text-amber-900 ml-1 mr-1 text-sm mt-4 text-sm"> shall mean our mobile application and/or website as updated by RAM Clinics from

@@ -12,6 +12,7 @@ import { MaterialCommunityIcons, } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React from "react";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 // get departments by branch
 const serviceData = [
@@ -45,12 +46,12 @@ const BookAppointment = () => {
             <ScrollView>
                 <View className="">
                     <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
-                        <MaterialCommunityIcons
+                         <HeaderWithBackButton isPushBack={true} title="Book Appointment" />
+                         <MaterialCommunityIcons
                             name="calendar-check-outline"
                             size={24}
                             color={"rgb(120 53 15)"}
                         />
-                        <Text className="text-2xl font-semibold">Book Appointment</Text>
                     </View>
                     <View className="flex-row pt-5 px-4">
                         <FlatList
