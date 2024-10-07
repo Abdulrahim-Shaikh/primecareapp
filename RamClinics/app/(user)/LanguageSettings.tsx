@@ -4,6 +4,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import RadioButton from "../../components/ui/RadioButton";
 import LinkButton from "../../components/LinkButton";
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import NASButton from "../../components/NASButton";
+import { router } from "expo-router";
 
 const suggestedLanguage = ["English (UK)", "English (US)"];
 const LanguageList = [
@@ -20,7 +23,30 @@ const LanguageList = [
 
 const LanguageSettings = () => {
   const [selectSuggested, setSelectSuggest] = useState(0);
-  const [selectLanguage, setSelectLanguage] = useState(0);
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
+  const { language, changeLanguage } = useLanguage();
+
+
+  function selectLanguage(item: string, index: number) {
+    setSelectedLanguage(item);
+    setSelectedLanguageIndex(index);
+  }
+
+  function onSave() {
+    if (selectedLanguage === "English") {
+      changeLanguage("en");
+      router.push({
+        pathname: "/ProfileTab"
+      })
+    } else if (selectedLanguage === "Arabic") {
+      changeLanguage("ar");
+      router.push({
+        pathname: "/ProfileTab"
+      })
+    }
+  }
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -52,26 +78,27 @@ const LanguageSettings = () => {
             <Text className="text-base font-semibold text-pc-primary">
               Select Language
             </Text>
-
             <View className="pt-2">
               {LanguageList.map((item, idx) => (
                 <Pressable
-                  onPress={() => setSelectLanguage(idx)}
+                  onPress={() => selectLanguage(item, idx)}
                   key={idx}
-                  className={`flex-row justify-between items-center pt-4 ${
-                    LanguageList.length === idx + 1
-                      ? ""
-                      : "border-b border-dashed border-pc-primary pb-4"
-                  }`}
+                  className={`flex-row justify-between items-center pt-4 ${LanguageList.length === idx + 1
+                    ? ""
+                    : "border-b border-dashed border-pc-primary pb-4"
+                    }`}
                 >
                   <Text className="text-base font-medium">{item}</Text>
-                  <RadioButton isActive={idx === selectLanguage} />
+                  <RadioButton isActive={idx === selectedLanguageIndex} />
                 </Pressable>
               ))}
             </View>
           </View>
           <View className="w-full pt-8">
-            <LinkButton link="/ProfileTab" text="Save" />
+            <NASButton
+              onPress={() => onSave()}
+              title="Save" 
+            />
           </View>
         </View>
       </ScrollView>
