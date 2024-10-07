@@ -11,6 +11,7 @@ import { Ionicons, MaterialCommunityIcons, } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+import { serviceData } from "../../constants/data";
 
 const BookAppointmentOptions = () => {
     const router = useRouter();
@@ -78,38 +79,38 @@ const BookAppointmentOptions = () => {
                     <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
                         <HeaderWithBackButton isPushBack={true} title="Search By" />
                     </View>
-                    <View className="flex-row px-4">
-                        <FlatList
-                            data={optionsData}
-                            numColumns={3}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                                <View className="flex flex-row p-1 m-1 w-32 h-32">
+                    <View className="flex flex-row justify-evenly">
+                        {
+                            optionsData.map((item) => (
+                                <View key={item.id} className="w-32">
                                     <TouchableOpacity
                                         className="border border-pc-primary p-2 rounded-lg w-full"
                                         onPress={
                                             () => {
                                                 router.push({
-                                                    pathname: item.link,
-                                                    params: item.params
+                                                    pathname: "/BookAppointmentOptions",
+                                                    params: {
+                                                        city: null,
+                                                        fromSpeciality: 0,
+                                                        department: item.title
+                                                    }
                                                 })
                                             }
                                         }>
                                         <View className="py-2 items-center">
-                                            {/* <FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
                                             {/* <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} /> */}
+                                            {/* <!--<FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
                                             {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
                                             {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
                                             {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
                                             {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
-                                            <MaterialCommunityIcons name={item.icon as any} size={36} color={'#3B2314'} />
+                                            <MaterialCommunityIcons name={item.icon} size={36} color={"#3b2314"} />
                                         </View>
                                         <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.title}</Text>
                                     </TouchableOpacity>
                                 </View>
-                            )}
-                        />
-                        {/* <Text className="text-2xl font-semibold">Search by</Text> */}
+                            ))
+                        }
                     </View>
                     <View className="flex-row pt-5">
                         {/* <FlatList

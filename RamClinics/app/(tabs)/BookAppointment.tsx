@@ -63,12 +63,13 @@ const BookAppointment = () => {
                         }
                     }>
                     <View className="py-2 items-center">
-                        <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} />
+                        {/* <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} /> */}
                         {/* <!--<FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
                         {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
                         {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
                         {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
                         {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
+                        <MaterialCommunityIcons name={item.icon} size={36} color={"#3b2314"} />
                     </View>
                     <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.title}</Text>
                 </TouchableOpacity>
@@ -90,76 +91,8 @@ const BookAppointment = () => {
                             color={"#3b2314"}
                         />
                     </View>
-                    <View className="flex-row pt-5 px-4">
-                        <FlatList
-                            data={serviceData}
-                            numColumns={3}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                                <View className="flex flex-row p-1 m-1 w-32 h-32">
-                                    {/* <TouchableOpacity className="border border-pc-primary p-2 rounded-lg w-full" onPress={
-                                        () => {
-                                            Alert.alert('Search by Doctor or Service', 'Please select one', [
-                                                {
-                                                    text: 'By Branch',
-                                                    onPress: () => router.push({
-                                                        pathname: "/BranchPage",
-                                                        params: {
-                                                            city: null,
-                                                            fromSpeciality: 0,
-                                                            department: item.title
-                                                        }
-                                                    })
-                                                },
-                                                {
-                                                    text: 'Doctor',
-                                                    onPress: () => router.push({
-                                                        pathname: "/SpecialistListPage",
-                                                        params: { department: item.title }
-                                                    }),
-                                                    style: 'default'
-                                                },
-                                                {
-                                                    text: 'Service',
-                                                    onPress: () => router.push({
-                                                        pathname: "/ServiceListPage",
-                                                        params: { department: item.title }
-                                                    }),
-                                                    style: 'default'
-                                                },
-                                            ],
-                                            )
-                                        }
-                                    }> */}
-
-                                    <TouchableOpacity
-                                        className="border border-[#3b2314] p-2 rounded-lg w-full"
-                                        onPress={
-                                            () => {
-                                                router.push({
-                                                    pathname: "/BookAppointmentOptions",
-                                                    params: {
-                                                        city: null,
-                                                        fromSpeciality: 0,
-                                                        department: item.title
-                                                    }
-                                                })
-                                            }
-                                        }>
-                                        <View className="py-2 items-center">
-                                            {/* <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} /> */}
-                                            {/* <!--<FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
-                                            {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
-                                            {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
-                                            {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
-                                            {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
-                                            <MaterialCommunityIcons name={item.icon as any} size={36} color={'#3B2314'} />
-                                        </View>
-                                        <Text className="text-sm font-semibold text-center text-[#3b2314] pt-3 pb-2">{item.title}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                        />
+                    <View className="flex flex-row justify-evenly">
+                        {serviceDataRender}
                     </View>
                 </View>
             </ScrollView>

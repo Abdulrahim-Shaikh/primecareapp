@@ -91,16 +91,15 @@ const ScheduleAppointment = () => {
     const [slotStatus, setSlotStatus] = useState("");
     const [slotName, setSlotName] = useState("");
     const [branchName, setBranchName] = useState("");
-    const [selectedSlotIds, setSelectedSlotIds] = useState(new Set<number>());
+    const [selectedSlots, setSelectedSlots] = useState(new Set<number>());
 
 
     let fromDateAux = new Date();
     let toDateAux = new Date();
 
     useEffect(() => {
-        setSelectedSlotIds(new Set<number>())
+        setSelectedSlots(new Set<number>())
         let slotsAux: any = Object.values(JSON.parse(params.toString()).slots)[0]
-        // console.log("\n\n\n\nslotsAux: ", slotsAux)
         if (slotsAux == null || slotsAux.length <= 0) {
             Alert.alert('Note', 'No slots found for this date and doctor', [
                 {
@@ -111,9 +110,16 @@ const ScheduleAppointment = () => {
             ],
             )
         } else {
-            console.log("\n\n\n\n")
+            console.log("\n\n\n\nslotsAux: ", slotsAux)
             slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
             slotsAux.forEach((slot: any) => {slot.selected = false})
+            let validSlots: any = []
+            // for (let slot of slotsAux) {
+            //     const currentTimeInstance = moment();
+            //     const slotTimeInstance = moment(`${date} ${slot.trim()}`, "YYYY-MM-DD hh:mm A");
+            //     if (moment(slotTimeInstance).isAfter(currentTimeInstance)) {
+            //     }
+            // }
             setSlots(slotsAux)
             setDoctorScheduleData(JSON.parse(params.toString()))
             if (patientData == null || patientData == "" || patientData.length <= 0) {
@@ -150,16 +156,16 @@ const ScheduleAppointment = () => {
     }, [])
 
     function selectSlot(slot: any) {
-        let tempMap = selectedSlotIds
-        if (selectedSlotIds.has(slot)) {
-            selectedSlotIds.delete(slot)
-            setSelectedSlotIds(tempMap)
-            // setSelectedSlotIds(selectedSlotIds.delete(slot.slotId))
+        let tempMap = selectedSlots
+        if (selectedSlots.has(slot)) {
+            selectedSlots.delete(slot)
+            setSelectedSlots(tempMap)
+            // setSelectedSlots(selectedSlots.delete(slot.slotId))
         } else {
             tempMap.add(slot)
-            setSelectedSlotIds(tempMap)
+            setSelectedSlots(tempMap)
         }
-        console.log("selectedSlotIds: ", selectedSlotIds)
+        console.log("selectedSlots: ", selectedSlots)
     }
 
     function slotChange(selectedSlot: any) {
@@ -230,8 +236,8 @@ const ScheduleAppointment = () => {
             walkIn: null
         }
 
-        if (selectedSlotIds != null && selectedSlotIds.size > 0) {
-            selectedSlotIds.forEach((slot: any) => {
+        if (selectedSlots != null && selectedSlots.size > 0) {
+            selectedSlots.forEach((slot: any) => {
                 temporaryPayload.slots.push({
                     endTime: slot.startTime,
                     scheduleId: scheduleId,
@@ -431,7 +437,7 @@ const ScheduleAppointment = () => {
                             numColumns={3}
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={{ marginHorizontal: "auto" }}
-                            extraData={selectedSlotIds}
+                            extraData={selectedSlots}
                             renderItem={({item}) => {
                                 return (
                                 <View className="flex flex-row p-1 m-1 w-32 h-32">
@@ -440,7 +446,7 @@ const ScheduleAppointment = () => {
                                             selectSlot(item)
                                         }}
                                         // className="border border-pc-primary p-2 rounded-lg w-full"
-                                        className={`border p-2 rounded-lg w-full ${selectedSlotIds.has(item)? "border-lime-500" : "border-pc-primary" }`}
+                                        className={`border p-2 rounded-lg w-full ${selectedSlots.has(item)? "border-lime-500" : "border-pc-primary" }`}
                                         >
                                         <View className="py-2 items-center">
                                             <Ionicons name="time" size={36} color={"#3B2314"} />

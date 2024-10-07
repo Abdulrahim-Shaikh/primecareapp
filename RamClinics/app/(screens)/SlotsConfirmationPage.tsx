@@ -75,8 +75,8 @@ const SlotsConfirmationPage = () => {
                 .then((response) => {
                     setLoader(true)
                     let slots: any = response.data;
-                    console.log("moment: ", moment())
-                    console.log("moment2: ", new Date())
+                    // console.log("moment: ", moment())
+                    // console.log("moment2: ", new Date())
                     const currentTimeInstance = moment();
                     // const currentTimeInstance = moment(date).format("YYYY-MM-DD hh:mm A");
                     // let doctorsAvailableAgainstSlots: Map<number, Array<any>> = new Map<number, Array<any>>()
