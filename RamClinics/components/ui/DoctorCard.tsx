@@ -1,4 +1,4 @@
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
@@ -110,29 +110,41 @@ const DoctorCard = ({
 
 
   const getPatientPolicyData = async () => {
-    // let response = await patientPolicyService.byPatientId(user.id)
-
-    // setPatientPolicyData(response.data[0])
-    console.log("patientData: ", patientData)
-    patientPolicyService.byPatientId(user.id)
-      .then((response: any) => {
-        console.log("respponse: ", response.data[0])
-        setPatientPolicyData(response.data[0])
-        console.log("patientPolicyData: ", patientPolicyData)
-        console.log("datePickerOpen")
-        setIsDatePickerOpen(true);
-      })
-      .catch((error) => {
-        console.log("patientPolicyService.byPatientId() error: ", error)
-      })
-  }
-
-  const bookAppointment = () => {
-    if (patientData == null || Object.keys(patientData).length <= 0) {
+    console.log("user: ", user)
+    if (useUserSate.getState().loggedIn == false) {
       Alert.alert('Patient Not Found', 'You need to Sign in first', [
         {
           text: 'BACK',
-          // onPress: () => router.back(),
+          style: 'default'
+        },
+        {
+          text: 'SIGN IN',
+          onPress: () => router.push('/SignIn'),
+          style: 'default'
+        },
+      ])
+    } else {
+      patientPolicyService.byPatientId(user.id)
+        .then((response: any) => {
+          // console.log("respponse: ", response.data[0])
+          setPatientPolicyData(response.data[0])
+          // console.log("patientPolicyData: ", patientPolicyData)
+          console.log("datePickerOpen")
+          setIsDatePickerOpen(true);
+        })
+        .catch((error) => {
+          console.log("patientPolicyService.byPatientId() error: ", error)
+        })
+    }
+  }
+
+  const bookAppointment = () => {
+    console.log("bookAppointment")
+    if (patientData == null || Object.keys(patientData).length <= 0) {
+      console.log("here")
+      Alert.alert('Patient Not Found', 'You need to Sign in first', [
+        {
+          text: 'BACK',
           style: 'default'
         },
         {
@@ -298,23 +310,25 @@ const DoctorCard = ({
             value={dateAux}
             mode="date"
             display="default"
-            onChange={(selectedDate: any) => {
-              const currentDate = selectedDate.nativeEvent.timestamp || date;
-              setDate(currentDate);
-              setIsDatePickerOpen(false);
-              bookAppointment()
+            onChange={(event, selectedDate: any) => {
+              if (event.type === 'set') {
+                // const currentDate = event.nativeEvent.timestamp || date;
+                var currentDate = moment.unix(event.nativeEvent.timestamp).toDate();
+                setDate(currentDate);
+                bookAppointment()
+              }
             }}
           />
         </View>
       )}
       <View className="flex flex-row justify-end ">
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             getPatientPolicyData();
           }}
           className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
           <Text>Book</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
     </TouchableOpacity >

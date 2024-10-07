@@ -18,17 +18,17 @@ import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 const serviceData = [
     {
         id: 1,
-        icon: 'tooth',
+        icon: 'tooth-outline',
         title: "Dental",
     },
     {
         id: 2,
-        icon: 'hand-dots',
+        icon: 'fingerprint',
         title: "Dermatology",
     },
     {
         id: 3,
-        icon: 'suitcase-medical',
+        icon: 'hospital-box',
         title: "Medical",
     },
 ]
@@ -63,12 +63,13 @@ const BookAppointment = () => {
                         }
                     }>
                     <View className="py-2 items-center">
-                        <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} />
+                        {/* <FontAwesome icon={item.icon as any} size={36} color={'#78350f'} /> */}
                         {/* <!--<FontAwesomeIcon icon={item.icon as any} size={36} color={'#78350f'} /> */}
                         {/* <FontAwesome6 name="fa-solid fa-tooth" color="#c3c3ce" /> */}
                         {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
                         {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
                         {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
+                        <MaterialCommunityIcons name={item.icon} size={36} color={"#3b2314"} />
                     </View>
                     <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.title}</Text>
                 </TouchableOpacity>
@@ -87,13 +88,12 @@ const BookAppointment = () => {
                         <MaterialCommunityIcons
                             name="calendar-check-outline"
                             size={24}
-                            color={"rgb(59,35,20)"}
+                            color={"#3b2314"}
                         />
                     </View>
                     <View className="flex flex-row justify-evenly">
                         {serviceDataRender}
                     </View>
-
                 </View>
             </ScrollView>
         </SafeAreaView>

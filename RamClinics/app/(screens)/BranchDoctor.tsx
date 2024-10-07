@@ -30,9 +30,13 @@ const BranchDoctor = () => {
         useCallback(() => {
             setLoader(true);
             console.log("\n\n\n\nbranchId: ", branchId);
+            console.log("branchId: ", branchId);
+            console.log("department: ", department);
+            console.log("speciality: ", speciality);
             if (branchId != null && department != null && speciality != null) {
                 resourceService.getResourceBySpeciality(branchId, department, speciality)
                 .then((response) => {
+                    console.log("response: ", response.data)
                     setDoctors(response.data)
                     setLoader(false);
                 })
@@ -88,7 +92,7 @@ const BranchDoctor = () => {
                             <Pressable>
                                 <Text
                                     onPress={() => setActiveCategory(index)}
-                                    className={`text-base border border-pc-primary rounded-md py-1 px-3 ${index === activeCategory ? "text-white bg-[rgb(59,35,20)]" : ""
+                                    className={`text-base border border-pc-primary rounded-md py-1 px-3 ${index === activeCategory ? "text-white bg-[#3B2314]" : ""
                                         }`}
                                 >
                                     {item}

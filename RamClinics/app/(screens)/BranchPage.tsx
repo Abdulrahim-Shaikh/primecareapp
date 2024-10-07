@@ -76,6 +76,7 @@ const BranchPage = () => {
                     }
                 })
             } else {
+                console.log("\n\n\ngoing from branch page to doctorSpeciality page")
                 router.push({
                     pathname: "/DoctorSpecialityPage",
                     params: {
@@ -133,9 +134,6 @@ const BranchPage = () => {
                                                     {item?.city}
                                                 </Text>
                                         }
-                                        <Text className="text-gray-600 pt-1">
-                                            {item?.city}
-                                        </Text>
                                     </View>
                                 </Pressable>
                             </View>
