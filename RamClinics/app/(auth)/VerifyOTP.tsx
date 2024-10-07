@@ -101,23 +101,29 @@ const VerifyOTP = () => {
             <OtpInputField disabled={false} onPress={onPressOtp} />
           </View>
 
-          <View className=" pb-32">
-            <Text className="text-base text-pc-primary text-center ">
-              Didn’t receive OTP?{" "}
-              <Text
-                className=" text-pc-primary"
-                onPress={() => router.push("/SignUp")}
-              >
-                Resend
-              </Text>
-            </Text>
+          <View className="pb-32">
+            <View className="flex flex-col">
+              <View>
+                <Text className="text-base text-pc-primary text-center ">
+                  Didn’t receive OTP?{" "}
+                  <Text
+                    className=" text-pc-primary"
+                    onPress={() => router.push("/SignUp")}
+                  >
+                    Resend
+                  </Text>
+                </Text>
+              </View>
+              <View className="pt-8">
+                {
+                  loader &&
+                  <View className="flex-1 items-center justify-center">
+                    <ActivityIndicator size="large" color="#3B2314" style={{ marginTop: 20 }} />
+                  </View>
+                }
+              </View>
+            </View>
           </View>
-          {
-            loader &&
-                <View className="flex-1 items-center justify-center">
-                  <ActivityIndicator size="large" color="#3B2314" style={{ marginTop: 20 }} />
-                </View>
-          }
 
 
           <NASButton title="Verify" onPress={verifyOtp} />
