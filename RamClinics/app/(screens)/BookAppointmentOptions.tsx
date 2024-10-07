@@ -88,12 +88,8 @@ const BookAppointmentOptions = () => {
                                         onPress={
                                             () => {
                                                 router.push({
-                                                    pathname: "/BookAppointmentOptions",
-                                                    params: {
-                                                        city: null,
-                                                        fromSpeciality: 0,
-                                                        department: item.title
-                                                    }
+                                                    pathname: item.link,
+                                                    params: item.params
                                                 })
                                             }
                                         }>
@@ -112,19 +108,6 @@ const BookAppointmentOptions = () => {
                             ))
                         }
                     </View>
-                    <View className="flex-row pt-5">
-                        {/* <FlatList
-                            data={optionsData}
-                            numColumns={3}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                               
-                            )}
-                        /> */}
-                    </View>
-                    {/* <View className="flex flex-row justify-evenly">
-                        {serviceDataRender}
-                    </View> */}
                 </View>
             </ScrollView>
         </SafeAreaView>
