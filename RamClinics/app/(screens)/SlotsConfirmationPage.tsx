@@ -141,6 +141,10 @@ const SlotsConfirmationPage = () => {
         search(moment(slotSearchDate).format("YYYY-MM-DD"))
     };
 
+
+    var appointmentsRender: any = []
+    var appointmentsRowRender: any = []
+
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
@@ -165,9 +169,10 @@ const SlotsConfirmationPage = () => {
                         )}
                     </View>
 
+
                     <FlatList
                         data={Array.from(slotsAvailable)}
-                        numColumns={3}
+                        numColumns={2}
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{ marginHorizontal: "auto" }}
                         renderItem={({ item }) => (

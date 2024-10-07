@@ -52,6 +52,9 @@ const AppointmentTypePage = () => {
     }
 
 
+    var appointmentsRender: any = []
+    var appointmentsRowRender: any = []
+
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
@@ -60,6 +63,40 @@ const AppointmentTypePage = () => {
                     <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View>
                 <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
+                    {/* <View>
+                        {
+                            Array.from(subServicesList).map((slot: any, index) => (
+                                index % 2 === 0 ? (
+                                    appointmentsRender.push(
+                                        <View className="flex flex-row justify-center" key={index}>
+                                            <Text>
+                                                {appointmentsRowRender}
+                                            </Text>
+                                        </View>
+                                    )
+                                ) : (
+                                    appointmentsRowRender.push(
+                                        <View className="flex flex-col justify-evenly" key={index}>
+                                            <Pressable
+                                                onPress={() => { selectSubService(slot.responsible, slot.devices, slot.callOrReception) }}
+                                                className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4"
+                                                key={index} >
+                                                <View className="p-3 rounded-md border border-pc-primary">
+                                                    <Image source={specialityIcon} />
+                                                </View>
+                                                <Text className="text-base font-semibold pt-3">{slot.subServiceNameEn} {slot.subServiceNameAr}</Text>
+                                                <Text className="item-center flex-row text-pc-primary pt-1">
+                                                    Select branch {" "}
+                                                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                                                </Text>
+                                            </Pressable>
+                                        </View>
+                                    )
+                                )
+                            ))
+                        }
+                    </View> */}
+
                     {subServicesList.map(({ subServiceNameEn, subServiceNameAr, responsible, callOrReception, devices }, idx) => (
                         <Pressable
                             onPress={() => { selectSubService(responsible, devices, callOrReception) }}
