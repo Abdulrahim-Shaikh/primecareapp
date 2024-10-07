@@ -82,11 +82,11 @@ const MainMenu = () => {
           contentContainerStyle={{ marginHorizontal:"auto"}}
           renderItem={({ item }) => (
             <View className="flex flex-row p-1 m-1 w-32 h-32">
-              <Pressable className="border border-pc-primary p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
+              <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
                 <View className="py-2 items-center">
-                  <Ionicons name={item.icon as any} size={36} color={"rgb(59,35,20)"} />
+                  <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
                 </View>
-                <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.title}</Text>
+                <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{item.title}</Text>
               </Pressable>
             </View>
           )}

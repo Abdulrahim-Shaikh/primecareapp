@@ -87,8 +87,7 @@ const VerifyOTP = () => {
       Alert.alert("Invalid OTP!")
     }
   };
-
-
+  
 
   return (
     <SafeAreaView className="bg-white h-full">

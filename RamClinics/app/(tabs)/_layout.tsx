@@ -17,9 +17,7 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
         {iconName === "home" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              {/* <Entypo name="home" size={Platform.OS === 'ios' ? 32 : 28} color={focused ? "white" : "rgb(59, 35, 20)"} /> */}
               <FontAwesome name="home" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(59, 35, 20)")} />
-              {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-pc-primary"}`}>Home</Text> */}
             </View>
           </View>
         )}
