@@ -134,9 +134,6 @@ const BranchPage = () => {
                                                     {item?.city}
                                                 </Text>
                                         }
-                                        <Text className="text-gray-600 pt-1">
-                                            {item?.city}
-                                        </Text>
                                     </View>
                                 </Pressable>
                             </View>
