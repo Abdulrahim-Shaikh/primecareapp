@@ -6,6 +6,7 @@ import { router } from "expo-router";
 import NASButton from "../../components/NASButton";
 import logo from "../../assets/logo/logo-ram-clinic.png";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+import loginService from "../../domain/services/LoginService";
 
 const SignIn = () => {
 
@@ -30,7 +31,41 @@ const SignIn = () => {
       mobileNo = mobileNo.substring(4);
     }
     if(mobileNo.length == 9) {
-      sendOtp();
+      loginService.byMobileNo(mobileNo)
+      .then((response) => {
+
+        if(response.data != null || response.data.length > 0){
+          sendOtp();
+        }else {
+          Alert.alert('Patient Not Found', 'You need to Sign up first', [
+              {
+                  text: 'BACK',
+                  style: 'default'
+              },
+              {
+                  text: 'SIGN UP',
+                  onPress: () => router.push('/SignUp'),
+                  style: 'default'
+              },
+          ],
+          )
+      }
+      })
+      .catch((error) => {
+        Alert.alert('Patient Not Found', 'You need to Sign Up first', [
+            {
+                text: 'BACK',
+                style: 'default'
+            },
+            {
+                text: 'Create Account',
+                onPress: () => router.push('/SignUp'),
+                style: 'default'
+            },
+        ],
+        )
+  })
+      
     }
   };
 
