@@ -9,7 +9,7 @@ import CheckBox from "react-native-elements/dist/checkbox/CheckBox";
 import { Picker } from "@react-native-picker/picker";
 import { countries } from "../../constants/data";
 import branchService from "../../domain/services/BranchService";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 import moment from "moment";
 import patientService from "../../domain/services/PatientService";
@@ -113,7 +113,8 @@ const SingUp = () => {
         Alert.alert("Success", "Registered Successfully!", [
           { text: "OK", onPress: () => router.push("/SignIn") }
         ]);
-        // console.log("Patient saved Successfully", res.data);
+        console.log("Patient saved Successfully! :", res.data);
+        console.log("\n\n\nDate=",dob);
       }).catch((error) => {
         console.error("Failed to save Patient:", error);
         Alert.alert("Error", "Please try again later.");
@@ -185,23 +186,10 @@ const SingUp = () => {
             <Text className="my-2 font-medium">Date of Birth *</Text>
             <View className="flex-row justify-between my-2">
               <Pressable onPress={() => setShowPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-xl py-4">
-                <Text className="text-lg">{moment(dob).format("YYYY-MM-DD")}</Text>
+                <Text className="text-lg">{moment(dob).format("DD-MMM-YYYY")}</Text>
               </Pressable>
               {showDatePicker && (
-                <DateTimePicker
-                  value={dob}
-                  mode="date"
-                  display="default"
-                  onChange={(event, selectedDate: any) => {
-                    if (event.type === 'set') {
-                      console.log("event: ", event)
-                      var currentDate = new Date(event.nativeEvent.timestamp);
-                      setDob(currentDate);
-                      setShowPicker(false);
-                    }
-                  }}
-                />
-                // <DateTimePicker value={dateAux} mode="date" display="default" onChange={() => {setShowPicker(false); setDob(dob)}} />
+                <DateTimePicker value={dob} mode="date" display="default" onChange={(event: DateTimePickerEvent, date: any) => { const selectedDate=date; setShowPicker(false); setDob(selectedDate)}} />
               )}
             </View>
 
