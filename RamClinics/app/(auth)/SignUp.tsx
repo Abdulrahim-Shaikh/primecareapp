@@ -66,6 +66,7 @@ const SingUp = () => {
   const [city, setCity] = useState('');
   const [showDatePicker, setShowPicker] = useState(false);
   const [dob, setDob] = useState(new Date());
+  let dateAux = new Date();
 
   useEffect(() => {
     branchService.findAll().then((res) => {
@@ -85,7 +86,7 @@ const SingUp = () => {
 
 
   let signupForm = {
-    "firstName": firstName, 
+    "firstName": firstName,
     "middleName": secondName,
     "lastName": lastName,
     "dob": moment(dob).format("YYYY-MM-DD"),
@@ -108,15 +109,15 @@ const SingUp = () => {
   const savePatient = () => {
     // console.log(signupForm);
     if (firstName && lastName && dob && mobileNo && selectedBranch && gender) {
-      patientService.save(signupForm).then((res)=>{
+      patientService.save(signupForm).then((res) => {
         Alert.alert("Success", "Registered Successfully!", [
           { text: "OK", onPress: () => router.push("/SignIn") }
         ]);
         // console.log("Patient saved Successfully", res.data);
       }).catch((error) => {
-      console.error("Failed to save Patient:", error);
-      Alert.alert("Error", "Please try again later.");
-    });
+        console.error("Failed to save Patient:", error);
+        Alert.alert("Error", "Please try again later.");
+      });
     } else {
       console.log("Mandatory Fields Missing!");
       Alert.alert("Mandatory Fields Missing!", "Please fill in all required fields.");
@@ -172,7 +173,7 @@ const SingUp = () => {
             {selectedOption === 1 && (
               <FormField name="Passport" placeholder="Passport" otherStyle="mb-2" onChangeText={(e) => { setPassport(e) }} />
             )}
-            
+
             <FormField name="Mobile No. *" placeholder="Mobile Number" otherStyle="" onChangeText={(e) => { setMobileNo(e) }} />
 
             <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, paddingTop: '5%' }} />
@@ -187,7 +188,20 @@ const SingUp = () => {
                 <Text className="text-lg">{moment(dob).format("YYYY-MM-DD")}</Text>
               </Pressable>
               {showDatePicker && (
-                <DateTimePicker value={dob} mode="date" display="default" onChange={() => {setShowPicker(false); setDob(dob)}} />
+                <DateTimePicker
+                  value={dob}
+                  mode="date"
+                  display="default"
+                  onChange={(event, selectedDate: any) => {
+                    if (event.type === 'set') {
+                      console.log("event: ", event)
+                      var currentDate = new Date(event.nativeEvent.timestamp);
+                      setDob(currentDate);
+                      setShowPicker(false);
+                    }
+                  }}
+                />
+                // <DateTimePicker value={dateAux} mode="date" display="default" onChange={() => {setShowPicker(false); setDob(dob)}} />
               )}
             </View>
 
