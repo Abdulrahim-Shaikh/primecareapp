@@ -37,9 +37,9 @@ const Promotions = () => {
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
                             renderItem={({ item }) => (
-                                <View className="flex flex-row justify-center items-center p-1 m-1 w-32 h-32">
+                                <View className="flex flex-row justify-center items-center p-1 m-1 w-32 h-32 rounded-md">
                                     <Pressable
-                                        className="border border-pc-primary p-2 rounded-lg w-full items-center"
+                                        className="border border-pc-primary p-2 rounded-lg w-full items-center bg-[rgb(59,35,20)]"
                                         onPress={() => {
                                             if (item.title === "Offers") {
                                                 router.push({ pathname: "/Offers", params: { offer: item.title } });
@@ -49,9 +49,9 @@ const Promotions = () => {
                                         }}
                                     >
                                         <View className="py-2 items-center">
-                                            <MaterialCommunityIcons name={item.icon as any} size={36} color={'rgb(59,35,20)'} />
+                                            <MaterialCommunityIcons name={item.icon as any} size={36} color={'rgb(132, 204, 22)'} />
                                         </View>
-                                        <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">
+                                        <Text className="text-sm  text-white font-semibold text-center text-pc-primary pt-3 pb-2">
                                             {item.title}
                                         </Text>
                                     </Pressable>

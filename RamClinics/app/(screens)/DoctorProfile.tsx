@@ -85,9 +85,9 @@ const DoctorProfile = () => {
                 <Text className="text-2xl text-white">{doctor.name}</Text>
               </View>
               <View>
-                <Text className="bg-white p-[10px] rounded-md">
+                {/* <Text className="bg-white p-[10px] rounded-md">
                   <AntDesign name="heart" size={16} color="rgb(132 204 22)" />
-                </Text>
+                </Text> */}
               </View>
             </View>
             <View className="flex-row justify-between items-center pt-4 pb-10">

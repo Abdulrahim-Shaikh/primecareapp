@@ -49,7 +49,7 @@ const BookAppointment = () => {
         serviceDataRender.push(
             <View className="w-32">
                 <TouchableOpacity
-                    className="border border-pc-primary p-2 rounded-lg w-full"
+                    className="border border-pc-primary p-2 rounded-lg w-full bg-[rgb(59,35,20)]"
                     onPress={
                         () => {
                             router.push({
@@ -69,9 +69,9 @@ const BookAppointment = () => {
                         {/* <FontAwesome name="calendar" size={36} color={'#78350f'} className="mr-2" /> */}
                         {/* <FontAwesomeIcon icon="fa-solid fa-tooth" /> */}
                         {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
-                        <MaterialCommunityIcons name={item.icon} size={36} color={"#3b2314"} />
+                        <MaterialCommunityIcons name={item.icon} size={36} color={'rgb(132, 204, 22)'} />
                     </View>
-                    <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.title}</Text>
+                    <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{item.title}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -83,7 +83,7 @@ const BookAppointment = () => {
         <SafeAreaView>
             <ScrollView>
                 <View className="">
-                    <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
+                    <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6 ">
                         <HeaderWithBackButton isPushBack={true} title="Book Appointment" />
                         <MaterialCommunityIcons
                             name="calendar-check-outline"

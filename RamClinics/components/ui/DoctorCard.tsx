@@ -1,6 +1,6 @@
 import { Alert, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import emptyImg from "../../assets/images/EmptyDoctorImg.jpg";
@@ -300,7 +300,8 @@ const DoctorCard = ({
           </View>
         </View>
         <View className="border border-pc-primary p-2 rounded-md ml-2">
-          <Ionicons name="heart-outline" size={16} color={"rgb(132 204 22)"} />
+          {/* <Ionicons name="heart-outline" size={16} color={"rgb(132 204 22)"} /> */}
+          <MaterialIcons name="local-hospital" size={24} color={'rgb(132, 204, 22)'} />
         </View>
       </View>
 
