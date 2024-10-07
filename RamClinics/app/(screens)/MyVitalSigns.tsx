@@ -68,30 +68,18 @@ const MyVitalSigns = () => {
         setFilteredVitalSigns(filtered);
     };
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    // const fetchData = async () => {
-    //     setLoading(true);
-    //     try {
-    //         const branchesResponse = await branchService.findAll();
-    //         setBranches(branchesResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch branches:", error);
-    //     }
-
-    //     try {
-    //         const vitalSignsResponse = await vitalSignsService.patientEncounterHistory(userId); //"PNT000028"
-    //         // console.log("Fetched vital signs:", vitalSignsResponse.data);
-    //         setVitalSigns(vitalSignsResponse.data);
-    //         setFilteredVitalSigns(vitalSignsResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch vital signs:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
+    const fetchData = async () => {
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+    };
 
     useEffect(() => {
         filterVitalSigns();

@@ -64,30 +64,18 @@ const MyInvoices = () => {
         setFilteredInvoices(filtered);
     };
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    // const fetchData = async () => {
-    //     setLoading(true);
-    //     try {
-    //         const branchesResponse = await branchService.findAll();
-    //         setBranches(branchesResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch branches:", error);
-    //     }
-
-    //     try {
-    //         const invoicesResponse = await invoiceService.invoicesByPatientId(userId);
-    //         // console.log("Fetched invoices:", invoicesResponse.data);
-    //         setInvoices(invoicesResponse.data);
-    //         setFilteredInvoices(invoicesResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch invoices:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
+    const fetchData = async () => {
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+    };
 
     // useEffect(() => {
     //     setLoading(true);

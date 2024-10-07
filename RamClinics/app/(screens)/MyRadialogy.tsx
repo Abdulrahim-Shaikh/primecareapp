@@ -65,28 +65,16 @@ const MyRadialogy = () => {
         setFilteredRadialogy(filtered);
     };
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const fetchData = async () => {
-        //setLoading(true);
         try {
             const branchesResponse = await branchService.findAll();
             setBranches(branchesResponse.data);
         } catch (error) {
             console.error("Failed to fetch branches:", error);
-        }
-
-        try {
-            const radialogyResponse = await radialogyService.byPatientId(userId); //"PNT000034"
-            // console.log("Fetched radialogy:", radialogyResponse.data);
-            setRadialogy(radialogyResponse.data);
-            setFilteredRadialogy(radialogyResponse.data);
-        } catch (error) {
-            console.error("Failed to fetch radialogy:", error);
-        } finally {
-           // setLoading(false);
         }
     };
 

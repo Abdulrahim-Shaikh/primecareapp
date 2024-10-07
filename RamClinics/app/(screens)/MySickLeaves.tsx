@@ -65,30 +65,18 @@ const MySickLeaves = () => {
         setFilteredSickLeaves(filtered);
     };
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    // const fetchData = async () => {
-    //     setLoading(true);
-    //     try {
-    //         const branchesResponse = await branchService.findAll();
-    //         setBranches(branchesResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch branches:", error);
-    //     }
-
-    //     try {
-    //         const sickLeavesResponse = await sickLeavesService.byPatientId(userId);
-    //         // console.log("Fetched sick leaves:", sickLeavesResponse.data);
-    //         setSickLeaves(sickLeavesResponse.data);
-    //         setFilteredSickLeaves(sickLeavesResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch sick leaves:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
+    const fetchData = async () => {
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+    };
 
     useEffect(() => {
         filterSickLeaves();

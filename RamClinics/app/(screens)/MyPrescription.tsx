@@ -64,30 +64,18 @@ const MyPrescription = () => {
         }
     }, [data, status]);
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    // const fetchData = async () => {
-    //     setLoading(true);
-    //     try {
-    //         const branchesResponse = await branchService.findAll();
-    //         setBranches(branchesResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch branches:", error);
-    //     }
-
-    //     try {
-    //         const prescriptionResponse = await prescriptionService.byPatientId(userId);
-    //         // console.log("Fetched prescription:", prescriptionResponse.data);
-    //         setPrescription(prescriptionResponse.data);
-    //         setFilteredPrescription(prescriptionResponse.data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch prescription:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
+    const fetchData = async () => {
+        try {
+            const branchesResponse = await branchService.findAll();
+            setBranches(branchesResponse.data);
+        } catch (error) {
+            console.error("Failed to fetch branches:", error);
+        }
+    };
     
     useEffect(() => {
         filterPrescription();
