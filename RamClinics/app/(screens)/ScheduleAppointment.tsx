@@ -156,14 +156,52 @@ const ScheduleAppointment = () => {
     }, [])
 
     function selectSlot(slot: any) {
+        setSelectedSlot(slot)
+        setSlotStatus(slot.status)
+        setSlotName(slot.slotName)
+        setSlotStartTime(slot.startTime)
+        setSlotEndTime(slot.endTime)
         let tempMap = selectedSlots
         if (selectedSlots.has(slot)) {
             selectedSlots.delete(slot)
             setSelectedSlots(tempMap)
-            // setSelectedSlots(selectedSlots.delete(slot.slotId))
+            if (loggedIn) {
+                bookAppointment()
+            } else {
+                Alert.alert('Patient Not Found', 'You need to Sign in first', [
+                    {
+                        text: 'BACK',
+                        onPress: () => router.back(),
+                        style: 'default'
+                    },
+                    {
+                        text: 'SIGN IN',
+                        onPress: () => router.push('/SignIn'),
+                        style: 'default'
+                    },
+                ],
+                )
+            }
         } else {
             tempMap.add(slot)
             setSelectedSlots(tempMap)
+            if (loggedIn) {
+                bookAppointment()
+            } else {
+                Alert.alert('Patient Not Found', 'You need to Sign in first', [
+                    {
+                        text: 'BACK',
+                        onPress: () => router.back(),
+                        style: 'default'
+                    },
+                    {
+                        text: 'SIGN IN',
+                        onPress: () => router.push('/SignIn'),
+                        style: 'default'
+                    },
+                ],
+                )
+            }
         }
         console.log("selectedSlots: ", selectedSlots)
     }
@@ -406,28 +444,6 @@ const ScheduleAppointment = () => {
                                 ))}
                             </Picker>
                         </View>
-                        {/* <TouchableOpacity onPress={
-                            () => {
-                                Alert.alert('Doctor ' + doctor, 'Date: ' + new Date(fromDate).toLocaleDateString() + " -\nSlot: " + new Date(fromDate).toLocaleTimeString() + '  to  ' + new Date(toDate).toLocaleTimeString(), [
-                                    {
-                                        text: 'Confirm',
-                                        onPress: () => {
-                                            loggedIn ? bookAppointment() : router.push("/SignIn");
-                                        },
-                                        style: 'default'
-                                    },
-                                    {
-                                        text: 'Cancel',
-                                        style: 'default'
-                                    },
-                                ])
-                            }
-                        }
-                            className="flex flex-row justify-between items-center pt-2 gap-4 ">
-                            <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                                Confirm Book
-                            </Text>
-                        </TouchableOpacity> */}
                     </View>
 
 
@@ -443,9 +459,21 @@ const ScheduleAppointment = () => {
                                 <View className="flex flex-row p-1 m-1 w-32 h-32">
                                     <Pressable
                                         onPress={() => {
-                                            selectSlot(item)
+                                            Alert.alert('Doctor ' + doctor, 'Date: ' + new Date(fromDate).toLocaleDateString() + " -\nSlot: " + item.slotName, [
+                                                {
+                                                    text: 'Confirm',
+                                                    onPress: () => {
+                                                        loggedIn ? selectSlot(item) : router.push("/SignIn");
+                                                    },
+                                                    style: 'default'
+                                                },
+                                                {
+                                                    text: 'Cancel',
+                                                    style: 'default'
+                                                },
+                                            ])
+                                            
                                         }}
-                                        // className="border border-pc-primary p-2 rounded-lg w-full"
                                         className={`border p-2 rounded-lg w-full ${selectedSlots.has(item)? "border-lime-500" : "border-pc-primary" }`}
                                         >
                                         <View className="py-2 items-center">
@@ -456,30 +484,10 @@ const ScheduleAppointment = () => {
                                 </View>
                                 )
                             }}
-                            // renderItem={({ item }) => {
-                            // )}
                         />
                     </View>
 
                     <View className="flex flex-col px-2">
-                        {/* <View className="border rounded-xl mb-3">
-                            <Picker
-                                selectedValue={selectedSlot} onValueChange={(itemValue) => { slotChange(itemValue); }} className="h-12 border border-pc-primary">
-                                <Picker.Item label="Select Shift" value="" />
-                                {slots.map((slot: any) => (
-                                    <Picker.Item key={slot.id} label={slot.slotName} value={slot.slotName} />
-                                ))}
-                            </Picker>
-                        </View> */}
-                        {/* <View className="border rounded-xl mb-2">
-                            <Picker
-                                selectedValue={defaultStatus} onValueChange={(itemValue) => { statusChange(itemValue); }} className="h-12">
-                                <Picker.Item label="Select Gender" value="" />
-                                {['Booked', 'Confirmed'].map((branch: any) => (
-                                    <Picker.Item key={branch} label={branch} value={branch} />
-                                ))}
-                            </Picker>
-                        </View> */}
                         <TouchableOpacity onPress={
                             () => {
                                 Alert.alert('Doctor ' + doctor, 'Date: ' + new Date(fromDate).toLocaleDateString() + " -\nSlot: " + new Date(fromDate).toLocaleTimeString() + '  to  ' + new Date(toDate).toLocaleTimeString(), [
