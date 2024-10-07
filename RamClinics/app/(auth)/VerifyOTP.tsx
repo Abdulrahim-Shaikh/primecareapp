@@ -7,6 +7,7 @@ import loginService from "../../domain/services/LoginService";
 import NASButton from "../../components/NASButton";
 import { useUserSate } from "../../domain/state/UserState";
 import { UserContext } from "../../domain/contexts/UserContext";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const VerifyOTP = () => {
   const { mobileNo } = useLocalSearchParams();
@@ -92,6 +93,9 @@ const VerifyOTP = () => {
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
+      <View className="px-4 pt-1">
+        <HeaderWithBackButton isPushBack={true}/>
+        </View>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
           <Text className="text-2xl font-bold text-center">Verify OTP</Text>
           <Text className="text-[14px] text-pc-primary text-center pt-3">
