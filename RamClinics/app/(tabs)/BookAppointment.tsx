@@ -6,13 +6,20 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import React from "react";
+import React, { useCallback } from "react";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+import { useState } from "react";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
 // get departments by branch
 const serviceData = [
@@ -33,16 +40,31 @@ const serviceData = [
     },
 ]
 
+const i18n =  new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
+
 const BookAppointment = () => {
+    const { language, changeLanguage } = useLanguage();
     const router = useRouter();
-
-    // useFocusEffect(
-    //     useCallback(() => {
-    //     }, [])
-    // )
-
-
     var serviceDataRender = []
+
+    const [locale, setLocale] = useState(i18n.locale);
+
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+    
+
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
+
+
 
     for (let item of serviceData) {
 
@@ -84,7 +106,7 @@ const BookAppointment = () => {
             <ScrollView>
                 <View className="">
                     <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="Book Appointment" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("Book Appointment")} />
                         <MaterialCommunityIcons
                             name="calendar-check-outline"
                             size={24}

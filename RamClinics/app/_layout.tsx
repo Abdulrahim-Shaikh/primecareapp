@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import "../global.css";
 import { UserProvider } from "../domain/contexts/UserContext";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LanguageProvider } from "../domain/contexts/LanguageContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,36 +32,38 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
   return (
 
-  <QueryClientProvider client={client}>
-    <UserProvider>
-      <Stack initialRouteName="(tabs)">
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(his)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/SignIn" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/SignUp" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="index" options={{ headerShown: true }} /> */}
-        <Stack.Screen
-          name="(auth)/OnBoardingSlider"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="(auth)/VerifySuccessfully"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="(auth)/ForgetPassword"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="(auth)/VerifyOTP"
-          options={{ headerShown: false }}
-        />
+    <QueryClientProvider client={client}>
+      <UserProvider>
+        <LanguageProvider>
+          <Stack initialRouteName="(tabs)">
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(his)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)/SignIn" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)/SignUp" options={{ headerShown: false }} />
+            {/* <Stack.Screen name="index" options={{ headerShown: true }} /> */}
+            <Stack.Screen
+              name="(auth)/OnBoardingSlider"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/VerifySuccessfully"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/ForgetPassword"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/VerifyOTP"
+              options={{ headerShown: false }}
+            />
 
 
-        <Stack.Screen name="(user)" options={{ headerShown: false }} />
-        <Stack.Screen name="(screens)" options={{ headerShown: false }} />
-      </Stack>
-    </UserProvider>
+            <Stack.Screen name="(user)" options={{ headerShown: false }} />
+            <Stack.Screen name="(screens)" options={{ headerShown: false }} />
+          </Stack>
+        </LanguageProvider>
+      </UserProvider>
     </QueryClientProvider>
   );
 };
