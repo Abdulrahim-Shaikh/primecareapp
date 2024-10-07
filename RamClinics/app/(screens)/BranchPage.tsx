@@ -48,6 +48,7 @@ const BranchPage = () => {
     }, []);
 
     function selectCity(item: any) {
+        console.log("branchItem: ", item)
         if (+callCenterFlow) {
             router.push({
                 pathname: "/ShiftAndGenderOptions",

@@ -48,9 +48,9 @@ const ServicesListPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title="Services" isPushBack={true} />
-                <View className="pt-8 ">
+                {/* <View className="pt-8 ">
                     <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
-                </View>
+                </View> */}
                 <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
                     {servicesList.map(({ serviceNameEn, serviceNameAr, subServices }, idx) => (
                         <Pressable

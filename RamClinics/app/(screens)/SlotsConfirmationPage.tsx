@@ -73,6 +73,7 @@ const SlotsConfirmationPage = () => {
 
             resourceService.getResourceByLiveSlotSpeciality(specialityCode, date, branch, shift, city, deviceCode, responsible)
                 .then((response) => {
+                    console.log("resourceService.getResourceByLiveSlotSpeciality: ", response.data)
                     setLoader(true)
                     let slots: any = response.data;
                     // console.log("moment: ", moment())
@@ -131,6 +132,9 @@ const SlotsConfirmationPage = () => {
                     setLoader(false)
                     setSlotsAvailable(slotsAvailableAux2)
                 })
+                .catch((error) => {
+                    console.log("could not fetch slots: ", error)
+                })
         }
     }
 
@@ -150,7 +154,7 @@ const SlotsConfirmationPage = () => {
                         onPress={() => setIsDatePickerOpen(true)}
                         className="flex flex-row justify-between items-center pt-2 gap-4 ">
                         <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                            On: {slotSearchDate.toLocaleDateString()}
+                            On: {moment(slotSearchDate).format("DD-MMMM-YYYY")}
                         </Text>
                     </TouchableOpacity>
                     <View>

@@ -5,7 +5,8 @@ import {
   TextInputKeyPressEventData,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useFocusEffect } from "expo-router";
 
 type Nullable<T> = T | null;
 
@@ -15,6 +16,24 @@ type PropsType = {
 };
 
 const OtpInputField = ({ disabled, onPress }: PropsType) => {
+
+  const otpInputRef = useRef<TextInput>(null);
+
+  const handleFocusInput = () => {
+      otpInputRef.current?.focus();
+  };
+
+  useEffect(() => {
+    handleFocusInput()
+      // otpInputRef.current?.focus();
+  })
+  
+  // useFocusEffect(
+  //   useCallback(() => {
+  //   }, [])
+  // )
+
+
   const inputRefs = useRef<Array<Nullable<TextInput>>>([]);
   const [otpValue, setOtpValue] = useState<string[]>(["", "", "", ""]);
 
@@ -49,12 +68,13 @@ const OtpInputField = ({ disabled, onPress }: PropsType) => {
           className="border border-pc-primary py-3 px-5 rounded-lg flex justify-center items-center"
         >
           <TextInput
-            ref={(ref) => {
-              if (ref && !inputRefs.current.includes(ref)) {
-                inputRefs.current = [...inputRefs.current, ref];
+            ref={(otpInputRef) => {
+              if (otpInputRef && !inputRefs.current.includes(otpInputRef)) {
+                inputRefs.current = [...inputRefs.current, otpInputRef];
               }
             }}
             className="text-center text-xl font-semibold"
+            placeholder=""
             maxLength={1}
             contextMenuHidden
             selectTextOnFocus
