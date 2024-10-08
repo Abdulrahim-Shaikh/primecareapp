@@ -181,7 +181,38 @@ const translations = {
                 "Madinah": "Madinah",
                 "Yanbu": "Yanbu",
                 "Riyadh": "Riyadh",
-        },
+    
+        //UserProfile
+        "firstname": "First Name",
+        "middlename": "Middle Name",
+        "lastname": "Last Name",
+        "mrno": "MRNO NO",
+        "nationalId": "National Id",
+        "gender": "Gender",
+        "dob": "Date of Birth",
+        "nationality": "Nationality",
+        "phone": "Mobile Number",
+
+        //DoctorsProfile
+         "DoctorName": "Doctor Name",
+         "professionalDetails": "Professional Details",
+         "rating": "Rating",
+         "departmentDetails":"Department Details",
+         "doctorAvailability": "Doctor Availability",
+         "experience": "Experience",
+         "qualification": "Qualification",
+         "reviews": "Reviews",
+
+         //BookAppointmentOptions
+         "By Branch" : "By Branch",
+         "By Doctor":   "ByDoctor",
+         "By Service": "By Service",
+         "searchBy": "Search By",
+
+        
+
+        
+    },
         ar: {
                 "Book Appointment": "حجز موعد",
                 "Forgot Password": "نسيت كلمة المرور",
@@ -362,6 +393,31 @@ const translations = {
                 "Yanbu": "ينبع",
                 "Riyadh": "الرياض"
 
-        }
+            //UserProfile
+        "firstname": "الاسم الأول",
+        "middlename": "الاسم الأوسط",
+        "lastname": "اسم العائلة",
+        "mrno": "رقم السجل الطبي",
+        "nationalId": "الرقم الوطني",
+        "gender": "الجنس",
+        "dob": "تاريخ الميلاد",
+        "nationality": "الجنسية",
+        "phone": "رقم الجوال",
+
+         //DoctorsProfile
+         "DoctorName": "اسم الطبيب",
+         "professionalDetails": "تفاصيل احترافية",
+         "rating": "تصنيف",
+         "departmentDetails":"تفاصيل القسم",
+         "doctorAvailability": "متوفرية الطبيب",
+         "experience": "تجربة",
+         "reviews": "التعليقات",
+
+         //BookAppointmentOptions
+         "By Branch" : "حسب الفرع",
+         "By Doctor":   "بواسطة دكتور",
+         "By Service": "حسب الخدمة",
+         "searchBy": "البحث عن طريق",
+    }
 }
 export default translations;

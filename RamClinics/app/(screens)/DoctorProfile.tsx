@@ -1,12 +1,40 @@
 import { Image, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { router, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { AntDesign, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import doctorService from "../../domain/services/DoctorService";
 import doctorImg from "../../assets/images/doctorProfile.jpg";
 import LinkButton from "../../components/LinkButton";
+import translations from "../../constants/locales/ar";
+import { I18n } from "i18n-js";
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+
+
+
+const i18n =  new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const DoctorProfile = () => {
+
+  const { language, changeLanguage } = useLanguage();
+  const router = useRouter();
+  var serviceDataRender = []
+  
+  const [locale, setLocale] = useState(i18n.locale);
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+}
+
+useFocusEffect(
+  useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+  }, [])
+)
+
   const { id } = useLocalSearchParams();
   const [doctor, setDoctor] = useState({});
   // console.log("doctor>>>>", doctor);
@@ -80,8 +108,8 @@ const DoctorProfile = () => {
           </TouchableOpacity>
           <View className="bg-[rgb(59,35,20)] rounded-t-3xl p-6 mt-5">
             <View className="flex-row justify-between items-start">
-              <View>
-                <Text className="text-white font-semibold">Doctor Name</Text>
+              <View className="w-full justify-between">
+                <Text className="text-white font-semibold">{i18n.t("DoctorName")}</Text>
                 <Text className="text-2xl text-white">{doctor.name}</Text>
               </View>
               <View>
@@ -90,31 +118,37 @@ const DoctorProfile = () => {
                 </Text> */}
               </View>
             </View>
-            <View className="flex-row justify-between items-center pt-4 pb-10">
-              <DetailItem icon="local-hospital" label="professional Details" value={renderValue(doctor.professionalDts, "Professional not available")} />
+            <View className="flex-row justify-between items-center pt-4 pb-10 w-full">
+              <DetailItem icon="local-hospital" label={i18n.t("professionalDetails")} value={renderValue(doctor.professionalDts, "Professional not available")} />
               {/* <DetailItem icon="directions-walk" label="Experience" value={renderValue(doctor.experience, "N/A")} /> */}
-              <DetailItem icon="star-rate" label="Rating" value={renderValue(`${doctor.rating} +`, "N/A")} />
+              <DetailItem icon="star-rate" label={i18n.t("rating")} value={renderValue(`${doctor.rating} +`, "N/A")} />
             </View>
           </View>
 
-          <View className="p-6 bg-slate-50 rounded-t-2xl -mt-10">
-            <View className="flex-row justify-between items-center pb-2">
-              <DetailItem icon="add-home" label="Department Details" value={renderValue(doctor.department, "Department not available")} isAmber />
+          <View className="p-6 bg-slate-50 rounded-t-2xl -mt-10 w-full">
+            <View className="flex-row justify-between items-center pb-2 w-full">
+            {language === "ar" && (<Text className="text-white font-semibold"></Text>)}
+              <DetailItem icon="add-home" label={i18n.t("departmentDetails")} value={renderValue(doctor.department, "Department not available")} isAmber />
             </View>
-            <View className="flex-row justify-between items-center pt-2 pb-5">
-              <DetailItem icon="access-alarms" label="Doctor Availability" value={renderValue(doctor.clinicHoursAr, "Availability not specified")} isAmber />
-            </View>
-            <View className="flex-row justify-between items-center pb-5">
-              <DetailItem icon="access-alarms" label="Experience" value={renderValue(doctor.experience, "Experience not specified")} isAmber />
-            </View>
-            <View className="flex-row justify-between items-center pb-5">
-              <DetailItem icon="menu-book" label="Qualification" value={renderQualification()} isAmber />
+            <View className="flex-row justify-between items-center pt-2 pb-5 w-full">
+            {language === "ar" && (<Text className="text-white font-semibold"></Text>)}
+              <DetailItem icon="access-alarms" label={i18n.t("doctorAvailability")} value={renderValue(doctor.clinicHoursAr, "Availability not specified")} isAmber />
             </View>
             <View className="flex-row justify-between items-center pb-5">
-              <DetailItem icon="account-balance" label="Nationality" value={renderValue(doctor.nationality, "Nationality not specified")} isAmber />
+            {language === "ar" && (<Text className="text-white font-semibold"></Text>)}
+              <DetailItem icon="access-alarms" label={i18n.t("experience")} value={renderValue(doctor.experience, "Experience not specified")} isAmber />
             </View>
-            <View className="flex-row gap-2">
-              <DetailItem icon="reviews" label="Reviews" value={renderValue(doctor.reviews, "No reviews yet")} isAmber />
+            <View className="flex-row justify-between items-center pb-5">
+            {language === "ar" && (<Text className="text-white font-semibold"></Text>)}
+              <DetailItem icon="menu-book" label={i18n.t("qualification")} value={renderQualification()} isAmber />
+            </View>
+            <View className="flex-row justify-between items-center pb-5">
+            {language === "ar" && (<Text className="text-white font-semibold"></Text>)}
+              <DetailItem icon="account-balance" label={i18n.t("nationality")} value={renderValue(doctor.nationality, "Nationality not specified")} isAmber />
+            </View>
+            <View className="flex-row justify-between items-center pb-5">
+            {language === "ar" && (<Text className="text-white font-semibold"></Text>)}
+              <DetailItem icon="reviews" label={i18n.t("reviews")} value={renderValue(doctor.reviews, "No reviews yet")} isAmber />
             </View>
           </View>
           <View className={`p-2 bg-slate-50 ${Platform.OS === 'ios' ? 'pb-10' : 'pb-4'}`}>

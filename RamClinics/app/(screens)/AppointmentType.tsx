@@ -100,16 +100,16 @@ const AppointmentTypePage = () => {
                     {subServicesList.map(({ subServiceNameEn, subServiceNameAr, responsible, callOrReception, devices }, idx) => (
                         <Pressable
                             onPress={() => { selectSubService(responsible, devices, callOrReception) }}
-                            className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4"
+                            className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4 bg-[rgb(59,35,20)]"
                             key={idx}
                         >
-                            <View className="p-3 rounded-md border border-pc-primary">
+                            <View className="p-3 rounded-md border border-pc-primary bg-white">
                                 <Image source={specialityIcon} />
                             </View>
-                            <Text className="text-base font-semibold pt-3">{subServiceNameEn} {subServiceNameAr}</Text>
-                            <Text className="item-center flex-row text-pc-primary pt-1">
+                            <Text className="text-base font-semibold pt-3 text-white">{subServiceNameEn} {subServiceNameAr}</Text>
+                            <Text className="item-center flex-row text-pc-primary pt-1 text-white">
                                 Select branch {" "}
-                                <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                                <Feather name="arrow-right" size={14} color="#fff" />{" "}
                             </Text>
                             {/* {
                                 +fromSpeciality

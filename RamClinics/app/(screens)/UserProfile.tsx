@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { router } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { router, useFocusEffect, useRouter } from "expo-router";
 import {
   AntDesign,
   Ionicons,
@@ -13,8 +13,35 @@ import { useUserSate } from "../../domain/state/UserState";
 import emptyProfileImg from "../../assets/images/avatar.png";
 import patientService from "../../domain/services/PatientService";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import translations from "../../constants/locales/ar";
+import { I18n } from "i18n-js";
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+
+const i18n =  new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
+
 
 const UserProfile = () => {
+
+  const { language, changeLanguage } = useLanguage();
+  
+    var serviceDataRender = []
+    
+    const [locale, setLocale] = useState(i18n.locale);
+    const changeLocale = (locale: any) => {
+      i18n.locale = locale;
+      setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+        changeLocale(language)
+        changeLanguage(language)
+    }, [])
+)
+
   const { user, setUser } = useUserSate();
   const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
   let [patient, setPatient] = useState([]);
@@ -66,19 +93,19 @@ const UserProfile = () => {
                 </Text>
               </View>
               <View>
-                <Text className=" text-white">First Name</Text>
+                <Text className=" text-white">{i18n.t("firstname")}</Text>
                 <Text className="text-lime-600 text-md font-semibold text-xl">
                   {user && user.firstName ? user.firstName : "-"}
                 </Text>
               </View>
               <View>
-                <Text className=" text-white">Middle Name</Text>
+                <Text className=" text-white">{i18n.t("middlename")}</Text>
                 <Text className="text-lime-600 text-md font-semibold text-xl">
                   {user && user.middleName ? user.middleName : "-"}
                 </Text>
               </View>
               <View>
-                <Text className=" text-white">Last Name</Text>
+                <Text className=" text-white">{i18n.t("lastname")}</Text>
                 <Text className="text-lime-600 text-md font-semibold text-xl">
                   {user && user.lastName ? user.lastName : "-"}
                 </Text>
@@ -94,7 +121,7 @@ const UserProfile = () => {
                   />
                 </Text>
                 <View>
-                  <Text className="text-white text-xs">MRN NO </Text>
+                  <Text className="text-white text-xs">{i18n.t("mrno")}</Text>
                   <View className="rounded-md">
                     <Text className="text-lime-600 text-md font-bold">{patient && patient.mrno ? patient.mrno : "KHB100105421846"}</Text>
                   </View>
@@ -109,7 +136,7 @@ const UserProfile = () => {
                   />
                 </Text>
                 <View>
-                  <Text className="text-white text-xs">Nationl Id</Text>
+                  <Text className="text-white text-xs">{i18n.t("nationalId")}</Text>
                   <View className="rounded-md">
                     <Text className="text-lime-600 text-md font-bold">{patient && patient.nationalId ? patient.nationalId : "28458625824"}</Text>
                   </View>
@@ -126,7 +153,7 @@ const UserProfile = () => {
                   />
                 </Text>
                 <View>
-                  <Text className="text-white text-xs">Gender </Text>
+                  <Text className="text-white text-xs">{i18n.t("gender")}</Text>
                   <View className="rounded-md ">
                     <Text className="text-lime-600 text-md font-bold">{patient && patient.gender ? patient.gender : "Dont Know"}</Text>
                   </View>
@@ -141,7 +168,7 @@ const UserProfile = () => {
                   />
                 </Text>
                 <View>
-                  <Text className="text-white text-xs">Date Of Birth</Text>
+                  <Text className="text-white text-xs">{i18n.t("dob")}</Text>
                   <View className="rounded-md">
                     <Text className="text-lime-600 text-md font-bold">
                       {patient && patient.dob ? new Date(patient.dob).toLocaleDateString() : "05/06/1999"}
@@ -163,7 +190,7 @@ const UserProfile = () => {
                   />
                 </Text>
                 <View>
-                  <Text className="text-white text-xs">Nationality</Text>
+                  <Text className="text-white text-xs">{i18n.t("nationality")}</Text>
                   <View className="rounded-md">
                     <Text className="text-lime-600 text-md font-bold">{patient && patient.nationality ? patient.nationality : "India"}</Text>
                   </View>
@@ -178,7 +205,7 @@ const UserProfile = () => {
                   />
                 </Text>
                 <View>
-                  <Text className="text-white text-xs">Mobile Number</Text>
+                  <Text className="text-white text-xs">{i18n.t("phone")}</Text>
                   <View className="rounded-md">
                     <Text className="text-lime-600 text-md font-bold">{user && user.mobile ? user.mobile : "28458625824"}</Text>
                   </View>

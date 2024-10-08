@@ -145,13 +145,13 @@ const DoctorSpecialityPage = () => {
           {specialityList.map(({ code, name, services }, idx) => (
             <Pressable
               onPress={() => { selectSpeciality(code, name, services) }}
-              className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4"
+              className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4 bg-[rgb(59,35,20)]"
               key={idx}
             >
-              <View className="p-3 rounded-md border border-pc-primary">
+              <View className="p-3 rounded-md border border-pc-primary bg-white">
                 <Image source={specialityIcon} />
               </View>
-              <Text className="text-base font-semibold pt-3">{name}</Text>
+              <Text className="text-base font-semibold pt-3 text-white">{name}</Text>
               {
                 +fromSpeciality
                   ?
@@ -160,9 +160,9 @@ const DoctorSpecialityPage = () => {
                     <Feather name="arrow-right" size={14} color="#454567" />{" "}
                   </Text>
                   :
-                  <Text className="item-center flex-row text-pc-primary pt-1">
+                  <Text className="item-center flex-row text-white pt-1">
                     Select doctor {" "}
-                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
+                    <Feather name="arrow-right" size={14} color="#FFF" />{" "}
                   </Text>
               }
             </Pressable>

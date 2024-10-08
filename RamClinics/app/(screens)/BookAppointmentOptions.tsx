@@ -12,8 +12,35 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import { serviceData } from "../../constants/data";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+import { useCallback, useState } from "react";
+
+
+const i18n =  new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const BookAppointmentOptions = () => {
+
+    const { language, changeLanguage } = useLanguage();
+    var serviceDataRender = []
+  
+    const [locale, setLocale] = useState(i18n.locale);
+    const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+}
+
+useFocusEffect(
+  useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+  }, [])
+)
     const router = useRouter();
     const { city, fromSpeciality, department } = useLocalSearchParams();
 
@@ -77,7 +104,7 @@ const BookAppointmentOptions = () => {
             <ScrollView>
                 <View className="">
                     <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="Search By" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("searchBy")} />
                     </View>
                     <View className="flex flex-row justify-evenly">
                         {
@@ -102,7 +129,7 @@ const BookAppointmentOptions = () => {
                                             {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
                                             <MaterialCommunityIcons name={item.icon} size={36} color={'rgb(132, 204, 22)'} />
                                         </View>
-                                        <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{item.title}</Text>
+                                        <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
                                     </TouchableOpacity>
                                 </View>
                             ))
