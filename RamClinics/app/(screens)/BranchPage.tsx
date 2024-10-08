@@ -35,12 +35,14 @@ const BranchPage = () => {
                 console.log("department: ", department)
                 console.log("speciality: ", speciality)
                 branchService.findAll().then((res) => {
+                    console.log("\n\n\nbranches: ", res.data)
                     setBranches(res.data);
                 }).catch((error) => {
                     console.log("branchService.findAll() error", error);
                 })
             } else {
                 branchService.getAllBranchesInCity(city).then((res) => {
+                    console.log("\n\nbranches: ", res.data)
                     setBranches(res.data);
                 });
             }

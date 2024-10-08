@@ -11,6 +11,8 @@ type TabIconProbs = {
 }
 
 const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
+
+
   return (
     <View className="flex items-center justify-center gap-2">
       <Text className={`p-2 justify-center justify-items-center rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`} style={ Platform.OS === 'ios' && styles.viewText} >
