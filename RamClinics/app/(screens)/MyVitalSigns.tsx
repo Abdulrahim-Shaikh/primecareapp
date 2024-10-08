@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import branchService from "../../domain/services/BranchService";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -9,14 +9,37 @@ import { useUserSate } from "../../domain/state/UserState";
 import SickLeavesReport from "./SickLeavesReport";
 import vitalSignsService from "../../domain/services/VitalSignsService";
 import moment from "moment";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+import { useFocusEffect } from "expo-router";
 
 const tabNames = [
     { label: "In Progress", value: "in-progress" },
     { label: "Finished", value: "finished" },
     { label: "Cancelled", value: "cancelled" }
 ];
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const MyVitalSigns = () => {
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
     const [fromDate, setFromDate] = useState(new Date());
@@ -47,7 +70,7 @@ const MyVitalSigns = () => {
     const [activeTab, setActiveTab] = useState("in-progress");
 
     const { data, status, isLoading } = vitalSignsService.vitalSignsByPatientIds(userId);
-  
+
     useEffect(() => {
         console.log('API response', data, status);
         if (data && status === "success") {
@@ -103,9 +126,9 @@ const MyVitalSigns = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
+                <View className={Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="My Vital Signs" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("My Vital Signs")} />
                         <MaterialCommunityIcons
                             name="emoticon-sick-outline"
                             size={24}
@@ -115,14 +138,14 @@ const MyVitalSigns = () => {
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("To")}: {moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
@@ -137,7 +160,7 @@ const MyVitalSigns = () => {
                             }}
                             className="h-12"
                         >
-                            <Picker.Item label="Select Branch" value="" />
+                            <Picker.Item label={i18n.t("Select Branch")} value="" />
                             {branches.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
@@ -148,7 +171,7 @@ const MyVitalSigns = () => {
                         {tabNames.map((item, idx) => (
                             <Pressable key={idx} onPress={() => setActiveTab(item.value)} className={`flex-1 border-b-2 pb-2 ${activeTab === item.value ? "border-pc-primary" : "border-transparent"}`}>
                                 <Text className={`text-center font-semibold ${activeTab === item.value ? "text-pc-primary" : "text-gray-700"}`}>
-                                    {item.label}
+                                    {i18n.t(item.label)}
                                 </Text>
                             </Pressable>
                         ))}
@@ -159,21 +182,20 @@ const MyVitalSigns = () => {
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredVitalSigns.length === 0 ? (
-                                <Text className="text-center text-lg text-gray-600 mt-4">No vital sign available for this filter.
-                                    Select Correct Branch Name, Date & Tabs</Text>
+                                <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No data available for this filter")}.</Text>
                             ) : (
                                 filteredVitalSigns.map((vitalsign: any) => (
                                     <Pressable key={vitalsign.id} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                         <View className="flex-row justify-between items-center">
-                                            <Text className="font-semibold">Vital Sign ID: {vitalsign.id}</Text>
+                                            <Text className="font-semibold">{i18n.t("Vital Sign ID")}: {vitalsign.id}</Text>
                                             <AntDesign name="medicinebox" size={24} color=" rgb(132 204 22)" />
                                         </View>
                                         <Text style={styles.invoiceText}>
                                             <Text style={styles.amount}>{vitalsign.mrno}</Text>
                                         </Text>
-                                        <Text style={styles.branchText}>Practitioner Name: {vitalsign.practitionerName}</Text>
-                                        <Text style={styles.branchText}>Branch: {vitalsign.branchName}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">Date: {new Date(vitalsign.createdDate).toLocaleDateString()}</Text>
+                                        <Text style={styles.branchText}>{i18n.t("Practitioner Name")}: {vitalsign.practitionerName}</Text>
+                                        <Text style={styles.branchText}>{i18n.t("Branch")}: {vitalsign.branchName}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(vitalsign.createdDate).toLocaleDateString()}</Text>
                                     </Pressable>
                                 ))
                             )}

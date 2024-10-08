@@ -1,25 +1,46 @@
 import { Platform, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Tabs } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { Tabs, useFocusEffect } from "expo-router";
 import {
   AntDesign, FontAwesome
 } from "@expo/vector-icons";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
 type TabIconProbs = {
   focused: boolean;
   iconName: string;
 }
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
 
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
 
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
   return (
     <View className="flex items-center justify-center gap-2">
-      <Text className={`p-2 justify-center justify-items-center rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`} style={ Platform.OS === 'ios' && styles.viewText} >
+      <Text className={`p-2 justify-center justify-items-center rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`} style={Platform.OS === 'ios' && styles.viewText} >
         {iconName === "home" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              <FontAwesome name="home" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(59, 35, 20)")} />
+              <FontAwesome name="home" size={30} color={Platform.OS === 'ios' ? (focused ? "rgb(132 204 22)" : "white") : (focused ? "white" : "rgb(59, 35, 20)")} />
             </View>
           </View>
         )}
@@ -34,41 +55,41 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
               {/* <MaterialCommunityIcons name="calendar-check-outline" size={Platform.OS === 'ios' ? 32 : 28} color={focused ? "white" : "rgb(59, 35, 20)"} /> */}
-              <FontAwesome name="calendar-check-o" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(59, 35, 20)")} />
+              <FontAwesome name="calendar-check-o" size={30} color={Platform.OS === 'ios' ? (focused ? "rgb(132 204 22)" : "white") : (focused ? "white" : "rgb(59, 35, 20)")} />
               {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-pc-primary"}`}>My{"\n"}Appointments</Text> */}
             </View>
           </View>
         )}
-        { Platform.OS === 'ios' ?
-        iconName === "book-app" && (
-          <View style={styles.iconBgBook}>
-            <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              <FontAwesome name="calendar-plus-o" size={60} color={focused?"rgb(132 204 22)":"white"} />
-              {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-pc-primary"}`}>Book{"\n"}Appointment</Text> */}
+        {Platform.OS === 'ios' ?
+          iconName === "book-app" && (
+            <View style={styles.iconBgBook}>
+              <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
+                <FontAwesome name="calendar-plus-o" size={60} color={focused ? "rgb(132 204 22)" : "white"} />
+                {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-pc-primary"}`}>Book{"\n"}Appointment</Text> */}
+              </View>
             </View>
-          </View>
-        )
-        :
-        iconName === "book-app" && (
-          <>
-            <View className="flex flex-col justify-center justify-items-center justif-self-center" >
-              <FontAwesome className="text-center" name="calendar-plus-o" size={34} color={focused?"white":"rgb(59, 35, 20)"} />
-              <Text className={`text-xs text-center pt-1 ${focused ? " text-white" : "text-pc-primary"}`}>Book{"\n"}Appointment</Text>
-            </View>
-          </>
-        )
-      }
+          )
+          :
+          iconName === "book-app" && (
+            <>
+              <View className="flex flex-col justify-center justify-items-center justif-self-center" >
+                <FontAwesome className="text-center" name="calendar-plus-o" size={34} color={focused ? "white" : "rgb(59, 35, 20)"} />
+                <Text className={`text-xs text-center pt-1 ${focused ? " text-white" : "text-pc-primary"}`}>Book{"\n"}Appointment</Text>
+              </View>
+            </>
+          )
+        }
         {iconName === "gift" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              <FontAwesome name="gift" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(59, 35, 20)")} />
+              <FontAwesome name="gift" size={30} color={Platform.OS === 'ios' ? (focused ? "rgb(132 204 22)" : "white") : (focused ? "white" : "rgb(59, 35, 20)")} />
             </View>
           </View>
         )}
         {iconName === "user" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-              <AntDesign name="user" size={30} color={Platform.OS ==='ios' ? (focused?"rgb(132 204 22)":"white") : (focused?"white":"rgb(59, 35, 20)")} />              
+              <AntDesign name="user" size={30} color={Platform.OS === 'ios' ? (focused ? "rgb(132 204 22)" : "white") : (focused ? "white" : "rgb(59, 35, 20)")} />
             </View>
           </View>
         )}
@@ -96,8 +117,8 @@ const TabLayout = () => {
           },
 
           tabBarStyle: {
-            backgroundColor:"rgb(59, 35, 20)",
-            height: Platform.OS === 'ios' ? 124 : 110, 
+            backgroundColor: "rgb(59, 35, 20)",
+            height: Platform.OS === 'ios' ? 124 : 110,
             marginTop: Platform.OS === 'ios' ? -35 : 0,
             borderTopEndRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopLeftRadius: Platform.OS === 'ios' ? 0 : 15,
@@ -110,7 +131,7 @@ const TabLayout = () => {
           name="index"
           options={{
             headerShown: false,
-            title: 'Home',
+            title: i18n.t('Home'),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon iconName="home" focused={focused} />
             ),
@@ -133,7 +154,7 @@ const TabLayout = () => {
           name="MyAppoinment"
           options={{
             headerShown: false,
-            title: 'MyAppoinment',
+            title: i18n.t('MyAppoinment'),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon iconName="calendar-check-outline" focused={focused} />
             ),
@@ -146,7 +167,7 @@ const TabLayout = () => {
           name="BookAppointment"
           options={{
             headerShown: false,
-            title: Platform.OS === 'ios' ? "BookAppoint" : "",
+            title: Platform.OS === 'ios' ? i18n.t("BookAppoint") : "",
             tabBarIcon: ({ color, focused }) => (
               <TabIcon iconName="book-app" focused={focused} />
             ),
@@ -158,9 +179,9 @@ const TabLayout = () => {
           name="Promotions"
           options={{
             headerShown: false,
-            title: "Promotions",
+            title: i18n.t("Promotions"),
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="gift" focused={focused} />              
+              <TabIcon iconName="gift" focused={focused} />
             ),
           }}
         />
@@ -169,7 +190,7 @@ const TabLayout = () => {
           name="ProfileTab"
           options={{
             headerShown: false,
-            title: "Profile",
+            title: i18n.t("Profile"),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon iconName="user" focused={focused} />
             ),
@@ -185,7 +206,7 @@ export default TabLayout;
 const styles = StyleSheet.create({
   viewText: {
     padding: 0,
-    backgroundColor: Platform.OS === 'ios' ? 'rgb(59, 35, 20)': '',
+    backgroundColor: Platform.OS === 'ios' ? 'rgb(59, 35, 20)' : '',
   },
   iconBg: {
     alignItems: 'center',

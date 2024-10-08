@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import branchService from "../../domain/services/BranchService";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -10,9 +10,33 @@ import radialogyService from "../../domain/services/RadialogyService";
 import RadialogyReport from "./RadialogyReport";
 import PdfViewer from "./PDFViewer";
 import moment from "moment";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+import { useFocusEffect } from "expo-router";
+
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const MyRadialogy = () => {
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
     const [fromDate, setFromDate] = useState(new Date());
@@ -24,7 +48,7 @@ const MyRadialogy = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedRadialogy, setSelectedRadialogy] = useState<any>(null);
     const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
-  //  const [loading, setLoading] = useState(true);
+    //  const [loading, setLoading] = useState(true);
     // const [pdfUri, setPdfUri] = useState('');
     let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
@@ -44,7 +68,7 @@ const MyRadialogy = () => {
     const [activeTab, setActiveTab] = useState("Pending");
 
     const { data, status, isLoading } = radialogyService.byPatientIds(userId);
-  
+
     useEffect(() => {
         console.log('API response', data, status);
         if (data && status === "success") {
@@ -102,9 +126,9 @@ const MyRadialogy = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
+                <View className={Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="My Radialogy" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("My Radialogy")} />
                         <MaterialCommunityIcons
                             name="car-brake-temperature"
                             size={24}
@@ -114,14 +138,14 @@ const MyRadialogy = () => {
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("To")}: {moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
@@ -136,7 +160,7 @@ const MyRadialogy = () => {
                             }}
                             className="h-12"
                         >
-                            <Picker.Item label="Select Branch" value="" />
+                            <Picker.Item label={i18n.t("Select Branch")} value="" />
                             {branches.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
@@ -147,7 +171,7 @@ const MyRadialogy = () => {
                         {tabNames.map((item, idx) => (
                             <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-lime-600" : "border-transparent"}`}>
                                 <Text className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : "text-gray-700"}`}>
-                                    {item}
+                                    {i18n.t(item)}
                                 </Text>
                             </Pressable>
                         ))}
@@ -158,23 +182,22 @@ const MyRadialogy = () => {
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredRadialogy.length === 0 ? (
-                                <Text className="text-center text-lg text-gray-600 mt-4">No radialogy available for this filter.
-                                    Select Correct Branch Name, Date & Tabs</Text>
+                                <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No data available for this filter")}.</Text>
                             ) : (
                                 filteredRadialogy.map((radialogys: any) => (
                                     <Pressable key={radialogys.id} onPress={() => openModal(radialogys)} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                         <View className="flex-row justify-between items-center">
-                                            <Text className="font-semibold">Radialogy ID: {radialogys.id}</Text>
+                                            <Text className="font-semibold">{i18n.t("Radialogy ID")}: {radialogys.id}</Text>
                                             <AntDesign name="medicinebox" size={24} color=" rgb(132 204 22)" />
                                         </View>
                                         <Text style={styles.invoiceText}>
                                             <Text style={styles.amount}>{radialogys.serviceName}</Text>
                                         </Text>
                                         <Text style={styles.invoiceText}>
-                                            Total Amount: <Text style={styles.amount}>{radialogys.total}</Text>
+                                            {i18n.t("Total Amount")}: <Text style={styles.amount}>{radialogys.total}</Text>
                                         </Text>
-                                        <Text style={styles.branchText}>Branch: {radialogys.branchName}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">Date: {new Date(radialogys.orderDate).toLocaleDateString()}</Text>
+                                        <Text style={styles.branchText}>{i18n.t("Branch")}: {radialogys.branchName}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(radialogys.orderDate).toLocaleDateString()}</Text>
                                     </Pressable>
                                 ))
                             )}
@@ -191,7 +214,7 @@ const MyRadialogy = () => {
                         onClose={closeModal}
                     /> */}
                     <Pressable onPress={closeModal} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>Close</Text>
+                        <Text style={styles.closeButtonText}>{i18n.t("Close")}</Text>
                     </Pressable>
                 </View>
             </Modal>

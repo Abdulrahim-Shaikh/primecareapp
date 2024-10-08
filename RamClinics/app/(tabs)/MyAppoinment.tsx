@@ -29,12 +29,31 @@ import branchService from "../../domain/services/BranchService";
 import patientService from "../../domain/services/PatientService";
 import moment from "moment";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
 const tabNames = ["Booked", "Checked In"];
-
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 const Appoinment = () => {
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
 
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
   const [cancelModal, setCancelModal] = useState(false);
   const [activeTab, setActiveTab] = useState("Booked");
   const [filteredItem, setFilteredItem] = useState(myAppoinmentData);
@@ -124,8 +143,8 @@ const Appoinment = () => {
       <ScrollView>
         <View className="pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6">
-            <HeaderWithBackButton isPushBack={true} title="My Appointments" />
-            <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(59, 35, 20)" }
+            <HeaderWithBackButton isPushBack={true} title={i18n.t("My Appointments")} />
+            <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(59, 35, 20)"}
             />
           </View>
           {/* <View className="pt-8">
@@ -133,13 +152,13 @@ const Appoinment = () => {
           </View> */}
           <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-              <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
+              <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
             </Pressable>
             {isFromDatePickerOpen && (
               <DateTimePicker value={fromDate} mode="date" display="default" onChange={onStartDateChange} />
             )}
             <Pressable onPress={() => setIsToDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-              <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
+              <Text className="text-lg">{i18n.t("To")}: {moment(toDate).format("DD-MMM-YYYY")}</Text>
             </Pressable>
             {isToDatePickerOpen && (
               <DateTimePicker value={toDate} mode="date" display="default" onChange={onEndDateChange} />
@@ -159,7 +178,7 @@ const Appoinment = () => {
                   className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : ""
                     }`}
                 >
-                  {item}
+                  {i18n.t(item)}
                 </Text>
               </Pressable>
             ))}
@@ -167,7 +186,7 @@ const Appoinment = () => {
 
           <View className="">
             {appointments.length <= 0 &&
-              <Text className="text-center text-lg text-gray-600 mt-4">No appointments scheduled for this filter</Text>
+              <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No appointments scheduled for this filter")}</Text>
             }
             {appointments.map((item) => (
               <View

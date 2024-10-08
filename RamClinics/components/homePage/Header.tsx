@@ -33,7 +33,7 @@ const Header = ({
           <Image source={profilePhotoUrl} style={styles.profileImage} />
         </View>
         <View>
-          <Text className="text-lg font-semibold">HI, {patientName}</Text>
+          <Text className="text-lg font-semibold">Hi, {patientName}</Text>
           <View className=" bg-lime-100 px-3 py-1 rounded-lg mt-2 flex flex-row justify-center">
             <Text className="text-[14px]">{branch}</Text>
             <Text className=" block pl-2 ">

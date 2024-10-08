@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, ActivityIndicator, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import branchService from "../../domain/services/BranchService";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -9,9 +9,32 @@ import patientService from "../../domain/services/PatientService";
 import { useUserSate } from "../../domain/state/UserState";
 import invoiceService from "../../domain/services/InvoiceService";
 import moment from "moment";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+import { useFocusEffect } from "expo-router";
+
+const i18n =  new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const MyApprovals = () => {
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
 
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+    
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
     let user = useUserSate.getState().user;
     let mrno = '';
     const tabNames = ["Pending", "Approved", "Cancelled"];
@@ -99,20 +122,20 @@ const MyApprovals = () => {
             <ScrollView>
                 <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="My Approvals" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("My Approvals")} />
                         <MaterialCommunityIcons name="receipt" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("To")}: {moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
@@ -122,7 +145,7 @@ const MyApprovals = () => {
                     <View className="border border-indigo-950 rounded-lg mb-4">
                         <Picker
                             selectedValue={selectedValue} onValueChange={(itemValue) => { setSelectedValue(itemValue); }} className="h-12">
-                            <Picker.Item label="Select Branch" value="" />
+                            <Picker.Item label={i18n.t("Select Branch")} value="" />
                             {branches.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
                             ))}
@@ -130,14 +153,14 @@ const MyApprovals = () => {
                     </View>
 
                     <Pressable onPress={() => search()} className="flex-1 bg-[rgb(59,35,20)] p-3 rounded-lg mt-2 mb-4">
-                        <Text className="text-lg text-white text-center"> search </Text>
+                        <Text className="text-lg text-white text-center"> {i18n.t("search")} </Text>
                     </Pressable>
 
                     <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
                             <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-lime-600" : "border-transparent"}`}>
                                 <Text className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : "text-gray-700"}`}>
-                                    {item}
+                                    {i18n.t(item)}
                                 </Text>
 
                             </Pressable>
@@ -149,7 +172,7 @@ const MyApprovals = () => {
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             approvals.length === 0 ? (
-                                <Text className="text-center text-lg text-gray-600 mt-4">No approvals available.</Text>
+                                <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No approvals available")}.</Text>
                             ) : (
                                 activeTab === "Cancelled" ?
                                     cancelledApps.map((apprval: any) => (

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import branchService from "../../domain/services/BranchService";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -10,9 +10,33 @@ import { useUserSate } from "../../domain/state/UserState";
 import SickLeavesReport from "./SickLeavesReport";
 import PdfViewer from "./PDFViewer";
 import moment from "moment";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+import { useFocusEffect } from "expo-router";
+
 const tabNames = ["Pending", "Cancelled", "Completed"];
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const MySickLeaves = () => {
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
     const [fromDate, setFromDate] = useState(new Date());
@@ -44,7 +68,7 @@ const MySickLeaves = () => {
     const [activeTab, setActiveTab] = useState("Pending");
 
     const { data, status, isLoading } = sickLeavesService.byPatientIds(userId);
-  
+
     useEffect(() => {
         console.log('API response', data, status);
         if (data && status === "success") {
@@ -102,9 +126,9 @@ const MySickLeaves = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className={ Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
+                <View className={Platform.OS === 'ios' ? "px-6" : "py-8 px-6"}>
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title="My Sick Leaves" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("My Sick Leaves")} />
                         <MaterialCommunityIcons
                             name="emoticon-sick-outline"
                             size={24}
@@ -114,14 +138,14 @@ const MySickLeaves = () => {
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">From: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">To: {moment(toDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("To")}: {moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
@@ -136,7 +160,7 @@ const MySickLeaves = () => {
                             }}
                             className="h-12"
                         >
-                            <Picker.Item label="Select Branch" value="" />
+                            <Picker.Item label={i18n.t("Select Branch")} value="" />
                             {branches.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
@@ -147,7 +171,7 @@ const MySickLeaves = () => {
                         {tabNames.map((item, idx) => (
                             <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-lime-600" : "border-transparent"}`}>
                                 <Text className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : "text-gray-700"}`}>
-                                    {item}
+                                    {i18n.t(item)}
                                 </Text>
                             </Pressable>
                         ))}
@@ -158,21 +182,19 @@ const MySickLeaves = () => {
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             filteredSickLeaves.length === 0 ? (
-                                <Text className="text-center text-lg text-gray-600 mt-4">No sick leaves available for this filter.
-                                    Select Correct Branch Name, Date & Tabs</Text>
+                                <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No data available for this filter")}.</Text>
                             ) : (
                                 filteredSickLeaves.map((sickLeave: any) => (
                                     <Pressable key={sickLeave.id} onPress={() => openModal(sickLeave)} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                         <View className="flex-row justify-between items-center">
-                                            <Text className="font-semibold">Sick Leaves ID: {sickLeave.id}</Text>
+                                            <Text className="font-semibold">{i18n.t("Sick Leaves ID")}: {sickLeave.id}</Text>
                                             <AntDesign name="medicinebox" size={24} color=" rgb(132 204 22)" />
                                         </View>
                                         <Text style={styles.invoiceText}>
                                             <Text style={styles.amount}>{sickLeave.consentFormName}</Text>
                                         </Text>
-                                        <Text style={styles.branchText}>Practitioner Name: {sickLeave.practitionerName}</Text>
-                                        <Text style={styles.branchText}>Branch: {sickLeave.branchName}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">Date: {new Date(sickLeave.createdDate).toLocaleDateString()}</Text>
+                                        <Text style={styles.branchText}>{i18n.t("Branch")}: {sickLeave.branchName}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(sickLeave.createdDate).toLocaleDateString()}</Text>
                                     </Pressable>
                                 ))
                             )}
@@ -189,7 +211,7 @@ const MySickLeaves = () => {
                         onClose={closeModal}
                     /> */}
                     <Pressable onPress={closeModal} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>Close</Text>
+                        <Text style={styles.closeButtonText}>{i18n.t("Close")}</Text>
                     </Pressable>
                 </View>
             </Modal>

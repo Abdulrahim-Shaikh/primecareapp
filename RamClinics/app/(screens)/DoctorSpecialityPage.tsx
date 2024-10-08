@@ -50,9 +50,11 @@ const DoctorSpecialityPage = () => {
       specialityService.findAll()
         .then((response) => {
           setSpecialityList(response.data)
+          setLoader(false)
         })
         .catch((error) => {
           console.log("error: ", error)
+          setLoader(false)
         })
     }
   }

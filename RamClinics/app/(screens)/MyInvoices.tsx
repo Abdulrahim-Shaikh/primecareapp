@@ -197,8 +197,7 @@ const MyInvoices = () => {
                         {isLoading ? (
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) : filteredInvoices.length === 0 ? (
-                            <Text className="text-center text-lg text-gray-600 mt-4">No invoices available for this filter.
-                                Select Correct Branch Name, Date & Tabs</Text>
+                            <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No data available for this filter")}.</Text>
                         ) : (
                             filteredInvoices.map((invoice: any) => (
                                 <Pressable key={invoice.id} onPress={() => openModal(invoice)} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
@@ -223,7 +222,7 @@ const MyInvoices = () => {
                     <PdfViewer url={pdfSource.uri} invoiceId={selectedInvoice?.id} />
 
                     <Pressable onPress={closeModal} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>Close</Text>
+                        <Text style={styles.closeButtonText}>{i18n.t("Close")}</Text>
                     </Pressable>
                 </View>
             </Modal>

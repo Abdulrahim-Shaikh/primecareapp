@@ -93,7 +93,7 @@ const BookAppointment = () => {
                         {/* <Ionicons name={item.icon as any} size={36} color={'#78350f'} /> */}
                         <MaterialCommunityIcons name={item.icon} size={36} color={'rgb(132, 204, 22)'} />
                     </View>
-                    <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{i18n.t(item.title)}</Text>
+                    <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
                 </TouchableOpacity>
             </View>
 
