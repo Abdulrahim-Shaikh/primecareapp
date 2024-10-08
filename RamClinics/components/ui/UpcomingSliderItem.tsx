@@ -11,13 +11,22 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import arrow from "../../assets/images/arrow.png";
 import sliderImgBg from "../../assets/images/doctor_img_bg.png";
 import background from "../../assets/images/background.jpg"
 import promotionOrderService from "../../domain/services/PromotionOrderService";
 import { useUserSate } from "../../domain/state/UserState";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { useFocusEffect } from "expo-router";
+
+const i18n = new I18n(translations);
+i18n.locale = Localization.locale;
+i18n.enableFallback = true;
 
 type PromotionService = { serviceName: string; totalAmount: number; };
 type Props = { id: number; promotionName: string; description: string; photo: any, promotionServices: PromotionService[] };
@@ -32,6 +41,21 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
   let userId = useUserSate.getState().userId;
   let patientName = useUserSate.getState().patientName;
 
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
+
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
+
   const handleBookPress = () => {
     setIsModalVisible(true);
   };
@@ -43,7 +67,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
 
   const handleConfirmBooking = () => {
     if (!userId) {
-      Alert.alert('Sign In Required', 'You need to be signed in to complete the booking. Please log in and try again.');
+      Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
       return;
     }
     const orderData = {
@@ -69,7 +93,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
 
     promotionOrderService.save(orderData)
       .then((response) => {
-        setConfirmationMessage('Your booking has been successful');
+        setConfirmationMessage(i18n.t('BookingSuccess'));
         setTimeout(() => {
           setIsModalVisible(false);
           setConfirmationMessage("");
@@ -91,28 +115,28 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
 
   return (
     <ImageBackground
-    source={background}
-    resizeMode="cover"
-    style={{ width: SCREEN_WIDTH * 0.9, margin: SCREEN_WIDTH * 0.05}} 
-    imageStyle={{ borderRadius: 20 }}>
-    <View style={{ flex: 1, position: 'relative' }}>
-      <View className="flex flex-row justify-between items-center w-full pt-8">
-        <View className="max-w-[230px] pl-5 relative z-10">
-          <Text className="text-lg font-semibold">
-            {promotionName}
-          </Text>
-          <Text className="text-base pt-1">{description}</Text>
+      source={background}
+      resizeMode="cover"
+      style={{ width: SCREEN_WIDTH * 0.9, margin: SCREEN_WIDTH * 0.05 }}
+      imageStyle={{ borderRadius: 20 }}>
+      <View style={{ flex: 1, position: 'relative' }}>
+        <View className="flex flex-row justify-between items-center w-full pt-8">
+          <View className="max-w-[230px] pl-5 relative z-10">
+            <Text className="text-lg font-semibold">
+              {promotionName}
+            </Text>
+            <Text className="text-base pt-1">{description}</Text>
+          </View>
+          <TouchableOpacity onPress={handleShowServices} className="px-6 py-2">
+            <FontAwesome name="list" size={24} color="#1e1b4b" style={{ marginBottom: 35 }} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={handleShowServices} className="px-6 py-2">
-              <FontAwesome name="list" size={24} color="#1e1b4b" style={{ marginBottom: 35 }}/>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity 
-        className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-4 py-2 rounded-lg"
-        style={{ position: 'absolute', right: 15, bottom: 20 }}
+        <TouchableOpacity
+          className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-4 py-2 rounded-lg"
+          style={{ position: 'absolute', right: 15, bottom: 20 }}
           onPress={handleBookPress}
         >
-          <Text style={{ color: 'black', }}>Book</Text>
+          <Text style={{ color: 'black', }}>{i18n.t("Book")}</Text>
         </TouchableOpacity>
         <Modal transparent={true} animationType="slide" visible={isModalVisible} onRequestClose={handleCancel}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
@@ -124,13 +148,13 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
                 <Text className="text-xl font-bold text-center mb-4 mt-7">{confirmationMessage}</Text>
               ) : (
                 <>
-                  <Text className="text-xl font-bold text-center mb-4 mt-7">Do you want to book this service?</Text>
+                  <Text className="text-xl font-bold text-center mb-4 mt-7">{i18n.t("BookingConfirmMessage")}</Text>
                   <View className="flex-row justify-between">
                     <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
-                      <Text className="text-center text-black font-bold">Cancel</Text>
+                      <Text className="text-center text-black font-bold">{i18n.t("Cancel")}</Text>
                     </Pressable>
                     <Pressable className="flex-1 bg-[rgb(59,35,20)] py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
-                      <Text className="text-center text-white font-bold">Confirm</Text>
+                      <Text className="text-center text-white font-bold">{i18n.t("Confirm")}</Text>
                     </Pressable>
                   </View>
                 </>
@@ -144,7 +168,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
               <Pressable className="absolute top-3 right-3" onPress={handleCloseServicesModal}>
                 <AntDesign name="closecircle" size={24} color="#78450f" />
               </Pressable>
-              <Text className="text-xl font-bold text-center mb-4 mt-4">List of Services</Text>
+              <Text className="text-xl font-bold text-center mb-4 mt-4">{i18n.t("ListOfServices")}</Text>
               <View style={{ maxHeight: 400 }}>
                 <FlatList
                   data={promotionServices}
@@ -154,7 +178,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
                       <View className="flex-1">
                         <Text className="text-base font-bold mb-1">{item.serviceName}</Text>
                         <Text className="text-sm" style={{ color: '#04522b', fontWeight: '600' }}>
-                          Amount: {item.totalAmount.toFixed(2)} SAR
+                          {i18n.t("Amount")}: {item.totalAmount.toFixed(2)} SAR
                         </Text>
                       </View>
                     </View>

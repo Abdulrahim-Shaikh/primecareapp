@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert, ActivityIndicator, ScrollView } from "react-native";
 import branchService from "../../domain/services/BranchService";
 import packageService from "../../domain/services/PackageService";
@@ -11,6 +11,15 @@ import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { useFocusEffect } from "expo-router";
+
+const i18n = new I18n(translations);
+i18n.locale = Localization.locale;
+i18n.enableFallback = true;
 
 const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/servicepackage/file/";
 
@@ -27,6 +36,21 @@ const Packages = () => {
     const [qrCodeData, setQrCodeData] = useState<any>();
     const [isLoadingQr, setIsLoadingQr] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
 
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
@@ -86,7 +110,7 @@ const Packages = () => {
 
     const handleConfirmBooking = () => {
         if (!userId) {
-            Alert.alert('Sign In Required', 'You need to be signed in to complete the booking. Please log in and try again.');
+            Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
             return;
         }
 
@@ -137,7 +161,8 @@ const Packages = () => {
     const getSelectedBranchPrice = (selectedPackage: any) => {
         if (!selectedPackage || !selectedPackage.packageBranchs) return "";
         const branch = selectedPackage.packageBranchs.find((branch: any) => branch.branchName === selectedBranch);
-        return branch ? branch.packBranchPrice : selectedPackage.packPrice;
+        const price = branch ? branch.packBranchPrice : selectedPackage.packPrice;
+        return price;
     };
 
     return (
@@ -145,13 +170,13 @@ const Packages = () => {
             <ScrollView>
                 <View className="flex-1 p-4 pt-2">
                     <View className="flex flex-row justify-start items-center gap-4">
-                        <HeaderWithBackButton isPushBack={true} title="Packages" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("Packages")} />
                         <MaterialCommunityIcons name="tag-heart" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
                     <View className="border border-pc-primary rounded-lg my-4">
                         <Picker
                             selectedValue={selectedBranch} onValueChange={(itemValue) => { setSelectedBranch(itemValue); }} className="h-12">
-                            <Picker.Item label="Select Branch" value="" />
+                            <Picker.Item label={i18n.t("Select Branch")} value="" />
                             {branches.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
@@ -160,7 +185,7 @@ const Packages = () => {
 
                     {isLoading ? (
                         <View className="flex-1 items-center justify-center">
-                            <ActivityIndicator size="large" color="#78450f" />
+                            <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         </View>
                     ) : filteredPackages.length > 0 ? (
                         <FlatList data={filteredPackages}
@@ -179,7 +204,7 @@ const Packages = () => {
                                                 onPress={() => handleBookPress(item)} style={{ alignSelf: 'flex-start' }}
                                             >
                                                 <FontAwesome name="calendar" size={14} color="white" className="mr-2" />
-                                                <Text className="text-white font-bold ">Book</Text>
+                                                <Text className="text-white font-bold">{i18n.t("Book")}</Text>
                                             </Pressable>
                                         </View>
                                     </View>
@@ -188,7 +213,7 @@ const Packages = () => {
                         />
                     ) : (
                         <View className="flex-1 items-center justify-center p-4">
-                            <Text className="text-gray-500 text-lg">No available packages for the branch!</Text>
+                            <Text className="text-gray-500 text-lg">{i18n.t("NoAvailableOffers")}</Text>
                         </View>
                     )}
 
@@ -199,8 +224,9 @@ const Packages = () => {
                                     <AntDesign name="closecircle" size={24} color="#78450f" />
                                 </Pressable>
                                 <Text className="text-xl font-bold text-center mb-4 mt-7">
-                                    {qrCodeData ? `Booking successful! Here is your QR code:` :
-                                        `Do you want to book this service for ${getSelectedBranchPrice(selectedPackage)} SAR?`}
+                                    {qrCodeData ? `${i18n.t("QRCodeSuccessMessage")}`
+                                        : `${i18n.t("PackageBookingConfirmMessage")} ${getSelectedBranchPrice(selectedPackage)} SAR`
+                                    }
                                 </Text>
 
                                 {isLoadingQr && <ActivityIndicator size="large" color="#78450f" />}
@@ -208,10 +234,10 @@ const Packages = () => {
                                 {!qrCodeData ? (
                                     <View className="flex-row justify-between mt-4">
                                         <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
-                                            <Text className="text-center text-black font-bold">Cancel</Text>
+                                            <Text className="text-center text-black font-bold">{i18n.t("Cancel")}</Text>
                                         </Pressable>
                                         <Pressable className="flex-1 bg-[rgb(59,35,20)] py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
-                                            <Text className="text-center text-white font-bold">Confirm</Text>
+                                            <Text className="text-center text-white font-bold">{i18n.t("Confirm")}</Text>
                                         </Pressable>
                                     </View>
                                 ) : (

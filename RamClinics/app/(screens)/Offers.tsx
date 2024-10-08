@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList, Image, Pressable, Modal, Alert, ActivityIndicator, ScrollView } from "react-native";
 import branchService from "../../domain/services/BranchService";
 import { useUserSate } from "../../domain/state/UserState";
@@ -10,7 +10,15 @@ import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { useFocusEffect } from "expo-router";
 
+const i18n = new I18n(translations);
+i18n.locale = Localization.locale;
+i18n.enableFallback = true;
 
 type Props = {
     id: number;
@@ -32,6 +40,21 @@ const Offers = () => {
     const [selectedPromotion, setSelectedPromotion] = useState<any>(null);
     const [confirmationMessage, setConfirmationMessage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
 
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
@@ -90,7 +113,7 @@ const Offers = () => {
 
     const handleConfirmBooking = () => {
         if (!userId) {
-            Alert.alert('Sign In Required', 'You need to be signed in to complete the booking. Please log in and try again.');
+            Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
             return;
         }
 
@@ -117,7 +140,7 @@ const Offers = () => {
 
         promotionOrderService.save(orderData)
             .then((response) => {
-                setConfirmationMessage('Your booking has been successful');
+                setConfirmationMessage(i18n.t('BookingSuccess'));
                 setTimeout(() => {
                     setIsModalVisible(false);
                     setConfirmationMessage("");
@@ -135,13 +158,13 @@ const Offers = () => {
             <ScrollView>
                 <View className="flex-1 p-4 pt-2">
                     <View className="flex flex-row justify-start items-center gap-4">
-                        <HeaderWithBackButton isPushBack={true} title="Offers" />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t("Offers")} />
                         <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
                     <View className="border border-pc-primary rounded-lg my-4">
                         <Picker
                             selectedValue={selectedBranch} onValueChange={(itemValue) => { setSelectedBranch(itemValue); }} className="h-12">
-                            <Picker.Item label="Select Branch" value="" />
+                            <Picker.Item label={i18n.t("Select Branch")} value="" />
                             {branches.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
@@ -150,7 +173,7 @@ const Offers = () => {
 
                     {isLoading ? (
                         <View className="flex-1 items-center justify-center">
-                            <ActivityIndicator size="large" color="#78450f" />
+                            <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         </View>
                     ) : filteredPromotions.length > 0 ? (
                         <FlatList
@@ -172,7 +195,7 @@ const Offers = () => {
                                                 style={{ alignSelf: 'flex-start' }}
                                             >
                                                 <FontAwesome name="calendar" size={14} color="white" className="mr-2" />
-                                                <Text className="text-white font-bold">Book</Text>
+                                                <Text className="text-white font-bold">{i18n.t("Book")}</Text>
                                             </Pressable>
                                         </View>
                                     </View>
@@ -181,7 +204,7 @@ const Offers = () => {
                         />
                     ) : (
                         <View className="flex-1 items-center justify-center p-4">
-                            <Text className="text-gray-500 text-lg">No available offers for the branch!</Text>
+                            <Text className="text-gray-500 text-lg">{i18n.t("NoAvailableOffers")}</Text>
                         </View>
                     )}
 
@@ -195,13 +218,13 @@ const Offers = () => {
                                     <Text className="text-xl font-bold text-center mb-4 mt-7">{confirmationMessage}</Text>
                                 ) : (
                                     <>
-                                        <Text className="text-xl font-bold text-center mb-4 mt-7">Do you want to book this service?</Text>
+                                        <Text className="text-xl font-bold text-center mb-4 mt-7">{i18n.t("BookingConfirmMessage")}</Text>
                                         <View className="flex-row justify-between">
                                             <Pressable className="flex-1 bg-red-50 py-2 rounded-lg mr-2" onPress={handleCancel}>
-                                                <Text className="text-center text-black font-bold">Cancel</Text>
+                                                <Text className="text-center text-black font-bold">{i18n.t("Cancel")}</Text>
                                             </Pressable>
                                             <Pressable className="flex-1 bg-[rgb(59,35,20)] py-2 rounded-lg ml-2" onPress={handleConfirmBooking}>
-                                                <Text className="text-center text-white font-bold">Confirm</Text>
+                                                <Text className="text-center text-white font-bold">{i18n.t("Confirm")}</Text>
                                             </Pressable>
                                         </View>
                                     </>
