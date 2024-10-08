@@ -52,7 +52,7 @@ const DoctorSpeciality = () => {
               keyExtractor={(item, index) => "key" + index}
               renderItem={({ item }) => (
                 <View className="">
-                  <Pressable className="flex flex-row border border-pc-primary p-2 rounded-lg"
+                  <Pressable className="flex flex-row border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg"
                     onPress={() =>
                       router.push({
                         pathname: "/BranchPage",
@@ -71,14 +71,14 @@ const DoctorSpeciality = () => {
                     }
                     >
                     <Text className=" bg-[rgb(59,35,20)] rounded-md p-3 flex justify-center items-center">
-                      <Ionicons name={'medical'} size={24} color={"white"} />
+                      <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
                     </Text>
                     <View className="px-3">
-                      <Text className="font-semibold">{item.name} </Text>
+                      <Text className="font-semibold text-white">{item.name} </Text>
                       <View>
-                        <Text className="font-bodyText pt-1">
+                        <Text className="font-bodyText pt-1 text-white">
                           doctors{" "}
-                          <AntDesign name="arrowright" />
+                          <AntDesign name="arrowright" color={"white"} />
                         </Text>
                       </View>
                     </View>
