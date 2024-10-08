@@ -74,7 +74,7 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
             <>
               <View className="flex flex-col justify-center justify-items-center justif-self-center" >
                 <FontAwesome className="text-center" name="calendar-plus-o" size={34} color={focused ? "white" : "rgb(59, 35, 20)"} />
-                <Text className={`text-xs text-center pt-1 ${focused ? " text-white" : "text-pc-primary"}`}>Book{"\n"}Appointment</Text>
+                <Text className={`text-xs text-center pt-1 ${focused ? " text-white" : "text-pc-primary"}`}>{i18n.t("bookAppoint")}</Text>
               </View>
             </>
           )

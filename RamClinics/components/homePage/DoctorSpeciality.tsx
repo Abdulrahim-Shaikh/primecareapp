@@ -100,8 +100,10 @@ const DoctorSpeciality = () => {
                       <Text className="font-semibold text-white">{item.name} </Text>
                       <View>
                         <Text className="font-bodyText pt-1 text-white">
-                          doctors{" "}
-                          <AntDesign name="arrowright" color={"white"} />
+                          {i18n.t("doctors")}{" "}
+                          {language === "ar" ? 
+                          <AntDesign name="arrowleft" color={"white"} /> : 
+                          <AntDesign name="arrowright" color={"white"} />}
                         </Text>
                       </View>
                     </View>

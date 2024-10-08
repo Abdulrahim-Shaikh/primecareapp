@@ -1,5 +1,5 @@
 import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { router } from "expo-router";
@@ -14,6 +14,15 @@ import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/dat
 import moment from "moment";
 import patientService from "../../domain/services/PatientService";
 import NASButton from "../../components/NASButton";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { useFocusEffect } from "expo-router";
+
+const i18n =  new I18n(translations);
+i18n.locale = Localization.locale;
+i18n.enableFallback = true;
 
 const SingUp = () => {
 
@@ -67,6 +76,18 @@ const SingUp = () => {
   const [showDatePicker, setShowPicker] = useState(false);
   const [dob, setDob] = useState(new Date());
   let dateAux = new Date();
+  const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+	const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
+	useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
 
   useEffect(() => {
     branchService.findAll().then((res) => {
@@ -75,15 +96,6 @@ const SingUp = () => {
       console.error("Failed to fetch branches:", error);
     });
   }, []);
-
-  //let branchList: any;
-  // useEffect(() => {
-  //    branchList = branches.map((branch: any) => (
-  //     { code: branch.branchCode, name: branch.name }
-  //   ))
-  //   console.error("branches:", branches);
-  // }, [branchList]);
-
 
   let signupForm = {
     "firstName": firstName,
@@ -95,10 +107,6 @@ const SingUp = () => {
     "passportNo": passport,
     "nationality": nationality,
     "mobileNumber": mobileNo,
-    // "companyCode": "TECHNAS",
-    // "divisionCode": "CHN",
-    // "version": "0",
-    // "audit": {"recordInputter": "root", "curNo": 1},
     "registerBranch": selectedBranch,
     "city": city,
     "referredBy": referredBy,
@@ -130,60 +138,59 @@ const SingUp = () => {
       <ScrollView>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
           <Text className="text-2xl font-bold text-center">
-            Create an Account
+            {i18n.t('createacc')}
           </Text>
           <Text className="text-[14px] text-pc-primary text-center pt-3">
-            Sign up today for personalized health insights and exclusive member
-            perks!
+            {i18n.t('signuptext')}
           </Text>
           <View className="w-full pt-1 pb-6">
 
-            <Text className="pt-4 font-medium">Document Type</Text>
+            <Text className="pt-4 font-medium">{i18n.t("doctype")}</Text>
             <View className="text-pc-primary flex justify-evenly flex-row items-center">
               <View className="flex-row">
                 <CheckBox checked={selectedOption === 0} onPress={() => setOption(0)} iconType="material-community"
                   checkedIcon="radiobox-marked" uncheckedIcon="radiobox-blank" />
                 <Text className="text-base font-medium pt-4">
-                  ID
+                  {i18n.t('id')}
                 </Text>
               </View>
               <View className="flex-row">
                 <CheckBox checked={selectedOption === 1} onPress={() => setOption(1)} iconType="material-community"
                   checkedIcon="radiobox-marked" uncheckedIcon="radiobox-blank" />
                 <Text className="text-base font-medium p-2 pt-4">
-                  Passport
+                  {i18n.t('Passport')}
                 </Text>
               </View>
             </View>
 
             {selectedOption === 0 && (
               <>
-                <Text className="mb-2 font-medium">ID Country</Text>
+                <Text className="mb-2 font-medium">{i18n.t("country")}</Text>
                 <View className="border rounded-xl mb-2">
                   <Picker
                     selectedValue={selectedIdCountry} onValueChange={(cntry) => { setIdCountry(cntry) }} className="text-slate-800">
-                    <Picker.Item label="ID Country" value="" style={{ color: 'grey', fontSize: 14 }} />
+                    <Picker.Item label={i18n.t("country")} value="" style={{ color: 'grey', fontSize: 14 }} />
                     {IDCountries.map((cntry: any) => (
-                      <Picker.Item key={cntry.id} label={cntry.name} value={cntry.name} />
+                      <Picker.Item key={cntry.id} label={i18n.t(cntry.name)} value={cntry.name} />
                     ))}
                   </Picker>
                 </View>
-                <FormField name="ID Number" placeholder="ID Number" otherStyle="mb-4" onChangeText={(e) => { setId(e) }} />
+                <FormField name={i18n.t("idno")} placeholder={i18n.t("idno")} otherStyle="mb-4" onChangeText={(e) => { setId(e) }} />
               </>
             )}
             {selectedOption === 1 && (
-              <FormField name="Passport" placeholder="Passport" otherStyle="mb-2" onChangeText={(e) => { setPassport(e) }} />
+              <FormField name={i18n.t("Passport")} placeholder={i18n.t("Passport")} otherStyle="mb-2" onChangeText={(e) => { setPassport(e) }} />
             )}
 
-            <FormField name="Mobile No. *" placeholder="Mobile Number" otherStyle="" onChangeText={(e) => { setMobileNo(e) }} />
+            <FormField name={`${i18n.t("mobileno")} *`} placeholder={i18n.t("mobilenum")} otherStyle="" onChangeText={(e) => { setMobileNo(e) }} />
 
             <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, paddingTop: '5%' }} />
 
-            <FormField name="First Name *" placeholder="First Name" otherStyle="mt-2" onChangeText={(e) => { setFirstName(e) }} />
-            <FormField name="Second Name" placeholder="Middle Name" otherStyle="mt-2" onChangeText={(e) => { setSecondName(e) }} />
-            <FormField name="Last Name *" placeholder="Last Name" otherStyle="mt-2" onChangeText={(e) => { setLastName(e) }} />
+            <FormField name={`${i18n.t("fl")} *`} placeholder={i18n.t("fl")} otherStyle="mt-2" onChangeText={(e) => { setFirstName(e) }} />
+            <FormField name={i18n.t("ml")} placeholder={i18n.t("ml")} otherStyle="mt-2" onChangeText={(e) => { setSecondName(e) }} />
+            <FormField name={`${i18n.t("ll")} *`} placeholder={i18n.t("ll")} otherStyle="mt-2" onChangeText={(e) => { setLastName(e) }} />
 
-            <Text className="my-2 font-medium">Date of Birth *</Text>
+            <Text className="my-2 font-medium">{`${i18n.t("dob")} *`}</Text>
             <View className="flex-row justify-between my-2">
               <Pressable onPress={() => setShowPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-xl py-4">
                 <Text className="text-lg">{moment(dob).format("DD-MMM-YYYY")}</Text>
@@ -193,60 +200,60 @@ const SingUp = () => {
               )}
             </View>
 
-            <Text className="my-2 font-medium">Gender *</Text>
+            <Text className="my-2 font-medium">{`${i18n.t("gender")} *`}</Text>
             <View className="border rounded-xl">
               <Picker
                 selectedValue={gender} onValueChange={(g) => { setGender(g) }} className="text-slate-800">
-                <Picker.Item label="Gender" value="" style={{ color: 'grey', fontSize: 14 }} />
-                <Picker.Item label="Male" value="Male" style={{ fontSize: 16 }} />
-                <Picker.Item label="Female" value="Female" style={{ fontSize: 16 }} />
+                <Picker.Item label={i18n.t("gender")} value="" style={{ color: 'grey', fontSize: 14 }} />
+                <Picker.Item label={i18n.t("male")} value="Male" style={{ fontSize: 16 }} />
+                <Picker.Item label={i18n.t("female")} value="Female" style={{ fontSize: 16 }} />
               </Picker>
             </View>
 
-            <Text className="my-2 font-medium">Nationality</Text>
+            <Text className="my-2 font-medium">{i18n.t("Nationality")}</Text>
             <View className="border rounded-xl">
               <Picker
                 selectedValue={nationality} onValueChange={(cntry) => { setNationality(cntry) }} className="text-slate-800">
-                <Picker.Item label="Nationality" value="" style={{ color: 'grey', fontSize: 14 }} />
+                <Picker.Item label={i18n.t("Nationality")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {countries.map((cntry: any) => (
-                  <Picker.Item key={cntry.code} label={cntry.name} value={cntry.name} />
+                  <Picker.Item key={cntry.code} label={i18n.t(cntry.name)} value={cntry.name} />
                 ))}
               </Picker>
             </View>
 
-            <FormField name="Email" placeholder="Email" otherStyle="mt-4" onChangeText={(e) => { setEmail(e) }} />
+            <FormField name={i18n.t("Email")} placeholder={i18n.t("Email")} otherStyle="mt-4" onChangeText={(e) => { setEmail(e) }} />
 
             <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, paddingVertical: 10 }} />
 
-            <Text className="my-2 font-medium">City</Text>
+            <Text className="my-2 font-medium">{i18n.t("City")}</Text>
             <View className="border rounded-xl">
               <Picker
                 selectedValue={city} onValueChange={(c) => { setCity(c) }} className="text-slate-800">
-                <Picker.Item label="City" value="" style={{ color: 'grey', fontSize: 14 }} />
+                <Picker.Item label={i18n.t("City")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {cities.map((c: any) => (
-                  <Picker.Item key={c.id} label={c.name} value={c.name} />
+                  <Picker.Item key={c.id} label={i18n.t(c.name)} value={c.name} />
                 ))}
               </Picker>
             </View>
 
-            <Text className="my-2 font-medium">Register Branch *</Text>
+            <Text className="my-2 font-medium">{`${i18n.t("Register Branch")} *`}</Text>
             <View className="border rounded-xl">
               <Picker
                 selectedValue={selectedBranch} onValueChange={(r) => { setSeletedBranch(r) }} className="text-slate-800">
-                <Picker.Item label="Branch" value="" style={{ color: 'grey', fontSize: 14 }} />
+                <Picker.Item label={i18n.t("Register Branch")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {branches.map((branch: any) => (
                   <Picker.Item key={branch.branchCode} label={branch.name} value={branch.name} />
                 ))}
               </Picker>
             </View>
 
-            <Text className="my-2 font-medium">Referred By</Text>
+            <Text className="my-2 font-medium">{i18n.t("Referred By")}</Text>
             <View className="border rounded-xl mb-6">
               <Picker
                 selectedValue={referredBy} onValueChange={(r) => { setReferredBy(r) }} className="text-slate-800">
-                <Picker.Item label="Referred By" value="" style={{ color: 'grey', fontSize: 14 }} />
+                <Picker.Item label={i18n.t("Referred By")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {referredByList.map((r: any) => (
-                  <Picker.Item key={r.id} label={r.name} value={r.name} />
+                  <Picker.Item key={r.id} label={i18n.t(r.name)} value={r.name} />
                 ))}
               </Picker>
             </View>
@@ -261,7 +268,7 @@ const SingUp = () => {
               otherStyle="mt-4"
             /> */}
           </View>
-          <NASButton title="Register" onPress={savePatient} />
+          <NASButton title={i18n.t("Register")} onPress={savePatient} />
 
           <View className="pt-8">
             {/* <View>
@@ -284,14 +291,14 @@ const SingUp = () => {
 
             <View className="pt-4">
               <Text className="text-base text-pc-primary text-center">
-                Already have an account?{" "}
+              {i18n.t("signuptext2")}{" "}
                 <Text
                   className="text-lime-600 underline underline-offset-8"
                   onPress={() => router.push("/SignIn")}
                 >
-                  Login
+                  {i18n.t("login")}
                 </Text>{" "}
-                here
+                {i18n.t("here")}
               </Text>
             </View>
           </View>

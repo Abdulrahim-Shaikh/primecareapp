@@ -1,10 +1,19 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import emptyProfileImg from "../../assets/images/avatar.png";
 import { useUserSate } from "../../domain/state/UserState";
 import httpService from "../../domain/services/core/HttpService";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { useFocusEffect } from "expo-router";
+
+const i18n =  new I18n(translations);
+i18n.locale = Localization.locale;
+i18n.enableFallback = true;
 
 const Header = ({
   setShowNotification,
@@ -18,6 +27,20 @@ const Header = ({
   let patientName = useUserSate.getState().patientName;
   let loggedIn = useUserSate.getState().loggedIn;
   let branch = useUserSate.getState().branch;
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
+
+const changeLocale = (locale: any) => {
+      i18n.locale = locale;
+      setLocale(locale);
+  }
+
+useFocusEffect(
+      useCallback(() => {
+          changeLocale(language)
+          changeLanguage(language)
+      }, [])
+  )
   
   const BASE_URL = "http://16.24.11.104:8080/HISAdmin/api/patient/file/";
 
@@ -33,7 +56,7 @@ const Header = ({
           <Image source={profilePhotoUrl} style={styles.profileImage} />
         </View>
         <View>
-          <Text className="text-lg font-semibold">Hi, {patientName}</Text>
+          <Text className="text-lg font-semibold">{i18n.t("Hi")} {patientName}</Text>
           <View className=" bg-lime-100 px-3 py-1 rounded-lg mt-2 flex flex-row justify-center">
             <Text className="text-[14px]">{branch}</Text>
             <Text className=" block pl-2 ">
