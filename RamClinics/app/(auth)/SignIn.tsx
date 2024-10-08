@@ -1,5 +1,5 @@
 import { Alert, ScrollView, StyleSheet, Text, View, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
@@ -10,23 +10,20 @@ import loginService from "../../domain/services/LoginService";
 
 const SignIn = () => {
 
-  const [otp, setOtp] = useState('');
   let mobileNo = '';
 
   const getData = () => {
     loginService.generateOtp(mobileNo).then((response) => {
       console.log('OTP response ..... ', response.data);
-      if (mobileNo == '568165257') {
-        setOtp('9999');
-      router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: '9999'} });
-      } else {
-        setOtp(response.data.otp);
+      if (mobileNo == '568165257') {        
+        router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: '9999'} });
+      } else {        
         router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: response.data.otp } });
       }
-    })
-    .catch((error) => {
-    console.log("Error sending OTP, ", error);
-    })
+    }).catch((error) => {
+      console.log("Error sending OTP, ", error);
+       Alert.alert('Tecnincal Error', 'TE- ' + error)
+    });
   }
 
   const sendOtp = () => {
@@ -50,9 +47,8 @@ const SignIn = () => {
       mobileNo = mobileNo.substring(4);
     }
     if (mobileNo.length == 9) {
-      loginService.byMobileNo(mobileNo)
-        .then((response) => {
-          if (response.data != null || response.data.length > 0) {
+      loginService.byMobileNo(mobileNo).then((response) => {
+          if (response && response.data != null || response.data.length > 0) {
             sendOtp();
           } else {
             Alert.alert('Patient Not Found', 'You need to Sign up first', [
