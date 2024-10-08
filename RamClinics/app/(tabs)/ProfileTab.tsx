@@ -23,8 +23,33 @@ import CustomSwitch from "../../components/CustomSwitch";
 import { useUserSate } from "../../domain/state/UserState";
 import { UserContext } from "../../domain/contexts/UserContext";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const ProfileTab = () => {
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
+
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
+
   const [logoutModal, setLogoutModal] = useState(false);
   const [user, setUser] = useState(null);
   const { userData } = useContext(UserContext);
@@ -59,7 +84,7 @@ const ProfileTab = () => {
       <ScrollView>
         <View className=" pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
-            <HeaderWithBackButton isPushBack={true} title="User Settings" />
+            <HeaderWithBackButton isPushBack={true} title={i18n.t("User Settings")} />
             <AntDesign name="user" size={24} color={"rgb(59, 35, 20)"} />
 
           </View>
@@ -80,7 +105,7 @@ const ProfileTab = () => {
                 <Pressable onPress={() => loggedIn ? router.push("/UserProfile") : router.push("/SignIn")}
                   className={`bg-lime-500 mt-4 px-3 border-[1px] border-primaryColor rounded-lg items-center ${loggedIn ? " px-2 py-1" : "p-2"}`}>
                   <Text className={`text-md text-primaryColor ${loggedIn ? "font-medium" : "font-semibold"}`}>
-                    {loggedIn ? "View Profile" : "Sign In"}
+                    {loggedIn ? i18n.t("View Profile") : i18n.t("Sign In")}
                   </Text>
                 </Pressable>
 
@@ -109,7 +134,7 @@ const ProfileTab = () => {
                   <View className="bg-lime-500 rounded-full p-3">
                     <Ionicons name={icon as any} size={24} color="white" />
                   </View>
-                  <Text className="text-lg font-semibold">{name}</Text>
+                  <Text className="text-lg font-semibold">{i18n.t(name)}</Text>
                 </View>
                 <View>
                   {name === "Dark Mode" ? (
@@ -132,7 +157,7 @@ const ProfileTab = () => {
                     </Text>
                   </View>
                   <Text className="text-lg font-semibold text-pc-primary">
-                    Logout
+                    {i18n.t('Logout')}
                   </Text>
                 </View>
               </Pressable>
@@ -147,11 +172,11 @@ const ProfileTab = () => {
             <View className="bg-white w-full pt-16 px-6 pb-6 rounded-t-[60px] ">
               <View className="pb-4 border-b border-dashed text-amber-500">
                 <Text className="text-[#ff5630] text-2xl text-center font-semibold ">
-                  Log Out
+                  {i18n.t("Logout")}
                 </Text>
               </View>
               <Text className="text-lg pt-4 text-center text-pc-primary">
-                Are you sure you want to log out?
+                {i18n.t("Are you sure you want to log out")}?
               </Text>
               <View className="pt-8 flex-row gap-4">
                 <Pressable
@@ -167,7 +192,7 @@ const ProfileTab = () => {
                   className="flex-1"
                 >
                   <Text className="text-white border border-pc-primary rounded-lg py-4 bg-[rgb(59,35,20)] text-center font-medium ">
-                    Logout
+                    {i18n.t('Logout')}
                   </Text>
                 </Pressable>
               </View>
