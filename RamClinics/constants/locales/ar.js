@@ -87,6 +87,21 @@ const translations = {
         "Book Appoinment": "Book Appoinment",
         "BookAppoint": "BookAppoint",
         "Profile": "Profile",
+
+        // MyApporovals
+        "My Approvals": "My Apporovals",
+        "From: ": "From: ",
+        "To: ": "To: ",
+        "search": "search",
+        "Pending": "Pending", 
+        "Approved":  "Approved", 
+        "Cancelled": "Cancelled", 
+        "Noapps": "No Approvals available.",
+
+        //Wallets
+        "urwallet1": "Your Wallet",
+        "urwallet2": "Your Wallet: ",
+        "balanc": "Balance: ",
     },
     ar: {
         "Book Appointment": "حجز موعد",
@@ -173,6 +188,22 @@ const translations = {
         "Book Appoinment": "حجز موعد",
         "BookAppoint": "حجز موعد",
         "Profile": "الملف الشخصي",
+
+        // MyApporovals
+        "My Approvals": "طلباتي",
+        "From: ": "من: ",
+        "To: ": "لى: ",
+        "search": "بحث",
+        "Pending": "قيد الانتظار",  
+        "Approved": "معتمد",  
+        "Cancelled": "ملغى", 
+        "Noapps": "لا توجد موافقات متاحة.",
+
+        // Wallets
+        "urwallet1": "حسابك",
+        "urwallet2": "حسابك: ",
+        "balanc": "الرصيد: ",
+
     }
 }
 export default translations;

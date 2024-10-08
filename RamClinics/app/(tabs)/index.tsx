@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, View, Text } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingSlider from "../../components/homePage/UpcomingSlider";
 import DoctorSpeciality from "../../components/homePage/DoctorSpeciality";
@@ -13,6 +13,15 @@ import { useUserSate } from "../../domain/state/UserState";
 import branchService from "../../domain/services/BranchService";
 import { useHISSate } from "../../domain/state/HISState";
 import { UserContext } from "../../domain/contexts/UserContext";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { useFocusEffect } from "expo-router";
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const Home = () => {
 
@@ -25,6 +34,20 @@ const Home = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showFavouriteModal, setShowFavouriteModal] = useState(false);
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
+
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
 
   useEffect(() => {
     const fetchBranch = async () => {

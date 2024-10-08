@@ -13,28 +13,15 @@ import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
 import { useFocusEffect } from "expo-router";
+import { lang } from "moment";
 
 const i18n =  new I18n(translations)
 i18n.locale = Localization.locale
 i18n.enableFallback = true;
 
 const MyApprovals = () => {
-    const { language, changeLanguage } = useLanguage();
-    const [locale, setLocale] = useState(i18n.locale);
 
-    const changeLocale = (locale: any) => {
-        i18n.locale = locale;
-        setLocale(locale);
-    }
-    
-    useFocusEffect(
-        useCallback(() => {
-            changeLocale(language)
-            changeLanguage(language)
-        }, [])
-    )
     let user = useUserSate.getState().user;
     let mrno = '';
     const tabNames = ["Pending", "Approved", "Cancelled"];
@@ -51,6 +38,19 @@ const MyApprovals = () => {
     const [cancelledApps, setCancelledApps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("Pending");
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+	
+	const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    } 
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
 
     const onChangeFrom = (event: DateTimePickerEvent, selectedDate: any) => {
         const currentDate = selectedDate;
@@ -128,14 +128,14 @@ const MyApprovals = () => {
 
                     <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg mr-2">
-                            <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("From: ")}{moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showFromPicker && (
                             <DateTimePicker value={fromDate} mode="date" display="default" onChange={onChangeFrom} />
                         )}
 
                         <Pressable onPress={() => setShowToPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg ml-2">
-                            <Text className="text-lg">{i18n.t("To")}: {moment(toDate).format("DD-MMM-YYYY")}</Text>
+                            <Text className="text-lg">{i18n.t("To: ")}{moment(toDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
@@ -172,13 +172,13 @@ const MyApprovals = () => {
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         ) :
                             approvals.length === 0 ? (
-                                <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No approvals available")}.</Text>
+                                <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("Noapps")}</Text>
                             ) : (
                                 activeTab === "Cancelled" ?
                                     cancelledApps.map((apprval: any) => (
                                         <View key={apprval.id} className="p-4 border border-pc-primary rounded-2xl w-full mt-4 bg-white">
                                             <View className="flex-row justify-between items-center">
-                                                <Text className="font-semibold">Approval ID: {apprval.id}</Text>
+                                                <Text className="font-semibold">{i18n.t("Approval ID:")} {apprval.id}</Text>
                                             </View>
                                             <Text className="mt-1 text-lg text-gray-800">
                                                 Status: <Text className="font-bold text-lime-600">{apprval.approvalStatus}</Text>

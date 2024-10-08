@@ -9,8 +9,8 @@ import walletService from "../../domain/services/WalletService";
 import { useUserSate } from "../../domain/state/UserState";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import translations from "../../constants/locales/ar";
-import { I18n } from 'i18n-js'
-import * as Localization from 'expo-localization'
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 
@@ -18,6 +18,7 @@ const i18n = new I18n(translations)
 i18n.locale = Localization.locale
 i18n.enableFallback = true;
 const Wallets = () => {
+
   const { language, changeLanguage } = useLanguage();
   const [locale, setLocale] = useState(i18n.locale);
 
@@ -53,19 +54,16 @@ const Wallets = () => {
       <ScrollView>
         <View className="px-3">
           <View className="flex flex-row justify-start items-center gap-4 pt-6">
-            <HeaderWithBackButton isPushBack={true} title={i18n.t("Your Wallet")} />
-            <MaterialCommunityIcons
-              name="wallet"
-              size={24}
-              color={"rgb(59, 35, 20)"}
+            <HeaderWithBackButton isPushBack={true} title={i18n.t("urwallet1")} />
+            <MaterialCommunityIcons name="wallet" size={24} color={"rgb(59, 35, 20)"}
             />
           </View>
           <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
             <Text className="text-base font-semibold text-pc-primary">
-              {i18n.t("Your Wallet")}
+            {i18n.t("urwallet2")}
             </Text>
             <View className=" flex-row justify-between items-center py-6 border-b border-dashed text-amber-500">
-              <Text className="text-2xl font-medium">{i18n.t("Balance")}</Text>
+              <Text className="text-2xl font-medium">{i18n.t("balanc")}</Text>
               <Text className="text-3xl font-semibold">{balance}</Text>
             </View>
             <View className=" flex-row justify-between items-center py-4 text-amber-500">

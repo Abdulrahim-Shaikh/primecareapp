@@ -10,7 +10,7 @@ import { UserContext } from "../../domain/contexts/UserContext";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const VerifyOTP = () => {
-  const { mobileNo } = useLocalSearchParams();
+  const { mobileNo, otpResp } = useLocalSearchParams();
 
   const { setUserData } = useContext(UserContext)
 
@@ -18,33 +18,33 @@ const VerifyOTP = () => {
   const [user, setUserInfo] = useState();
 
   // hardcoded values
-  const [otpResp, setOtpResp] = useState({ otp: '9999' });
+  // const [otpResp, setOtpResp] = useState({ otp: '9999' });
   const [otp, setOtp] = useState('');
   const [loader, setLoader] = useState(false);
 
   const { data, status } = loginService.useGenerateOtp(mobileNo);
   // let otp: string = '';
 
-  useEffect(() => {
-    console.log('API res', data, status)
-    getData();
-  }, [])
+  // useEffect(() => {
+  //   console.log('API res', data, status)
+  //   getData();
+  // }, [])
 
-  useEffect(() => {
-    console.log('API res', data, status)
-  }, [data])
+  // useEffect(() => {
+  //   console.log('API res', data, status)
+  // }, [data])
 
-  const getData = async () => {
-    const response = await loginService.generateOtp(mobileNo);
-    const resp = loginService.useGenerateOtp(mobileNo);
-    setOtpResp(response.data);
-    // hardcoded values?
-    if (mobileNo == '0568165257' || mobileNo == '568165257') {
-      otpResp.otp = '9999';
-      setOtpResp({ ...otpResp, otp: '9999' });
-    }
-    console.log('OTP response ..... ', response.data);
-  }
+  // const getData = async () => {
+  //   const response = await loginService.generateOtp(mobileNo);
+  //   const resp = loginService.useGenerateOtp(mobileNo);
+  //   setOtpResp(response.data);
+  //   // hardcoded values?
+  //   if (mobileNo == '0568165257' || mobileNo == '568165257') {
+  //     otpResp.otp = '9999';
+  //     setOtpResp({ ...otpResp, otp: '9999' });
+  //   }
+  //   console.log('OTP response ..... ', response.data);
+  // }
 
   useEffect(() => {
     if (user) {
@@ -65,9 +65,9 @@ const VerifyOTP = () => {
   }
 
   const verifyOtp = () => {
-    console.log("otp received", otpResp.otp)
+    console.log("otp received", otpResp)
     console.log("otp written", otp)
-    if (otpResp && otpResp.otp && otpResp.otp == otp) {
+    if (otpResp && otpResp == otp) {
       console.log("otpResp and otp are same")
       loginService.byMobileNo(mobileNo)
         .then(res => {

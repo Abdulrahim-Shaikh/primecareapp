@@ -169,9 +169,9 @@ const Appoinment = () => {
               <Pressable
                 key={idx}
                 onPress={() => changeTab(item)}
-                className={`flex-1 border-b  pb-2 ${activeTab === item
-                  ? "border-pc-primary"
-                  : "text-amber-500"
+                className={`flex-1 border-b-2  pb-2 ${activeTab === item
+                  ?  "border-lime-600"
+                  : "border-transparent"
                   }`}
               >
                 <Text
@@ -237,13 +237,13 @@ const Appoinment = () => {
                     </View>
                   </View>
 
-                  <View className=" border border-pc-primary p-2 rounded-md ">
+                  {/* <View className=" border border-pc-primary p-2 rounded-md ">
                     <Ionicons
                       name="heart-outline"
                       size={16}
                       color={"rgb(132 204 22)"}
                     />
-                  </View>
+                  </View> */}
                 </View>
                 <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
                   {item.sessionStatus === "Upcoming" ? (

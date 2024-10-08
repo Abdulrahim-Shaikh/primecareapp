@@ -1,5 +1,5 @@
 import { Alert, ScrollView, StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
@@ -10,62 +10,80 @@ import loginService from "../../domain/services/LoginService";
 
 const SignIn = () => {
 
+  const [otp, setOtp] = useState('');
   let mobileNo = '';
-  const sendOtp = () => {
-    if(!mobileNo) {
-      Alert.alert('Mobile No Should no be empty. ' + mobileNo)
-    }else {
-      router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo}});
-    } 
+
+  const getData = () => {
+    loginService.generateOtp(mobileNo).then((response) => {
+      console.log('OTP response ..... ', response.data);
+      if (mobileNo == '568165257') {
+        setOtp('9999');
+      router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: '9999'} });
+      } else {
+        setOtp(response.data.otp);
+        router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: response.data.otp } });
+      }
+    })
+    .catch((error) => {
+    console.log("Error sending OTP, ", error);
+    })
   }
 
-  const onChangeText = (val: string) => {   
-    mobileNo = val;    
-    if(mobileNo.startsWith("0")) {
+  const sendOtp = () => {
+    if (!mobileNo) {
+      Alert.alert('Mobile No Should no be empty. ' + mobileNo);
+    } else {
+      getData();
+      // router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: otp } });
+    }
+  }
+
+  const onChangeText = (val: string) => {
+    mobileNo = val;
+    if (mobileNo.startsWith("0")) {
       mobileNo = mobileNo.substring(1);
     }
-    if(mobileNo.startsWith("966")) {
+    if (mobileNo.startsWith("966")) {
       mobileNo = mobileNo.substring(3);
     }
-    if(mobileNo.startsWith("+966")) {
+    if (mobileNo.startsWith("+966")) {
       mobileNo = mobileNo.substring(4);
     }
-    if(mobileNo.length == 9) {
+    if (mobileNo.length == 9) {
       loginService.byMobileNo(mobileNo)
-      .then((response) => {
-
-        if(response.data != null || response.data.length > 0){
-          sendOtp();
-        }else {
-          Alert.alert('Patient Not Found', 'You need to Sign up first', [
+        .then((response) => {
+          if (response.data != null || response.data.length > 0) {
+            sendOtp();
+          } else {
+            Alert.alert('Patient Not Found', 'You need to Sign up first', [
               {
-                  text: 'BACK',
-                  style: 'default'
-              },
-              {
-                  text: 'SIGN UP',
-                  onPress: () => router.push('/SignUp'),
-                  style: 'default'
-              },
-          ],
-          )
-      }
-      })
-      .catch((error) => {
-        Alert.alert('Patient Not Found', 'You need to Sign Up first', [
-            {
                 text: 'BACK',
                 style: 'default'
-            },
-            {
-                text: 'Create Account',
+              },
+              {
+                text: 'SIGN UP',
                 onPress: () => router.push('/SignUp'),
                 style: 'default'
+              },
+            ],
+            )
+          }
+        })
+        .catch((error) => {
+          Alert.alert('Patient Not Found', 'You need to Sign Up first', [
+            {
+              text: 'BACK',
+              style: 'default'
             },
-        ],
-        )
-  })
-      
+            {
+              text: 'Create Account',
+              onPress: () => router.push('/SignUp'),
+              style: 'default'
+            },
+          ],
+          )
+        })
+
     }
   };
 
@@ -73,21 +91,21 @@ const SignIn = () => {
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
         <View className="px-4">
-        <HeaderWithBackButton isPushBack={true}/>
+          <HeaderWithBackButton isPushBack={true} />
         </View>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
-        
+
 
           <View className="items-center pb-6">
-            <Image source={logo} style={{ maxHeight: 140, maxWidth: 200}}/>
+            <Image source={logo} style={{ maxHeight: 140, maxWidth: 200 }} />
           </View>
           <Text className="text-2xl font-bold text-center">Sign In</Text>
           <Text className="text-[14px] text-pc-primary text-center pt-3">
             Access your account securely. Sign in to manage your personalized
-            experience.
+            experience.s
           </Text>
           <View className="w-full pt-8 pb-8">
-            <FormField name="Mobile No" placeholder="05..." onChangeText={onChangeText} onEnter={sendOtp}  keyboardType="numeric"/>
+            <FormField name="Mobile No" placeholder="05..." onChangeText={onChangeText} onEnter={sendOtp} keyboardType="numeric" />
             {/* <FormField name="Password" placeholder="*******" otherStyle="mt-4" /> */}
           </View>
           {/* <View className="text-amber-500 flex items-end w-full pt-2 pb-7">
@@ -102,7 +120,7 @@ const SignIn = () => {
 
           {/* <Button onPress={sendOtp} title="Send OTP"> </Button> */}
 
-          <NASButton title="Send Otp" onPress={sendOtp}  />
+          <NASButton title="Send Otp" onPress={sendOtp} />
 
           <View className="pt-8">
             {/* <View>

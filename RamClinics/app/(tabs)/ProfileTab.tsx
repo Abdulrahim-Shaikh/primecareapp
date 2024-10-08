@@ -181,18 +181,18 @@ const ProfileTab = () => {
               <View className="pt-8 flex-row gap-4">
                 <Pressable
                   onPress={() => setLogoutModal(false)}
-                  className="flex-1"
+                  className="flex-1 border border-pc-primary rounded-lg bg-amber-100"
                 >
-                  <Text className="text-pc-primary border border-pc-primary rounded-lg py-4 bg-amber-100 text-center font-medium ">
+                  <Text className="text-pc-primary py-4 text-center font-medium ">
                     Cancel
                   </Text>
                 </Pressable>
                 <Pressable
                   onPress={() => { setLogoutModal(false); setLoggedOut(); router.push("/(tabs)") }}
-                  className="flex-1"
+                  className="flex-1  border border-pc-primary rounded-lg bg-[rgb(59,35,20)]"
                 >
-                  <Text className="text-white border border-pc-primary rounded-lg py-4 bg-[rgb(59,35,20)] text-center font-medium ">
-                    {i18n.t('Logout')}
+                  <Text className="text-white py-4 text-center font-medium ">
+                  {i18n.t('Logout')}
                   </Text>
                 </Pressable>
               </View>
