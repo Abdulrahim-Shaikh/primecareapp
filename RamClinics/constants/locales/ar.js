@@ -87,17 +87,22 @@ const translations = {
         "Book Appoinment": "Book Appoinment",
         "BookAppoint": "BookAppoint",
         "Profile": "Profile",
-
+        "Help & Support": "Help & Support",
+        "Always Here to Help": "Always Here to Help",
+        "Your inquiries, suggestions, and complains all are most welcomed": "Your inquiry, suggestions, and complains all are most welcomed",
+        "Contact Us": "Contact Us",
+        "Timings": "Timings",
+        "Saturday to Thursday": "Saturday to Thursday",
+        "Friday": "Friday",
         // MyApporovals
         "My Approvals": "My Apporovals",
         "From: ": "From: ",
         "To: ": "To: ",
         "search": "search",
-        "Pending": "Pending", 
-        "Approved":  "Approved", 
-        "Cancelled": "Cancelled", 
+        "Pending": "Pending",
+        "Approved": "Approved",
+        "Cancelled": "Cancelled",
         "Noapps": "No Approvals available.",
-
         //Wallets
         "urwallet1": "Your Wallet",
         "urwallet2": "Your Wallet: ",
@@ -188,22 +193,26 @@ const translations = {
         "Book Appoinment": "حجز موعد",
         "BookAppoint": "حجز موعد",
         "Profile": "الملف الشخصي",
-
+        "Help & Support": "المساعدة والتواصل",
+        "Always Here to Help": "تلقائيا لمساعدتك",
+        "Your inquiries, suggestions, and complains all are most welcomed": "تواصل معك عن طرح أسئلتك، اقتراحاتك وشكوا",
+        "Contact Us": "توال معنا",
+        "Timings": "الوقت الساي",
+        "Saturday to Thursday": "السبت لى الخميس",
+        "Friday": "الجمعة",
         // MyApporovals
         "My Approvals": "طلباتي",
         "From: ": "من: ",
         "To: ": "لى: ",
         "search": "بحث",
-        "Pending": "قيد الانتظار",  
-        "Approved": "معتمد",  
-        "Cancelled": "ملغى", 
+        "Pending": "قيد الانتظار",
+        "Approved": "معتمد",
+        "Cancelled": "ملغى",
         "Noapps": "لا توجد موافقات متاحة.",
-
         // Wallets
         "urwallet1": "حسابك",
         "urwallet2": "حسابك: ",
         "balanc": "الرصيد: ",
-
     }
 }
 export default translations;
