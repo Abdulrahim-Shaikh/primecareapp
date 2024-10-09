@@ -145,7 +145,7 @@ const DoctorSelect = () => {
             ],
             )
         } else {
-            Alert.alert('Doctor ' + item.name, 'Date: ' + new Date(searchDate).toLocaleDateString() + " -\nSlot: " + selectedSlot, [
+            Alert.alert('Doctor ' + item.name, 'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + " -\nSlot: " + selectedSlot, [
                 { text: 'Cancel', style: 'default' },
                 {
                     text: 'Confirm',

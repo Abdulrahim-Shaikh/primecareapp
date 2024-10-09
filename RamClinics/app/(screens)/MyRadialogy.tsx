@@ -197,7 +197,7 @@ const MyRadialogy = () => {
                                             {i18n.t("Total Amount")}: <Text style={styles.amount}>{radialogys.total}</Text>
                                         </Text>
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {radialogys.branchName}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(radialogys.orderDate).toLocaleDateString()}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(radialogys.invoiceDate).format("DD-MMM-YYYY")}</Text>
                                     </Pressable>
                                 ))
                             )}

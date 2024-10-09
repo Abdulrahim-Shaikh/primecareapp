@@ -196,7 +196,7 @@ const MyPrescription = () => {
                                             {i18n.t("Total Amount")}: <Text style={styles.amount}>{prescription.total}</Text>
                                         </Text>
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {prescription.branch}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(prescription.invoiceDate).toLocaleDateString()}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(prescription.invoiceDate).format("DD-MMM-YYYY")}</Text>
                                     </Pressable>
                                 ))
                             )}

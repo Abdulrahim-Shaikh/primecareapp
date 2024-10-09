@@ -459,7 +459,7 @@ const ScheduleAppointment = () => {
                                 <View className="flex flex-row p-1 m-1 w-32 h-32">
                                     <Pressable
                                         onPress={() => {
-                                            Alert.alert('Doctor ' + doctor, 'Date: ' + new Date(fromDate).toLocaleDateString() + " -\nSlot: " + item.slotName, [
+                                            Alert.alert('Doctor ' + doctor, 'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + " -\nSlot: " + item.slotName, [
                                                 {
                                                     text: 'Confirm',
                                                     onPress: () => {
@@ -490,7 +490,7 @@ const ScheduleAppointment = () => {
                     <View className="flex flex-col px-2">
                         <TouchableOpacity onPress={
                             () => {
-                                Alert.alert('Doctor ' + doctor, 'Date: ' + new Date(fromDate).toLocaleDateString() + " -\nSlot: " + new Date(fromDate).toLocaleTimeString() + '  to  ' + new Date(toDate).toLocaleTimeString(), [
+                                Alert.alert('Doctor ' + doctor, 'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + " -\nSlot: " + new Date(fromDate).toLocaleTimeString() + '  to  ' + new Date(toDate).toLocaleTimeString(), [
                                     {
                                         text: 'Confirm',
                                         onPress: () => {

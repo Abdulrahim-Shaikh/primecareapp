@@ -10,6 +10,7 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
+import moment from "moment";
 
 const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
@@ -80,7 +81,7 @@ const MyPromotionBookings = () => {
                                                 </Text>
                                             </View>
                                             <Text className="text-sm self-center" style={{ color: '#78450f', fontWeight: '500' }}>
-                                                {new Date(item.orderDate).toLocaleDateString()}
+                                                {moment(item.orderDate).format("DD-MMM-YYYY")}
                                             </Text>
                                         </View>
                                     )}

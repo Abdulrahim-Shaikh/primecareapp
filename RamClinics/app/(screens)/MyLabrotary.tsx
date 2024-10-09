@@ -196,7 +196,7 @@ const MyLabrotary = () => {
                                             {i18n.t("Total Amount")}: <Text style={styles.amount}>{labratorys.total}</Text>
                                         </Text>
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {labratorys.branch}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(labratorys.orderDate).toLocaleDateString()}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(labratorys.orderDate).format("DD-MMM-YYYY")}</Text>
                                     </Pressable>
                                 ))
                             )}

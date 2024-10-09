@@ -194,7 +194,7 @@ const MySickLeaves = () => {
                                             <Text style={styles.amount}>{sickLeave.consentFormName}</Text>
                                         </Text>
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {sickLeave.branchName}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(sickLeave.createdDate).toLocaleDateString()}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(sickLeave.createdDate).format("DD-MMM-YYYY")}</Text>
                                     </Pressable>
                                 ))
                             )}

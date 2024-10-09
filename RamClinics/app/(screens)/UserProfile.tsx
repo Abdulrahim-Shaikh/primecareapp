@@ -171,7 +171,7 @@ const UserProfile = () => {
                   <Text className="text-white text-xs">{i18n.t("dob")}</Text>
                   <View className="rounded-md">
                     <Text className="text-lime-600 text-md font-bold">
-                      {patient && patient.dob ? new Date(patient.dob).toLocaleDateString() : "05/06/1999"}
+                      {patient && patient.dob ? moment(patient.dob).format("DD-MMM-YYYY") : "05/06/1999"}
                     </Text>
 
                   </View>

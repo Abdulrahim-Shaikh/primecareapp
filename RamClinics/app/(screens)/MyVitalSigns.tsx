@@ -195,7 +195,7 @@ const MyVitalSigns = () => {
                                         </Text>
                                         <Text style={styles.branchText}>{i18n.t("Practitioner Name")}: {vitalsign.practitionerName}</Text>
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {vitalsign.branchName}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(vitalsign.createdDate).toLocaleDateString()}</Text>
+                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(vitalsign.createdDate).format("DD-MMM-YYYY")}</Text>
                                     </Pressable>
                                 ))
                             )}

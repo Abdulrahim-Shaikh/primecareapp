@@ -209,7 +209,7 @@ const MyInvoices = () => {
                                         {i18n.t("Total Amount")}: <Text className="font-bold text-lime-600">{invoice.total}</Text>
                                     </Text>
                                     <Text className="mt-1 text-sm text-gray-600">{i18n.t("Branch")}: {invoice.branch}</Text>
-                                    <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {new Date(invoice.invoiceDate).toLocaleDateString()}</Text>
+                                    <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(invoice.invoiceDate).format("DD-MMM-YYYY")}</Text>
                                 </Pressable>
                             ))
                         )}
