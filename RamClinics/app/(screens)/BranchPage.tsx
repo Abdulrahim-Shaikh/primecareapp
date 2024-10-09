@@ -1,12 +1,21 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import branchService from "../../domain/services/BranchService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import logoRamClinic from "../../assets/logo/logo-ram-clinic.png";
 import Searchbox from "../../components/ui/Searchbox";
 import resourceService from "../../domain/services/ResourceService";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const BranchPage = () => {
 
@@ -14,6 +23,20 @@ const BranchPage = () => {
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [branches, setBranches] = useState([]);
     const [searchValue, setSearchValue] = useState('');
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+  
+    const changeLocale = (locale: any) => {
+      i18n.locale = locale;
+      setLocale(locale);
+    }
+  
+    useFocusEffect(
+      useCallback(() => {
+        changeLocale(language)
+        changeLanguage(language)
+      }, [])
+    )
 
     useEffect(() => {
         if (devices != null || devices != "") {
@@ -96,7 +119,7 @@ const BranchPage = () => {
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
-                <HeaderWithBackButton title="Select Branch" isPushBack={true} />
+                <HeaderWithBackButton title={i18n.t("Select Branch")} isPushBack={true} />
                 {/* <View className="pt-8">
                     <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View> */}

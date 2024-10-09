@@ -16,13 +16,35 @@ import { doctorSpecialityData2 } from "../../constants/data";
 import specialityService from "../../domain/services/SpecialityService";
 import specialityIcon from "../../assets/images/docton-speciality-icon-3.png";
 import Searchbox from "../../components/ui/Searchbox";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 const DoctorSpecialityPage = () => {
 
   const { branchId, fromSpeciality, department, callCenterFlow } = useLocalSearchParams();
   const [specialityList, setSpecialityList] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
   const [loader, setLoader] = useState(false);
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
+
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
 
   const fetchSpecialities = () => {
     setLoader(true)
@@ -127,7 +149,7 @@ const DoctorSpecialityPage = () => {
   return (
     <SafeAreaView>
       <ScrollView className="p-6">
-        <HeaderWithBackButton title="Doctor Speciality" isPushBack={true} />
+        <HeaderWithBackButton title={i18n.t("Doctor Speciality")} isPushBack={true} />
         {/* <View className="pt-8 ">
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View> */}
@@ -155,13 +177,13 @@ const DoctorSpecialityPage = () => {
               {
                 +fromSpeciality
                   ?
-                  <Text className="item-center flex-row text-pc-primary pt-1">
-                    Select branch {" "}
+                  <Text className="item-center flex-row text-white pt-1">
+                    {i18n.t("Select branch")} {" "}
                     <Feather name="arrow-right" size={14} color="#454567" />{" "}
                   </Text>
                   :
                   <Text className="item-center flex-row text-white pt-1">
-                    Select doctor {" "}
+                    {i18n.t("Select doctor")} {" "}
                     <Feather name="arrow-right" size={14} color="#FFF" />{" "}
                   </Text>
               }

@@ -7,7 +7,11 @@ import Searchbox from '../../components/ui/Searchbox';
 import DoctorCard from '../../components/ui/DoctorCard';
 import doctorService from '../../domain/services/DoctorService';
 import resourceService from '../../domain/services/ResourceService';
-
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
 const categoryList = [
     "All",
@@ -17,6 +21,10 @@ const categoryList = [
     "Cardiologist",
 ];
 
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
+
 const BranchDoctor = () => {
 
     const [searchValue, setSearchValue] = useState('');
@@ -25,6 +33,20 @@ const BranchDoctor = () => {
     const { branchId, fromSpeciality, department, speciality } = useLocalSearchParams();
     let [doctors, setDoctors] = useState([]);
     let [loader, setLoader] = useState(true);
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+  
+    const changeLocale = (locale: any) => {
+      i18n.locale = locale;
+      setLocale(locale);
+    }
+  
+    useFocusEffect(
+      useCallback(() => {
+        changeLocale(language)
+        changeLanguage(language)
+      }, [])
+    )
 
     useFocusEffect(
         useCallback(() => {
@@ -73,7 +95,7 @@ const BranchDoctor = () => {
         <SafeAreaView>
             <ScrollView className="pt-6">
                 <View className="px-6">
-                    <HeaderWithBackButton isPushBack={true} title="Doctors" />
+                    <HeaderWithBackButton isPushBack={true} title={i18n.t("Doctors")} />
                 </View>
 
                 <View className="pt-8 px-6 ">
@@ -95,7 +117,7 @@ const BranchDoctor = () => {
                                     className={`text-base border border-pc-primary rounded-md py-1 px-3 ${index === activeCategory ? "text-white bg-[#3B2314]" : ""
                                         }`}
                                 >
-                                    {item}
+                                    {i18n.t(item)}
                                 </Text>
                             </Pressable>
                         )}
@@ -105,7 +127,7 @@ const BranchDoctor = () => {
                 <View className="pb-16 px-6">
                     {
                         doctors.length === 0 || doctors == null
-                        ?  <Text className="text-center text-lg text-gray-600 mt-4">No doctors available for selected speciality</Text>
+                        ?  <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No doctors available for selected speciality")}</Text>
                         : loader 
                             ? 
                             <ActivityIndicator size="large" color="#00ff00" />

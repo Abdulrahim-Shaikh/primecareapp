@@ -13,6 +13,15 @@ import patientService from "../../domain/services/PatientService";
 import branchService from "../../domain/services/BranchService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
 import specialityService from "../../domain/services/SpecialityService";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 type Props = {
   id: any;
@@ -56,7 +65,20 @@ const DoctorCard = ({
   const [patientPolicyData, setPatientPolicyData] = useState({})
 
   let dateAux = new Date();
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
 
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
 
   useFocusEffect(
     useCallback(() => {
@@ -328,7 +350,7 @@ const DoctorCard = ({
             getPatientPolicyData();
           }}
           className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
-          <Text>Book</Text>
+          <Text>{i18n.t("Book")}</Text>
         </Pressable>
       </View>
 

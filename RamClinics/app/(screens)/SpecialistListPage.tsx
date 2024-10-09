@@ -1,10 +1,10 @@
 import { SafeAreaView, ScrollView, View, Text, FlatList, Pressable, ViewToken, Alert, ActivityIndicator } from "react-native";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import Searchbox from "../../components/ui/Searchbox";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DoctorCard from "../../components/ui/DoctorCard";
 import { myAppoinmentData, topDoctorData } from "../../constants/data";
-import { router, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
 import { useAnimatedRef, useSharedValue, useAnimatedScrollHandler } from "react-native-reanimated";
 import branchService from "../../domain/services/BranchService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
@@ -16,7 +16,15 @@ import moment from "moment";
 import scheduleService from "../../domain/services/ScheduleService";
 import resourceService from "../../domain/services/ResourceService";
 import doctorService from "../../domain/services/DoctorService";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const specialityList = [
     "All",
@@ -30,6 +38,20 @@ const specialityList = [
 ];
 
 const SpecialityListPage = () => {
+    const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
+
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
     const [activeCategory, setActiveCategory] = useState(0);
     const [activeSpeciality, setActiveSpeciality] = useState(0);
     const [branchOptions, setBranchOptions] = useState([])
@@ -116,7 +138,7 @@ const SpecialityListPage = () => {
                 <View className="pt-8 pb-4 px-6">
                     <View className="flex flex-row justify-start items-center gap-4 pt-6">
                         <View className="px-6">
-                            <HeaderWithBackButton isPushBack={true} title="Find your specialist" />
+                            <HeaderWithBackButton isPushBack={true} title={i18n.t("Find your specialist")} />
                         </View>
                     </View>
                 </View>
