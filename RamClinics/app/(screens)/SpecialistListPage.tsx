@@ -153,7 +153,7 @@ const SpecialityListPage = () => {
                             <ActivityIndicator className="mt-80" size="large" color="#00ff00" />
                         :
                         filteredDoctors.map((doctor, idx) => (
-                            <Pressable >
+                            <Pressable>
                                 <DoctorCard {...doctor} key={idx} />
                             </Pressable>
                         ))

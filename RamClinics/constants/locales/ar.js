@@ -263,7 +263,9 @@ const translations = {
         "By Service": "By Service",
         "searchBy": "Search By",
 
-
+        "No specialities found": "No specialities found",
+        "Select branch": "Select branch",
+        "Appointment Type": "Appointment Type",
 
 
     },
@@ -526,6 +528,13 @@ const translations = {
         "By Doctor": "بواسطة دكتور",
         "By Service": "حسب الخدمة",
         "searchBy": "البحث عن طريق",
+
+        //AppointmentType
+        "Select branch": "اختر الفرع",
+        "Appointment Type": "نوع الموعد",
+
+        //DoctorSpecialityPage
+        "No specialities found": "لم يتم العثور على تخصصات",
     }
 }
 export default translations;
