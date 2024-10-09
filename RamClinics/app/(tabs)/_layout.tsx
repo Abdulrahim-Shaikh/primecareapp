@@ -64,7 +64,7 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
           iconName === "book-app" && (
             <View style={styles.iconBgBook}>
               <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
-                <FontAwesome name="calendar-plus-o" size={60} color={focused ? "rgb(132 204 22)" : "white"} />
+                <FontAwesome name="calendar-plus-o" size={69} color={focused ? "rgb(132 204 22)" : "white"} />
                 {/* <Text className={`text-xs text-center ${focused ? " text-white" : "text-pc-primary"}`}>Book{"\n"}Appointment</Text> */}
               </View>
             </View>
@@ -110,7 +110,7 @@ const TabLayout = () => {
           tabBarLabelStyle: {
             fontSize: 11,
             color: "white",
-            paddingBottom: Platform.OS === 'ios' ? 0 : 8,
+            paddingBottom: Platform.OS === 'ios' ? 0 : 10,
           },
 
           tabBarBadgeStyle: {
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   iconBgBook: {
     alignItems: 'center',
     paddingTop: 2,
-    paddingBottom: -2
+    paddingBottom: 0,
   },
   iconView: {
     alignItems: 'center',

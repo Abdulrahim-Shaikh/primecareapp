@@ -169,8 +169,8 @@ const MyVitalSigns = () => {
 
                     <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
-                            <Pressable key={idx} onPress={() => setActiveTab(item.value)} className={`flex-1 border-b-2 pb-2 ${activeTab === item.value ? "border-pc-primary" : "border-transparent"}`}>
-                                <Text className={`text-center font-semibold ${activeTab === item.value ? "text-pc-primary" : "text-gray-700"}`}>
+                            <Pressable key={idx} onPress={() => setActiveTab(item.value)} className={`flex-1 border-b-2 pb-2 ${activeTab === item.value ? "border-lime-600" : "border-transparent"}`}>
+                                <Text className={`text-center font-semibold ${activeTab === item.value ? "text-lime-600" : "text-gray-700"}`}>
                                     {i18n.t(item.label)}
                                 </Text>
                             </Pressable>
