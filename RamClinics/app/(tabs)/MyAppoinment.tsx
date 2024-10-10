@@ -252,20 +252,20 @@ const Appoinment = () => {
                         onPress={() => setCancelModal(true)}
                         className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center"
                       >
-                        Cancel
+                        {i18n.t("Cancel")}
                       </Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity>
                       <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
-                        Book Again
+                       {i18n.t("Book Again")}
                       </Text>
                     </TouchableOpacity>
                   )}
 
                   {item.sessionStatus === "Upcoming" ? (
                     <Text className="flex-1 text-white border border-pc-primary	 px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center">
-                      Change Date
+                      {i18n.t("Change Date")}
                     </Text>
                   ) : (
                     <Text onPress={() => {
@@ -278,7 +278,7 @@ const Appoinment = () => {
                       });
                     }}
                       className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center">
-                      Leave Review
+                      {i18n.t("Leave Review")}
                     </Text>
                   )}
                 </View>
@@ -296,11 +296,11 @@ const Appoinment = () => {
           <View className="bg-white w-full pt-16 px-6 pb-6 rounded-t-[60px] ">
             <View className="pb-4 border-b border-dashed text-amber-500">
               <Text className="text-[#ff5630] text-2xl text-center font-semibold ">
-                Cancel Appointment
+               {i18n.t("Cancel Appointment")}
               </Text>
             </View>
             <Text className="text-lg pt-4 text-center text-pc-primary">
-              Are you sure you want to cancel?
+              {i18n.t("Are you sure you want to cancel")}?
             </Text>
 
             <View className="pt-8 flex-row gap-4">
@@ -309,7 +309,7 @@ const Appoinment = () => {
                 className="flex-1"
               >
                 <Text className="text-pc-primary	border border-bg-[rgb(59,35,20)] rounded-lg py-4 bg-amber-100 text-center font-medium ">
-                  Cancel
+                  {i18n.t("Cancel")}
                 </Text>
               </Pressable>
               <Pressable
@@ -317,7 +317,7 @@ const Appoinment = () => {
                 className="flex-1"
               >
                 <Text className="text-white border border-bg-[rgb(59,35,20)] rounded-lg py-4 bg-[rgb(59,35,20)] text-center font-medium ">
-                  Confirm
+                  {i18n.t("Confirm")}
                 </Text>
               </Pressable>
             </View>

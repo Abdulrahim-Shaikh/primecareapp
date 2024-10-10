@@ -1,15 +1,37 @@
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native"
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton"
-import { useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useState } from "react";
 import doctorRatingsService from "../../domain/services/DoctorRatingsService";
 import { Rating } from "react-native-elements";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const RateDental = () => {
     const { appointmentId, patientName } = useLocalSearchParams();
     const [review, setReview] = useState('');
     const [score, setScore] = useState(5);
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+  
+    const changeLocale = (locale: any) => {
+      i18n.locale = locale;
+      setLocale(locale);
+    }
+  
+    useFocusEffect(
+      useCallback(() => {
+        changeLocale(language)
+        changeLanguage(language)
+      }, [])
+    )
 
     const handleRating = (rating: number) => {
         setScore(rating);
@@ -36,12 +58,12 @@ const RateDental = () => {
     return (
         <View className="flex-1 p-4 bg-white">
             <View className="flex flex-row justify-start items-center gap-4 py-6 mt-4">
-                <HeaderWithBackButton title="Rate Dental Doctor" isPushBack={true} />
+                <HeaderWithBackButton title={i18n.t("Rate Dental Doctor")} isPushBack={true} />
             </View>
-            <TextInput placeholder="Provide Your Review" className="mt-4 p-2 border border-pc-primary"
+            <TextInput placeholder={i18n.t("Provide Your Review")} className="mt-4 p-2 border border-pc-primary"
                 value={review}
                 onChangeText={setReview}></TextInput>
-            <TextInput placeholder="Provide Your Experience" className="mt-4 mb-5 p-2 border border-pc-primary"></TextInput>
+            <TextInput placeholder={i18n.t("Provide Your Experience")} className="mt-4 mb-5 p-2 border border-pc-primary"></TextInput>
             <View className="flex flex-row items-center mt-4 mb-5">
                 <Rating
                     type="star"
@@ -53,13 +75,13 @@ const RateDental = () => {
                     ratingColor="#78450f"
                     ratingBackgroundColor="#d3d3d3"
                 />
-                <Text className="ml-10 text-lg">{`Score: ${score}`}</Text>
+                <Text className="ml-10 text-lg">{`${i18n.t("Score")}: ${score}`}</Text>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity
                     onPress={handleSubmit}
                     className="bg-[rgb(59,35,20)] w-2/4 py-2 rounded-lg items-center">
-                    <Text className="text-white">Submit Ratings</Text>
+                    <Text className="text-white">{i18n.t("Submit Ratings")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

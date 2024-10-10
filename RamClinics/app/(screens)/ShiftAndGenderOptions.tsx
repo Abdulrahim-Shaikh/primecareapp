@@ -1,17 +1,39 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { StyleSheet, Button, FlatList, Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import branchService from "../../domain/services/BranchService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import logoRamClinic from "../../assets/logo/logo-ram-clinic.png";
 import Searchbox from "../../components/ui/Searchbox";
 import resourceService from "../../domain/services/ResourceService";
 import { Picker } from "@react-native-picker/picker";
 import LinkButton from "../../components/LinkButton";
 import moment, { Moment } from "moment";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { lang } from "moment";
 
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 const ShiftAndGenderOptions = () => {
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
+  
+    const changeLocale = (locale: any) => {
+      i18n.locale = locale;
+      setLocale(locale);
+    }
+  
+    useFocusEffect(
+      useCallback(() => {
+        changeLocale(language)
+        changeLanguage(language)
+      }, [])
+    )
 
     const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception } = useLocalSearchParams();
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
@@ -113,24 +135,24 @@ const ShiftAndGenderOptions = () => {
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
-                <HeaderWithBackButton title="Shift and Gender" isPushBack={true} />
+                <HeaderWithBackButton title={i18n.t("Shift and Gender")} isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
                     <View className="flex content-between">
                         <View className="border border-indigo-950 rounded-lg mb-4">
                             <Picker
                                 selectedValue={selectedShift} onValueChange={(itemValue) => { setSelectedShift(itemValue); }} className="h-12">
-                                <Picker.Item label="Select Shift" value="" />
+                                <Picker.Item label={i18n.t("Select Shift")} value="" />
                                 {shiftOptions.map((branch: any) => (
-                                    <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
+                                    <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.name} />
                                 ))}
                             </Picker>
                         </View>
                         <View className="border border-indigo-950 rounded-lg mb-4">
                             <Picker
                                 selectedValue={selectedGender} onValueChange={(itemValue) => { setSelectedGender(itemValue); }} className="h-12">
-                                <Picker.Item label="Select Gender" value="" />
+                                <Picker.Item label={i18n.t("Select Gender")} value="" />
                                 {genderOptions.map((branch: any) => (
-                                    <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
+                                    <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.id} />
                                 ))}
                             </Picker>
                         </View>
@@ -138,7 +160,7 @@ const ShiftAndGenderOptions = () => {
                         onPress={() =>  search()}
                          className="flex flex-row justify-between items-center pt-2 gap-4 ">
                             <Text className="flex-1 text-white border border-[#3B2314] px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                                Schedule Appointment
+                               {i18n.t("Schedule Appointment")}
                             </Text>
                         </TouchableOpacity>
                     </View>

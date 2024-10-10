@@ -17,6 +17,7 @@ import translations from "../../constants/locales/ar";
 import { I18n } from "i18n-js";
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
+import moment from "moment";
 
 const i18n =  new I18n(translations)
 i18n.locale = Localization.locale
@@ -111,7 +112,7 @@ const UserProfile = () => {
                 </Text>
               </View>
             </View>
-            <View className="flex-row justify-between items-center pt-12 pb-8">
+            <View className="flex-row justify-between items-center pt-12 pb-8 bg-">
               <View className="flex-row gap-2">
                 <Text className="p-2 rounded-md bg-white">
                   <MaterialIcons
