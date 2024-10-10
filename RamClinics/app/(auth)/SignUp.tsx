@@ -216,7 +216,7 @@ const SingUp = () => {
                 selectedValue={nationality} onValueChange={(cntry) => { setNationality(cntry) }} className="text-slate-800">
                 <Picker.Item label={i18n.t("Nationality")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {countries.map((cntry: any) => (
-                  <Picker.Item key={cntry.code} label={i18n.t(cntry.name)} value={cntry.name} />
+                  <Picker.Item key={cntry.code} label={cntry.name} value={cntry.name} />
                 ))}
               </Picker>
             </View>
