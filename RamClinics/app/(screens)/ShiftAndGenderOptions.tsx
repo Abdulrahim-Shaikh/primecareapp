@@ -22,17 +22,17 @@ i18n.enableFallback = true;
 const ShiftAndGenderOptions = () => {
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
-  
+
     const changeLocale = (locale: any) => {
-      i18n.locale = locale;
-      setLocale(locale);
+        i18n.locale = locale;
+        setLocale(locale);
     }
-  
+
     useFocusEffect(
-      useCallback(() => {
-        changeLocale(language)
-        changeLanguage(language)
-      }, [])
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
     )
 
     const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception } = useLocalSearchParams();
@@ -41,7 +41,7 @@ const ShiftAndGenderOptions = () => {
     const [searchValue, setSearchValue] = useState('');
     const [selectedShift, setSelectedShift] = useState('');
     const [selectedGender, setSelectedGender] = useState('');
-    const [slotsAvailable, setSlotsAvailable ] = useState(new Map<string, Array<number>>())
+    const [slotsAvailable, setSlotsAvailable] = useState(new Map<string, Array<number>>())
 
     useEffect(() => {
         setDevicesList(JSON.parse(devices.toString()))
@@ -80,7 +80,7 @@ const ShiftAndGenderOptions = () => {
                     gender: selectedGender
                 }
             })
-        } 
+        }
         // let subServiceSlotInterval = +callOrReception
         // if (+callCenterFlow) {
         //     let deviceCode: any = ""
@@ -157,10 +157,10 @@ const ShiftAndGenderOptions = () => {
                             </Picker>
                         </View>
                         <TouchableOpacity
-                        onPress={() =>  search()}
-                         className="flex flex-row justify-between items-center pt-2 gap-4 ">
+                            onPress={() => search()}
+                            className="flex flex-row justify-between items-center pt-2 gap-4 ">
                             <Text className="flex-1 text-white border border-[#3B2314] px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                               {i18n.t("Schedule Appointment")}
+                                {i18n.t("Schedule Appointment")}
                             </Text>
                         </TouchableOpacity>
                     </View>

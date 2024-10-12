@@ -1,5 +1,5 @@
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View, Text, TextInput } from "react-native";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import FormField from "../../components/FormField";
@@ -12,6 +12,9 @@ import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 import { useFocusEffect } from "expo-router";
+import { UserContext } from "../../domain/contexts/UserContext";
+import loginService from "../../domain/services/LoginService";
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -20,6 +23,11 @@ i18n.enableFallback = true;
 const EditProfile = () => {
   const { language, changeLanguage } = useLanguage();
   const [locale, setLocale] = useState(i18n.locale);
+  const [showDatePicker, setShowPicker] = useState(false);
+
+  let { setUser } = useUserSate();
+  const [userInfo, setUserInfo] = useState<any>();
+  const { userData, setUserData } = useContext(UserContext)
 
   const changeLocale = (locale: any) => {
     i18n.locale = locale;
@@ -36,8 +44,7 @@ const EditProfile = () => {
   const [patient, setPatient] = useState(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [dob, setDob] = useState('');
-  console.log("firstName>>>", firstName);
+  const [dob, setDob] = useState(new Date());
   useEffect(() => {
     patientService.find(user.id).then((res) => {
       // console.log("patientid", res.data)
@@ -46,24 +53,42 @@ const EditProfile = () => {
       setLastName(res.data.lastName || '');
       if (res.data.dob) {
         const date = new Date(res.data.dob);
-        const formattedDob = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-        setDob(formattedDob);
+        // const formattedDob = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        setDob(date);
       }
     });
   }, [user.id]);
+
+  const getPatient = () => {
+    loginService.byMobileNo(user.mobile)
+      .then((res) => {
+        Alert.alert("User Updated Successfully");
+        setUser(res.data);
+        setUserInfo(res.data);
+        setUserData(res.data);
+      })
+      .catch((error) => {
+        console.log("loginservice error", error)
+      })
+  }
 
   const handleSave = () => {
     const updatedPatient = {
       ...patient,
       firstName: firstName,
       lastName: lastName,
+      dob: dob
     };
     patientService.update(updatedPatient)
       .then(() => {
-        Alert.alert("Success", "Details updated successfully");
+        getPatient();
       })
+      .then(() => {
+        console.log("user", userData)
+      })
+      // 
       .catch((error) => {
-        Alert.alert(error);
+        // Alert.alert(error);
       });
   };
 
@@ -93,13 +118,23 @@ const EditProfile = () => {
                 onChangeText={setLastName}
               />
             </View>
-            <View className="pt-5 pb-8">
-              <FormField
-                placeholder="24/25/2024"
-                name={i18n.t("Date of Birth")}
-                value={dob}
-                onChangeText={setDob}
-              />
+
+            <View className={`w-full pt-5`}>
+              <Text className="text-base font-medium">Select date</Text>
+              <View className={`px-4 py-3  border rounded-xl w-full mt-2`} >
+                <TextInput
+                  placeholder={dob.toDateString()}
+                  placeholderTextColor="#c3c3ce"
+                  className="w-full"
+                  value={dob.toDateString()}
+                  onPress={() => setShowPicker(true)}
+                />
+              </View>
+              <View className="pt-5 pb-8">
+                {showDatePicker && (
+                  <DateTimePicker value={dob} mode="date" display="default" onChange={(event: DateTimePickerEvent, date: any) => { const selectedDate = date; setShowPicker(false); setDob(selectedDate) }} />
+                )}
+              </View>
             </View>
 
             <TouchableOpacity
