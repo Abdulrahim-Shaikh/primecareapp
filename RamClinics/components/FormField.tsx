@@ -5,6 +5,7 @@ type PropsType = {
   name?: string;
   placeholder: string;
   otherStyle?: string;
+  dirty?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
   value?: string;
   onChangeText?(value: any): void;
@@ -15,6 +16,7 @@ const FormField = ({
   name,
   placeholder,
   otherStyle,
+  dirty,
   keyboardType,
   value,
   onChangeText,
@@ -23,7 +25,9 @@ const FormField = ({
   const [focus, setFocus] = useState(false);
   return (
     <View className={`w-full ${otherStyle}`}>
-      {name && <Text className="text-base font-medium">{name}</Text>}
+      {name && 
+      <Text className="text-base font-medium">{name}</Text>
+      }
       <View
         className={`px-4 py-3  border rounded-xl w-full mt-2 ${
           focus ? "border-pc-primary " : "text-amber-500"

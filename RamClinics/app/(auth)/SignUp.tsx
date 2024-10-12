@@ -1,5 +1,5 @@
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { router } from "expo-router";
@@ -19,8 +19,12 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import SearchableDropdown from 'react-native-searchable-dropdown';
+import SelectDropdown from "react-native-select-dropdown";
+import { Icon } from "react-native-elements";
 
-const i18n =  new I18n(translations);
+const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
 i18n.enableFallback = true;
 
@@ -75,19 +79,24 @@ const SingUp = () => {
   const [city, setCity] = useState('');
   const [showDatePicker, setShowPicker] = useState(false);
   const [dob, setDob] = useState(new Date());
+  const [errors, setErrors] = useState({});
+  const [countryCode, setCountryCode] = useState('');
+  const [selectedCountryCodeItem, setSelectedCountryCodeItem] = useState<any>(null);
+  const [errorsExist, setErrorsExist] = useState(false);
+
   let dateAux = new Date();
   const { language, changeLanguage } = useLanguage();
-    const [locale, setLocale] = useState(i18n.locale);
-	const changeLocale = (locale: any) => {
-        i18n.locale = locale;
-        setLocale(locale);
-    }
-	useFocusEffect(
-        useCallback(() => {
-            changeLocale(language)
-            changeLanguage(language)
-        }, [])
-    )
+  const [locale, setLocale] = useState(i18n.locale);
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
 
   useEffect(() => {
     branchService.findAll().then((res) => {
@@ -96,6 +105,14 @@ const SingUp = () => {
       console.error("Failed to fetch branches:", error);
     });
   }, []);
+
+  useEffect(() => {
+    console.log("nationality", nationality)
+  }, [nationality])
+
+  function selectNationality(item: any) {
+    console.log("item nationality: ", item)
+  }
 
   let signupForm = {
     "firstName": firstName,
@@ -114,20 +131,129 @@ const SingUp = () => {
     "emailId": email,
   }
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return emailRegex.exec(String(email)) !== null;
+  }
+
+  const validateName = (name: string) => {
+    // create a regex validation to check firstname and last name
+    const regex = /^[a-z ,.'-]+$/i
+    return regex.exec(String(name)) !== null;
+
+    // const regex = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžæÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+    // return regex.exec(String(name)) !== null;
+  }
+
+  const validateNumber = (number: any) => {
+    const regex = /^[0-9]*$/;
+    return regex.exec(String(number)) !== null;
+  }
+
   const savePatient = () => {
     // console.log(signupForm);
-    if (firstName && lastName && dob && mobileNo && selectedBranch && gender) {
+    let tempErrors = {
+      "firstName": "",
+      "secondName": "",
+      "lastName": "",
+      "countryCode": "",
+      "dob": "",
+      "mobileNo": "",
+      "id": "",
+      "email": "",
+      "selectedBranch": "",
+      "gender": "",
+      "saveError": ""
+    };
+
+    if (countryCode && firstName && lastName && dob && mobileNo && selectedBranch && gender) {
+      if (firstName != null && !validateName(firstName)) {
+        console.log("valid")
+        tempErrors.firstName = "Invalid first name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (secondName != null && !validateName(secondName)) {
+        console.log("valid")
+        tempErrors.secondName = "Invalid first name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (lastName != null && !validateName(lastName)) {
+        tempErrors.lastName = "Invalid last name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (mobileNo.length < 9 || (mobileNo.length == 10 && !mobileNo.startsWith("0"))) {
+        tempErrors.mobileNo = "Invalid Mobile Number";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        return;
+      }
+      if (email != null && !validateEmail(email)) {
+        console.log("email invalid")
+        tempErrors.email = "Invalid Email";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        return;
+      }
       patientService.save(signupForm).then((res) => {
+        setErrors({});
+        setErrorsExist(false);
         Alert.alert("Success", "Registered Successfully!", [
           { text: "OK", onPress: () => router.push("/SignIn") }
         ]);
-        console.log("Patient saved Successfully! :", res.data);
-        console.log("\n\n\nDate=",dob);
       }).catch((error) => {
+        tempErrors.saveError = "Failed to save Patient";
+        setErrors(tempErrors)
+        setErrorsExist(true);
         console.error("Failed to save Patient:", error);
         Alert.alert("Error", "Please try again later.");
       });
     } else {
+      if (firstName != null && !validateName(firstName)) {
+        console.log("valid")
+        tempErrors.firstName = "Invalid first name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (secondName != null && !validateName(secondName)) {
+        console.log("valid")
+        tempErrors.secondName = "Invalid first name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (lastName != null && !validateName(lastName)) {
+        tempErrors.lastName = "Invalid last name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (id != null && !validateNumber(id)) {
+        tempErrors.id = "Invalid id, should be a number";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (mobileNo != null && !validateNumber(mobileNo)) {
+        tempErrors.mobileNo = "Invalid id, should be a number";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (email != null && !validateEmail(email)) {
+        console.log("email invalid")
+        tempErrors.email = "Invalid Email";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+      }
+      if (firstName == "") tempErrors.firstName = "First Name is required";
+      if (lastName == "") tempErrors.lastName = "Last Name is required";
+      if (countryCode == "") tempErrors.countryCode = "Country Code is required";
+      if (dob == null) tempErrors.dob = "Date of birth required";
+      if (mobileNo == "") tempErrors.mobileNo = "Mobile number required";
+      if (selectedBranch == "") tempErrors.selectedBranch = "Branch required";
+      if (gender == "") tempErrors.gender = "Gender required";
+      setErrors(tempErrors)
+      setErrorsExist(true);
+      console.log("errors: ", tempErrors);
       console.log("Mandatory Fields Missing!");
       Alert.alert("Mandatory Fields Missing!", "Please fill in all required fields.");
     }
@@ -167,9 +293,8 @@ const SingUp = () => {
               <>
                 <Text className="mb-2 font-medium">{i18n.t("country")}</Text>
                 <View className="border rounded-xl mb-2">
-                  <Picker
-                    selectedValue={selectedIdCountry} onValueChange={(cntry) => { setIdCountry(cntry) }} className="text-slate-800">
-                    <Picker.Item label={i18n.t("country")} value="" style={{ color: 'grey', fontSize: 14 }} />
+                  <Picker selectedValue={selectedIdCountry} onValueChange={(cntry) => { setIdCountry(cntry) }} className="text-slate-800">
+                    <Picker.Item label="Select Country Code" value="" style={{ color: 'grey', fontSize: 14 }} />
                     {IDCountries.map((cntry: any) => (
                       <Picker.Item key={cntry.id} label={i18n.t(cntry.name)} value={cntry.name} />
                     ))}
@@ -182,8 +307,47 @@ const SingUp = () => {
               <FormField name={i18n.t("Passport")} placeholder={i18n.t("Passport")} otherStyle="mb-2" onChangeText={(e) => { setPassport(e) }} />
             )}
 
-            <FormField name={`${i18n.t("mobileno")} *`} placeholder={i18n.t("mobilenum")} otherStyle="" onChangeText={(e) => { setMobileNo(e) }} />
 
+
+            <View className="w-full flex flex-col">
+              <View className="flex flex-row items-center">
+                <View>
+                  <Text className="text-base font-medium">Mobile Number </Text>
+                </View>
+                <View>
+                  <Text className="text-red-600">
+                    *
+                  </Text>
+                </View>
+              </View>
+              <View className="w-full mt-2 flex flex-row align-center items-center">
+                <View className="w-2/5">
+                  <View className={`border rounded-xl ${errorsExist && errors[mobileNo] != ""}`}>
+                    <Picker
+                      selectedValue={selectedCountryCodeItem}
+                      onValueChange={(item) => {
+                        setSelectedCountryCodeItem(item);
+                        setCountryCode(item.dial_code)
+                      }}
+                      className="text-slate-800">
+                      {countries.map((cntry: any) => (
+                        <Picker.Item key={cntry.dial_code} label={" (" + cntry.dial_code + ") " + cntry.name} value={cntry} />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+                <View className={`px-4 py-3  border rounded-xl w-3/5 h-full`} >
+                  <TextInput
+                    placeholder={i18n.t("mobileno")}
+                    placeholderTextColor="#c3c3ce"
+                    className="w-full"
+                    keyboardType='phone-pad'
+                    value={mobileNo}
+                    onChangeText={(e) => setMobileNo(e)}
+                  />
+                </View>
+              </View>
+            </View>
             <View style={{ borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, paddingTop: '5%' }} />
 
             <FormField name={`${i18n.t("fl")} *`} placeholder={i18n.t("fl")} otherStyle="mt-2" onChangeText={(e) => { setFirstName(e) }} />
@@ -196,7 +360,7 @@ const SingUp = () => {
                 <Text className="text-lg">{moment(dob).format("DD-MMM-YYYY")}</Text>
               </Pressable>
               {showDatePicker && (
-                <DateTimePicker value={dob} mode="date" display="default" onChange={(event: DateTimePickerEvent, date: any) => { const selectedDate=date; setShowPicker(false); setDob(selectedDate)}} />
+                <DateTimePicker value={dob} mode="date" display="default" onChange={(event: DateTimePickerEvent, date: any) => { const selectedDate = date; setShowPicker(false); setDob(selectedDate) }} />
               )}
             </View>
 
@@ -212,6 +376,39 @@ const SingUp = () => {
 
             <Text className="my-2 font-medium">{i18n.t("Nationality")}</Text>
             <View className="border rounded-xl">
+              <Fragment>
+                <SelectDropdown
+                  data={countries}
+                  search={true}
+                  onSelect={(selectedItem, index) => {
+                    console.log("selectedcountry: ", selectedItem, index);
+                  }}
+                  renderButton={(selectedItem, isOpened) => {
+                    return (
+                      <View style={styles.dropdownButtonStyle}>
+                        <Text style={styles.dropdownButtonTxtStyle}>
+                          {(selectedItem && selectedItem.name) || 'Select nationality'}
+                        </Text>
+                      </View>
+                    );
+                  }}
+                  renderItem={(item, index, isSelected) => {
+                    return (
+                      <View style={{ ...styles.dropdownItemStyle }}>
+                        <Icon name={item.icon} />
+                        <Text>{item.name}</Text>
+                      </View>
+                    );
+                  }}
+                  showsVerticalScrollIndicator={false}
+                  dropdownStyle={styles.dropdownMenuStyle}
+                />
+                <></>
+              </Fragment>
+            </View>
+
+            {/* <Text className="my-2 font-medium">{i18n.t("Nationality")}</Text>
+            <View className="border rounded-xl">
               <Picker
                 selectedValue={nationality} onValueChange={(cntry) => { setNationality(cntry) }} className="text-slate-800">
                 <Picker.Item label={i18n.t("Nationality")} value="" style={{ color: 'grey', fontSize: 14 }} />
@@ -219,7 +416,7 @@ const SingUp = () => {
                   <Picker.Item key={cntry.code} label={cntry.name} value={cntry.name} />
                 ))}
               </Picker>
-            </View>
+            </View> */}
 
             <FormField name={i18n.t("Email")} placeholder={i18n.t("Email")} otherStyle="mt-4" onChangeText={(e) => { setEmail(e) }} />
 
@@ -242,7 +439,10 @@ const SingUp = () => {
                 selectedValue={selectedBranch} onValueChange={(r) => { setSeletedBranch(r) }} className="text-slate-800">
                 <Picker.Item label={i18n.t("Register Branch")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {branches.map((branch: any) => (
-                  <Picker.Item key={branch.branchCode} label={branch.name} value={branch.name} />
+                  (branch.name == "Technas" || branch.name == "Doha Medical Complex") ?
+                    <></>
+                    :
+                    <Picker.Item key={branch.branchCode} label={`${branch.name}, ${branch.city ? branch.city.trim() : ""}`} value={branch.name} />
                 ))}
               </Picker>
             </View>
@@ -257,6 +457,27 @@ const SingUp = () => {
                 ))}
               </Picker>
             </View>
+            {
+              errorsExist &&
+              <View className="rounded-xl border-2 border-rose-500 px-4 py-3 bg-red-200">
+                <View className="list-disc">
+                  {
+                    Object.keys(errors).map((key) => {
+                      return key && errors[key] != "" && errors[key].length > 0 && (
+                        <View className="flex items-center flex-row">
+                          <MaterialCommunityIcons
+                            name="circle-medium"
+                            size={24}
+                            color={"#dc2626"}
+                          />
+                          <Text className="text-red-600">{errors[key]}</Text>
+                        </View>
+                      )
+                    })
+                  }
+                </View>
+              </View>
+            }
             {/* <FormField
               name="Password"
               placeholder="*******"
@@ -291,7 +512,7 @@ const SingUp = () => {
 
             <View className="pt-4">
               <Text className="text-base text-pc-primary text-center">
-              {i18n.t("signuptext2")}{" "}
+                {i18n.t("signuptext2")}{" "}
                 <Text
                   className="text-lime-600 underline underline-offset-8"
                   onPress={() => router.push("/SignIn")}
@@ -310,4 +531,30 @@ const SingUp = () => {
 
 export default SingUp;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  dropdownButtonStyle: {
+    height: 50,
+    borderRadius: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dropdownButtonTxtStyle: {
+    fontWeight: '500',
+  },
+  dropdownButtonArrowStyle: {
+    fontSize: 28,
+  },
+  dropdownMenuStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '90%',
+    borderRadius: 8,
+  },
+  dropdownItemStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

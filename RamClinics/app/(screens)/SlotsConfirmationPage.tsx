@@ -130,6 +130,7 @@ const SlotsConfirmationPage = () => {
                     }
                     setLoader(false)
                     setSlotsAvailable(slotsAvailableAux2)
+                    console.log("slotsAvailableAux2: ", slotsAvailableAux2)
                 })
         }
     }
@@ -172,7 +173,7 @@ const SlotsConfirmationPage = () => {
 
                     <FlatList
                         data={Array.from(slotsAvailable)}
-                        numColumns={2}
+                        numColumns={3}
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{ marginHorizontal: "auto" }}
                         renderItem={({ item }) => (

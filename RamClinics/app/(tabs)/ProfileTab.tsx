@@ -43,16 +43,9 @@ const ProfileTab = () => {
   }
 
 
-  useFocusEffect(
-    useCallback(() => {
-      changeLocale(language)
-      changeLanguage(language)
-    }, [])
-  )
-
   const [logoutModal, setLogoutModal] = useState(false);
   const [user, setUser] = useState(null);
-  const { userData } = useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
   const [patientName, setPatientName] = useState("");
   // let user = useUserSate.getState().user;
   // let patientName = useUserSate.getState().patientName;
@@ -71,10 +64,15 @@ const ProfileTab = () => {
 
   useFocusEffect(
     useCallback(() => {
+      console.log("here")
+      console.log("usessss: ", useUserSate.getState())
+      console.log("data: ", userData)
+      changeLocale(language)
+      changeLanguage(language)
       setUser(useUserSate.getState().user)
       setPatientName(useUserSate.getState().patientName)
+      console.log("patientName: ", patientName);
       console.log("loggedIn ?: ", loggedIn);
-      // console.log("userState: ", useUserSate.getState());
     }, [])
   )
 
@@ -97,7 +95,7 @@ const ProfileTab = () => {
               }
               <View className="">
                 <Text className="text-white text-xl font-bold">
-                  {user && patientName ? patientName : "Guest"}
+                  {patientName ? patientName : "Guest"}
                 </Text>
                 <Text className="text-white text-base pt-2 font-semibold">
                   {user && user.mobile ? user.mobile : "mobile"}

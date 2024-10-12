@@ -259,7 +259,7 @@ const translations = {
 
         //BookAppointmentOptions
         "By Branch": "By Branch",
-        "By Doctor": "ByDoctor",
+        "By Doctor": "By Doctor",
         "By Service": "By Service",
         "searchBy": "Search By",
 
