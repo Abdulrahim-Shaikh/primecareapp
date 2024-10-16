@@ -16,16 +16,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AntDesign,
   Entypo,
-  Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import { myAppoinmentData } from "../../constants/data";
-import Searchbox from "../../components/ui/Searchbox";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import appointmentService from "../../domain/services/AppointmentService";
 import { useUserSate } from "../../domain/state/UserState";
-import branchService from "../../domain/services/BranchService";
 import patientService from "../../domain/services/PatientService";
 import moment from "moment";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
@@ -33,7 +30,6 @@ import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
 
 const tabNames = ["Booked", "Checked In"];
 const i18n = new I18n(translations)
@@ -63,9 +59,6 @@ const Appoinment = () => {
   const [allAppointments, setAllAppointments] = useState(myAppoinmentData);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-
-  const { user, setUser } = useUserSate();
 
   const onStartDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || fromDate;
@@ -107,7 +100,6 @@ const Appoinment = () => {
       // console.log("here")
       const patientId = useUserSate.getState().userId;
       console.log("patientId: ", patientId)
-      const branch = useUserSate.getState().branch;
       let branchId;
       patientService.getByPatientId(patientId)
         .then((response) => {
@@ -119,10 +111,6 @@ const Appoinment = () => {
       appointmentService.getAppointments(patientId, branchId)
         .then((response) => {
           setAllAppointments(response.data);
-          for (let i of response.data) {
-            // console.log("\n\n\n\ni: ", i)
-          }
-          // console.log("appointments: ", response)
         })
         .catch((error) => {
           console.log(error);
@@ -231,7 +219,7 @@ const Appoinment = () => {
                           <Entypo name="dot-single" />
                         </Text>
                         <Text className="text-pc-primary">
-                          <AntDesign name="clockcircle" /> {item.startTime} - {item.endTime}
+                          <AntDesign name="clockcircle" /> {(new Date(item.startTime)).toDateString()} - {(new Date(item.endTime)).toDateString()}
                         </Text>
                       </Text>
                     </View>

@@ -6,6 +6,7 @@ import {
   View,
 } from "react-native";
 import React, { useRef, useState } from "react";
+import { OtpInput } from "react-native-otp-entry"
 
 type Nullable<T> = T | null;
 
@@ -42,8 +43,9 @@ const OtpInputField = ({ disabled, onPress }: PropsType) => {
   };
 
   return (
-    <View className="flex flex-row justify-center items-center gap-4">
-      {[...new Array(4)].map((_, idx) => (
+    <View className="flex px-12 flex-row justify-center items-center gap-4">
+      
+      {/* {[...new Array(4)].map((_, idx) => (
         <View
           key={idx}
           className="border border-pc-primary py-3 px-5 rounded-lg flex justify-center items-center"
@@ -64,7 +66,17 @@ const OtpInputField = ({ disabled, onPress }: PropsType) => {
             onKeyPress={(event) => handleBackspace(event, idx)}
           />
         </View>
-      ))}
+      ))} */}
+      <OtpInput
+        numberOfDigits={4}
+        focusColor="black"
+        focusStickBlinkingDuration={500}
+        onTextChange={(text) => console.log(text)}
+        onFilled={(text) => handleChange(text, 3) }
+        textInputProps={{
+          accessibilityLabel: "One-Time Password",
+        }}
+      />
     </View>
   );
 };
