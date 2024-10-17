@@ -528,7 +528,7 @@ export const profileSettings = [
   {
     id: 7,
     icon: "help",
-    name: "Help Center",
+    name: "Contact Us",
     link: "/HelpSupport",
   },
   {
