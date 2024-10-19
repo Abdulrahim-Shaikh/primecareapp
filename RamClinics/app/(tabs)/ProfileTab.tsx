@@ -109,16 +109,12 @@ const ProfileTab = () => {
 
               </View>
             </View>
-            <Pressable
+            {/* <Pressable
               onPress={() => loggedIn ? router.push("/EditProfile") : router.push("/SignIn")}
               className="bg-white p-3 rounded-full"
             >
-              <MaterialCommunityIcons
-                name="pencil-outline"
-                size={24}
-                color={"rgb(59, 35, 20)"}
-              />
-            </Pressable>
+              <MaterialCommunityIcons name="pencil-outline" size={24} color={"rgb(59, 35, 20)"} />
+            </Pressable> */}
           </View>
 
           <View className="pt-2">
