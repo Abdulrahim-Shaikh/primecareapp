@@ -36,6 +36,7 @@ const DoctorSelect = () => {
     const { branches, setBranches } = useBranches();
 
     useEffect(() => {
+        console.log("department; ", department)
         console.log("doctorList: ", doctorList)
         setDoctors(JSON.parse(doctorList.toString()))
         console.log("doctors: ", doctors)
@@ -144,9 +145,6 @@ const DoctorSelect = () => {
                                 .then((response: any) => {
                                     console.log("appointmentService.save: ", response)
                                     Alert.alert('Appointment booked', 'Appointment has booked successfully!')
-                                    // Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
-                                    //     { text: 'OK', onPress: () => router.push('/index'), style: 'default' },
-                                    // ])
                                 })
                                 .catch((error: any) => {
                                     console.log("appointmentService.save error: ", error)
@@ -156,6 +154,7 @@ const DoctorSelect = () => {
                     })
                     .catch((error: any) => {
                         console.log("getAppointmentsBySlotId error: ", error)
+                        Alert.alert('Appointment booking failed', 'Failed to book appointment!')
                     })
             })
 
