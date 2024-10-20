@@ -90,7 +90,7 @@ const BranchPage = () => {
                         city: city,
                         branch: item,
                         fromSpeciality: fromSpeciality,
-                        department: null,
+                        department: department,
                         speciality: speciality,
                         specialityCode: specialityCode,
                         callCenterFlow: callCenterFlow,
@@ -106,7 +106,7 @@ const BranchPage = () => {
                         params: {
                             branchId: item.id,
                             fromSpeciality: fromSpeciality,
-                            department: null,
+                            department: department,
                             specialityCode: item.code,
                             speciality: speciality,
                             callCenterDoctorFlow: 0
