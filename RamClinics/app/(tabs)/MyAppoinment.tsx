@@ -278,7 +278,7 @@ const Appoinment = () => {
                           <Entypo name="dot-single" />
                         </Text>
                         <Text className="text-pc-primary">
-                          <AntDesign name="clockcircle" /> {(new Date(item.startTime)).toDateString()} - {(new Date(item.endTime)).toDateString()}
+                          <AntDesign name="clockcircle" /> {moment(new Date(item.startTime)).format("DD-MM-YYYY hh:mm")}    to    {moment(new Date(item.endTime)).format("DD-MM-YYYY hh:mm")}
                         </Text>
                       </Text>
                     </View>
