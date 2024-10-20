@@ -72,7 +72,7 @@ const Appoinment = () => {
     const currentTimeInstance = moment()
     setToDate(currentDate);
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
+    const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
     if (isEnabled) {
       setFromDate(firstDayOfMonth);
       let slicedAppointments = []
@@ -182,7 +182,7 @@ const Appoinment = () => {
           </View> */}
           <View className="flex flex-row items-center justify-center">
             <View>
-              <Text>Last month - All</Text>
+              <Text>Last month</Text>
             </View>
             <View>
               <Switch
@@ -293,7 +293,7 @@ const Appoinment = () => {
                   </View> */}
                 </View>
                 <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                  {item.sessionStatus === "Upcoming" ? (
+                  {/* {item.sessionStatus === "Upcoming" ? (
                     <TouchableOpacity>
                       <Text
                         onPress={() => setCancelModal(true)}
@@ -308,7 +308,7 @@ const Appoinment = () => {
                         {i18n.t("Book Again")}
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
 
                   {item.sessionStatus === "Upcoming" ? (
                     <Text className="flex-1 text-white border border-pc-primary	 px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center">
