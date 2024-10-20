@@ -43,6 +43,7 @@ const MyInvoices = () => {
     const [filteredInvoices, setFilteredInvoices] = useState([]);
     const [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
+    const [fromType, setFromType] = useState("lastMonth");
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
     const [showFromPicker, setShowFromPicker] = useState(false);
@@ -71,21 +72,32 @@ const MyInvoices = () => {
     const { data, status, isLoading } = invoiceService.invoicesByPatientIds(userId);
 
     useEffect(() => {
-        console.log('API response', data, status);
+        // console.log('API response', data, status);
         if (data && status === "success") {
             setInvoices(data);
-            setFilteredInvoices(data);
+            let today = new Date();
+            if (fromType === 'lastMonth') {
+                let lastMonth = new Date();
+                lastMonth.setMonth(today.getMonth() - 1);
+                setFromDate(lastMonth);
+            } else if (fromType === 'all') {
+                let lastYear = new Date();
+                lastYear.setFullYear(today.getFullYear() - 1);
+                setFromDate(lastYear);
+            }
+            // setFilteredInvoices(data);
         }
-    }, [data, status]);
+    }, [data, status, fromType]);
 
     const filterInvoices = () => {
         let filtered = invoices?.filter((item: any) => item.invoiceStatus === activeTab) || [];
+        filtered = filtered.filter((item: any) => {
+            const invoiceDate = new Date(item.invoiceDate);
+            const isWithinDateRange = invoiceDate >= fromDate && invoiceDate <= toDate;
+            return isWithinDateRange;
+        });
         if (selectedValue) {
-            filtered = filtered.filter((item: any) => {
-                const invoiceDate = new Date(item.invoiceDate);
-                const isWithinDateRange = invoiceDate >= fromDate && invoiceDate <= toDate
-                return item.branch === selectedValue && isWithinDateRange;
-            });
+            filtered = filtered.filter((item: any) => item.branch === selectedValue);
         }
         setFilteredInvoices(filtered);
     };
@@ -152,7 +164,7 @@ const MyInvoices = () => {
                         <MaterialCommunityIcons name="receipt" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
 
-                    <View className="flex-row justify-between my-4">
+                    {/* {/* <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
                             <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
@@ -166,6 +178,13 @@ const MyInvoices = () => {
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
                         )}
+                    </View> */}
+
+                    <View className="bg-gray-200 rounded-lg mt-4 mb-3">
+                        <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
+                            <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
+                            <Picker.Item label={i18n.t("All")} value="all" />
+                        </Picker>
                     </View>
 
                     <View className="border border-gray-300 rounded-lg mb-4">

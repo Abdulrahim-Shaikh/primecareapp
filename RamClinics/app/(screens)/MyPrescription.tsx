@@ -39,6 +39,7 @@ const MyPrescription = () => {
     )
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
+    const [fromType, setFromType] = useState("lastMonth");
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
     const [showFromPicker, setShowFromPicker] = useState(false);
@@ -66,12 +67,13 @@ const MyPrescription = () => {
 
     const filterPrescription = () => {
         let filtered = prescription?.filter((item: any) => item.invoiceStatus === activeTab) || [];
+        filtered = filtered.filter((item: any) => {
+            const invoiceDate = new Date(item.invoiceDate);
+            const isWithinDateRange = invoiceDate >= fromDate && invoiceDate <= toDate
+            return isWithinDateRange;
+        });
         if (selectedValue) {
-            filtered = filtered.filter((item: any) => {
-                const invoiceDate = new Date(item.invoiceDate);
-                const isWithinDateRange = invoiceDate >= fromDate && invoiceDate <= toDate
-                return item.branch === selectedValue && isWithinDateRange;
-            });
+            filtered = filtered.filter((item: any) => item.branch === selectedValue);
         }
         setFilteredPrescription(filtered);
     };
@@ -81,12 +83,22 @@ const MyPrescription = () => {
     const { data, status, isLoading } = prescriptionService.byPatientIds(userId);
 
     useEffect(() => {
-        console.log('API response', data, status);
+        // console.log('API response', data, status);
         if (data && status === "success") {
             setPrescription(data);
-            setFilteredPrescription(data);
+            let today = new Date();
+            if (fromType === 'lastMonth') {
+                let lastMonth = new Date();
+                lastMonth.setMonth(today.getMonth() - 1);
+                setFromDate(lastMonth);
+            } else if (fromType === 'all') {
+                let lastYear = new Date();
+                lastYear.setFullYear(today.getFullYear() - 1);
+                setFromDate(lastYear);
+            }
+            // setFilteredPrescription(data);
         }
-    }, [data, status]);
+    }, [data, status, fromType]);
 
     useEffect(() => {
         fetchData();
@@ -135,7 +147,7 @@ const MyPrescription = () => {
                         />
                     </View>
 
-                    <View className="flex-row justify-between my-4">
+                    {/* <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
                             <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
@@ -149,6 +161,13 @@ const MyPrescription = () => {
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
                         )}
+                    </View> */}
+
+                    <View className="bg-gray-200 rounded-lg mt-4 mb-3">
+                        <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
+                            <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
+                            <Picker.Item label={i18n.t("All")} value="all" />
+                        </Picker>
                     </View>
 
                     <View className="border border-gray-300 rounded-lg mb-4">

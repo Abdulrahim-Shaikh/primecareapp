@@ -42,6 +42,7 @@ const MyVitalSigns = () => {
     )
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
+    const [fromType, setFromType] = useState("lastMonth");
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
     const [showFromPicker, setShowFromPicker] = useState(false);
@@ -72,21 +73,32 @@ const MyVitalSigns = () => {
     const { data, status, isLoading } = vitalSignsService.vitalSignsByPatientIds(userId);
 
     useEffect(() => {
-        console.log('API response', data, status);
+        // console.log('API response', data, status);
         if (data && status === "success") {
             setVitalSigns(data);
-            setFilteredVitalSigns(data);
+            let today = new Date();
+            if (fromType === 'lastMonth') {
+                let lastMonth = new Date();
+                lastMonth.setMonth(today.getMonth() - 1);
+                setFromDate(lastMonth);
+            } else if (fromType === 'all') {
+                let lastYear = new Date();
+                lastYear.setFullYear(today.getFullYear() - 1);
+                setFromDate(lastYear);
+            }
+            // setFilteredVitalSigns(data);
         }
-    }, [data, status]);
+    }, [data, status, fromType]);
 
     const filterVitalSigns = () => {
         let filtered = vitalSigns?.filter((item: any) => item.status === activeTab) || [];
+        filtered = filtered.filter((item: any) => {
+            const createdDate = new Date(item.createdDate);
+            const isWithinDateRange = createdDate >= fromDate && createdDate <= toDate
+            return isWithinDateRange;
+        });
         if (selectedValue) {
-            filtered = filtered.filter((item: any) => {
-                const createdDate = new Date(item.createdDate);
-                const isWithinDateRange = createdDate >= fromDate && createdDate <= toDate
-                return item.branchName === selectedValue && isWithinDateRange;
-            });
+            filtered = filtered.filter((item: any) => item.branchName === selectedValue);
         }
         setFilteredVitalSigns(filtered);
     };
@@ -136,7 +148,7 @@ const MyVitalSigns = () => {
                         />
                     </View>
 
-                    <View className="flex-row justify-between my-4">
+                    {/* <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
                             <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
@@ -150,6 +162,13 @@ const MyVitalSigns = () => {
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
                         )}
+                    </View> */}
+
+                    <View className="bg-gray-200 rounded-lg mt-4 mb-3">
+                        <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
+                            <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
+                            <Picker.Item label={i18n.t("All")} value="all" />
+                        </Picker>
                     </View>
 
                     <View className="border border-gray-300 rounded-lg mb-4">

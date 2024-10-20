@@ -44,13 +44,6 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
             </View>
           </View>
         )}
-        {/* {iconName === "message" && (
-          <AntDesign
-            name="message1"
-            size={20}
-            color={focused ? "white" : "rgb(59, 35, 20)"}
-          />
-        )} */}
         {iconName === "calendar-check-outline" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
@@ -110,7 +103,7 @@ const TabLayout = () => {
           tabBarLabelStyle: {
             fontSize: 11,
             color: "white",
-            paddingBottom: Platform.OS === 'ios' ? 0 : 10,
+            paddingBottom: Platform.OS === 'ios' ? 6 : 10,
           },
 
           tabBarBadgeStyle: {
@@ -118,8 +111,9 @@ const TabLayout = () => {
 
           tabBarStyle: {
             backgroundColor: "rgb(59, 35, 20)",
-            height: Platform.OS === 'ios' ? 124 : 110,
+            height: Platform.OS === 'ios' ? 100 : 90,
             marginTop: Platform.OS === 'ios' ? -35 : 0,
+            paddingTop: Platform.OS === 'ios' ? 0 : 12,
             borderTopEndRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopLeftRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopWidth: 0,
@@ -138,18 +132,7 @@ const TabLayout = () => {
           }}
         />
 
-        {/* <Tabs.Screen
-          name="Chat"
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="message" focused={focused} />
-            ),
-          }}
-        /> */}
-
-        {/* {
-            useUserSate.getState().loggedIn && ( */}
+        {/* { useUserSate.getState().loggedIn && ( */}
         <Tabs.Screen
           name="MyAppoinment"
           options={{
@@ -167,9 +150,40 @@ const TabLayout = () => {
           name="BookAppointment"
           options={{
             headerShown: false,
-            title: Platform.OS === 'ios' ? i18n.t("BookAppoint") : "",
+            title: Platform.OS === 'ios' ? "" : "",
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="book-app" focused={focused} />
+              // <TabIcon iconName="book-app" focused={focused} />
+              <View style={[
+                Platform.OS === 'ios' ? {
+                //aiphone
+                width: 80,
+                height: 80,
+                borderWidth: 3,
+                borderRadius:50,
+                borderColor: "rgb(59, 35, 20)",
+                backgroundColor: focused? "rgb(132, 204, 22)" : "white",
+                justifyContent: 'center',
+                alignItems: 'center',
+                shadowColor: 'black', 
+                shadowOffset: { width: 0, height: -5 }, 
+                shadowOpacity: 0.15,
+                shadowRadius: 3.84, 
+                bottom: 0,
+                } : {
+                //yandroid
+                width: 75,
+                height: 75,
+                borderWidth: 3,
+                borderRadius: 10,
+                borderColor: "rgb(59, 35, 20)",
+                backgroundColor: focused? "rgb(132, 204, 22)" : "white",
+                justifyContent: 'center',
+                alignItems: 'center',
+                bottom: 10,
+                }]}>
+                {/* <FontAwesome className="text-center pl-0.5" name="calendar-plus-o" s ize={40} color={focused ? "white" : "rgb(59, 35, 20)"} /> */}
+                <Text className={`font-black text-lg text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>Book Appoint ment</Text>
+              </View>
             ),
           }}
         />
@@ -210,7 +224,7 @@ const styles = StyleSheet.create({
   },
   iconBg: {
     alignItems: 'center',
-    paddingTop: Platform.OS === 'ios' ? 24 : 0,
+    paddingTop: Platform.OS === 'ios' ? 16 : 0,
   },
   iconBgBook: {
     alignItems: 'center',

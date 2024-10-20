@@ -27,6 +27,7 @@ const MyApprovals = () => {
     const tabNames = ["Pending", "Approved", "Cancelled"];
     const [patient, setPatient] = useState([]);
     const [fromDate, setFromDate] = useState(new Date());
+    const [fromType, setFromType] = useState("lastMonth");
     const [toDate, setToDate] = useState(new Date());
     const [branches, setBranches] = useState([]);
     const [showFromPicker, setShowFromPicker] = useState(false);
@@ -63,6 +64,19 @@ const MyApprovals = () => {
         setShowToPicker(false);
         setToDate(currentDate);
     };
+
+    useEffect(() => {
+        let today = new Date();
+        if (fromType === 'lastMonth') {
+            let lastMonth = new Date();
+            lastMonth.setMonth(today.getMonth() - 1);
+            setFromDate(lastMonth);
+        } else if (fromType === 'all') {
+            let lastYear = new Date();
+            lastYear.setFullYear(today.getFullYear() - 1);
+            setFromDate(lastYear);
+        }
+    }, [fromType]);
 
     const setMrNo = () => {
         patient.forEach((patnt: any) => {
@@ -126,7 +140,7 @@ const MyApprovals = () => {
                         <MaterialCommunityIcons name="receipt" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
 
-                    <View className="flex-row justify-between my-4">
+                    {/* <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 border border-indigo-950 p-3 rounded-lg mr-2">
                             <Text className="text-lg">{i18n.t("From: ")}{moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
@@ -140,6 +154,13 @@ const MyApprovals = () => {
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
                         )}
+                    </View> */}
+
+                    <View className="bg-gray-200 rounded-lg mt-4 mb-3">
+                        <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
+                            <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
+                            <Picker.Item label={i18n.t("All")} value="all" />
+                        </Picker>
                     </View>
 
                     <View className="border border-indigo-950 rounded-lg mb-4">
@@ -152,7 +173,7 @@ const MyApprovals = () => {
                         </Picker>
                     </View>
 
-                    <Pressable onPress={() => search()} className="flex-1 bg-[rgb(59,35,20)] p-3 rounded-lg mt-2 mb-4">
+                    <Pressable onPress={() => search()} className="flex-1 bg-[rgb(59,35,20)] p-3 rounded-lg mb-6">
                         <Text className="text-lg text-white text-center"> {i18n.t("search")} </Text>
                     </Pressable>
 

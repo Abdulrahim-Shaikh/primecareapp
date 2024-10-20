@@ -39,6 +39,7 @@ const MyRadialogy = () => {
     )
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
+    const [fromType, setFromType] = useState("lastMonth");
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
     const [showFromPicker, setShowFromPicker] = useState(false);
@@ -70,21 +71,33 @@ const MyRadialogy = () => {
     const { data, status, isLoading } = radialogyService.byPatientIds(userId);
 
     useEffect(() => {
-        console.log('API response', data, status);
+        // console.log('API response', data, status);
         if (data && status === "success") {
             setRadialogy(data);
-            setFilteredRadialogy(data);
+            let today = new Date();
+            if (fromType === 'lastMonth') {
+                let lastMonth = new Date();
+                lastMonth.setMonth(today.getMonth() - 1);
+                setFromDate(lastMonth);
+            } else if (fromType === 'all') {
+                let lastYear = new Date();
+                lastYear.setFullYear(today.getFullYear() - 1);
+                setFromDate(lastYear);
+            }
+            // setFilteredRadialogy(data);
         }
-    }, [data, status]);
+    }, [data, status, fromType]);
 
     const filterRadialogy = () => {
-        let filtered = radialogy?.filter((item: any) => item.status === activeTab) || [];
+        // let filtered = radialogy?.filter((item: any) => item.status === activeTab) || [];
+        let filtered: any = [];
+        filtered = radialogy?.filter((item: any) => {
+            const orderDate = new Date(item.orderDate);
+            const isWithinDateRange = orderDate >= fromDate && orderDate <= toDate;
+            return isWithinDateRange;
+        });
         if (selectedValue) {
-            filtered = filtered.filter((item: any) => {
-                const orderDate = new Date(item.orderDate);
-                const isWithinDateRange = orderDate >= fromDate && orderDate <= toDate
-                return item.branchName === selectedValue && isWithinDateRange;
-            });
+            filtered = radialogy?.filter((item: any) => item.branchName === selectedValue);
         }
         setFilteredRadialogy(filtered);
     };
@@ -104,7 +117,7 @@ const MyRadialogy = () => {
 
     useEffect(() => {
         filterRadialogy();
-    }, [fromDate, toDate, selectedValue, activeTab, radialogy]);
+    }, [fromDate, toDate, selectedValue, radialogy]);
 
     const openModal = async (radialogy: any) => {
         setSelectedRadialogy(radialogy);
@@ -136,7 +149,7 @@ const MyRadialogy = () => {
                         />
                     </View>
 
-                    <View className="flex-row justify-between my-4">
+                    {/* <View className="flex-row justify-between my-4">
                         <Pressable onPress={() => setShowFromPicker(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
                             <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
                         </Pressable>
@@ -150,6 +163,13 @@ const MyRadialogy = () => {
                         {showToPicker && (
                             <DateTimePicker value={toDate} mode="date" display="default" onChange={onChangeTo} />
                         )}
+                    </View> */}
+
+                    <View className="bg-gray-200 rounded-lg mt-4 mb-3">
+                        <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
+                            <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
+                            <Picker.Item label={i18n.t("All")} value="all" />
+                        </Picker>
                     </View>
 
                     <View className="border border-gray-300 rounded-lg mb-4">
@@ -167,7 +187,7 @@ const MyRadialogy = () => {
                         </Picker>
                     </View>
 
-                    <View className="flex-row justify-between mb-4">
+                    {/* <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
                             <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-lime-600" : "border-transparent"}`}>
                                 <Text className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : "text-gray-700"}`}>
@@ -175,7 +195,7 @@ const MyRadialogy = () => {
                                 </Text>
                             </Pressable>
                         ))}
-                    </View>
+                    </View> */}
 
                     <View>
                         {isLoading ? (
