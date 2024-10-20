@@ -18,6 +18,10 @@ export class ResourceService extends RestService<any> {
         return this.get(`getResourceByLiveSlotSpeciality/?specialityCode=${specialityCode}&date=${date}&branch=${branch}&shiftType=${shiftType}&city=${city}&deviceCode=${deviceCode}&responsible=${responsible}`);
     }
 
+    getAllDoctorsByDesignation(designation: string) {
+        return this.get(`getAllDoctorsByDesignation/${designation}`);
+    }
+
 }
 const resourceService = new ResourceService('resource');
 export default resourceService;

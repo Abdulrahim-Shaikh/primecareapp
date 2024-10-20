@@ -11,6 +11,8 @@ import { useUserSate } from "../../domain/state/UserState";
 import branchService from "../../domain/services/BranchService";
 import slotService from "../../domain/services/SlotService";
 import appointmentService from "../../domain/services/AppointmentService";
+import { useBranches } from "../../domain/contexts/BranchesContext";
+import { Calendar } from "react-native-calendars";
 
 const Separator = () => <View style={styles.separator} />;
 const styles = StyleSheet.create({
@@ -31,6 +33,7 @@ const DoctorSelect = () => {
     const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
     const [searchDate, setSearchDate] = useState(moment(slotSearchDate).toDate());
     const [loggedIn, setLoggedIn] = useState(useUserSate.getState().loggedIn);
+    const { branches, setBranches } = useBranches();
 
     useEffect(() => {
         console.log("doctorList: ", doctorList)
@@ -48,6 +51,7 @@ const DoctorSelect = () => {
 
         slotService.slotsByIds(slotGroupIds)
             .then((response) => {
+                console.log("response.data: ", response.data)
                 let app: any = {}
                 app.slots = [...response.data]
                 let start, end;
@@ -86,8 +90,11 @@ const DoctorSelect = () => {
                             slot.status = 'busy';
                         }
                         slots.push({
-                            slotId: slot.id, status: slot.status,
-                            slotName: slot.slotName, startTime: slot.startTime, endTime: slot.endTime
+                            slotId: slot.id, 
+                            status: slot.status,
+                            slotName: slot.slotName, 
+                            startTime: slot.startTime, 
+                            endTime: slot.endTime
                         });
                     });
                 }
@@ -95,6 +102,8 @@ const DoctorSelect = () => {
                 app.history = [];
                 app.createdBy = useUserSate.getState().user.name;
                 app.createdDate = today;
+                app.source = "CallCenter - PrimeCare Mobile App"
+                app.flowType = "CallCenter - NewFlow"
                 let history: any = {};
                 history.status = "Booked";
                 history.updatedBy = useUserSate.getState().user.name;
@@ -114,13 +123,29 @@ const DoctorSelect = () => {
                         if (Object.keys(response.data).length > 0) {
                             Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!')
                         } else {
+                            console.log("app: ", app)
+                            // appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", app)
+                            // .then((response) => {
+                            //     // setLoader(false)
+                            //     Alert.alert('Success', 'Appointment has been booked successfully', [
+                            //         {
+                            //             text: 'OK',
+                            //             style: 'default'
+                            //         },
+                            //     ],
+                            //     )
+                            // })
+                            // .catch((error) => {
+                            //     // setLoader(false)
+                            //     console.log("appointmentService error", error)
+                            // })
                             appointmentService.save(app)
                                 .then((response: any) => {
                                     console.log("appointmentService.save: ", response)
                                     Alert.alert('Appointment booked', 'Appointment has booked successfully!')
-                                    Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
-                                        { text: 'OK', onPress: () => router.push('/index'), style: 'default' },
-                                    ])
+                                    // Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
+                                    //     { text: 'OK', onPress: () => router.push('/index'), style: 'default' },
+                                    // ])
                                 })
                                 .catch((error: any) => {
                                     console.log("appointmentService.save error: ", error)

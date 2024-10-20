@@ -13,6 +13,15 @@ export class AppointmentService extends RestService<any> {
     getAppointmentsBySlotId(slots: any[], branchId: string, apptDate: string, practitionerId: string,){
         return this.post(`getAppointmentsBySlotId?branchId=${branchId}&apptDate=${apptDate}&practitionerId=${practitionerId}`, slots);
     }
+
+    bookAppointmentBySource(source: any, flowType: any, appointment: any) {
+        return this.post(`bookAppointmentBySource/${source}/${flowType}`, appointment);
+    }
+
+    appointmentsByDate(branchId: any, fromDate: any, toDate: any, patientId: any, mrno: any, status: any) {
+        return this.get(`appointmentsByDate/${branchId}/${fromDate}/${toDate}/${patientId}/${mrno}/${status}`);
+    }
+
 }
 
 const appointmentService = new AppointmentService('appointment');

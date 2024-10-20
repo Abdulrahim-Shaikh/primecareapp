@@ -12,6 +12,8 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
+import { Ionicons } from "@expo/vector-icons";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -19,23 +21,24 @@ i18n.enableFallback = true;
 
 const BranchPage = () => {
 
-    const { city, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception } = useLocalSearchParams();
-    const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
-    const [branches, setBranches] = useState([]);
-    const [searchValue, setSearchValue] = useState('');
+    const { city, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception, callCenterDoctorFlow } = useLocalSearchParams();
+    const [ devicesList, setDevicesList ] = useState(JSON.parse(devices.toString()));
+    const [ branchesData, setBranchesData ] = useState([]);
     const { language, changeLanguage } = useLanguage();
-    const [locale, setLocale] = useState(i18n.locale);
-  
+    const [ locale, setLocale ] = useState(i18n.locale);
+    const { branches, changeBranches } = useBranches();
+
     const changeLocale = (locale: any) => {
-      i18n.locale = locale;
-      setLocale(locale);
+        i18n.locale = locale;
+        setLocale(locale);
     }
-  
+
     useFocusEffect(
-      useCallback(() => {
-        changeLocale(language)
-        changeLanguage(language)
-      }, [])
+        useCallback(() => {
+            console.log("branches.length: ", branches.length)
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
     )
 
     useEffect(() => {
@@ -50,67 +53,77 @@ const BranchPage = () => {
             const getBranchBySpecialityCity = async () => {
                 let response = await resourceService.getBranchBySpecialityCity(specialityCode, city, deviceCode)
                 console.log("getBranchBySpecialityCity response.data: ", response.data)
-                setBranches(response.data)
+                setBranchesData(response.data)
             }
             getBranchBySpecialityCity()
         } else {
             if (city == null || city == "" || city.length == 0) {
-                console.log("department: ", department)
-                console.log("speciality: ", speciality)
-                branchService.findAll().then((res) => {
-                    console.log("\n\n\nbranches: ", res.data)
-                    setBranches(res.data);
-                }).catch((error) => {
-                    console.log("branchService.findAll() error", error);
-                })
+                if (branches != null) {
+                    setBranchesData(branches);
+                }
             } else {
                 branchService.getAllBranchesInCity(city).then((res) => {
-                    console.log("\n\nbranches: ", res.data)
-                    setBranches(res.data);
+                    let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled)
+                    setBranchesData(newCallCenterEnabledBranches);
                 });
             }
         }
     }, []);
 
     function selectCity(item: any) {
-        if (+callCenterFlow) {
+        if (+callCenterDoctorFlow) {
             router.push({
-                pathname: "/ShiftAndGenderOptions",
+                pathname: "/DoctorSpecialityPage",
                 params: {
-                    city: city,
-                    branch: item,
+                    branchId: item.id,
                     fromSpeciality: fromSpeciality,
-                    department: null,
-                    speciality: speciality,
-                    specialityCode: specialityCode,
-                    callCenterFlow: callCenterFlow,
-                    devices: devices,
-                    responsible: responsible,
-                    callOrReception: callOrReception
+                    department: department,
+                    callCenterFlow: 0,
+                    callCenterDoctorFlow: callCenterDoctorFlow
                 }
             })
         } else {
-            if (+fromSpeciality) {
+            if (+callCenterFlow) {
                 router.push({
-                    pathname: "/BranchDoctor",
+                    pathname: "/ShiftAndGenderOptions",
                     params: {
-                        branchId: item.id,
+                        city: city,
+                        branch: item,
                         fromSpeciality: fromSpeciality,
                         department: null,
-                        speciality: speciality
+                        speciality: speciality,
+                        specialityCode: specialityCode,
+                        callCenterFlow: callCenterFlow,
+                        devices: devices,
+                        responsible: responsible,
+                        callOrReception: callOrReception
                     }
                 })
             } else {
-                console.log("\n\n\ngoing from branch page to doctorSpeciality page")
-                router.push({
-                    pathname: "/DoctorSpecialityPage",
-                    params: {
-                        branchId: item.id,
-                        fromSpeciality: fromSpeciality,
-                        department: department,
-                        callCenterFlow: 0
-                    }
-                })
+                if (+fromSpeciality) {
+                    router.push({
+                        pathname: "/BranchDoctor",
+                        params: {
+                            branchId: item.id,
+                            fromSpeciality: fromSpeciality,
+                            department: null,
+                            specialityCode: item.code,
+                            speciality: speciality,
+                            callCenterDoctorFlow: 0
+                        }
+                    })
+                } else {
+                    router.push({
+                        pathname: "/DoctorSpecialityPage",
+                        params: {
+                            branchId: item.id,
+                            fromSpeciality: fromSpeciality,
+                            department: department,
+                            callCenterFlow: 0,
+                            callCenterDoctorFlow: 0
+                        }
+                    })
+                }
             }
         }
     }
@@ -120,25 +133,37 @@ const BranchPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Select Branch")} isPushBack={true} />
-                {/* <View className="pt-8">
-                    <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
-                </View> */}
                 <View className="flex-1 pt-6 space-y-4 ">
+                    <View className="flex flex-row pl-2 pb-4">
+                        {/* <View>
+                            <Text>Skip</Text>
+                        </View> */}
+                        <View>
+                            <Ionicons
+                                name="chevron-forward"
+                                color={"#000000"}
+                                size={20}
+                            />
+                        </View>
+                    </View>
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
-                        data={branches}
+                        data={branchesData}
                         keyExtractor={(item: any, index) => "key" + index}
                         renderItem={({ item }) => (
                             <View className="w-full">
                                 <Pressable
                                     className="flex flex-row border border-pc-primary rounded-lg p-4 shadow-sm bg-white"
-                                    onPress={() => selectCity(item)}>
+                                    onPress={() => {
+                                        typeof item === 'string' ? selectCity(item) : selectCity(item)
+                                    }
+                                    }>
                                     <View className="rounded-smg bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <Image source={logoRamClinic} style={{ width: 50, height: 50 }} />
                                     </View>
                                     <View className="px-4 flex justify-center">
                                         {
-                                            +callCenterFlow
+                                            typeof item === 'string'
                                                 ?
                                                 <Text className="font-semibold text-lg text-gray-800">
                                                     {item}

@@ -21,6 +21,13 @@ import moment from 'moment';
 import branchService from "../../domain/services/BranchService";
 import { useUserSate } from "../../domain/state/UserState";
 import { Picker } from "@react-native-picker/picker";
+import { Calendar } from "react-native-calendars";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+import scheduleService from "../../domain/services/ScheduleService";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
 
 const styles = StyleSheet.create({
     dropdownButtonStyle: {
@@ -70,19 +77,27 @@ const styles = StyleSheet.create({
     },
 });
 
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
+
+
 const ScheduleAppointment = () => {
     let loggedIn = useUserSate.getState().loggedIn;
     const router = useRouter();
-    const { branchId, department, speciality, doctor, date, params, patientData, patientPolicyData } = useLocalSearchParams();
+    const { branchId, department, speciality, doctor, resourceId, date, params, patientData, patientPolicyData } = useLocalSearchParams();
 
     // const doctorScheduleData = params ? JSON.parse(params.toString()) : {}
     const [doctorScheduleData, setDoctorScheduleData] = useState(params ? JSON.parse(params.toString()) : {})
     const [patientDataJson, setPatientDataJson] = useState(patientData ? JSON.parse(patientData.toString()) : {})
     const [fromDate, setFromDate] = useState(new Date())
     const [toDate, setToDate] = useState(new Date())
+    const [slotSearchDate, setSlotSearchDate] = useState(new Date());
+    const [dateString, setDateString] = useState(moment(new Date()).format("YYYY-MM-DD"));
     const [patientPolicyDataJson, setPatientPolicyDataJson] = useState(patientPolicyData ? JSON.parse(patientPolicyData.toString()) : {})
     // const defaultStatus = doctorScheduleData.status ? doctorScheduleData.status : "Booked"
     const [slots, setSlots] = useState([])
+    const [loader, setLoader] = useState(false)
     const [defaultStatus, setDefaultStatus] = useState(doctorScheduleData.status ? doctorScheduleData.status : "Booked")
     const [day, setDay] = useState("1");
     const [selectedSlot, setSelectedSlot] = useState<any>()
@@ -92,6 +107,8 @@ const ScheduleAppointment = () => {
     const [slotName, setSlotName] = useState("");
     const [branchName, setBranchName] = useState("");
     const [selectedSlots, setSelectedSlots] = useState(new Set<number>());
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
 
 
     let fromDateAux = new Date();
@@ -99,6 +116,17 @@ const ScheduleAppointment = () => {
 
     useEffect(() => {
         setSelectedSlots(new Set<number>())
+        console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nparams: ", params)
+        if (params == null || params == "" || params.length <= 0) {
+            Alert.alert('Note', 'Doctor Schedule not found', [
+                {
+                    text: 'BACK',
+                    onPress: () => router.back(),
+                    style: 'default'
+                },
+            ],
+            )
+        }
         let slotsAux: any = Object.values(JSON.parse(params.toString()).slots)[0]
         if (slotsAux == null || slotsAux.length <= 0) {
             Alert.alert('Note', 'No slots found for this date and doctor', [
@@ -112,15 +140,32 @@ const ScheduleAppointment = () => {
         } else {
             console.log("\n\n\n\nslotsAux: ", slotsAux)
             slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
-            slotsAux.forEach((slot: any) => {slot.selected = false})
             let validSlots: any = []
+            let tempDate = moment(slotSearchDate).format("YYYY-MM-DD")
+            let currentTimeInstance = moment();
+            slotsAux.forEach((slot: any) => {
+                console.log("\n\n\nslot: ", slot.startTime)
+                if (moment(moment(`${tempDate} ${slot.startTime.trim()}`, "YYYY-MM-DD hh:mm A")).isSameOrAfter(moment(currentTimeInstance))) {
+                    validSlots.push(slot)
+                }
+                slot.selected = false
+            })
+            if (validSlots == null || validSlots.length <= 0) {
+                console.log("empty valid slots")
+                setSlots([])
+            } else {
+                let sortedTimeSlots = slotsAux.sort((a: any, b: any) => {
+                    return moment(`${date} ${a.startTime.trim()}`, "YYYY-MM-DD hh:mm A").diff(moment(`${date} ${b.startTime.trim()}`, "YYYY-MM-DD hh:mm A"))
+                })
+                setSlots(sortedTimeSlots)
+            }
+
             // for (let slot of slotsAux) {
             //     const currentTimeInstance = moment();
             //     const slotTimeInstance = moment(`${date} ${slot.trim()}`, "YYYY-MM-DD hh:mm A");
             //     if (moment(slotTimeInstance).isAfter(currentTimeInstance)) {
             //     }
             // }
-            setSlots(slotsAux)
             setDoctorScheduleData(JSON.parse(params.toString()))
             if (patientData == null || patientData == "" || patientData.length <= 0) {
                 Alert.alert('Patient Not Found', 'You need to Sign in first', [
@@ -155,7 +200,67 @@ const ScheduleAppointment = () => {
         }
     }, [])
 
+
+    function onDateChange(selectedDate: any) {
+        let timestamp = new Date(selectedDate.timestamp)
+        setSlotSearchDate(new Date(selectedDate.timestamp))
+        setDateString(moment(selectedDate.timestamp).format("YYYY-MM-DD"))
+        let requestBody: any = [{
+            date: dateString,
+            day: +moment(timestamp).format("D"),
+            resourceIds: [resourceId],
+            wday: moment(timestamp).format("dddd").substring(0, 3)
+        }]
+        scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
+            .then((response) => {
+                console.log("recieved")
+                setDoctorScheduleData(response.data[0])
+                let slotsAux: any = Object.values(JSON.parse(params.toString()).slots)[0]
+                if (slotsAux == null || slotsAux.length <= 0) {
+                    Alert.alert('Note', 'No slots found for this date and doctor', [
+                        {
+                            text: 'BACK',
+                            onPress: () => router.back(),
+                            style: 'default'
+                        },
+                    ],
+                    )
+                } else {
+                    slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
+                    console.log("sssslotsAux: ", slotsAux)
+                    let validSlots: any = []
+                    let tempDate = moment(new Date(selectedDate.timestamp)).format("YYYY-MM-DD")
+                    let currentTimeInstance = moment();
+                    slotsAux.forEach((slot: any) => {
+                        console.log("\n\n\nslot: ", slot.startTime)
+                        if (moment(moment(`${tempDate} ${slot.startTime.trim()}`, "YYYY-MM-DD hh:mm A")).isSameOrAfter(moment(currentTimeInstance))) {
+                            validSlots.push(slot)
+                        }
+                        slot.selected = false
+                    })
+                    if (validSlots == null || validSlots.length <= 0) {
+                        console.log("empty valid slots")
+                        setSlots([])
+                    } else {
+                        setSlots(validSlots)
+                    }
+                }
+            })
+            .catch((err) => {
+                Alert.alert('Note', 'Doctor Schedule not found', [
+                    {
+                        text: 'OK',
+                        style: 'default',
+                        onPress: () => router.back(),
+                    },
+                ],
+                )
+                console.log(err);
+            })
+    }
+
     function selectSlot(slot: any) {
+        console.log("slot: ", slot)
         setSelectedSlot(slot)
         setSlotStatus(slot.status)
         setSlotName(slot.slotName)
@@ -166,7 +271,7 @@ const ScheduleAppointment = () => {
             selectedSlots.delete(slot)
             setSelectedSlots(tempMap)
             if (loggedIn) {
-                bookAppointment()
+                bookAppointment(slot)
             } else {
                 Alert.alert('Patient Not Found', 'You need to Sign in first', [
                     {
@@ -186,7 +291,7 @@ const ScheduleAppointment = () => {
             tempMap.add(slot)
             setSelectedSlots(tempMap)
             if (loggedIn) {
-                bookAppointment()
+                bookAppointment(slot)
             } else {
                 Alert.alert('Patient Not Found', 'You need to Sign in first', [
                     {
@@ -206,23 +311,17 @@ const ScheduleAppointment = () => {
         console.log("selectedSlots: ", selectedSlots)
     }
 
-    function slotChange(selectedSlot: any) {
-        setSelectedSlot(selectedSlot)
-        setSlotStatus(selectedSlot.status)
-        setSlotName(selectedSlot.slotName)
-        setSlotStartTime(selectedSlot.startTime)
-        setSlotEndTime(selectedSlot.endTime)
-    }
-
     function statusChange(selectedStatus: any) {
         setDefaultStatus(selectedStatus)
     }
 
-    const bookAppointment = () => {
-        let today = moment().format("YYYY-MM-DDTHH:mm:ss");
+    const bookAppointment = (selectedSlot: any) => {
+        setLoader(true)
+        let today = (new Date()).toISOString();
         let scheduleId = Object.values(doctorScheduleData.scheduleId)[0]
         let aptDate = Object.values(doctorScheduleData.date)[0]
-        let appointmentDate = moment(aptDate ? aptDate : "").format("YYYY-MM-DDTHH:mm:ss")
+        let appointmentDate = moment(aptDate || "").format("YYYY-MM-DDTHH:mm:ss")
+        console.log("\n\n\npatientDataJson: ", patientDataJson)
 
         let temporaryPayload: any = {
             mrno: patientDataJson.mrno,
@@ -232,18 +331,18 @@ const ScheduleAppointment = () => {
             branchName: branchName,
             cardNo: patientPolicyDataJson.cardNo,
             className: patientPolicyDataJson.className,
-            createdBy: "ibrahim",
+            createdBy: patientDataJson.firstName + " " + patientDataJson.lastName,
             createdDate: today,
             department: department,
-            startTime: slotStartTime,
-            endTime: slotEndTime,
+            startTime: selectedSlot.startTime,
+            endTime: selectedSlot.endTime,
             gender: patientDataJson.gender,
             hisStatus: defaultStatus,
             history: [
                 {
                     status: defaultStatus,
-                    updatedBy: 'ibrahim',
-                    updatedDate: "2024-09-30T14:52:21.531Z"
+                    updatedBy: patientDataJson.firstName + " " + patientDataJson.lastName,
+                    updatedDate: today
                 }
             ],
             mobileNo: patientDataJson.mobileNumber,
@@ -258,20 +357,13 @@ const ScheduleAppointment = () => {
             remarks: null,
             requestByPatient: null,
             shift: null,
-            slots: [
-                // {
-                //     endTime: slotStartTime,
-                //     scheduleId: scheduleId,
-                //     slotId: 6900196,
-                //     slotName: slotName,
-                //     startTime: slotEndTime,
-                //     status: slotStatus
-                // }
-            ],
+            slots: [],
             speciality: speciality,
             status: 'pending',
             visitType: 'Checkup',
-            walkIn: null
+            walkIn: null,
+            source: "CallCenter - PrimeCare Mobile App",
+            flowType: "CallCenter - NewFlow",
         }
 
         if (selectedSlots != null && selectedSlots.size > 0) {
@@ -289,90 +381,60 @@ const ScheduleAppointment = () => {
 
         console.log("\n\n\ntemporaryPayloadd: ", temporaryPayload)
         console.log("\n\n\n")
-
-        let temporaryPayload2 = {
-            "mrno": "KHO-AQRPNT100001",
-            "patientId": "PNT100001",
-            "patientName": "Abdulrahim  Shaikh",
-            "gender": "Male",
-            "age": 21,
-            "mobileNo": "594951370",
-            "nationality": "India",
-            "department": "Dental",
-            "speciality": "General Dentist",
-            "appointmentDate": "2024-09-30T00:00:00",
-            "branchName": "Ram Buhairah",
-            "branchId": 593482,
-            "policyNo": "C0001",
-            "policyName": "Cash Plan",
-            "createdBy": "ibrahim",
-            "visitType": "Checkup",
-            "status": "pending",
-            "hisStatus": "Booked",
-            "slots": [
-                { "slotId": 6900196, "scheduleId": 6889360, "status": "busy", "slotName": "20:30-20:35", "startTime": "2024-09-30T20:30:00", "endTime": "2024-09-30T20:35:00" },
-            ],
-            "nationalId": null,
-            "practitionerName": "waari hussain",
-            "practitionerId": 25937,
-            "shift": null,
-            "walkIn": null,
-            "requestByPatient": null,
-            "remarks": null,
-            "history": [
-                { "status": "Booked", "updatedBy": "ibrahim", "updatedDate": "2024-09-30T14:52:21.531Z" }
-            ],
-            "startTime": "2024-09-30T20:30:00",
-            "endTime": "2024-09-30T20:45:00",
-            "className": null,
-            "cardNo": "0",
-            "createdDate": "2024-09-30T17:52:21"
-        }
-        // console.log("\n\n\ntemporaryPayload2: ", temporaryPayload2)
         console.log("\n\n\n")
+
+
+
+        // appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", temporaryPayload)
+        // .then((response) => {
+        //     console.log("hello")
+        //     setLoader(false)
+        //     Alert.alert('Success', 'Appointment has been booked successfully', [
+        //         {
+        //             text: 'OK',
+        //             style: 'default'
+        //         },
+        //     ],
+        //     )
+        // })
+        // .catch((error) => {
+        //     setLoader(false)
+        //     console.log("appointmentService error", error)
+        // })
 
         appointmentService.save(temporaryPayload)
             .then((response) => {
-                // console.log("response appointmentService save: ", response)
-
                 Alert.alert('Success', 'Appointment has been booked successfully', [
                     {
                         text: 'OK',
-                        // onPress: () => router.push({
-                        //     pathname: "/BookAppointment",
-                        // }),
                         style: 'default'
                     },
                 ],
                 )
-                // router.push({
-                //     pathname: "/BookAppointment",
-                // })
-                // console.log("appointmentService response: ", response)
             })
             .catch((error) => {
-                // router.push({
-                //     pathname: "/BookAppointment",
-                // })
                 console.log("appointmentService error", error)
             })
     }
 
     return (
         <SafeAreaView>
-            <ScrollView>
-                <View className="pt-8 px-6">
-                    <View className="flex flex-row justify-start items-center gap-4 pt-6">
-                        <MaterialCommunityIcons
-                            name="arrow-left"
-                            size={24}
-                            color={"rgb(132 204 22)"}
-                            onPress={() => router.back()}
+            <ScrollView className="p-6 pt-20">
+                <HeaderWithBackButton title="Schedule Appointment" isPushBack={true} />
+                <View className="py-4 gap-4 flex justify-center">
+                    <View style={{ flex: 1 }}>
+                        <Calendar
+                            current={moment(slotSearchDate).format('YYYY-MM-DD')}
+                            minDate={moment().format('YYYY-MM-DD')}
+                            markedDates={{
+                                [dateString]: { selected: true, marked: true, selectedColor: '#3B2314' },
+                            }}
+                            theme={{
+                                todayTextColor: 'rgb(132 204 22)',
+                            }}
+                            onDayPress={(day: any) => { setDateString(day.dateString); onDateChange(day) }}
                         />
-                        <Text className="text-2xl font-semibold">Schedule Appointment</Text>
                     </View>
-                </View>
-                <View className="py-8 gap-4 flex justify-center">
                     <View className="pl-2 pr-2">
                         <View className="p-4 border border-pc-primary rounded-2xl w-full mt-4" >
                             <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-pc-primary pb-4">
@@ -425,7 +487,7 @@ const ScheduleAppointment = () => {
                         </View>
                     </View>
 
-                    <View className="flex mt-3 flex-col px-8">
+                    <View className="flex mt-3 flex-col px-4">
                         {/* <View className="border rounded-xl mb-3">
                             <Picker
                                 selectedValue={selectedSlot} onValueChange={(itemValue) => { slotChange(itemValue); }} className="h-12 border border-pc-primary">
@@ -448,70 +510,50 @@ const ScheduleAppointment = () => {
 
 
                     <View>
-                        <FlatList
-                            data={slots}
-                            numColumns={3}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{ marginHorizontal: "auto" }}
-                            extraData={selectedSlots}
-                            renderItem={({item}) => {
-                                return (
-                                <View className="flex flex-row p-1 m-1 w-32 h-32">
-                                    <Pressable
-                                        onPress={() => {
-                                            Alert.alert('Doctor ' + doctor, 'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + " -\nSlot: " + item.slotName, [
-                                                {
-                                                    text: 'Confirm',
-                                                    onPress: () => {
-                                                        loggedIn ? selectSlot(item) : router.push("/SignIn");
-                                                    },
-                                                    style: 'default'
-                                                },
-                                                {
-                                                    text: 'Cancel',
-                                                    style: 'default'
-                                                },
-                                            ])
-                                            
-                                        }}
-                                        className={`border p-2 rounded-lg w-full ${selectedSlots.has(item)? "border-lime-500" : "border-pc-primary" }`}
-                                        >
-                                        <View className="py-2 items-center">
-                                            <Ionicons name="time" size={36} color={"#3B2314"} />
-                                        </View>
-                                        <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.slotName}</Text>
-                                    </Pressable>
-                                </View>
-                                )
-                            }}
-                        />
-                    </View>
+                        {
+                            slots.length <= 0 ?
+                                <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No slots available for selected date")}</Text>
+                                :
+                                <FlatList
+                                    data={slots}
+                                    numColumns={3}
+                                    showsHorizontalScrollIndicator={false}
+                                    contentContainerStyle={{ marginHorizontal: "auto" }}
+                                    extraData={selectedSlots}
+                                    renderItem={({ item }) => {
+                                        return (
+                                            <View className="flex flex-row p-1 m-1 w-32 h-32">
+                                                <Pressable
+                                                    onPress={() => {
+                                                        console.log("item: ", item)
+                                                        Alert.alert('Doctor ' + doctor, 'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + " -\nSlot: " + item.slotName, [
+                                                            {
+                                                                text: 'Confirm',
+                                                                onPress: () => {
+                                                                    loggedIn ? selectSlot(item) : router.push("/SignIn");
+                                                                },
+                                                                style: 'default'
+                                                            },
+                                                            {
+                                                                text: 'Cancel',
+                                                                style: 'default'
+                                                            },
+                                                        ])
 
-                    <View className="flex flex-col px-2">
-                        <TouchableOpacity onPress={
-                            () => {
-                                Alert.alert('Doctor ' + doctor, 'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + " -\nSlot: " + new Date(fromDate).toLocaleTimeString() + '  to  ' + new Date(toDate).toLocaleTimeString(), [
-                                    {
-                                        text: 'Confirm',
-                                        onPress: () => {
-                                            loggedIn ? bookAppointment() : router.push("/SignIn");
-                                        },
-                                        style: 'default'
-                                    },
-                                    {
-                                        text: 'Cancel',
-                                        style: 'default'
-                                    },
-                                ])
-                            }
+                                                    }}
+                                                    className={`border p-2 rounded-lg w-full ${selectedSlots.has(item) ? "border-lime-500" : "border-pc-primary"}`}
+                                                >
+                                                    <View className="py-2 items-center">
+                                                        <Ionicons name="time" size={36} color={"#3B2314"} />
+                                                    </View>
+                                                    <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item.slotName}</Text>
+                                                </Pressable>
+                                            </View>
+                                        )
+                                    }}
+                                />
                         }
-                            className="flex flex-row justify-between items-center pt-2 gap-4 ">
-                            <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                                Confirm Book
-                            </Text>
-                        </TouchableOpacity>
                     </View>
-
                 </View>
             </ScrollView>
         </SafeAreaView>

@@ -61,23 +61,28 @@ useFocusEffect(
                 callCenterFlow: 0,
                 devices: JSON.stringify(""),
                 responsible: "",
-                callOrReception: ""
+                callOrReception: "",
+                callCenterDoctorFlow: 0
             }
         },
         {
             id: 2,
             icon: 'doctor',
             title: "By Doctor",
-            link: "/SpecialistListPage",
-            params: { department: department }
+            link: "/CityPage",
+            params: { 
+                branchId: "",
+                fromSpeciality: fromSpeciality,
+                department: department,
+                callCenterFlow: 0,
+                specialiyCode: "",
+                speciality: "",
+                responsible: "",
+                devices: JSON.stringify(""),
+                callOrReception: "",
+                callCenterDoctorFlow: 1
+            }
         },
-        // {
-        //     id: 3,
-        //     icon: 'file-waveform',
-        //     title: "By Service",
-        //     link: "/NormalFlow",
-        //     params: { department: department }
-        // },
         {
             // id: 4,
             id: 3,
@@ -88,7 +93,8 @@ useFocusEffect(
                 branchId: "",
                 fromSpeciality: fromSpeciality,
                 department: department,
-                callCenterFlow: 1
+                callCenterFlow: 1,
+                callCenterDoctorFlow: 0
             }
         },
 

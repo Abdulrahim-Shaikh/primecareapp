@@ -154,7 +154,7 @@ const TabLayout = () => {
           name="MyAppoinment"
           options={{
             headerShown: false,
-            title: i18n.t('MyAppoinment'),
+            title: i18n.t('My Appointment'),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon iconName="calendar-check-outline" focused={focused} />
             ),

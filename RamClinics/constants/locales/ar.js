@@ -55,6 +55,7 @@ const translations = {
         "Upcoming Offers": "Upcoming Offers",
         "My Appoinments": "My Appointments",
         "My Appointments": "My Appointments",
+        "My Appointment": "My Appointment",
         "Book Appoinment": "Book Appointment",
         "Family Members": "Family Members",
         "Labrotary": "Laboratory",
@@ -199,6 +200,7 @@ const translations = {
         "Morning": "Morning",
         "Evening": "Evening",
         "Select Gender": "Select Gender",
+        "Search": "Search",
         "Edit Profile": "Edit Profile",
         "First Name": "First Name",
         "Last Name": "Last Name",
@@ -265,6 +267,7 @@ const translations = {
         "No specialities found": "No specialities found",
         "Select branch": "Select branch",
         "Appointment Type": "Appointment Type",
+        "No slots available for selected date": "No slots available for selected date",
 
 
     },
@@ -465,6 +468,7 @@ const translations = {
         "Morning": "صباح ",
         "Evening": "مساء",
         "Select Gender": "حدد الجنس",
+        "Search": "بحث",
         "Edit Profile": "تحرير الملف الشخصي",
         "First Name": "الاسم الأول",
         "Last Name": "اسم العائلة",
@@ -533,6 +537,8 @@ const translations = {
 
         //DoctorSpecialityPage
         "No specialities found": "لم يتم العثور على تخصصات",
+        "No slots available for selected date": "لا توجد فتحات متاحة للتاريخ المحدد",
+        "My Appointment": "موعدي",
 
     }
 }

@@ -193,9 +193,9 @@ const NormalFlow = () => {
             console.log("dateString: ", dateString)
             let requestBody: any = [{
                 date: dateString,
-                day: 2,
+                day: +moment(date).format("D"),
                 resourceIds: [resourceId],
-                wday: "Wed"
+                wday: moment(date).format("ddd")
             }]
             scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
                 .then((response) => {
@@ -527,6 +527,7 @@ const NormalFlow = () => {
                                                                     department: department,
                                                                     speciality: speciality,
                                                                     doctor: doctor,
+                                                                    resourceId: item.id,
                                                                     date: (new Date(date)).toString(),
                                                                     params: JSON.stringify(item),
                                                                     patientData: JSON.stringify(patientData),

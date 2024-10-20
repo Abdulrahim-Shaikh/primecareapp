@@ -33,6 +33,11 @@ type Props = {
   clinicHours: any;
   consultationFee: string;
   speciality: string;
+  specialityCode: string;
+  branchId: number;
+  fromSpeciality: string;
+  selectedSpecialityCode: string;
+  callCenterDoctorFlow: boolean;
 };
 
 const DoctorCard = ({
@@ -44,7 +49,12 @@ const DoctorCard = ({
   rating,
   clinicHours,
   consultationFee,
-  speciality
+  speciality,
+  specialityCode,
+  branchId,
+  fromSpeciality,
+  selectedSpecialityCode,
+  callCenterDoctorFlow
 }: Props) => {
 
   const BASE_URL = "http://16.24.11.104:8080/HISAdmin/api/resource/file/";
@@ -60,7 +70,7 @@ const DoctorCard = ({
   // const [doctorName, setDoctorName] = useState(null);
   const [mobile, setMobile] = useState("");
   // const [branchId, setBranchId] = useState("");
-  const [doctorScheduleData, setDoctorScheduleData] = useState(myAppoinmentData)
+  const [doctorScheduleData, setDoctorScheduleData] = useState([])
   const [patientData, setPatientData] = useState(useUserSate.getState().user)
   const [patientPolicyData, setPatientPolicyData] = useState({})
 
@@ -75,6 +85,9 @@ const DoctorCard = ({
 
   useFocusEffect(
     useCallback(() => {
+      console.log("speciality: ", speciality)
+      console.log("specialityCode: ", specialityCode)
+      console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
       changeLocale(language)
       changeLanguage(language)
     }, [])
@@ -89,43 +102,12 @@ const DoctorCard = ({
         if (useUserSate.getState().user.mobile != null) {
           const mobile = useUserSate.getState().user.mobile
           setMobile(useUserSate.getState().user.mobile)
-          // patientService.byMobileNo(mobile)
-          //   .then((response: any) => {
-          //     setPatientData(response.data[0])
-          //     patientPolicyService.byPatientId(response.data[0].id)
-          //       .then((response: any) => {
-          //         setPatientPolicyData(response.data[0])
-          //         // patientPolicyData = response.data[0]
-          //       })
-          //       .catch((error) => {
-          //         console.log("patientPolicyService.byPatientId() error: ", error)
-          //       })
-          //   })
-          //   .catch((error) => {
-          //     console.log("error: ", error)
-          //   })
         }
       }
       if (useUserSate.getState().user != null && useUserSate.getState().user.mobile != null) {
         const mobile = useUserSate.getState().user.mobile
         setMobile(useUserSate.getState().user.mobile)
         setPatientData(useUserSate.getState().user)
-        // patientService.byMobileNo(mobile)
-        //   .then((response: any) => {
-        //     setPatientData(response.data[0])
-        //     patientPolicyService.byPatientId(response.data[0].id)
-        //       .then((response: any) => {
-        //         setPatientPolicyData(response.data[0])
-        //         // patientPolicyData = response.data[0]
-        //       })
-        //       .catch((error) => {
-        //         console.log("patientPolicyService.byPatientId() error: ", error)
-        //       })
-        //   })
-        //   .catch((error) => {
-        //     console.log("error: ", error)
-        //   })
-
       }
     }, [])
   )
@@ -133,7 +115,7 @@ const DoctorCard = ({
 
   const getPatientPolicyData = async () => {
     console.log("user: ", user)
-    if (useUserSate.getState().loggedIn == false) {
+    if (!useUserSate.getState().loggedIn) {
       Alert.alert('Patient Not Found', 'You need to Sign in first', [
         {
           text: 'BACK',
@@ -151,8 +133,72 @@ const DoctorCard = ({
           // console.log("respponse: ", response.data[0])
           setPatientPolicyData(response.data[0])
           // console.log("patientPolicyData: ", patientPolicyData)
-          console.log("datePickerOpen")
-          setIsDatePickerOpen(true);
+          if (callCenterDoctorFlow) {
+            console.log("\n\n\n\n\n\n\n\n\nbranchId: ", branchId)
+
+            let visitTypes = []
+            console.log("department: ", department)
+            if (department == 'Dermatology') {
+              visitTypes = [
+                { subServiceNameEn: 'New service Appointment', callOrReception: 20 },
+                { subServiceNameEn: 'Consultation Appointment', callOrReception: 20 },
+                { subServiceNameEn: 'Follow up Appointment', callOrReception: 20 },
+                { subServiceNameEn: 'Emergency Appointment', callOrReception: 20 },
+              ]
+              router.push({
+                pathname: "/AppointmentType",
+                params: {
+                  branchId: branchId,
+                  city: null,
+                  fromSpeciality: fromSpeciality,
+                  department: department,
+                  callCenterFlow: 0,
+                  specialityCode: specialityCode,
+                  speciality: speciality,
+                  subServices: JSON.stringify(visitTypes),
+                  callCenterDoctorFlow: 1,
+                  resourceId: id
+                }
+              })
+            } else {
+              specialityService.getSpecialityServiceByDepartmentTest(department).then((response) => {
+                console.log("\n\n\nspecialityService.getSpecialityServiceByDepartmentTest response: ", response.data)
+                let specialityList = [...response.data];
+                console.log("specialityCode: ", selectedSpecialityCode)
+                let selectedDoctorSpeciality = specialityList.find(speciality => speciality.code == selectedSpecialityCode);
+                visitTypes = selectedDoctorSpeciality?.services[0].subServices;
+                console.log("visitTypes: ", visitTypes)
+                router.push({
+                  pathname: "/AppointmentType",
+                  params: {
+                    branchId: branchId,
+                    city: null,
+                    fromSpeciality: fromSpeciality,
+                    department: department,
+                    callCenterFlow: 0,
+                    specialityCode: specialityCode,
+                    speciality: speciality,
+                    subServices: JSON.stringify(visitTypes),
+                    callCenterDoctorFlow: 1,
+                    resourceId: id
+                  }
+                })
+              })
+              .catch((error) => {
+                Alert.alert('Note', 'Appointment types not found', [
+                    {
+                        text: 'OK',
+                        // onPress: () => router.back(),
+                        style: 'default'
+                    },
+                ],
+                )
+              })
+            }
+          } else {
+            console.log("datePickerOpen")
+            setIsDatePickerOpen(true);
+          }
         })
         .catch((error) => {
           console.log("patientPolicyService.byPatientId() error: ", error)
@@ -161,6 +207,7 @@ const DoctorCard = ({
   }
 
   const bookAppointment = () => {
+
     console.log("bookAppointment")
     if (patientData == null || Object.keys(patientData).length <= 0) {
       console.log("here")
@@ -193,7 +240,11 @@ const DoctorCard = ({
           .then((response) => {
             let speciality = response.data.speciality;
             let doctorName = response.data.name;
-            let branchId = response.data.branchId[0];
+
+            // need to be checked
+            // let branchId = response.data.branchId[0];
+
+
             setSpeciality(response.data.speciality);
             // setDoctorName(response.data.name);
             // setBranchId(response.data.branchId[0]); // set first branchId from patient branch list if below API gives error
@@ -225,27 +276,39 @@ const DoctorCard = ({
               let dateString = moment(date).format("YYYY-MM-DD");
               let requestBody: any = [{
                 date: dateString,
-                day: 2,
+                day: +moment(date).format("D"),
                 resourceIds: [id],
-                wday: "Mon"
+                wday: moment(date).format("ddd")
               }]
               scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
                 .then((response) => {
                   // setAppointmentEntry(true)
                   setDoctorScheduleData(response.data)
-                  router.push({
-                    pathname: "/ScheduleAppointment/",
-                    params: {
-                      branchId: branchId,
-                      department: department,
-                      speciality: speciality,
-                      doctor: doctorName,
-                      date: (new Date(date)).toString(),
-                      params: JSON.stringify(response.data[0]),
-                      patientData: JSON.stringify(patientData),
-                      patientPolicyData: JSON.stringify(patientPolicyData)
-                    }
-                  })
+                  if (response.data == null || response.data.length <= 0 || response.data[0] == null || response.data[0].length <= 0) {
+                    Alert.alert('Note', 'Doctor Schedule not found', [
+                      {
+                        text: 'BACK',
+                        // onPress: () => router.back(),
+                        style: 'default'
+                      },
+                    ],
+                    )
+                  } else {
+                    router.push({
+                      pathname: "/ScheduleAppointment/",
+                      params: {
+                        branchId: branchId,
+                        department: department,
+                        speciality: speciality,
+                        doctor: doctorName,
+                        resourceId: id,
+                        date: (new Date(date)).toString(),
+                        params: JSON.stringify(response.data[0]),
+                        patientData: JSON.stringify(patientData),
+                        patientPolicyData: JSON.stringify(patientPolicyData)
+                      }
+                    })
+                  }
                 })
                 .catch((err) => {
                   Alert.alert('Note', 'Doctor Schedule not found', [

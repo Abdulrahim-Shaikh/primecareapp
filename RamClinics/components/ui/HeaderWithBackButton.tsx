@@ -8,6 +8,7 @@ type PropsTypes = {
   title?: string;
   isPushBack?: boolean;
   isTextWhite?: boolean;
+  skip?: boolean;
 };
 
 const HeaderWithBackButton = ({
@@ -15,6 +16,7 @@ const HeaderWithBackButton = ({
   title,
   isPushBack,
   isTextWhite,
+  skip
 }: PropsTypes) => {
   return (
     <View className="flex flex-row justify-start items-center">
@@ -50,6 +52,19 @@ const HeaderWithBackButton = ({
           {title}
         </Text>
       )}
+      {skip && (
+        <View className="flex content-end flex-wrap">
+          <View>
+            <Text>Skip</Text>
+          </View>
+          <View>
+            <Text className="bg-[#3B2314] rounded-full p-2" >
+              <Ionicons name="chevron-back" color={"white"} size={20} />
+            </Text>
+          </View>
+        </View>
+      )
+      }
     </View>
   );
 };

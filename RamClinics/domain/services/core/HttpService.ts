@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UAT_LINK } from '@env';
+import { CLAIMS_LINK } from '@env';
 import {
     useQuery
 } from "@tanstack/react-query";
@@ -14,6 +15,8 @@ class HttpService {
 
     // private baseUrl = PROD_LINK;
     private baseUrl = UAT_LINK;
+    // private baseUrl = CLAIMS_LINK;
+
 
     getHeaders() {
         return {
