@@ -9,6 +9,7 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -16,19 +17,20 @@ i18n.enableFallback = true;
 
 const DoctorSpeciality = () => {
   const { language, changeLanguage } = useLanguage();
+  const { branches, changeBranches } = useBranches();
 
   const [locale, setLocale] = useState(i18n.locale);
 
   const changeLocale = (locale: any) => {
-      i18n.locale = locale;
-      setLocale(locale);
+    i18n.locale = locale;
+    setLocale(locale);
   }
-  
+
   useFocusEffect(
-      useCallback(() => {
-          changeLocale(language)
-          changeLanguage(language)
-      }, [])
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
   )
   let [specialtyList, setSpecialty] = useState([]);
 
@@ -50,7 +52,8 @@ const DoctorSpeciality = () => {
                 branchId: null,
                 fromSpeciality: 1,
                 department: null,
-                callCenterFlow: 0
+                callCenterFlow: 0,
+                callCenterDoctorFlow: 0
               }
             })
           }
@@ -88,7 +91,8 @@ const DoctorSpeciality = () => {
                           callCenterFlow: 0,
                           devices: JSON.stringify(""),
                           responsible: "",
-                          callOrReception: ""
+                          callOrReception: "",
+                          callCenterDoctorFlow: 0
                         }
                       })
                     }
@@ -101,9 +105,9 @@ const DoctorSpeciality = () => {
                       <View>
                         <Text className="font-bodyText pt-1 text-white">
                           {i18n.t("doctors")}{" "}
-                          {language === "ar" ? 
-                          <AntDesign name="arrowleft" color={"white"} /> : 
-                          <AntDesign name="arrowright" color={"white"} />}
+                          {language === "ar" ?
+                            <AntDesign name="arrowleft" color={"white"} /> :
+                            <AntDesign name="arrowright" color={"white"} />}
                         </Text>
                       </View>
                     </View>

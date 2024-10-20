@@ -8,6 +8,15 @@ import moment, { Moment } from "moment";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import DoctorSelect from "./DoctorSelect";
+import { Calendar } from "react-native-calendars";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const SlotsConfirmationPage = () => {
 
@@ -16,9 +25,12 @@ const SlotsConfirmationPage = () => {
     const [slotsAvailable, setSlotsAvailable] = useState(new Map<string, Array<number>>())
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [slotSearchDate, setSlotSearchDate] = useState(new Date());
+    const [dateString, setDateString] = useState(moment(new Date()).format("YYYY-MM-DD"));
     const [doctorListPageRoute, setDoctorListPageRoute] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState("");
     const [loader, setLoader] = useState(false);
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
 
     var slotsRender = [];
 
@@ -64,7 +76,7 @@ const SlotsConfirmationPage = () => {
     const search = (date: any) => {
         setLoader(true)
         let subServiceSlotInterval = +callOrReception
-        console.log("subServiceSlotInterval: ", subServiceSlotInterval)
+        // console.log("subServiceSlotInterval: ", subServiceSlotInterval)
         if (+callCenterFlow) {
             let deviceCode: any = ""
             for (let device of devicesList) {
@@ -125,72 +137,86 @@ const SlotsConfirmationPage = () => {
                                     }
                                 }
                             }
-                        // } else {
+                            // } else {
                         }
                     }
                     setLoader(false)
                     setSlotsAvailable(slotsAvailableAux2)
-                    console.log("slotsAvailableAux2: ", slotsAvailableAux2)
+                    // console.log("slotsAvailableAux2: ", slotsAvailableAux2)
                 })
         }
     }
 
-    function onDateChange(event: DateTimePickerEvent, selectedDate?: Date) {
-        const currentDate = selectedDate || slotSearchDate;
-        setIsDatePickerOpen(false);
-        setSlotSearchDate(currentDate);
+    function onDateChange(selectedDate: any) {
+        setSlotSearchDate(new Date(selectedDate.timestamp))
+        setDateString(moment(selectedDate.timestamp).format("YYYY-MM-DD"))
+        console.log("moment(slotSearchDate).format('YYYY-MM-DD'): ", moment(slotSearchDate).format("YYYY-MM-DD"))
         search(moment(slotSearchDate).format("YYYY-MM-DD"))
     };
-
-
-    var appointmentsRender: any = []
-    var appointmentsRowRender: any = []
 
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
-                <HeaderWithBackButton title="Slots Confirmation" isPushBack={true} />
+                <HeaderWithBackButton title="Available Appointments" isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
-                    <TouchableOpacity
-                        onPress={() => setIsDatePickerOpen(true)}
+                    <View style={{ flex: 1 }}>
+                        <Calendar
+                            current={moment(slotSearchDate).format('YYYY-MM-DD')}
+                            minDate={moment().format('YYYY-MM-DD')}
+                            markedDates={{
+                                [dateString]: { selected: true, marked: true, selectedColor: '#3B2314' },
+                            }}
+                            onDayPress={(day: any) => { setDateString(day.dateString); onDateChange(day) }}
+                            theme={{
+                                todayTextColor: 'rgb(132 204 22)',
+                            }}
+                        />
+                    </View>
+                    <View
                         className="flex flex-row justify-between items-center pt-2 gap-4 ">
                         <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                            On: {moment(slotSearchDate).format("DD-MMM-YYYY")} 
+                            On: {dateString}
                         </Text>
-                    </TouchableOpacity>
-                    <View>
+                    </View>
+                    <View className="pt-3">
                         {
                             loader && <ActivityIndicator size="large" color="#454567" />
                         }
                     </View>
-                    <View>
+                    {/* <View>
                         <Text>{isDatePickerOpen}</Text>
                         {isDatePickerOpen && (
                             <DateTimePicker value={slotSearchDate} mode="date" display="default" onChange={onDateChange} />
                         )}
-                    </View>
+                    </View> */}
 
 
-                    <FlatList
-                        data={Array.from(slotsAvailable)}
-                        numColumns={3}
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ marginHorizontal: "auto" }}
-                        renderItem={({ item }) => (
-                            <View className="flex flex-row p-1 m-1 w-32 h-32">
-                                <Pressable
-                                    onPress={() => {
-                                        selectSlot(item)
-                                    }}
-                                    className="border border-pc-primary p-2 rounded-lg w-full">
-                                    <View className="py-2 items-center">
-                                        <Ionicons name="time" size={36} color={"#3B2314"} />
+                    {
+                        Array.from(slotsAvailable).length == 0 && !loader
+                            ?
+                            <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No slots available for selected date")}</Text>
+                            :
+                            <FlatList
+                                data={Array.from(slotsAvailable)}
+                                numColumns={3}
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{ marginHorizontal: "auto" }}
+                                renderItem={({ item }) => (
+                                    <View className="flex flex-row p-1 m-1 w-32 h-32">
+                                        <Pressable
+                                            onPress={() => {
+                                                selectSlot(item)
+                                            }}
+                                            className="border border-pc-primary p-2 rounded-lg w-full">
+                                            <View className="py-2 items-center">
+                                                <Ionicons name="time" size={36} color={"#3B2314"} />
+                                            </View>
+                                            <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item[0]}</Text>
+                                        </Pressable>
                                     </View>
-                                    <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item[0]}</Text>
-                                </Pressable>
-                            </View>
-                        )}
-                    />
+                                )}
+                            />
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>

@@ -39,12 +39,14 @@ const ShiftAndGenderOptions = () => {
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [branches, setBranches] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-    const [selectedShift, setSelectedShift] = useState('');
-    const [selectedGender, setSelectedGender] = useState('');
+    const [selectedShift, setSelectedShift] = useState('Both');
+    const [selectedGender, setSelectedGender] = useState('Both');
     const [slotsAvailable, setSlotsAvailable] = useState(new Map<string, Array<number>>())
 
     useEffect(() => {
         setDevicesList(JSON.parse(devices.toString()))
+        setSelectedGender('Both')
+        setSelectedShift('Both')
     }, []);
 
     const shiftOptions: any = [
@@ -137,30 +139,44 @@ const ShiftAndGenderOptions = () => {
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Shift and Gender")} isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
-                    <View className="flex content-between">
-                        <View className="border border-indigo-950 rounded-lg mb-4">
-                            <Picker
-                                selectedValue={selectedShift} onValueChange={(itemValue) => { setSelectedShift(itemValue); }} className="h-12">
-                                <Picker.Item label={i18n.t("Select Shift")} value="" />
-                                {shiftOptions.map((branch: any) => (
-                                    <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.name} />
-                                ))}
-                            </Picker>
+                    <View>
+                        <Text className="text-base font-medium">Select Shift: </Text>
+                        <View className="py-1">
+                            <View className="border border-indigo-950 rounded-lg mb-4">
+                                <Picker
+                                    selectedValue={selectedShift} onValueChange={(itemValue) => { setSelectedShift(itemValue); }} className="h-12">
+                                    <Picker.Item label={i18n.t("Select Shift")} value="" />
+                                    {shiftOptions.map((branch: any) => (
+                                        <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.name} />
+                                    ))}
+                                </Picker>
+                            </View>
                         </View>
-                        <View className="border border-indigo-950 rounded-lg mb-4">
-                            <Picker
-                                selectedValue={selectedGender} onValueChange={(itemValue) => { setSelectedGender(itemValue); }} className="h-12">
-                                <Picker.Item label={i18n.t("Select Gender")} value="" />
-                                {genderOptions.map((branch: any) => (
-                                    <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.id} />
-                                ))}
-                            </Picker>
+                        <Text className="text-base font-medium">Select Gender: </Text>
+                        <View className="py-1">
+                            <View className="border border-indigo-950 rounded-lg mb-4">
+                                <Picker
+                                    selectedValue={selectedGender} onValueChange={(itemValue) => { setSelectedGender(itemValue); }} className="h-12">
+                                    <Picker.Item label={i18n.t("Select Gender")} value="" />
+                                    {genderOptions.map((branch: any) => (
+                                        <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.name} />
+                                    ))}
+                                </Picker>
+                            </View>
                         </View>
+                    </View>
+                    <View className="pt-4 flex content-center items-center">
                         <TouchableOpacity
                             onPress={() => search()}
-                            className="flex flex-row justify-between items-center pt-2 gap-4 ">
-                            <Text className="flex-1 text-white border border-[#3B2314] px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                                {i18n.t("Schedule Appointment")}
+                            style={{
+                                width: 150,
+                                height: 80,
+                                backgroundColor: '#3B2314',
+                                borderRadius: 30,
+                            }}
+                            className="flex flex-row justify-between h-24 items-center pt-2 gap-4 ">
+                            <Text className="flex-1 text-xl font-bold text-white border border-[#3B2314] px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
+                                {i18n.t("Search")}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -188,5 +204,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#737373',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
+    search: {
+        height: 100,
+    }
 });
 export default ShiftAndGenderOptions;

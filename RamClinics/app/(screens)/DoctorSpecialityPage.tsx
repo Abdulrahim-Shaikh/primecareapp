@@ -28,7 +28,7 @@ i18n.locale = Localization.locale
 i18n.enableFallback = true;
 const DoctorSpecialityPage = () => {
 
-  const { branchId, fromSpeciality, department, callCenterFlow } = useLocalSearchParams();
+  const { branchId, fromSpeciality, department, callCenterFlow, callCenterDoctorFlow } = useLocalSearchParams();
   const [specialityList, setSpecialityList] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -50,7 +50,7 @@ const DoctorSpecialityPage = () => {
   const fetchSpecialities = () => {
     setLoader(true)
     if (department != null) {
-      if (+callCenterFlow) {
+      if (+callCenterFlow || +callCenterDoctorFlow) {
         specialityService.getSpecialityServiceByDepartmentTest(department)
           .then((response) => {
             setSpecialityList(response.data)
@@ -89,7 +89,8 @@ const DoctorSpecialityPage = () => {
   )
 
 
-  function selectSpeciality(code: any, speciality: any, services: any) {
+  function selectSpeciality(item: any, code: any, speciality: any, services: any) {
+    console.log("item: ", item.code)
     console.log("fromSpeciality: ", fromSpeciality)
     console.log("")
     if (+callCenterFlow) {
@@ -128,7 +129,8 @@ const DoctorSpecialityPage = () => {
             callCenterFlow: callCenterFlow,
             devices: JSON.stringify(""),
             responsible: "",
-            callOrReception: ""
+            callOrReception: "",
+            callCenterDoctorFlow: 0
           }
         })
       } else {
@@ -139,7 +141,9 @@ const DoctorSpecialityPage = () => {
             branchId: branchId,
             fromSpeciality: fromSpeciality,
             department: department,
-            speciality: speciality
+            specialityCode: code,
+            speciality: speciality,
+            callCenterDoctorFlow: callCenterDoctorFlow
           }
         })
       }
@@ -154,85 +158,49 @@ const DoctorSpecialityPage = () => {
         {/* <View className="pt-8 ">
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View> */}
-        <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
+        <View className="pt-8">
             {
-              loader && 
-                <View className="flex-1 items-center justify-center">
-                  <ActivityIndicator size="large" color="#3B2314" style={{ marginTop: 20 }} />
-                </View>
+                loader && <ActivityIndicator size="large" color="#454567" />
             }
+        </View>
+        <View className="flex-row flex-wrap">
           {
-            (specialityList == null || specialityList.length === 0) && !loader && 
+            (specialityList == null || specialityList.length === 0) && !loader &&
             <Text className="w-full text-center text-lg text-gray-600">{i18n.t("No specialities found")}</Text>
           }
-                <View className="flex-1 space-y-4 ">
-                    <FlatList
-                        contentContainerStyle={{ gap: 12 }}
-                        data={specialityList}
-                        keyExtractor={(item: any, index) => "key" + index}
-                        renderItem={({ item }) => {
-                            return (
-                                <View className="w-full">
-                                    <Pressable
-                                        className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
-                                        onPress={() => { selectSpeciality(item.code, item.name, item.services) }}
-                                    >
-                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                            {/* <Image source={specialityIcon} style={{ width: 50, height: 50 }} /> */}
+          <View className="flex-1 space-y-4 ">
+            <FlatList
+              contentContainerStyle={{ gap: 12 }}
+              data={specialityList}
+              keyExtractor={(item: any, index) => "key" + index}
+              renderItem={({ item }) => {
+                return (
+                  <View className="w-full">
+                    <Pressable
+                      className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
+                      onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
+                    >
+                      <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                        {/* <Image source={specialityIcon} style={{ width: 50, height: 50 }} /> */}
                         <MaterialCommunityIcons
-                            name="hand-coin-outline"
-                            size={50}
-                            color={"#3b2314"}
+                          name="stethoscope"
+                          size={40}
+                          color={"#3b2314"}
                         />
-                                        </View>
-                                        <View className="w-full px-4 flex justify-center">
-                                            <Text className="w-full font-semibold text-lg text-gray-800">
-                                                {item.name}
-                                            </Text>
-                                            <Text className="pr-16 text-gray-600 pt-1 text-lg">
-                                                {i18n.t("Select doctor")}
-                                              {
-                                                language === "en" 
-                                                ? 
-                                                <Feather name="arrow-right" size={14} color="#000000" />
-                                                : 
-                                                <Feather name="arrow-left" size={14} color="#000000" />
-                                              }
-                                            </Text>
-                                        </View>
-                                    </Pressable>
-                                </View>
-                            );
-                        }}
-                    />
-                </View>
-
-
-          {/* {specialityList.map(({ code, name, services }, idx) => (
-            <Pressable
-              onPress={() => { selectSpeciality(code, name, services) }}
-              className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4 bg-[rgb(59,35,20)]"
-              key={idx}
-            >
-              <View className="p-3 rounded-md border border-pc-primary bg-white">
-                <Image source={specialityIcon} />
-              </View>
-              <Text className="text-base font-semibold pt-3 text-white">{name}</Text>
-              {
-                +fromSpeciality
-                  ?
-                  <Text className="item-center flex-row text-white pt-1">
-                    {i18n.t("Select branch")} {" "}
-                    <Feather name="arrow-right" size={14} color="#454567" />{" "}
-                  </Text>
-                  :
-                  <Text className="item-center flex-row text-white pt-1">
-                    {i18n.t("Select doctor")} {" "}
-                    <Feather name="arrow-right" size={14} color="#FFF" />{" "}
-                  </Text>
-              }
-            </Pressable>
-          ))} */}
+                      </View>
+                      <View className="w-full px-4 flex justify-center gap-3">
+                        <View className="w-full flex flex-row items-center gap-2 font-semibold text-lg text-gray-800">
+                          <Text className="text-base">
+                            {item.name}
+                          </Text>
+                        </View>
+                      </View>
+                    </Pressable>
+                  </View>
+                );
+              }}
+            />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView >

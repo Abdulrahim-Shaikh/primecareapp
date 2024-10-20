@@ -20,9 +20,9 @@ import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import SearchableDropdown from 'react-native-searchable-dropdown';
 import SelectDropdown from "react-native-select-dropdown";
 import { Icon } from "react-native-elements";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
@@ -74,7 +74,7 @@ const SingUp = () => {
   const [nationality, setNationality] = useState('');
   const [gender, setGender] = useState('');
   const [referredBy, setReferredBy] = useState('');
-  const [branches, setBranches] = useState([]);
+  const { branches, setBranches } = useBranches();
   const [selectedBranch, setSeletedBranch] = useState('');
   const [city, setCity] = useState('');
   const [showDatePicker, setShowPicker] = useState(false);
@@ -93,18 +93,15 @@ const SingUp = () => {
   }
   useFocusEffect(
     useCallback(() => {
+      if (branches == null) {
+        branchService.findAll().then((response) => {
+          setBranches(response.data)
+        })
+      }
       changeLocale(language)
       changeLanguage(language)
     }, [])
   )
-
-  useEffect(() => {
-    branchService.findAll().then((res) => {
-      setBranches(res.data);
-    }).catch((error) => {
-      console.error("Failed to fetch branches:", error);
-    });
-  }, []);
 
   useEffect(() => {
     console.log("nationality", nationality)
@@ -439,11 +436,16 @@ const SingUp = () => {
                 selectedValue={selectedBranch} onValueChange={(r) => { setSeletedBranch(r) }} className="text-slate-800">
                 <Picker.Item label={i18n.t("Register Branch")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {branches.map((branch: any) => (
+                  (branch.name != 'Technas' && branch.name != 'Doha Medical Complex' && branch.name != 'Saudi Swiss' && branch.name !+ 'Central Pharmacy Warehouse') 
+                  && <Picker.Item key={branch.branchCode} label={`${branch.name}, ${branch.city ? branch.city.trim() : ""}`} value={branch.name} />
+                ))}
+
+                {/* {branches.map((branch: any) => (
                   (branch.name == "Technas" || branch.name == "Doha Medical Complex") ?
                     <></>
                     :
                     <Picker.Item key={branch.branchCode} label={`${branch.name}, ${branch.city ? branch.city.trim() : ""}`} value={branch.name} />
-                ))}
+                ))} */}
               </Picker>
             </View>
 

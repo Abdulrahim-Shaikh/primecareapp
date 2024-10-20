@@ -18,6 +18,9 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
+import { useBranches } from "../../domain/contexts/BranchesContext";
+import { useDoctors } from "../../domain/contexts/DoctorsContext";
+import resourceService from "../../domain/services/ResourceService";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -35,7 +38,9 @@ const Home = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showFavouriteModal, setShowFavouriteModal] = useState(false);
   const { language, changeLanguage } = useLanguage();
-  const [locale, setLocale] = useState(i18n.locale);
+  const [ locale, setLocale ] = useState(i18n.locale);
+  const { branchesData, changeBranches } = useBranches();
+  const { doctors, changeDoctors } = useDoctors()
 
   const changeLocale = (locale: any) => {
     i18n.locale = locale;
@@ -44,6 +49,23 @@ const Home = () => {
 
   useFocusEffect(
     useCallback(() => {
+
+
+      if (doctors == null || doctors.length == 0) {
+        console.log('firing resource service')
+        resourceService.getAllDoctorsByDesignation('Doctor').then((res) => {
+          changeDoctors(res.data)
+        }).then(() => {
+          console.log("doctors set")
+        })
+      }
+
+      if (branchesData == null) {
+        branchService.findAll().then((res) => {
+          changeBranches(res.data)
+        })
+      }
+
       changeLocale(language)
       changeLanguage(language)
     }, [])
@@ -96,11 +118,9 @@ const Home = () => {
               </View>
             </View>
           }
-          {/* <SearchSection setShowFilter={setShowFilter} />     */}
           <UpcomingSlider />
           <DoctorSpeciality />
           {loggedIn && (<MainMenu />)}
-          {/* <TopDoctor showBackButton={false} /> */}
         </View>
 
         <NotificationModal

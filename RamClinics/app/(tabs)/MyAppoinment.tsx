@@ -7,6 +7,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TouchableOpacity,
   View,
@@ -30,6 +31,8 @@ import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { all } from "axios";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const tabNames = ["Booked", "Checked In"];
 const i18n = new I18n(translations)
@@ -59,6 +62,44 @@ const Appoinment = () => {
   const [allAppointments, setAllAppointments] = useState(myAppoinmentData);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const { branches, changeBranches } = useBranches()
+  const [branchId, setBranchId] = useState(null)
+
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState);
+    const currentDate = new Date();
+    const currentTimeInstance = moment()
+    setToDate(currentDate);
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
+    if (isEnabled) {
+      setFromDate(firstDayOfMonth);
+      let slicedAppointments = []
+      for (let appt of allAppointments) {
+        let apptDate = new Date(...appt.appointmentDate)
+        const slotTimeInstance = moment(apptDate)
+        if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfMonth))) {
+          slicedAppointments.push(appt)
+        }
+      }
+      setAppointments(slicedAppointments)
+      changeTab(activeTab)
+    } else {
+      setFromDate(firstDayOfYear);
+      let slicedAppointments = []
+      for (let appt of allAppointments) {
+        let apptDate = new Date(...appt.appointmentDate)
+        const slotTimeInstance = moment(apptDate)
+        if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+          slicedAppointments.push(appt)
+        }
+      }
+      setAppointments(slicedAppointments)
+      changeTab(activeTab)
+    }
+  }
+
 
   const onStartDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || fromDate;
@@ -75,12 +116,13 @@ const Appoinment = () => {
 
   const changeTab = (tab: string) => {
     // console.log("here")
-    setAppointments(allAppointments.filter((item) => item.hisStatus === tab))
+    setAppointments(appointments.filter((item) => item.hisStatus === tab))
     setActiveTab(tab)
   }
 
   useFocusEffect(
     useCallback(() => {
+      console.log("useUserSate.getState().loggedIn: ", useUserSate.getState().user)
       if (useUserSate.getState().loggedIn === false) {
         Alert.alert('Note', 'You must Sign In to view your appointments', [
           {
@@ -99,30 +141,29 @@ const Appoinment = () => {
       }
       // console.log("here")
       const patientId = useUserSate.getState().userId;
-      console.log("patientId: ", patientId)
-      let branchId;
-      patientService.getByPatientId(patientId)
-        .then((response) => {
-          branchId = response.data.branchId;
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
+      // console.log("branch: ", branch)
+      let branchId = branch.id;
+      setBranchId(branchId)
+      console.log("branchId: ", branchId)
       appointmentService.getAppointments(patientId, branchId)
         .then((response) => {
           setAllAppointments(response.data);
+          // toggleSwitch()
+          changeTab("Booked")
         })
         .catch((error) => {
-          console.log(error);
+          console.log("error: ", error);
         })
+      // appointmentService.getAppointments(patientId, branchId)
+      //   .then((response) => {
+      //     setAllAppointments(response.data);
+      //     changeTab("Booked")
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   })
 
-
-      const filteredData = myAppoinmentData.filter(
-        (item) => item.sessionStatus === activeTab
-      );
-
-      setFilteredItem(filteredData);
-      changeTab("Booked")
     }, [])
   )
 
@@ -132,13 +173,29 @@ const Appoinment = () => {
         <View className="pb-8 px-6">
           <View className="flex flex-row justify-start items-center gap-4 pt-6">
             <HeaderWithBackButton isPushBack={true} title={i18n.t("My Appointments")} />
-            <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(59, 35, 20)"}
-            />
+            <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(59, 35, 20)"} />
           </View>
           {/* <View className="pt-8">
             <Searchbox searchValue={searchValue} setSearchValue={setSearchValue}/>
           </View> */}
-          <View className="flex-row justify-between my-4">
+          <View className="flex flex-row items-center justify-center">
+            <View>
+              <Text>Last month - All</Text>
+            </View>
+            <View>
+              <Switch
+                trackColor={{ false: '#767577', true: '#767577' }}
+                thumbColor={isEnabled ? '#3b2314' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
+            <View>
+              <Text>All</Text>
+            </View>
+          </View>
+          {/* <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
               <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
             </Pressable>
@@ -151,14 +208,14 @@ const Appoinment = () => {
             {isToDatePickerOpen && (
               <DateTimePicker value={toDate} mode="date" display="default" onChange={onEndDateChange} />
             )}
-          </View>
+          </View> */}
           <View className="pt-2 flex flex-row  justify-between items-center">
             {tabNames.map((item, idx) => (
               <Pressable
                 key={idx}
                 onPress={() => changeTab(item)}
                 className={`flex-1 border-b-2  pb-2 ${activeTab === item
-                  ?  "border-lime-600"
+                  ? "border-lime-600"
                   : "border-transparent"
                   }`}
               >
@@ -246,7 +303,7 @@ const Appoinment = () => {
                   ) : (
                     <TouchableOpacity>
                       <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
-                       {i18n.t("Book Again")}
+                        {i18n.t("Book Again")}
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -284,7 +341,7 @@ const Appoinment = () => {
           <View className="bg-white w-full pt-16 px-6 pb-6 rounded-t-[60px] ">
             <View className="pb-4 border-b border-dashed text-amber-500">
               <Text className="text-[#ff5630] text-2xl text-center font-semibold ">
-               {i18n.t("Cancel Appointment")}
+                {i18n.t("Cancel Appointment")}
               </Text>
             </View>
             <Text className="text-lg pt-4 text-center text-pc-primary">

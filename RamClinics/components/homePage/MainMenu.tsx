@@ -1,20 +1,26 @@
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
+import { UserContext } from "../../domain/contexts/UserContext";
+import branchService from "../../domain/services/BranchService";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
 i18n.enableFallback = true;
+
 const MainMenu = () => {
   const { language, changeLanguage } = useLanguage();
   const [locale, setLocale] = useState(i18n.locale);
+
+  const { setUserData } = useContext(UserContext)
+  const { branches, setBranches } = useBranches();
+
 
   const changeLocale = (locale: any) => {
     i18n.locale = locale;
@@ -23,6 +29,11 @@ const MainMenu = () => {
 
   useFocusEffect(
     useCallback(() => {
+      if (branches == null) {
+        branchService.findAll().then((response) => {
+          setBranches(response.data)
+        })
+      }
       changeLocale(language)
       changeLanguage(language)
     }, [])
