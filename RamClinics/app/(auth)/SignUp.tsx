@@ -436,11 +436,16 @@ const SingUp = () => {
                 selectedValue={selectedBranch} onValueChange={(r) => { setSeletedBranch(r) }} className="text-slate-800">
                 <Picker.Item label={i18n.t("Register Branch")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {branches.map((branch: any) => (
+                  (branch.name != 'Technas' && branch.name != 'Doha Medical Complex' && branch.name != 'Saudi Swiss' && branch.name !+ 'Central Pharmacy Warehouse') 
+                  && <Picker.Item key={branch.branchCode} label={`${branch.name}, ${branch.city ? branch.city.trim() : ""}`} value={branch.name} />
+                ))}
+
+                {/* {branches.map((branch: any) => (
                   (branch.name == "Technas" || branch.name == "Doha Medical Complex") ?
                     <></>
                     :
                     <Picker.Item key={branch.branchCode} label={`${branch.name}, ${branch.city ? branch.city.trim() : ""}`} value={branch.name} />
-                ))}
+                ))} */}
               </Picker>
             </View>
 

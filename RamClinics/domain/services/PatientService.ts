@@ -6,7 +6,7 @@ export class PatientService extends RestService<any> {
         return this.get("byMobileNo/" + mobileNo);
     }
     getByPatientId(patientId: any) {
-        return this.get("getByPatientId" + patientId);
+        return this.get("getByPatientId?patientId=" + patientId);
     }
     getFamilyFile(familyFile: any) {
         return this.get("getFamilyFile/" + familyFile);

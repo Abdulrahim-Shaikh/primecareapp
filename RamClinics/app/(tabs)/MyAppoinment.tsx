@@ -32,6 +32,7 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { all } from "axios";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const tabNames = ["Booked", "Checked In"];
 const i18n = new I18n(translations)
@@ -62,56 +63,40 @@ const Appoinment = () => {
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  const { branches, changeBranches } = useBranches()
+  const [branchId, setBranchId] = useState(null)
+
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
     const currentDate = new Date();
+    const currentTimeInstance = moment()
     setToDate(currentDate);
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
-    const patientId = useUserSate.getState().userId;
     if (isEnabled) {
       setFromDate(firstDayOfMonth);
-      patientService.getByPatientId(patientId)
-        .then((response) => {
-          let branchId = response.data.branchId;
-          appointmentService.appointmentsByDate(branchId, fromDate.toDateString, toDate.toDateString, patientId, response.data.mrno, "Booked")
-            .then((response) => {
-              setAllAppointments(response.data);
-              appointmentService.appointmentsByDate(branchId, fromDate.toDateString, toDate.toDateString, patientId, response.data.mrno, "Checked In")
-                .then((response) => {
-                  let appointments = [...allAppointments, ...response.data];
-                  setAllAppointments(appointments);
-                  changeTab("Booked")
-                })
-                .catch((error) => {
-                  console.log(error);
-                })
-              changeTab("Booked")
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      let slicedAppointments = []
+      for (let appt of allAppointments) {
+        let apptDate = new Date(...appt.appointmentDate)
+        const slotTimeInstance = moment(apptDate)
+        if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfMonth))) {
+          slicedAppointments.push(appt)
+        }
+      }
+      setAppointments(slicedAppointments)
+      changeTab(activeTab)
     } else {
       setFromDate(firstDayOfYear);
-      patientService.getByPatientId(patientId)
-        .then((response) => {
-          let branchId = response.data.branchId;
-          appointmentService.appointmentsByDate(branchId, fromDate.toDateString, toDate.toDateString, patientId, response.data.mrno, "Booked")
-            .then((response) => {
-              setAllAppointments(response.data);
-              changeTab("Booked")
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      let slicedAppointments = []
+      for (let appt of allAppointments) {
+        let apptDate = new Date(...appt.appointmentDate)
+        const slotTimeInstance = moment(apptDate)
+        if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+          slicedAppointments.push(appt)
+        }
+      }
+      setAppointments(slicedAppointments)
+      changeTab(activeTab)
     }
   }
 
@@ -131,13 +116,13 @@ const Appoinment = () => {
 
   const changeTab = (tab: string) => {
     // console.log("here")
-    setAppointments(allAppointments.filter((item) => item.hisStatus === tab))
-    console.log("allAppointments: ", allAppointments)
+    setAppointments(appointments.filter((item) => item.hisStatus === tab))
     setActiveTab(tab)
   }
 
   useFocusEffect(
     useCallback(() => {
+      console.log("useUserSate.getState().loggedIn: ", useUserSate.getState().user)
       if (useUserSate.getState().loggedIn === false) {
         Alert.alert('Note', 'You must Sign In to view your appointments', [
           {
@@ -156,23 +141,28 @@ const Appoinment = () => {
       }
       // console.log("here")
       const patientId = useUserSate.getState().userId;
-      console.log("patientId: ", patientId)
-      let branchId;
-      patientService.getByPatientId(patientId)
-        .then((response) => {
-          branchId = response.data.branchId;
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
+      // console.log("branch: ", branch)
+      let branchId = branch.id;
+      setBranchId(branchId)
+      console.log("branchId: ", branchId)
       appointmentService.getAppointments(patientId, branchId)
         .then((response) => {
           setAllAppointments(response.data);
+          // toggleSwitch()
           changeTab("Booked")
         })
         .catch((error) => {
-          console.log(error);
+          console.log("error: ", error);
         })
+      // appointmentService.getAppointments(patientId, branchId)
+      //   .then((response) => {
+      //     setAllAppointments(response.data);
+      //     changeTab("Booked")
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   })
 
     }, [])
   )
@@ -190,7 +180,7 @@ const Appoinment = () => {
           </View> */}
           <View className="flex flex-row items-center justify-center">
             <View>
-              <Text>Last 1 month</Text>
+              <Text>Last month - All</Text>
             </View>
             <View>
               <Switch
@@ -202,7 +192,7 @@ const Appoinment = () => {
               />
             </View>
             <View>
-              <Text>From January 1</Text>
+              <Text>All</Text>
             </View>
           </View>
           {/* <View className="flex-row justify-between my-4">
