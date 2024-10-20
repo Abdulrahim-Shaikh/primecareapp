@@ -83,6 +83,7 @@ const Appoinment = () => {
           slicedAppointments.push(appt)
         }
       }
+      console.log("slicedAppointments: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
     } else {
@@ -95,6 +96,7 @@ const Appoinment = () => {
           slicedAppointments.push(appt)
         }
       }
+      console.log("slicedAppointments2: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
     }
@@ -116,7 +118,7 @@ const Appoinment = () => {
 
   const changeTab = (tab: string) => {
     // console.log("here")
-    setAppointments(appointments.filter((item) => item.hisStatus === tab))
+    // setAppointments(appointments.filter((item) => item.hisStatus === tab))
     setActiveTab(tab)
   }
 
@@ -148,8 +150,8 @@ const Appoinment = () => {
         appointmentService.getAppointments(patientId, branchId)
           .then((response) => {
             setAllAppointments(response.data);
-            // toggleSwitch()
-            changeTab("Booked")
+            toggleSwitch()
+            // changeTab("Booked")
           })
           .catch((error) => {
             console.log("error: ", error);
@@ -209,7 +211,7 @@ const Appoinment = () => {
               <DateTimePicker value={toDate} mode="date" display="default" onChange={onEndDateChange} />
             )}
           </View> */}
-          <View className="pt-2 flex flex-row  justify-between items-center">
+          {/* <View className="pt-2 flex flex-row  justify-between items-center">
             {tabNames.map((item, idx) => (
               <Pressable
                 key={idx}
@@ -227,7 +229,7 @@ const Appoinment = () => {
                 </Text>
               </Pressable>
             ))}
-          </View>
+          </View> */}
 
           <View className="">
             {appointments.length <= 0 &&
