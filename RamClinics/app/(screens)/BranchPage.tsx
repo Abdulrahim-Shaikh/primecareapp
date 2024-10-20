@@ -138,13 +138,13 @@ const BranchPage = () => {
                         {/* <View>
                             <Text>Skip</Text>
                         </View> */}
-                        <View>
+                        {/* <View>
                             <Ionicons
                                 name="chevron-forward"
                                 color={"#000000"}
                                 size={20}
                             />
-                        </View>
+                        </View> */}
                     </View>
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
