@@ -157,7 +157,7 @@ const SlotsConfirmationPage = () => {
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
-                <HeaderWithBackButton title="Slots Confirmation" isPushBack={true} />
+                <HeaderWithBackButton title="Available Appointments" isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
                     <View style={{ flex: 1 }}>
                         <Calendar
