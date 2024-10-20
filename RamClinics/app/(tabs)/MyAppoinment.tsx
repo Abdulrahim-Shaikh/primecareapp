@@ -138,31 +138,31 @@ const Appoinment = () => {
             style: 'default'
           },
         ])
+      } else {
+        // console.log("here")
+        const patientId = useUserSate.getState().userId;
+        let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
+        // console.log("branch: ", branch)
+        setBranchId(branch.id)
+        console.log("branchId: ", branchId)
+        appointmentService.getAppointments(patientId, branchId)
+          .then((response) => {
+            setAllAppointments(response.data);
+            // toggleSwitch()
+            changeTab("Booked")
+          })
+          .catch((error) => {
+            console.log("error: ", error);
+          })
+        // appointmentService.getAppointments(patientId, branchId)
+        //   .then((response) => {
+        //     setAllAppointments(response.data);
+        //     changeTab("Booked")
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   })
       }
-      // console.log("here")
-      const patientId = useUserSate.getState().userId;
-      let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
-      // console.log("branch: ", branch)
-      let branchId = branch.id;
-      setBranchId(branchId)
-      console.log("branchId: ", branchId)
-      appointmentService.getAppointments(patientId, branchId)
-        .then((response) => {
-          setAllAppointments(response.data);
-          // toggleSwitch()
-          changeTab("Booked")
-        })
-        .catch((error) => {
-          console.log("error: ", error);
-        })
-      // appointmentService.getAppointments(patientId, branchId)
-      //   .then((response) => {
-      //     setAllAppointments(response.data);
-      //     changeTab("Booked")
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   })
 
     }, [])
   )

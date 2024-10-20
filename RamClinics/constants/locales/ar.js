@@ -270,6 +270,18 @@ const translations = {
         "Appointment Type": "Appointment Type",
         "No slots available for selected date": "No slots available for selected date",
 
+        "Periodontics": "Periodontics",
+        "Endodontics": "Endodontics",
+        "Orthodontics": "Orthodontics",
+        "Implantology": "Implantology",
+        "Oral Hygien": "Oral Hygien",
+        "Family Dentistry": "Family Dentistry",
+        "Conservative Dentistry": "Conservative Dentistry",
+        "Dental Laser Dentistry": "Dental Laser Dentistry",
+        "Oral and Maxillofacial Surgery": "Oral and Maxillofacial Surgery",
+        "General Dentistry": "General Dentistry",
+        "Proshtodontics": "Proshtodontics",
+        "Pedodontics": "Pedodontics",
 
     },
     ar: {
@@ -541,6 +553,19 @@ const translations = {
         "No specialities found": "لم يتم العثور على تخصصات",
         "No slots available for selected date": "لا توجد فتحات متاحة للتاريخ المحدد",
         "My Appointment": "موعدي",
+        "Periodontics": "طب اللثة",
+        " Periodontics": "طب اللثة",
+        "Endodontics": "طب العصب",
+        "Orthodontics": "طب الأسنان التقويمي",
+        "Implantology": "طب الأسنان التركيبي",
+        "Oral Hygien": "الصحة الفموية",
+        "Family Dentistry": "طب الأسرة",
+        "Conservative Dentistry": "طب الأسنان التحفظي",
+        "Dental Laser Dentistry": "طب الأسنان بالليزر",
+        "Oral and Maxillofacial Surgery": "جراحة الفم والفكين",
+        "General Dentistry": "طب الأسنان العام",
+        "Proshtodontics": "طب الأسنان التجميلي",
+        "Pedodontics": "طب الأسنان الأطفال",
 
     }
 }
