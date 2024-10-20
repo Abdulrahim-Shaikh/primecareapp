@@ -137,7 +137,7 @@ const TabLayout = () => {
           name="MyAppoinment"
           options={{
             headerShown: false,
-            title: i18n.t('My Appointment'),
+            title: i18n.t('MyAppointmnts'),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon iconName="calendar-check-outline" focused={focused} />
             ),
@@ -182,7 +182,7 @@ const TabLayout = () => {
                 bottom: 10,
                 }]}>
                 {/* <FontAwesome className="text-center pl-0.5" name="calendar-plus-o" s ize={40} color={focused ? "white" : "rgb(59, 35, 20)"} /> */}
-                <Text className={`font-black text-lg text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>Book Appoint ment</Text>
+                <Text className={`font-black text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>Book Appoint ment</Text>
               </View>
             ),
           }}
