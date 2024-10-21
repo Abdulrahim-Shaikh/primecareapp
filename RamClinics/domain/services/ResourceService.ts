@@ -15,7 +15,7 @@ export class ResourceService extends RestService<any> {
     }
 
     getResourceByLiveSlotSpeciality(specialityCode: any, date: any, branch: any, shiftType: any, city: any, deviceCode: any, responsible: any) {
-        return this.get(`getResourceByLiveSlotSpeciality/?specialityCode=${specialityCode}&date=${date}&branch=${branch}&shiftType=${shiftType}&city=${city}&deviceCode=${deviceCode}&responsible=${responsible}`);
+        return this.get(`getResourceByLiveSlotSpeciality?specialityCode=${specialityCode}&date=${date}&branch=${branch}&shiftType=${shiftType}&city=${city}&deviceCode=${deviceCode}&responsible=${responsible}`);
     }
 
     getAllDoctorsByDesignation(designation: string) {

@@ -31,6 +31,7 @@ const SlotsConfirmationPage = () => {
     const [loader, setLoader] = useState(false);
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
+    const [allSlots, setAllSlots] = useState([])
 
     var slotsRender = [];
 
@@ -42,10 +43,29 @@ const SlotsConfirmationPage = () => {
     }, []);
 
     const selectSlot = async (slot: any) => {
-        console.log("slot: ", slot)
+
+        console.log("slot[0]: ", slot[0])
         setSelectedSlot(slot)
         setDoctorListPageRoute(true)
-        console.log("slotsAvailable.get(selectedSlot): ", slotsAvailable.get(selectedSlot))
+
+        const timeSlots = Object.keys(allSlots);
+        let today = moment().format("YYYY-MM-DD");
+        const sortedTimeSlots: any = timeSlots.sort((a, b) => {
+            return moment(`${today} ${a.trim()}`, "YYYY-MM-DD hh:mm A").diff(moment(`${today} ${b.trim()}`, "YYYY-MM-DD hh:mm A"))
+        })
+
+        let iterations = +callOrReception / 5
+        let reservedSlots: any = []
+        for (let i = 0; i < sortedTimeSlots.length; i++) {
+            if (sortedTimeSlots[i] == slot[0]) {
+                for (let j = i; j < i + iterations; j++) {
+                    reservedSlots.push(allSlots[sortedTimeSlots[j]])
+                }
+                break;
+            }
+        }
+
+        // console.log("slotsAvailable.get(selectedSlot): ", slotsAvailable.get(selectedSlot))
         router.push({
             pathname: "/DoctorSelect",
             params: {
@@ -63,14 +83,10 @@ const SlotsConfirmationPage = () => {
                 gender: gender,
                 slotSearchDate: moment(slotSearchDate).format("YYYY-MM-DD"),
                 selectedSlot: slot[0],
-                doctorList: JSON.stringify(slot[1])
+                reservedSlots: JSON.stringify(reservedSlots),
+                doctorList: JSON.stringify(slot[1]),
             }
         })
-    }
-
-    function checkSlots() {
-        console.log("slotsAvailable.size: ", slotsAvailable.size)
-        console.log("slotsAvailable: ", slotsAvailable)
     }
 
     const search = (date: any) => {
@@ -83,10 +99,18 @@ const SlotsConfirmationPage = () => {
                 deviceCode += device.deviceCode + ","
             }
 
+            console.log("specialityCode: ", specialityCode)
+            console.log("date: ", date)
+            console.log("branch: ", branch)
+            console.log("shift: ", shift)
+            console.log("city: ", city)
+            console.log("deviceCode: ", deviceCode)
+            console.log("responsible: ", responsible)
             resourceService.getResourceByLiveSlotSpeciality(specialityCode, date, branch, shift, city, deviceCode, responsible)
                 .then((response) => {
                     setLoader(true)
                     let slots: any = response.data;
+                    setAllSlots(response.data)
                     // console.log("moment: ", moment())
                     // console.log("moment2: ", new Date())
                     const currentTimeInstance = moment();
@@ -144,6 +168,10 @@ const SlotsConfirmationPage = () => {
                     setSlotsAvailable(slotsAvailableAux2)
                     // console.log("slotsAvailableAux2: ", slotsAvailableAux2)
                 })
+                .catch((error) => {
+                    setLoader(false)
+                    console.log("getResourceByLiveSlotSpeciality failed")
+                })
         }
     }
 
@@ -151,7 +179,7 @@ const SlotsConfirmationPage = () => {
         setSlotSearchDate(new Date(selectedDate.timestamp))
         setDateString(moment(selectedDate.timestamp).format("YYYY-MM-DD"))
         console.log("moment(slotSearchDate).format('YYYY-MM-DD'): ", moment(slotSearchDate).format("YYYY-MM-DD"))
-        search(moment(slotSearchDate).format("YYYY-MM-DD"))
+        search(moment(new Date(selectedDate.timestamp)).format("YYYY-MM-DD"))
     };
 
     return (
