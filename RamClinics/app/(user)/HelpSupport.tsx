@@ -32,7 +32,7 @@ const HelpSupport = () => {
     <SafeAreaView>
       <ScrollView>
         <View className="p-6">
-          <HeaderWithBackButton isPushBack={true} title={i18n.t("Help & Support")} />
+          <HeaderWithBackButton isPushBack={true} title={i18n.t("Contact Us")} />
           <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-2xl">
             <Text className="text-2xl py-1 font-bold text-pc-primary">
               {i18n.t("Always Here to Help")}!
@@ -99,19 +99,27 @@ const HelpSupport = () => {
             </View>
           </View>
 
-          <View className="mt-8 p-4 border border-pc-primary rounded-2xl bg-indigo-950">
-            <Text className="text-2xl pl-4 py-1 font-bold text-lime-600">
+          <View className="my-8 p-4 border border-pc-primary rounded-2xl bg-amber-100">
+            <Text className="text-2xl pl-4 py-1 font-bold text-pc-primary">
               {i18n.t("Timings")}
             </Text>
-            <View className="rounded-lg mt-5 mb-3">
-              <View className="flex items-center">
-                <View className="rounded-lg bg-indigo-100 mr-1 p-2">
-                  <Text className="text-lg font-bold text-indigo-950 text-center">{i18n.t("Saturday to Thursday")}:</Text>
-                  <Text className="text-lg font-bold text-indigo-950 text-center">8:00 AM to 10:00 PM</Text>
+            <View className="rounded-lg my-3">
+              <View className="border border-pc-primary bg-white rounded-lg p-3 mt-5 mb-3">
+                <View className="flex flex-row items-center p-2">
+                  <Ionicons name="time" size={24} color="rgb(132 204 22)" />
+                  <View className="flex-1">
+                    <Text className="text-lg font-bold text-pc-primary text-center">{i18n.t("Saturday to Thursday")}:</Text>
+                    <Text className="text-lg font-bold text-pc-primary text-center">8:00 AM to 10:00 PM</Text>
+                  </View>
                 </View>
-                <View className="rounded-lg bg-indigo-100 ml-1 p-2 mt-4">
-                  <Text className="text-lg font-bold text-indigo-950 text-center">{i18n.t("Friday")}:</Text>
-                  <Text className="text-lg font-bold text-indigo-950 text-center">4:00 AM to 10:00 PM</Text>
+              </View>
+              <View className="border border-pc-primary bg-white rounded-lg p-3 mt-5 mb-3">
+                <View className="flex flex-row items-center p-2">
+                  <Ionicons name="time" size={24} color="rgb(132 204 22)" />
+                  <View className="flex-1">
+                    <Text className="text-lg font-bold text-pc-primary text-center">{i18n.t("Friday")}:</Text>
+                    <Text className="text-lg font-bold text-pc-primary text-center">4:00 PM to 10:00 PM</Text>
+                  </View>
                 </View>
               </View>
             </View>

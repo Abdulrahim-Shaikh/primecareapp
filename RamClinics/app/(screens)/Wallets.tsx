@@ -159,7 +159,7 @@ const Wallets = () => {
     
     walletService.refillWallet(refillAccountNo,'paymentLink', +refillAmount, +branchId, +doctorId, patientId)
       .then((response) => {
-        let msg = 'Entered Amount ' + refillAmount + ' .,sent payment link to patient Successfully!';
+        let msg = 'Entered Amount ' + refillAmount + ', sent payment link to patient Successfully! (Check SMS)';
         Alert.alert('Success', msg);
         setRefillAmt('0');
       })
