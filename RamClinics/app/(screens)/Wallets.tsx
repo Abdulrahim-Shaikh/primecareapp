@@ -45,7 +45,7 @@ const Wallets = () => {
   const [showBranches, setShowBranches] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState('');
-  const [noBalance, setNoBal] = useState(true);
+  const [noAccount, setNoAccount] = useState(true);
   const [patientWallets, setPatientWallets] = useState([]);
   const [patientWallet, setPatientWallet] = useState();
   const [doctorName, setDoctorName] = useState();
@@ -55,6 +55,7 @@ const Wallets = () => {
   const { option } = useLocalSearchParams();
   const [refillAmount, setRefillAmt] = useState('');
   const [showTransfer, setShowTransfer] = useState(false);
+  const [showTransferPatient, setShowTransferPat] = useState(false);
   const [transferAmount, setTransferAmt] = useState('');
   let refillAccountNo = '';
   let account = {
@@ -86,9 +87,9 @@ const Wallets = () => {
         .then((response) => {
           console.log('Patient Account >>>>>', response.data);
           if (response.data.length === 0) {
-            setNoBal(true);
+            setNoAccount(true);
           } else {
-            setNoBal(false);
+            setNoAccount(false);
             setPatientWallet(response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'));
             console.log("patient General Wallet: ", response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'));
           }
@@ -143,7 +144,7 @@ const Wallets = () => {
       doctorId = selectedDoc;
       if (doctorWallet) {
         refillAccountNo = doctorWallet.accountId;
-      } 
+      }
       else {
         refillAccountNo = 'none';
       }
@@ -155,9 +156,9 @@ const Wallets = () => {
       branchId = selectedBranchId;
     } else {
       branchId = primaryBranchId;
-    }  
-    
-    walletService.refillWallet(refillAccountNo,'paymentLink', +refillAmount, +branchId, +doctorId, patientId)
+    }
+
+    walletService.refillWallet(refillAccountNo, 'paymentLink', +refillAmount, +branchId, +doctorId, patientId)
       .then((response) => {
         let msg = 'Entered Amount ' + refillAmount + ', sent payment link to patient Successfully! (Check SMS)';
         Alert.alert('Success', msg);
@@ -170,7 +171,7 @@ const Wallets = () => {
   };
 
   const transferToDoctor = () => {
-    walletService.transferToDoctorWallet(patientWallet?.accountId, +transferAmount, selectedBranchId, selectedDoc, patientId)
+    walletService.transferToDoctorWallet(patientWallet?.accountId, +transferAmount, +selectedBranchId, +selectedDoc, patientId)
       .then((response) => {
         let msg = 'Entered Amount ' + transferAmount + ' transferred Successfully!';
         Alert.alert('Success', msg);
@@ -179,7 +180,7 @@ const Wallets = () => {
       })
       .catch((error) => {
         Alert.alert('Error', 'Failed to transfer to doctor');
-        console.error("Failed to refill wallet", error);
+        console.error("Failed to refill wallet:", error.response ? error.response.data : error.message);
       })
   };
 
@@ -198,14 +199,13 @@ const Wallets = () => {
             </Text>
             <View className=" flex-row justify-between items-center py-6 border-b border-dashed text-amber-500">
               <Text className="text-2xl font-medium">{i18n.t("balanc")}</Text>
-              {noBalance ?
+              {noAccount ?
                 <Text className="text-xl font-medium">No Account, Refill First</Text>
                 :
                 <Text className="text-3xl font-semibold">{patientWallet?.currency + " " + patientWallet?.balance}</Text>
               }
             </View>
             <View className=" flex-row justify-between items-center py-4 text-amber-500">
-              {/* disabled={noBalance} */}
               <Button title={selectedDoc ? "Change Doctor" : "Transfer to Doctor"} color="#841584" onPress={() => setShowBranches(true)} />
               <Button title="Refill" color="green" onPress={() => setShowRefill(true)} />
             </View>
@@ -248,14 +248,15 @@ const Wallets = () => {
                   <Text className="text-xl font-medium">No Account, Refill First</Text>
                 }
               </View>
-              {doctorWallet?.balance > 0 ? (
+              {doctorWallet ? (
                 <>
+                  {/* disabled={doctorWallet.balance <= 0} */}
                   <View className=" flex-row justify-between items-center py-4 text-amber-500">
                     <Button title="Transfer to Doctor" color="#841584" onPress={() => setShowTransfer(true)} />
                     <Button title="Refill" color="green" onPress={() => setShowRefillDoctor(true)} />
                   </View>
                   <View className=" flex-row justify-between items-center text-amber-500">
-                    <Button title="Transfer to You" color="#78450f" />
+                    <Button title="Transfer to You" color="#78450f" onPress={() => setShowTransferPat(true)} />
                   </View>
                 </>
               )
@@ -312,6 +313,23 @@ const Wallets = () => {
                 <Button title="Cancel" color="red" onPress={() => setShowTransfer(false)} />
                 <Button title="Transfer" color="green" onPress={() => transferToDoctor()} />
               </View>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal transparent={true} animationType="fade" visible={showTransferPatient} onRequestClose={() => setShowTransferPat(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <Pressable className="absolute top-3 right-3" onPress={() => setShowTransferPat(false)}>
+                <AntDesign name="closecircle" size={24} color="#78450f" />
+              </Pressable>
+              <Text className="text-xl font-bold text-center mb-4 mt-7">Coming Soon</Text>
+              <Text className="text-xs text-center mb-4 mt-7">Visit RAM Clinics Reception for a Refund.</Text>
+              {/* <TextInput onChangeText={setTransferAmt} value={transferAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
+              <View className=" flex-row justify-between items-center py-4">
+                <Button title="Cancel" color="red" onPress={() => setShowTransfer(false)} />
+                <Button title="Transfer" color="green" onPress={() => transferToDoctor()} />
+              </View> */}
             </View>
           </View>
         </Modal>

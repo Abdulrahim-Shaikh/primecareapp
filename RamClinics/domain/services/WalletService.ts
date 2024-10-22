@@ -13,8 +13,8 @@ export class WalletService extends RestService<any> {
     refillWallet(accountNo : string, type : string, amount : number, branchId : any, doctorId : any, patientId : any) {
         return this.put(`refillWallet/${accountNo}/${type}/${amount}/${branchId}/${doctorId}/${patientId}`,{});
     }
-    
-    transferToDoctorWallet(accountNo : string,amount : number,branchId : any,doctorId : any,patientId : any) {
+
+    transferToDoctorWallet(accountNo : string, amount : number, branchId : any, doctorId : any, patientId : any) {
         return this.put(`transferToDoctorWallet/${accountNo}/${amount}/${branchId}/${doctorId}/${patientId}`,{});
     }
 }
