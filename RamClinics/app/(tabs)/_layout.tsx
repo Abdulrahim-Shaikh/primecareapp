@@ -183,7 +183,7 @@ const TabLayout = () => {
                 bottom: 10,
                 }]}>
                 {/* <FontAwesome className="text-center pl-0.5 pt-0" name="calendar-plus-o" size={22} color={focused ? "white" : "rgb(59, 35, 20)"} /> */}
-                <Text className={`font-extrabold text-2xl pt-1 text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>{i18n.t('BOOK')}</Text>
+                <Text className={`font-extrabold text-3xl pt-2 text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>{i18n.t('BOOK')}</Text>
                 <Text className={`font-bold text-xs pb-2 text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>{i18n.t('appointment')}</Text>
               </View>
             ),

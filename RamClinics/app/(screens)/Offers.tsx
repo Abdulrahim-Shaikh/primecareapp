@@ -59,20 +59,20 @@ const Offers = () => {
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
 
-    useEffect(() => {
-        const fetchBranch = async () => {
-            try {
-                const res = await branchService.findAll();
-                setBranches(res.data);
-                if (res.data.length > 0) {
-                    setSelectedBranch(res.data[0].name);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchBranch();
-    }, []);
+    // useEffect(() => {
+    //     const fetchBranch = async () => {
+    //         try {
+    //             const res = await branchService.findAll();
+    //             setBranches(res.data);
+    //             if (res.data.length > 0) {
+    //                 setSelectedBranch(res.data[0].name);
+    //             }
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     fetchBranch();
+    // }, []);
 
     useEffect(() => {
         const fetchPromotion = async () => {
@@ -89,17 +89,17 @@ const Offers = () => {
         fetchPromotion();
     }, []);
 
-    useEffect(() => {
-        // if (selectedBranch) {
-        const filtered = promotions.filter((promotion: any) => {
-            return promotion.promotionBranches.some(
-                (branch: any) => branch.branchName === selectedBranch);
-        });
-        setFilteredPromotions(filtered);
-        // } else {
-        //     setFilteredPromotions(promotions);
-        // }
-    }, [selectedBranch, promotions]);
+    // useEffect(() => {
+    //     // if (selectedBranch) {
+    //     const filtered = promotions.filter((promotion: any) => {
+    //         return promotion.promotionBranches.some(
+    //             (branch: any) => branch.branchName === selectedBranch);
+    //     });
+    //     setFilteredPromotions(filtered);
+    //     // } else {
+    //     //     setFilteredPromotions(promotions);
+    //     // }
+    // }, [selectedBranch, promotions]);
 
     const handleBookPress = (item: any) => {
         setSelectedPromotion(item);
@@ -156,12 +156,12 @@ const Offers = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="flex-1 p-4 pt-2">
-                    <View className="flex flex-row justify-start items-center gap-4">
+                <View className="flex-1 p-6">
+                    <View className="flex flex-row justify-start items-center gap-4 pb-8">
                         <HeaderWithBackButton isPushBack={true} title={i18n.t("Offers")} />
                         <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
-                    <View className="border border-pc-primary rounded-lg my-4">
+                    {/* <View className="border border-pc-primary rounded-lg my-4">
                         <Picker
                             selectedValue={selectedBranch} onValueChange={(itemValue) => { setSelectedBranch(itemValue); }} className="h-12">
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
@@ -169,15 +169,15 @@ const Offers = () => {
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker>
-                    </View>
+                    </View> */}
 
                     {isLoading ? (
                         <View className="flex-1 items-center justify-center">
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         </View>
-                    ) : filteredPromotions.length > 0 ? (
+                    ) : promotions.length > 0 ? (
                         <FlatList
-                            data={filteredPromotions}
+                            data={promotions}
                             keyExtractor={(item: any) => item.id.toString()}
                             renderItem={({ item }) => {
                                 const photoUrl = (item.photo && Array.isArray(item.photo) && item.photo.length > 0 && item.photo[0])

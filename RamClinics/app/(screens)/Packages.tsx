@@ -55,20 +55,20 @@ const Packages = () => {
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
 
-    useEffect(() => {
-        const fetchBranch = async () => {
-            try {
-                const res = await branchService.findAll();
-                setBranches(res.data);
-                if (res.data.length > 0) {
-                    setSelectedBranch(res.data[0].name);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchBranch();
-    }, []);
+    // useEffect(() => {
+    //     const fetchBranch = async () => {
+    //         try {
+    //             const res = await branchService.findAll();
+    //             setBranches(res.data);
+    //             if (res.data.length > 0) {
+    //                 setSelectedBranch(res.data[0].name);
+    //             }
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     fetchBranch();
+    // }, []);
 
     useEffect(() => {
         const fetchPackages = async () => {
@@ -85,17 +85,17 @@ const Packages = () => {
         fetchPackages();
     }, []);
 
-    useEffect(() => {
-        // if (selectedBranch) {
-        const filtered = packages.filter((pack: any) => {
-            return pack.packageBranchs.some(
-                (branch: any) => branch.branchName === selectedBranch);
-        });
-        setFilteredPackages(filtered);
-        // } else {
-        //     setFilteredPackages(packages);
-        // }
-    }, [selectedBranch, packages]);
+    // useEffect(() => {
+    //     // if (selectedBranch) {
+    //     const filtered = packages.filter((pack: any) => {
+    //         return pack.packageBranchs.some(
+    //             (branch: any) => branch.branchName === selectedBranch);
+    //     });
+    //     setFilteredPackages(filtered);
+    //     // } else {
+    //     //     setFilteredPackages(packages);
+    //     // }
+    // }, [selectedBranch, packages]);
 
     const handleBookPress = (item: any) => {
         setSelectedPackage(item);
@@ -168,12 +168,12 @@ const Packages = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View className="flex-1 p-4 pt-2">
-                    <View className="flex flex-row justify-start items-center gap-4">
+                <View className="flex-1 p-6">
+                    <View className="flex flex-row justify-start items-center gap-4 pb-8">
                         <HeaderWithBackButton isPushBack={true} title={i18n.t("Packages")} />
                         <MaterialCommunityIcons name="tag-heart" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
-                    <View className="border border-pc-primary rounded-lg my-4">
+                    {/* <View className="border border-pc-primary rounded-lg my-4">
                         <Picker
                             selectedValue={selectedBranch} onValueChange={(itemValue) => { setSelectedBranch(itemValue); }} className="h-12">
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
@@ -181,7 +181,7 @@ const Packages = () => {
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker>
-                    </View>
+                    </View> */}
 
                     {isLoading ? (
                         <View className="flex-1 items-center justify-center">

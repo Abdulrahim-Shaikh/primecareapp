@@ -245,7 +245,7 @@ const Wallets = () => {
                 {doctorWallet ?
                   <Text className="text-2xl font-semibold">{doctorWallet?.currency} {doctorWallet?.balance}</Text>
                   :
-                  <Text className="text-xl font-medium">No Account, Refill First</Text>
+                  <Text className="text-xl font-medium">No Wallet, Refill First</Text>
                 }
               </View>
               {doctorWallet ? (
