@@ -75,9 +75,9 @@ const DoctorSpeciality = () => {
           <View className="flex flex-col">
             <View className="flex flex-row justify-between items-center w-full px-6">
               <Text className="text-xl font-semibold">{i18n.t("Dental Specialities")}</Text>
-              <Text className="font-semibold text-pc-primary">
+              {/* <Text className="font-semibold text-pc-primary">
                 View All
-              </Text>
+              </Text> */}
             </View>
 
             <View className="pt-5">
@@ -128,9 +128,9 @@ const DoctorSpeciality = () => {
             </View>
             <View className="flex flex-row justify-between items-center w-full px-6 pt-8 pt-6">
               <Text className=" text-xl font-semibold">{i18n.t("Dermatology Specialities")}</Text>
-              <Text className=" font-semibold text-pc-primary">
+              {/* <Text className=" font-semibold text-pc-primary">
                 View All
-              </Text>
+              </Text> */}
             </View>
 
             <View className="pt-5">
@@ -182,12 +182,12 @@ const DoctorSpeciality = () => {
             </View>
             <View className="flex flex-row justify-between items-center w-full px-6 pt-8">
               <Text className=" text-xl font-semibold">{i18n.t("Medical Specialities")}</Text>
-              <Text
+              {/* <Text
                 onPress={() => {
                 }}
                 className=" font-semibold text-pc-primary">
                 View All
-              </Text>
+              </Text> */}
             </View>
 
             <View className="pt-5">

@@ -537,7 +537,7 @@ const NormalFlow = () => {
                                                         }
                                                         }
                                                     >
-                                                        Schedule Appointment
+                                                        Available Appointments
                                                     </Text>
 
                                                 </View>
