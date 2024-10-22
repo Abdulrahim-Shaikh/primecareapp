@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Button,
   Image,
@@ -33,6 +34,8 @@ import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { all } from "axios";
 import { useBranches } from "../../domain/contexts/BranchesContext";
+import scheduleService from "../../domain/services/ScheduleService";
+import patientPolicyService from "../../domain/services/PatientPolicyService";
 
 const tabNames = ["Booked", "Checked In"];
 const i18n = new I18n(translations)
@@ -58,46 +61,61 @@ const Appoinment = () => {
   const [filteredItem, setFilteredItem] = useState(myAppoinmentData);
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
-  const [appointments, setAppointments] = useState(myAppoinmentData);
-  const [allAppointments, setAllAppointments] = useState(myAppoinmentData);
+  const [appointments, setAppointments] = useState([]);
+  const [allAppointments, setAllAppointments] = useState([]);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const { branches, changeBranches } = useBranches()
   const [branchId, setBranchId] = useState(null)
+  const [patientData, setPatientData] = useState(useUserSate.getState().user)
+  const [patientPolicyData, setPatientPolicyData] = useState({})
+  const [user, setUser] = useState(useUserSate.getState().user);
+  const [loader, setLoader] = useState(false);
 
-  const toggleSwitch = () => {
+  const toggleSwitch = (allAppointmentsData: any) => {
+    setLoader(true)
     setIsEnabled(previousState => !previousState);
     const currentDate = new Date();
     const currentTimeInstance = moment()
     setToDate(currentDate);
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
+    const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
     if (isEnabled) {
       setFromDate(firstDayOfMonth);
-      let slicedAppointments = []
-      for (let appt of allAppointments) {
-        let apptDate = new Date(...appt.appointmentDate)
-        const slotTimeInstance = moment(apptDate)
-        if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfMonth))) {
-          slicedAppointments.push(appt)
+      let slicedAppointments: any = []
+      for (let appt of allAppointmentsData) {
+        if (Object.keys(appt).includes("appointmentDate")) {
+          let apptDate = new Date(...appt.appointmentDate)
+          const slotTimeInstance = moment(apptDate)
+          if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+            slicedAppointments.push(appt)
+          }
         }
       }
+      // console.log("slicedAppointments: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
     } else {
       setFromDate(firstDayOfYear);
-      let slicedAppointments = []
-      for (let appt of allAppointments) {
-        let apptDate = new Date(...appt.appointmentDate)
-        const slotTimeInstance = moment(apptDate)
-        if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
-          slicedAppointments.push(appt)
+      let slicedAppointments: any = []
+      allAppointmentsData.forEach((appt: any) => {
+        if (Object.keys(appt).includes("appointmentDate")) {
+          let apptDate = new Date(...appt.appointmentDate)
+          const slotTimeInstance = moment(apptDate)
+          if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+            slicedAppointments.push(appt)
+          }
         }
-      }
+
+      })
+      // for (let appt of allAppointments) {
+      // }
+      // console.log("slicedAppointments2: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
     }
+    setLoader(false)
   }
 
 
@@ -116,12 +134,75 @@ const Appoinment = () => {
 
   const changeTab = (tab: string) => {
     // console.log("here")
-    setAppointments(appointments.filter((item) => item.hisStatus === tab))
+    // setAppointments(appointments.filter((item) => item.hisStatus === tab))
     setActiveTab(tab)
+  }
+
+
+  function bookAgain(item: any) {
+    console.log("item: ", item)
+    console.log("item.department: ", item.department)
+    console.log("item.speciality: ", item.speciality)
+    let date = new Date()
+    if (item.branchId != null && item.department != null && date != null && item.speciality != null) {
+      let dateString = moment(date).format("YYYY-MM-DD");
+      // serious issue
+      let requestBody: any = [{
+        date: dateString,
+        day: +moment(date).format("D"),
+        resourceIds: [item.practitionerId],
+        wday: moment(date).format("dddd").substring(0, 3)
+      }]
+      console.log("user: ", user)
+      if (useUserSate.getState().loggedIn == false) {
+        Alert.alert('Patient Not Found', 'You need to Sign in first', [
+          {
+            text: 'BACK',
+            style: 'default'
+          },
+          {
+            text: 'SIGN IN',
+            onPress: () => router.push('/SignIn'),
+            style: 'default'
+          },
+        ])
+      } else {
+        patientPolicyService.byPatientId(user.id)
+          .then((patientPolicyResponse: any) => {
+            setPatientPolicyData(patientPolicyResponse.data[0])
+            scheduleService.getDoctorSchedule(item.branchId, item.department, item.speciality, "false", requestBody)
+              .then((response) => {
+                console.log("data")
+                router.push({
+                  pathname: "/ScheduleAppointment/",
+                  params: {
+                    branchId: branchId,
+                    department: item.department,
+                    speciality: item.speciality,
+                    doctor: item.doctorName,
+                    resourceId: item.resourceId,
+                    date: (new Date()).toString(),
+                    params: JSON.stringify(response.data[0]),
+                    patientData: JSON.stringify(patientData),
+                    patientPolicyData: JSON.stringify(patientPolicyResponse.data[0])
+                  }
+                })
+              })
+              .catch((error) => {
+                Alert.alert('Note', 'Doctor Schedule not found')
+                console.log("error doctor schedule: ", error)
+              })
+          })
+          .catch((error) => {
+            console.log("patientPolicyService.byPatientId() error: ", error)
+          })
+      }
+    }
   }
 
   useFocusEffect(
     useCallback(() => {
+      setLoader(true)
       console.log("useUserSate.getState().loggedIn: ", useUserSate.getState().user)
       if (useUserSate.getState().loggedIn === false) {
         Alert.alert('Note', 'You must Sign In to view your appointments', [
@@ -138,31 +219,76 @@ const Appoinment = () => {
             style: 'default'
           },
         ])
+      } else {
+        console.log("here")
+        const patientId = useUserSate.getState().userId;
+        let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
+        console.log("branch: ", branch)
+        console.log("patientId: ", patientId)
+        console.log("branch.id: ", branch.id)
+        setBranchId(branch.id)
+        appointmentService.getAppointments(patientId, branch.id)
+          .then((response) => {
+            console.log("completed success")
+            setAllAppointments(response.data);
+            setLoader(true)
+            // setIsEnabled(previousState => !previousState);
+            const currentDate = new Date();
+            const currentTimeInstance = moment()
+            setToDate(currentDate);
+            const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
+            if (isEnabled) {
+              setFromDate(firstDayOfMonth);
+              let slicedAppointments: any = []
+              for (let appt of response.data) {
+                if (Object.keys(appt).includes("appointmentDate")) {
+                  let apptDate = new Date(...appt.appointmentDate)
+                  const slotTimeInstance = moment(apptDate)
+                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                    slicedAppointments.push(appt)
+                  }
+                }
+              }
+              // console.log("slicedAppointments: ", slicedAppointments)
+              setAppointments(slicedAppointments)
+              changeTab(activeTab)
+              setLoader(false)
+            } else {
+              setFromDate(firstDayOfYear);
+              let slicedAppointments: any = []
+              response.data.forEach((appt: any) => {
+                if (Object.keys(appt).includes("appointmentDate")) {
+                  let apptDate = new Date(...appt.appointmentDate)
+                  const slotTimeInstance = moment(apptDate)
+                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                    slicedAppointments.push(appt)
+                  }
+                }
+
+              })
+              // for (let appt of allAppointments) {
+              // }
+              // console.log("slicedAppointments2: ", slicedAppointments)
+              setAppointments(slicedAppointments)
+              changeTab(activeTab)
+              setLoader(false)
+            }
+            // changeTab("Booked")
+          })
+          .catch((error: any) => {
+            console.log("errorer: ", error);
+            setLoader(false)
+          })
+        // appointmentService.getAppointments(patientId, branchId)
+        //   .then((response) => {
+        //     setAllAppointments(response.data);
+        //     changeTab("Booked")
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   })
       }
-      // console.log("here")
-      const patientId = useUserSate.getState().userId;
-      let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
-      // console.log("branch: ", branch)
-      let branchId = branch.id;
-      setBranchId(branchId)
-      console.log("branchId: ", branchId)
-      appointmentService.getAppointments(patientId, branchId)
-        .then((response) => {
-          setAllAppointments(response.data);
-          // toggleSwitch()
-          changeTab("Booked")
-        })
-        .catch((error) => {
-          console.log("error: ", error);
-        })
-      // appointmentService.getAppointments(patientId, branchId)
-      //   .then((response) => {
-      //     setAllAppointments(response.data);
-      //     changeTab("Booked")
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   })
 
     }, [])
   )
@@ -180,14 +306,18 @@ const Appoinment = () => {
           </View> */}
           <View className="flex flex-row items-center justify-center">
             <View>
-              <Text>Last month - All</Text>
+              <Text>Last month</Text>
             </View>
             <View>
               <Switch
                 trackColor={{ false: '#767577', true: '#767577' }}
                 thumbColor={isEnabled ? '#3b2314' : '#f4f3f4'}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
+                onValueChange={() => {
+                  setLoader(true)
+                  toggleSwitch(allAppointments)
+                }}
+                // onValueChange={toggleSwitch(allAppointments)}
                 value={isEnabled}
               />
             </View>
@@ -195,6 +325,12 @@ const Appoinment = () => {
               <Text>All</Text>
             </View>
           </View>
+            {
+              loader && 
+              <View className="pt-8">
+                <ActivityIndicator size="large" color="#454567" />
+              </View>
+            }
           {/* <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
               <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
@@ -209,7 +345,7 @@ const Appoinment = () => {
               <DateTimePicker value={toDate} mode="date" display="default" onChange={onEndDateChange} />
             )}
           </View> */}
-          <View className="pt-2 flex flex-row  justify-between items-center">
+          {/* <View className="pt-2 flex flex-row  justify-between items-center">
             {tabNames.map((item, idx) => (
               <Pressable
                 key={idx}
@@ -227,13 +363,13 @@ const Appoinment = () => {
                 </Text>
               </Pressable>
             ))}
-          </View>
+          </View> */}
 
-          <View className="">
-            {appointments.length <= 0 &&
+          <View>
+            {!loader && appointments.length <= 0 &&
               <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No appointments scheduled for this filter")}</Text>
             }
-            {appointments.map((item) => (
+            {appointments.map((item: any) => (
               <View
                 key={`key: ${item.id}`}
                 className="p-4 border border-pc-primary rounded-2xl w-full mt-4"
@@ -270,13 +406,8 @@ const Appoinment = () => {
                       </View>
 
                       <Text className="text-[12px] pt-2">
-                        <Text> <AntDesign name="star" color={"#ffab00"} /> </Text>
-                        {item.age}
-                        <Text>
-                          <Entypo name="dot-single" />
-                        </Text>
                         <Text className="text-pc-primary">
-                          <AntDesign name="clockcircle" /> {(new Date(item.startTime)).toDateString()} - {(new Date(item.endTime)).toDateString()}
+                          <AntDesign name="clockcircle" /> {moment(new Date(item.startTime)).format("ddd DD-MM-YYYY hh:mm")}    to    {moment(new Date(item.endTime)).format("ddd DD-MM-YYYY hh:mm")}
                         </Text>
                       </Text>
                     </View>
@@ -291,7 +422,7 @@ const Appoinment = () => {
                   </View> */}
                 </View>
                 <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                  {item.sessionStatus === "Upcoming" ? (
+                  {/* {item.sessionStatus === "Upcoming" ? (
                     <TouchableOpacity>
                       <Text
                         onPress={() => setCancelModal(true)}
@@ -301,12 +432,16 @@ const Appoinment = () => {
                       </Text>
                     </TouchableOpacity>
                   ) : (
-                    <TouchableOpacity>
-                      <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
-                        {i18n.t("Book Again")}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
+                  )} */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      bookAgain(item)
+                    }}
+                  >
+                    <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
+                      {i18n.t("Book Again")}
+                    </Text>
+                  </TouchableOpacity>
 
                   {item.sessionStatus === "Upcoming" ? (
                     <Text className="flex-1 text-white border border-pc-primary	 px-4 py-2 rounded-lg bg-[rgb(59,35,20)] text-center">

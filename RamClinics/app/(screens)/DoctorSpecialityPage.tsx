@@ -189,10 +189,8 @@ const DoctorSpecialityPage = () => {
                         />
                       </View>
                       <View className="w-full px-4 flex justify-center gap-3">
-                        <View className="w-full flex flex-row items-center gap-2 font-semibold text-lg text-gray-800">
-                          <Text className="text-base">
-                            {item.name}
-                          </Text>
+                        <View className="w-full flex flex-col items-start gap-2 font-semibold text-lg text-gray-800">
+                          <Text>{item.name}</Text>
                         </View>
                       </View>
                     </Pressable>

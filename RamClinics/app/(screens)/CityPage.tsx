@@ -56,18 +56,33 @@ const CityPage = () => {
     )
 
 
-    useEffect(() => {
-        const fetchBranchCounts = async () => {
-            const counts: { [key: string]: number } = {};
-            for (const city of cities) {
-                const branches = await branchService.getAllBranchesInCity(city.city);
-                counts[city.city] = branches.data.length;
-            }
-            setBranchCounts(counts);
-            console.log("count", counts)
-        };
-        fetchBranchCounts();
-    }, [cities]);
+    useFocusEffect(
+        useCallback(() => {
+            const fetchBranchCounts = async () => {
+                const counts: { [key: string]: number } = {};
+                for (const city of cities) {
+                    if (+callCenterDoctorFlow) {
+                        branchService.getAllBranchesInCity(city).then((res) => {
+                            let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled)
+                            counts[city] = newCallCenterEnabledBranches.length;
+                            setBranchCounts(counts);
+                        });
+                    } else {
+                        let deviceCode: any = ""
+                        for (let device of devicesList) {
+                            deviceCode += device.deviceCode + ","
+                        }
+                        resourceService.getBranchBySpecialityCity(specialityCode, city, deviceCode)
+                        .then((response) => {
+                            counts[city] = response.data.length;
+                            setBranchCounts(counts);
+                        })
+                    }
+                }
+            };
+            fetchBranchCounts();
+        }, [cities])
+    )
 
     return (
         <SafeAreaView>
@@ -79,7 +94,6 @@ const CityPage = () => {
                         data={cities}
                         keyExtractor={(item: any, index) => "key" + index}
                         renderItem={({ item }) => {
-                            const noOfBranches = branchCounts[item.city] || 0;
                             return (
                                 <View className="w-full">
                                     <Pressable
@@ -110,7 +124,7 @@ const CityPage = () => {
                                                 {item || item.city}
                                             </Text>
                                             <Text className="text-gray-600 pt-1">
-                                                {noOfBranches} Branches
+                                                {branchCounts[item] || 0} Branches
                                             </Text>
                                         </View>
                                     </Pressable>

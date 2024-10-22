@@ -64,6 +64,9 @@ const Home = () => {
         branchService.findAll().then((res) => {
           changeBranches(res.data)
         })
+        .then(() => {
+          console.log("branches set")
+        })
       }
 
       changeLocale(language)

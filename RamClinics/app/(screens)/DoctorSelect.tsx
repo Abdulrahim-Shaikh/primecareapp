@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 
 const DoctorSelect = () => {
 
-    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception, shift, gender, slotSearchDate, selectedSlot, doctorList } = useLocalSearchParams();
+    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception, shift, gender, slotSearchDate, selectedSlot, reservedSlots, doctorList } = useLocalSearchParams();
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [doctors, setDoctors] = useState(JSON.parse(doctorList.toString()));
@@ -34,25 +34,26 @@ const DoctorSelect = () => {
     const [searchDate, setSearchDate] = useState(moment(slotSearchDate).toDate());
     const [loggedIn, setLoggedIn] = useState(useUserSate.getState().loggedIn);
     const { branches, setBranches } = useBranches();
+    const [slotsReserved, setSlotsReserved] = useState(JSON.parse(reservedSlots.toString()));
 
     useEffect(() => {
-        console.log("doctorList: ", doctorList)
         setDoctors(JSON.parse(doctorList.toString()))
-        console.log("doctors: ", doctors)
         setSlot(selectedSlot)
+        setSlotsReserved(JSON.parse(reservedSlots.toString()))
         setSearchDate(moment(slotSearchDate).toDate())
         setLoggedIn(useUserSate.getState().loggedIn)
     }, []);
 
-    const bookAppointment = async () => {
+    const bookAppointment = async (doctor: any) => {
 
-        let branchResponse = await branchService.findAll();
-        let branchId = branchResponse.data.find((branch: any) => branch.name === selectedDoctor?.primaryBranch)?.id;
-        let slotGroupIds = doctors.flat().filter((slotDoc: any) => slotDoc.id == selectedDoctor?.id).map((slot: any) => slot.slotId).join('$')
+        // let branchResponse = await branchService.findAll();
+        let branchId = branches.find((branch: any) => branch.name === doctor?.primaryBranch)?.id;
+        let slotGroupIds = slotsReserved.flat().filter((slotDoc: any) => slotDoc.id == doctor?.id).map((slot: any) => slot.slotId).join('$')
 
         slotService.slotsByIds(slotGroupIds)
             .then((response) => {
-                console.log("response.data: ", response.data)
+                console.log("arrararararesponse.data: ", response.data)
+                console.log("useUserSate.getState().user: ", useUserSate.getState().user)
                 let app: any = {}
                 app.slots = [...response.data]
                 let start, end;
@@ -62,16 +63,16 @@ const DoctorSelect = () => {
                 }
                 app.mrno = useUserSate.getState().user.mrno
                 app.patientId = useUserSate.getState().user.id
-                app.patientName = useUserSate.getState().user.name
-                app.practitionerName = selectedDoctor.name
-                app.practitionerId = selectedDoctor.id
-                app.branchName = selectedDoctor.primaryBranch
+                app.patientName = useUserSate.getState().user.firstName + " " + useUserSate.getState().user.lastName
+                app.practitionerName = doctor.name
+                app.practitionerId = doctor.id
+                app.branchName = doctor.primaryBranch
                 app.department = department;
                 app.speciality = speciality;
                 app.gender = useUserSate.getState().user.gender
                 app.age = Math.ceil(useUserSate.getState().user.age)
                 app.mobileNo = useUserSate.getState().user.mobile
-                app.nationality = useUserSate.getState().user.nationality
+                app.nationality = useUserSate.getState().user.country
                 app.nationalId = useUserSate.getState().user.nationalityId
                 app.branchId = branchId;
                 app.status = "pending"
@@ -125,38 +126,40 @@ const DoctorSelect = () => {
                             Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!')
                         } else {
                             console.log("app: ", app)
-                            // appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", app)
-                            // .then((response) => {
-                            //     // setLoader(false)
-                            //     Alert.alert('Success', 'Appointment has been booked successfully', [
-                            //         {
-                            //             text: 'OK',
-                            //             style: 'default'
-                            //         },
-                            //     ],
-                            //     )
-                            // })
-                            // .catch((error) => {
-                            //     // setLoader(false)
-                            //     console.log("appointmentService error", error)
-                            // })
-                            appointmentService.save(app)
-                                .then((response: any) => {
-                                    console.log("appointmentService.save: ", response)
-                                    Alert.alert('Appointment booked', 'Appointment has booked successfully!')
-                                    // Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
-                                    //     { text: 'OK', onPress: () => router.push('/index'), style: 'default' },
-                                    // ])
-                                })
-                                .catch((error: any) => {
-                                    console.log("appointmentService.save error: ", error)
-                                    Alert.alert('Appointment booking failed', 'Failed to book appointment!')
-                                })
+                            appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", app)
+                            .then((response) => {
+                                // setLoader(false)
+                                Alert.alert('Success', 'Appointment has been booked successfully', [
+                                    {
+                                        text: 'OK',
+                                        style: 'default'
+                                    },
+                                ],
+                                )
+                            })
+                            .catch((error) => {
+                                // setLoader(false)
+                                console.log("appointmentService error", error)
+                            })
+                            // appointmentService.save(app)
+                            //     .then((response: any) => {
+                            //         console.log("appointmentService.save: ", response)
+                            //         Alert.alert('Appointment booked', 'Appointment has booked successfully!')
+                            //     })
+                            //     .catch((error: any) => {
+                            //         console.log("appointmentService.save error: ", error)
+                            //         Alert.alert('Appointment booking failed', 'Failed to book appointment!')
+                            //     })
                         }
                     })
                     .catch((error: any) => {
                         console.log("getAppointmentsBySlotId error: ", error)
+                        Alert.alert('Appointment booking failed', 'Failed to book appointment!')
                     })
+            })
+            .catch((error) => {
+                Alert.alert("Appointment booking failed", "There might be an existing appointment in the selected slot interval or with the same doctor!")
+                console.log("slotService error: ", error)
             })
 
     }
@@ -176,7 +179,7 @@ const DoctorSelect = () => {
                 {
                     text: 'Confirm',
                     onPress: () => {
-                        loggedIn ? bookAppointment() : router.push("/SignIn");
+                        loggedIn ? bookAppointment(item) : router.push("/SignIn");
                     },
                     style: 'default'
                 },

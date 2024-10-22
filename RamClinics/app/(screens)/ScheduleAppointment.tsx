@@ -144,8 +144,12 @@ const ScheduleAppointment = () => {
             let tempDate = moment(slotSearchDate).format("YYYY-MM-DD")
             let currentTimeInstance = moment();
             slotsAux.forEach((slot: any) => {
-                console.log("\n\n\nslot: ", slot.startTime)
-                if (moment(moment(`${tempDate} ${slot.startTime.trim()}`, "YYYY-MM-DD hh:mm A")).isSameOrAfter(moment(currentTimeInstance))) {
+                console.log("one: ", moment(slot.startTime))
+                console.log("two: ", moment(currentTimeInstance))
+                console.log(moment(slot.startTime).isSameOrAfter(moment(currentTimeInstance)))
+                // console.log(moment(moment(`${tempDate} ${slot.startTime.trim()}`, "YYYY-MM-DD hh:mm A")).isSameOrAfter(moment(currentTimeInstance)))
+                console.log("\n")
+                if (moment(slot.startTime).isSameOrAfter(moment(currentTimeInstance))) {
                     validSlots.push(slot)
                 }
                 slot.selected = false
