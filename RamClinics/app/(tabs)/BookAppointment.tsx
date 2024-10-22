@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, } from "@expo/vector-icons";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React, { useCallback } from "react";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
@@ -50,6 +50,8 @@ const BookAppointment = () => {
     var serviceDataRender = []
 
     const [locale, setLocale] = useState(i18n.locale);
+    const { fromMainMenu } = useLocalSearchParams();
+    const [title, setTitle] = useState("Book Appointment");
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -59,6 +61,12 @@ const BookAppointment = () => {
 
     useFocusEffect(
         useCallback(() => {
+            console.log("fromMainMenu", fromMainMenu)
+            if (fromMainMenu != undefined && fromMainMenu != null) {
+                setTitle("All Doctor Specialities")
+            } else {
+                setTitle("Book Appointment")
+            }
             changeLocale(language)
             changeLanguage(language)
         }, [])
@@ -106,12 +114,15 @@ const BookAppointment = () => {
             <ScrollView>
                 <View className="">
                     <View className=" pb-8 px-6 flex flex-row justify-start items-center gap-4 pt-6">
-                        <HeaderWithBackButton isPushBack={true} title={i18n.t("Book Appointment")} />
-                        <MaterialCommunityIcons
-                            name="calendar-check-outline"
-                            size={24}
-                            color={"#3b2314"}
-                        />
+                        <HeaderWithBackButton isPushBack={true} title={i18n.t(title)} />
+                        {
+                            (fromMainMenu == undefined || fromMainMenu == null) &&
+                            <MaterialCommunityIcons
+                                name="calendar-check-outline"
+                                size={24}
+                                color={"#3b2314"}
+                            />
+                        }
                     </View>
                     <View className="flex flex-row justify-evenly">
                         {serviceDataRender}

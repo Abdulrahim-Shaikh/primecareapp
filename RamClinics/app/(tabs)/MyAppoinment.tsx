@@ -83,11 +83,8 @@ const Appoinment = () => {
     const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
     if (isEnabled) {
       setFromDate(firstDayOfMonth);
-      let slicedAppointments = []
-      console.log("appointments: ", allAppointments.length)
+      let slicedAppointments: any = []
       for (let appt of allAppointmentsData) {
-        console.log("debug 1")
-        console.log("appt: ", appt)
         if (Object.keys(appt).includes("appointmentDate")) {
           let apptDate = new Date(...appt.appointmentDate)
           const slotTimeInstance = moment(apptDate)
@@ -99,7 +96,6 @@ const Appoinment = () => {
       // console.log("slicedAppointments: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
-      setLoader(false)
     } else {
       setFromDate(firstDayOfYear);
       let slicedAppointments: any = []
@@ -118,8 +114,8 @@ const Appoinment = () => {
       // console.log("slicedAppointments2: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
-      setLoader(false)
     }
+    setLoader(false)
   }
 
 
@@ -206,6 +202,7 @@ const Appoinment = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setLoader(true)
       console.log("useUserSate.getState().loggedIn: ", useUserSate.getState().user)
       if (useUserSate.getState().loggedIn === false) {
         Alert.alert('Note', 'You must Sign In to view your appointments', [
@@ -234,7 +231,49 @@ const Appoinment = () => {
           .then((response) => {
             console.log("completed success")
             setAllAppointments(response.data);
-            toggleSwitch(response.data)
+            setLoader(true)
+            // setIsEnabled(previousState => !previousState);
+            const currentDate = new Date();
+            const currentTimeInstance = moment()
+            setToDate(currentDate);
+            const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
+            if (isEnabled) {
+              setFromDate(firstDayOfMonth);
+              let slicedAppointments: any = []
+              for (let appt of response.data) {
+                if (Object.keys(appt).includes("appointmentDate")) {
+                  let apptDate = new Date(...appt.appointmentDate)
+                  const slotTimeInstance = moment(apptDate)
+                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                    slicedAppointments.push(appt)
+                  }
+                }
+              }
+              // console.log("slicedAppointments: ", slicedAppointments)
+              setAppointments(slicedAppointments)
+              changeTab(activeTab)
+              setLoader(false)
+            } else {
+              setFromDate(firstDayOfYear);
+              let slicedAppointments: any = []
+              response.data.forEach((appt: any) => {
+                if (Object.keys(appt).includes("appointmentDate")) {
+                  let apptDate = new Date(...appt.appointmentDate)
+                  const slotTimeInstance = moment(apptDate)
+                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                    slicedAppointments.push(appt)
+                  }
+                }
+
+              })
+              // for (let appt of allAppointments) {
+              // }
+              // console.log("slicedAppointments2: ", slicedAppointments)
+              setAppointments(slicedAppointments)
+              changeTab(activeTab)
+              setLoader(false)
+            }
             // changeTab("Booked")
           })
           .catch((error: any) => {
@@ -275,6 +314,7 @@ const Appoinment = () => {
                 thumbColor={isEnabled ? '#3b2314' : '#f4f3f4'}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={() => {
+                  setLoader(true)
                   toggleSwitch(allAppointments)
                 }}
                 // onValueChange={toggleSwitch(allAppointments)}
@@ -285,11 +325,12 @@ const Appoinment = () => {
               <Text>All</Text>
             </View>
           </View>
-          <View className="pt-8">
             {
-              loader && <ActivityIndicator size="large" color="#454567" />
+              loader && 
+              <View className="pt-8">
+                <ActivityIndicator size="large" color="#454567" />
+              </View>
             }
-          </View>
           {/* <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
               <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
@@ -324,11 +365,11 @@ const Appoinment = () => {
             ))}
           </View> */}
 
-          <View className="">
-            {appointments.length <= 0 &&
+          <View>
+            {!loader && appointments.length <= 0 &&
               <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No appointments scheduled for this filter")}</Text>
             }
-            {appointments.map((item) => (
+            {appointments.map((item: any) => (
               <View
                 key={`key: ${item.id}`}
                 className="p-4 border border-pc-primary rounded-2xl w-full mt-4"
@@ -365,13 +406,8 @@ const Appoinment = () => {
                       </View>
 
                       <Text className="text-[12px] pt-2">
-                        <Text> <AntDesign name="star" color={"#ffab00"} /> </Text>
-                        {item.age}
-                        <Text>
-                          <Entypo name="dot-single" />
-                        </Text>
                         <Text className="text-pc-primary">
-                          <AntDesign name="clockcircle" /> {moment(new Date(item.startTime)).format("DD-MM-YYYY hh:mm")}    to    {moment(new Date(item.endTime)).format("DD-MM-YYYY hh:mm")}
+                          <AntDesign name="clockcircle" /> {moment(new Date(item.startTime)).format("ddd DD-MM-YYYY hh:mm")}    to    {moment(new Date(item.endTime)).format("ddd DD-MM-YYYY hh:mm")}
                         </Text>
                       </Text>
                     </View>

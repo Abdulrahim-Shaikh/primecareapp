@@ -32,12 +32,14 @@ const DoctorSpeciality = () => {
       changeLanguage(language)
     }, [])
   )
-  let [specialtyList, setSpecialty] = useState([]);
+  let [specialtyList, setSpecialty] = useState([
+    'Dental', 'Dermatology', 'Medical'
+  ]);
 
   useEffect(() => {
-    specialityService.findAll().then((response) => {
-      setSpecialty(response.data);
-    })
+    // specialityService.findAll().then((response) => {
+    //   setSpecialty(response.data);
+    // })
   }, [])
 
   return (
@@ -47,13 +49,9 @@ const DoctorSpeciality = () => {
         <Text
           onPress={() =>
             router.push({
-              pathname: "/DoctorSpecialityPage",
+              pathname: "/BookAppointment",
               params: {
-                branchId: null,
-                fromSpeciality: 1,
-                department: null,
-                callCenterFlow: 0,
-                callCenterDoctorFlow: 0
+                fromMainMenu: 1
               }
             })
           }
@@ -81,36 +79,29 @@ const DoctorSpeciality = () => {
                   <Pressable className="flex flex-row border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg"
                     onPress={() =>
                       router.push({
-                        pathname: "/BranchPage",
+                        pathname: "/BookAppointmentOptions",
                         params: {
                           city: null,
-                          fromSpeciality: 1,
-                          department: null,
-                          speciality: item.name,
-                          specialityCode: item.code,
-                          callCenterFlow: 0,
-                          devices: JSON.stringify(""),
-                          responsible: "",
-                          callOrReception: "",
-                          callCenterDoctorFlow: 0
+                          fromSpeciality: 0,
+                          department: item
                         }
                       })
                     }
                   >
-                    <Text className=" bg-[rgb(59,35,20)] rounded-md p-3 flex justify-center items-center">
-                      <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
-                    </Text>
-                    <View className="px-3">
-                      <Text className="font-semibold text-white">{item.name} </Text>
+                    <View className="rounded-md gap-4 p-3 flex justify-center flex-row items-center">
                       <View>
-                        <Text className="font-bodyText pt-1 text-white">
-                          {i18n.t("doctors")}{" "}
-                          {language === "ar" ?
-                            <AntDesign name="arrowleft" color={"white"} /> :
-                            <AntDesign name="arrowright" color={"white"} />}
-                        </Text>
+                        <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
+                      </View>
+                      <View>
+                        <Text className="text-white">{item}</Text>
                       </View>
                     </View>
+                    {/* <Text className=" bg-[rgb(59,35,20)] rounded-md p-3 flex justify-center items-center">
+                        <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
+                    </Text>
+                    <View className="px-3">
+                      <Text className="items-center font-semibold text-white">{item}</Text>
+                    </View> */}
                   </Pressable>
                 </View>
               )}

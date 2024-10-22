@@ -71,7 +71,7 @@ const ShiftAndGenderOptions = () => {
                     city: city,
                     branch: branch,
                     fromSpeciality: fromSpeciality,
-                    department: null,
+                    department: department,
                     speciality: speciality,
                     specialityCode: specialityCode,
                     callCenterFlow: callCenterFlow,
