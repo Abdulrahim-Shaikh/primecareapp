@@ -28,10 +28,32 @@ const DoctorSpeciality = () => {
 
   useFocusEffect(
     useCallback(() => {
+      specialityService.getByDept("Dental").then((response) => {
+        setDentalSpeciality(response.data)
+        console.log("dental response: ", response.data.length)
+      })
+        .catch((error) => {
+          console.log("dental error: ", error)
+        })
+      specialityService.getByDept("Dermatology").then((response) => {
+        setDermatologySpeciality(response.data)
+      })
+        .catch((error) => {
+          console.log("derma error: ", error)
+        })
+      specialityService.getByDept("Medical").then((response) => {
+        setMedicalSpeciality(response.data)
+      })
+        .catch((error) => {
+          console.log("medical error: ", error)
+        })
       changeLocale(language)
       changeLanguage(language)
     }, [])
   )
+  const [dentalSpecialityList, setDentalSpeciality] = useState([])
+  const [dermatologySpecialityList, setDermatologySpeciality] = useState([])
+  const [medicalSpecialityList, setMedicalSpeciality] = useState([])
   let [specialtyList, setSpecialty] = useState([
     'Dental', 'Dermatology', 'Medical'
   ]);
@@ -44,69 +66,168 @@ const DoctorSpeciality = () => {
 
   return (
     <View className="pt-8">
-      <View className="flex flex-row justify-between items-center w-full px-6">
-        <Text className=" text-xl font-semibold">{i18n.t("Doctor Speciality")}</Text>
-        <Text
-          onPress={() =>
-            router.push({
-              pathname: "/BookAppointment",
-              params: {
-                fromMainMenu: 1
-              }
-            })
-          }
-          className=" font-semibold text-pc-primary">
-          {i18n.t("View All")}
-        </Text>
-      </View>
+      <View className="flex flex-col">
+        <View className="flex flex-row justify-between items-center w-full px-6">
+          <Text className=" text-xl font-semibold">{i18n.t("Dental Specialities")}</Text>
+          <Text
+            className=" font-semibold text-pc-primary">
+          </Text>
+        </View>
 
-      <View className="h-[90px] pt-5">
-
-        {
-          specialtyList.length === 0
-            ?
-            <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No Doctors found")}</Text>
-            :
-
-            <FlatList
-              horizontal
-              contentContainerStyle={{ gap: 8 }}
-              showsHorizontalScrollIndicator={false}
-              data={specialtyList}
-              keyExtractor={(item, index) => "key" + index}
-              renderItem={({ item }) => (
-                <View className="">
-                  <Pressable className="flex flex-row border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg"
-                    onPress={() =>
-                      router.push({
-                        pathname: "/BookAppointmentOptions",
-                        params: {
-                          city: null,
-                          fromSpeciality: 0,
-                          department: item
-                        }
-                      })
-                    }
-                  >
-                    <View className="rounded-md gap-4 p-3 flex justify-center flex-row items-center">
-                      <View>
-                        <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
-                      </View>
-                      <View>
-                        <Text className="text-white">{item}</Text>
-                      </View>
+        <View className="pt-5">
+          {
+            specialtyList.length === 0
+              ?
+              <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No Doctors found")}</Text>
+              :
+              <View>
+                <FlatList
+                  horizontal
+                  contentContainerStyle={{ gap: 8 }}
+                  showsHorizontalScrollIndicator={false}
+                  data={dentalSpecialityList}
+                  keyExtractor={(item: any, index) => "key" + index}
+                  renderItem={({ item }) => (
+                    <View className="">
+                      <Pressable className="flex flex-row border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg"
+                      onPress={() =>
+                        router.push({
+                          pathname: "/ServicesListPage",
+                          params: {
+                            city: null,
+                            fromSpeciality: 0,
+                            department: "Dental",
+                            callCenterFlow: 1,
+                            specialityCode: item.code,
+                            speciality: item.name,
+                            services: JSON.stringify(item.services)
+                          }
+                        })
+                      }
+                      >
+                        <View className="rounded-md gap-4 p-3 flex justify-center flex-row items-center">
+                          <View>
+                            <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
+                          </View>
+                          <View>
+                            <Text className="text-white">{item.name}</Text>
+                          </View>
+                        </View>
+                      </Pressable>
                     </View>
-                    {/* <Text className=" bg-[rgb(59,35,20)] rounded-md p-3 flex justify-center items-center">
-                        <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
-                    </Text>
-                    <View className="px-3">
-                      <Text className="items-center font-semibold text-white">{item}</Text>
-                    </View> */}
-                  </Pressable>
-                </View>
-              )}
-            />
-        }
+                  )}
+                />
+              </View>
+          }
+        </View>
+        <View className="flex flex-row justify-between items-center w-full px-6 pt-8 pt-6">
+          <Text className=" text-xl font-semibold">{i18n.t("Dermatology Specialities")}</Text>
+          <Text
+            className=" font-semibold text-pc-primary">
+          </Text>
+        </View>
+
+        <View className="pt-5">
+
+          {
+            specialtyList.length === 0
+              ?
+              <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No Doctors found")}</Text>
+              :
+              <View>
+                <FlatList
+                  horizontal
+                  contentContainerStyle={{ gap: 8 }}
+                  showsHorizontalScrollIndicator={false}
+                  data={dermatologySpecialityList}
+                  keyExtractor={(item: any, index) => "key" + index}
+                  renderItem={({ item }) => (
+                    <View className="">
+                      <Pressable className="flex flex-row border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg"
+                      onPress={() =>
+                        router.push({
+                          pathname: "/ServicesListPage",
+                          params: {
+                            city: null,
+                            fromSpeciality: 0,
+                            department: "Dermatology",
+                            callCenterFlow: 1,
+                            specialityCode: item.code,
+                            speciality: item.name,
+                            services: JSON.stringify(item.services)
+                          }
+                        })
+                      }
+                      >
+                        <View className="rounded-md gap-4 p-3 flex justify-center flex-row items-center">
+                          <View>
+                            <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
+                          </View>
+                          <View>
+                            <Text className="text-white">{item.name}</Text>
+                          </View>
+                        </View>
+                      </Pressable>
+                    </View>
+                  )}
+                />
+              </View>
+          }
+        </View>
+        <View className="flex flex-row justify-between items-center w-full px-6 pt-8">
+          <Text className=" text-xl font-semibold">{i18n.t("Medical Specialities")}</Text>
+          <Text
+            className=" font-semibold text-pc-primary">
+          </Text>
+        </View>
+
+        <View className="pt-5">
+
+          {
+            specialtyList.length === 0
+              ?
+              <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No Doctors found")}</Text>
+              :
+              <View>
+                <FlatList
+                  horizontal
+                  contentContainerStyle={{ gap: 8 }}
+                  showsHorizontalScrollIndicator={false}
+                  data={medicalSpecialityList}
+                  keyExtractor={(item: any, index) => "key" + index}
+                  renderItem={({ item }) => (
+                    <View className="">
+                      <Pressable className="flex flex-row border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg"
+                      onPress={() =>
+                        router.push({
+                          pathname: "/ServicesListPage",
+                          params: {
+                            city: null,
+                            fromSpeciality: 0,
+                            department: "Medical",
+                            callCenterFlow: 1,
+                            specialityCode: item.code,
+                            speciality: item.name,
+                            services: JSON.stringify(item.services)
+                          }
+                        })
+                      }
+                      >
+                        <View className="rounded-md gap-4 p-3 flex justify-center flex-row items-center">
+                          <View>
+                            <Ionicons name={'medical'} size={24} color={"rgb(132 204 22)"} />
+                          </View>
+                          <View>
+                            <Text className="text-white">{item.name}</Text>
+                          </View>
+                        </View>
+                      </Pressable>
+                    </View>
+                  )}
+                />
+              </View>
+          }
+        </View>
       </View>
     </View>
   );

@@ -286,6 +286,9 @@ const translations = {
         "Proshtodontics": "Proshtodontics",
         "Pedodontics": "Pedodontics",
         "All Doctor Specialities": "All Doctor Specialities",
+        "Dental Specialities": "Dental Specialities",
+        "Dermatology Specialities": "Dermatology Specialities",
+        "Medical Specialities": "Medical Specialities",
 
     },
     ar: {
@@ -576,6 +579,9 @@ const translations = {
         "Proshtodontics": "طب الأسنان التجميلي",
         "Pedodontics": "طب الأسنان الأطفال",
         "All Doctor Specialities": "جميع تخصصات الأطباء",
+        "Dental Specialities": "تخصصات الأسنان",
+        "Dermatology Specialities": "تخصصات الجلدية",
+        "Medical Specialities": "تخصصات الطب العام",
 
     }
 }
