@@ -98,7 +98,7 @@ const Home = () => {
   return (
     <SafeAreaView className="">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="justify-start min-h-[85vh] my-8 items-start">
+        <View className="justify-start my-8 items-start">
           {loggedIn ?
             <Header
               setShowNotification={setShowNotification}
@@ -123,7 +123,6 @@ const Home = () => {
           }
           <UpcomingSlider />
           <DoctorSpeciality />
-          {loggedIn && (<MainMenu />)}
         </View>
 
         <NotificationModal
