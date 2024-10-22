@@ -49,6 +49,7 @@ const ServicesListPage = () => {
 
     useFocusEffect(
         useCallback(() => {
+            console.log("services: ", services)
             setServicesList(JSON.parse(services.toString()))
         }, [])
     )
@@ -119,7 +120,7 @@ const ServicesListPage = () => {
                         }}
                     />
                 </View>
-                <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
+                {/* <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
                     {servicesList.map(({ serviceNameEn, serviceNameAr, subServices }, idx) => (
                         <Pressable
                             onPress={() => { selectService(serviceNameEn, subServices) }}
@@ -133,7 +134,7 @@ const ServicesListPage = () => {
                             <Text className="text-base font-semibold text-white">{serviceNameAr}</Text>
                         </Pressable>
                     ))}
-                </View>
+                </View> */}
             </ScrollView>
         </SafeAreaView >
     );

@@ -164,19 +164,19 @@ const SingUp = () => {
     };
 
     if (countryCode && firstName && lastName && dob && mobileNo && selectedBranch && gender) {
-      if (firstName != null && !validateName(firstName)) {
+      if (firstName != null && firstName != '' && !validateName(firstName)) {
         console.log("valid")
         tempErrors.firstName = "Invalid first name";
         setErrors(tempErrors)
         setErrorsExist(true);
       }
-      if (secondName != null && !validateName(secondName)) {
+      if (secondName != null && secondName != '' && !validateName(secondName)) {
         console.log("valid")
         tempErrors.secondName = "Invalid first name";
         setErrors(tempErrors)
         setErrorsExist(true);
       }
-      if (lastName != null && !validateName(lastName)) {
+      if (lastName != null && lastName != '' && !validateName(lastName)) {
         tempErrors.lastName = "Invalid last name";
         setErrors(tempErrors)
         setErrorsExist(true);
@@ -187,7 +187,7 @@ const SingUp = () => {
         setErrorsExist(true);
         return;
       }
-      if (email != null && !validateEmail(email)) {
+      if (email != null && email != '' && !validateEmail(email)) {
         console.log("email invalid")
         tempErrors.email = "Invalid Email";
         setErrors(tempErrors)
