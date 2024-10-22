@@ -10,7 +10,7 @@ export class WalletService extends RestService<any> {
         return this.get(`getAccountsByPatientId/${patientId}/${branchId}`);
     }
 
-    refillWallet(accountNo : string,branchId : any,amount : number,type : string,doctorId : any,patientId : any) {
+    refillWallet(accountNo : string, type : string, amount : number, branchId : any, doctorId : any, patientId : any) {
         return this.put(`refillWallet/${accountNo}/${type}/${amount}/${branchId}/${doctorId}/${patientId}`,{});
     }
     

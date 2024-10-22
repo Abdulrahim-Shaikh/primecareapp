@@ -41,9 +41,10 @@ const Wallets = () => {
   let primaryBranch = useUserSate.getState().branch;
   const [branches, setBranches] = useState([]);
   const [selectedBranchId, setSelectedBranchId] = useState('');
+  const [primaryBranchId, setPrimaryBranchId] = useState('');
   const [showBranches, setShowBranches] = useState(false);
   const [doctors, setDoctors] = useState([]);
-  const [selectedDoc, setSelectedDoc] = useState();
+  const [selectedDoc, setSelectedDoc] = useState('');
   const [noBalance, setNoBal] = useState(true);
   const [patientWallets, setPatientWallets] = useState([]);
   const [patientWallet, setPatientWallet] = useState();
@@ -80,6 +81,7 @@ const Wallets = () => {
     let primBranch: any = branches.find((b: any) => b.name === primaryBranch);
     if (primBranch) {
       console.log('primBranch', primBranch.id);
+      setPrimaryBranchId(primBranch.id);
       walletService.getAccountsByPatientId(patientId, primBranch.id)
         .then((response) => {
           console.log('Patient Account >>>>>', response.data);
@@ -135,17 +137,27 @@ const Wallets = () => {
   const refill = (type: String) => {
     setShowRefill(false);
     setShowRefillDoctor(false);
+    let branchId = '';
+    let doctorId = '';
     if (type === 'doctor') {
+      doctorId = selectedDoc;
       if (doctorWallet) {
         refillAccountNo = doctorWallet.accountId;
       } 
       else {
-        refillAccountNo = '';
+        refillAccountNo = 'none';
       }
     } else {
-      refillAccountNo = '';
+      refillAccountNo = 'none';
+      doctorId = '0';
     }
-    walletService.refillWallet(refillAccountNo, selectedBranchId, +refillAmount, 'paymentLink', selectedDoc, patientId)
+    if (selectedBranchId) {
+      branchId = selectedBranchId;
+    } else {
+      branchId = primaryBranchId;
+    }  
+    
+    walletService.refillWallet(refillAccountNo,'paymentLink', +refillAmount, +branchId, +doctorId, patientId)
       .then((response) => {
         let msg = 'Entered Amount ' + refillAmount + ' .,sent payment link to patient Successfully!';
         Alert.alert('Success', msg);
