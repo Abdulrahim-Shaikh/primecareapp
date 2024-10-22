@@ -15,7 +15,7 @@ export class WalletService extends RestService<any> {
     }
     
     transferToDoctorWallet(accountNo : string,amount : number,branchId : any,doctorId : any,patientId : any) {
-        return this.put(`account/transferToDoctorWallet/${accountNo}/${amount}/${branchId}/${doctorId}/${patientId}`,{});
+        return this.put(`transferToDoctorWallet/${accountNo}/${amount}/${branchId}/${doctorId}/${patientId}`,{});
     }
 }
 const specialityService = new WalletService('account');

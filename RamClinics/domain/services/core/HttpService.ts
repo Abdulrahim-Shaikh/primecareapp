@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { UAT_LINK } from '@env';
-import { CLAIMS_LINK } from '@env';
 import {
     useQuery
 } from "@tanstack/react-query";
@@ -61,6 +60,7 @@ class HttpService {
     }
 
     putAPI(path: string, entity: any) {
+        console.log(path);
         return axios.put(this.baseUrl + path, entity, this.getHeaders());
     }
 
