@@ -304,9 +304,9 @@ const Appoinment = () => {
           {/* <View className="pt-8">
             <Searchbox searchValue={searchValue} setSearchValue={setSearchValue}/>
           </View> */}
-          <View className="flex flex-row items-center justify-center">
+          <View className="pt-3 flex w-full flex-row items-center justify-start gap-3">
             <View>
-              <Text>Last month</Text>
+              <Text className="text-lg">Last month</Text>
             </View>
             <View>
               <Switch
@@ -322,7 +322,7 @@ const Appoinment = () => {
               />
             </View>
             <View>
-              <Text>All</Text>
+              <Text className="text-lg">All</Text>
             </View>
           </View>
             {

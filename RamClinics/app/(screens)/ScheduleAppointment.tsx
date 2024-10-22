@@ -424,7 +424,7 @@ const ScheduleAppointment = () => {
     return (
         <SafeAreaView>
             <ScrollView className="p-6 pt-20">
-                <HeaderWithBackButton title="Schedule Appointment" isPushBack={true} />
+                <HeaderWithBackButton title="Available Appointments" isPushBack={true} />
                 <View className="py-4 gap-4 flex justify-center">
                     <View style={{ flex: 1 }}>
                         <Calendar

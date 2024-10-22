@@ -1,8 +1,8 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { StyleSheet, FlatList, Modal, Pressable, ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import resourceService from "../../domain/services/ResourceService";
 import moment, { Moment } from "moment";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
@@ -36,13 +36,16 @@ const DoctorSelect = () => {
     const { branches, setBranches } = useBranches();
     const [slotsReserved, setSlotsReserved] = useState(JSON.parse(reservedSlots.toString()));
 
-    useEffect(() => {
-        setDoctors(JSON.parse(doctorList.toString()))
-        setSlot(selectedSlot)
-        setSlotsReserved(JSON.parse(reservedSlots.toString()))
-        setSearchDate(moment(slotSearchDate).toDate())
-        setLoggedIn(useUserSate.getState().loggedIn)
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            console.log("city: ", city)
+            setDoctors(JSON.parse(doctorList.toString()))
+            setSlot(selectedSlot)
+            setSlotsReserved(JSON.parse(reservedSlots.toString()))
+            setSearchDate(moment(slotSearchDate).toDate())
+            setLoggedIn(useUserSate.getState().loggedIn)
+        }, [])
+    )
 
     const bookAppointment = async (doctor: any) => {
 
@@ -92,10 +95,10 @@ const DoctorSelect = () => {
                             slot.status = 'busy';
                         }
                         slots.push({
-                            slotId: slot.id, 
+                            slotId: slot.id,
                             status: slot.status,
-                            slotName: slot.slotName, 
-                            startTime: slot.startTime, 
+                            slotName: slot.slotName,
+                            startTime: slot.startTime,
                             endTime: slot.endTime
                         });
                     });
@@ -127,20 +130,20 @@ const DoctorSelect = () => {
                         } else {
                             console.log("app: ", app)
                             appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", app)
-                            .then((response) => {
-                                // setLoader(false)
-                                Alert.alert('Success', 'Appointment has been booked successfully', [
-                                    {
-                                        text: 'OK',
-                                        style: 'default'
-                                    },
-                                ],
-                                )
-                            })
-                            .catch((error) => {
-                                // setLoader(false)
-                                console.log("appointmentService error", error)
-                            })
+                                .then((response) => {
+                                    // setLoader(false)
+                                    Alert.alert('Success', 'Appointment has been booked successfully', [
+                                        {
+                                            text: 'OK',
+                                            style: 'default'
+                                        },
+                                    ],
+                                    )
+                                })
+                                .catch((error) => {
+                                    // setLoader(false)
+                                    console.log("appointmentService error", error)
+                                })
                             // appointmentService.save(app)
                             //     .then((response: any) => {
                             //         console.log("appointmentService.save: ", response)
@@ -174,16 +177,20 @@ const DoctorSelect = () => {
             ],
             )
         } else {
-            Alert.alert('Doctor ' + item.name, 'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + " -\nSlot: " + selectedSlot, [
-                { text: 'Cancel', style: 'default' },
-                {
-                    text: 'Confirm',
-                    onPress: () => {
-                        loggedIn ? bookAppointment(item) : router.push("/SignIn");
+            Alert.alert(
+                `${item.name},  ${branch}${city},`,
+                // 'Doctor ' + item.name,
+                'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + " -\nSlot: " + selectedSlot,
+                [
+                    { text: 'Cancel', style: 'default' },
+                    {
+                        text: 'Confirm',
+                        onPress: () => {
+                            loggedIn ? bookAppointment(item) : router.push("/SignIn");
+                        },
+                        style: 'default'
                     },
-                    style: 'default'
-                },
-            ],
+                ],
             )
         }
     }
@@ -250,7 +257,7 @@ const DoctorSelect = () => {
                             </View>
                             <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
                                 <TouchableOpacity
-                                        onPress={() => router.back()}
+                                    onPress={() => router.back()}
                                 >
                                     <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center" >
                                         Cancel
