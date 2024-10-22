@@ -1,4 +1,4 @@
-import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
@@ -7,12 +7,15 @@ import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import specialityService from "../../domain/services/SpecialityService";
 import walletService from "../../domain/services/WalletService";
 import { useUserSate } from "../../domain/state/UserState";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
+import doctorService from "../../domain/services/DoctorService";
+import branchService from "../../domain/services/BranchService";
+import { Picker } from "@react-native-picker/picker";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -35,20 +38,139 @@ const Wallets = () => {
   )
 
   let patientId = useUserSate.getState().userId;
-  const [balance, setbalance] = useState()
+  let primaryBranch = useUserSate.getState().branch;
+  const [branches, setBranches] = useState([]);
+  const [selectedBranchId, setSelectedBranchId] = useState('');
+  const [showBranches, setShowBranches] = useState(false);
+  const [doctors, setDoctors] = useState([]);
+  const [selectedDoc, setSelectedDoc] = useState();
+  const [noBalance, setNoBal] = useState(true);
+  const [patientWallets, setPatientWallets] = useState([]);
+  const [patientWallet, setPatientWallet] = useState();
+  const [doctorName, setDoctorName] = useState();
+  const [doctorWallet, setDoctorWallet] = useState();
+  const [showRefill, setShowRefill] = useState(false);
+  const [showRefillDoctor, setShowRefillDoctor] = useState(false);
   const { option } = useLocalSearchParams();
+  const [refillAmount, setRefillAmt] = useState('');
+  const [showTransfer, setShowTransfer] = useState(false);
+  const [transferAmount, setTransferAmt] = useState('');
+  let refillAccountNo = '';
+  let account = {
+    "status": "Active",
+  }
 
   useEffect(() => {
-    const fetchWallet = async () => {
-      try {
-        const res = await walletService.getBalance(patientId);
-        setbalance(res.data);
-      } catch (error) {
-        console.error("Filter error", error)
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const branchesResponse = await branchService.findAll();
+      setBranches(branchesResponse.data);
+    } catch (error) {
+      console.error("Failed to fetch branches:", error);
+    }
+    finally {
+    }
+  };
+
+  //get acccount by primary branch
+  useEffect(() => {
+    let primBranch: any = branches.find((b: any) => b.name === primaryBranch);
+    if (primBranch) {
+      console.log('primBranch', primBranch.id);
+      walletService.getAccountsByPatientId(patientId, primBranch.id)
+        .then((response) => {
+          console.log('Patient Account >>>>>', response.data);
+          if (response.data.length === 0) {
+            setNoBal(true);
+          } else {
+            setNoBal(false);
+            setPatientWallet(response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'));
+            console.log("patient General Wallet: ", response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'));
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch Account:", error);
+        })
+    }
+  }, [branches]);
+
+
+  //get doctors by branch
+  useEffect(() => {
+    doctorService.getAllDoctorsByBranch(selectedBranchId)
+      .then((response) => {
+        setDoctors(response.data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch doctors:", error);
+      })
+  }, [selectedBranchId]);
+
+
+  useEffect(() => {
+    setShowBranches(false);
+    const doctor = doctors.find((doc: any) => doc.id === selectedDoc);
+    setDoctorName(doctor?.name);
+  }, [selectedDoc]);
+
+
+  //get acccount by selected branch and doctor
+  useEffect(() => {
+    walletService.getAccountsByPatientId(patientId, selectedBranchId)
+      .then((response) => {
+        console.log('Accounts 2 >>>>', response.data);
+        setPatientWallet(response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'));
+        setDoctorWallet(response.data.find((wallet: any) => wallet.doctorId === selectedDoc));
+        console.log("General Wallet: ", response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'), "\tDoctor Wallet: ", response.data.find((wallet: any) => wallet.doctorId === selectedDoc));
+      })
+      .catch((error) => {
+        console.error("Failed to fetch Account (2):", error);
+      })
+
+  }, [selectedBranchId, selectedDoc]);
+
+  const refill = (type: String) => {
+    setShowRefill(false);
+    setShowRefillDoctor(false);
+    if (type === 'doctor') {
+      if (doctorWallet) {
+        refillAccountNo = doctorWallet.accountId;
+      } 
+      else {
+        refillAccountNo = '';
       }
-    };
-    fetchWallet();
-  });
+    } else {
+      refillAccountNo = '';
+    }
+    walletService.refillWallet(refillAccountNo, selectedBranchId, +refillAmount, 'paymentLink', selectedDoc, patientId)
+      .then((response) => {
+        let msg = 'Entered Amount ' + refillAmount + ' .,sent payment link to patient Successfully!';
+        Alert.alert('Success', msg);
+        setRefillAmt('0');
+      })
+      .catch((error) => {
+        Alert.alert('Error', 'Failed to refill wallet');
+        console.error("Failed to refill wallet", error);
+      })
+  };
+
+  const transferToDoctor = () => {
+    walletService.transferToDoctorWallet(patientWallet?.accountId, +transferAmount, selectedBranchId, selectedDoc, patientId)
+      .then((response) => {
+        let msg = 'Entered Amount ' + transferAmount + ' transferred Successfully!';
+        Alert.alert('Success', msg);
+        setTransferAmt('0');
+        setShowTransfer(false);
+      })
+      .catch((error) => {
+        Alert.alert('Error', 'Failed to transfer to doctor');
+        console.error("Failed to refill wallet", error);
+      })
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -60,31 +182,128 @@ const Wallets = () => {
           </View>
           <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
             <Text className="text-base font-semibold text-pc-primary">
-            {i18n.t("urwallet2")}
+              {i18n.t("urwallet2")}
             </Text>
             <View className=" flex-row justify-between items-center py-6 border-b border-dashed text-amber-500">
               <Text className="text-2xl font-medium">{i18n.t("balanc")}</Text>
-              <Text className="text-3xl font-semibold">{balance}</Text>
+              {noBalance ?
+                <Text className="text-xl font-medium">No Account, Refill First</Text>
+                :
+                <Text className="text-3xl font-semibold">{patientWallet?.currency + " " + patientWallet?.balance}</Text>
+              }
             </View>
             <View className=" flex-row justify-between items-center py-4 text-amber-500">
-              {/* <Button title="Transfer to Doctor" color="#841584" />
-              <Button title="Refill" color="green" /> */}
+              {/* disabled={noBalance} */}
+              <Button title={selectedDoc ? "Change Doctor" : "Transfer to Doctor"} color="#841584" onPress={() => setShowBranches(true)} />
+              <Button title="Refill" color="green" onPress={() => setShowRefill(true)} />
             </View>
           </View>
-          {/* <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
-            <Text className="text-base font-semibold text-pc-primary">
-              Doctor Wallet
-            </Text>
-            <View className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500">
-              <Text className="text-2xl font-medium">Balance</Text>
-              <Text className="text-3xl font-semibold">1.0</Text>
-            </View>
-            <View className=" flex-row justify-between items-center py-4 text-amber-500">
-              <Button title="Transfer to Patient" color="#841584" />
-              <Button title="Refill" color="green" />
-            </View>
-          </View> */}
         </View>
+        {showBranches && (
+          <View className="pt-5 p-3">
+            <View className="border border-indigo-950 rounded-lg mb-4">
+              <Picker
+                selectedValue={selectedBranchId} onValueChange={(itemValue) => { setSelectedBranchId(itemValue); }} className="h-12">
+                <Picker.Item label={i18n.t("Select Branch")} value="" />
+                {branches.map((branch: any) => (
+                  <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
+                ))}
+              </Picker>
+            </View>
+            <View className="border border-indigo-950 rounded-lg mb-4">
+              <Picker
+                selectedValue={selectedDoc} onValueChange={(itemValue) => { setSelectedDoc(itemValue); }} className="h-12">
+                <Picker.Item label={i18n.t("Select doctor")} value="" />
+                {doctors.map((doctor: any) => (
+                  <Picker.Item key={doctor.id} label={doctor.name} value={doctor.id} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+        )}
+        {selectedDoc && (
+          <View className="px-3">
+            <View className="mt-8 p-6 border border-pc-primary bg-amber-100 rounded-xl">
+              <View className="flex-row justify-between">
+                <Text className="text-base font-semibold text-pc-primary"> {i18n.t("doctorWalt")} </Text>
+                <Text className="text-xl font-semibold text-pc-primary"> {doctorName} </Text>
+              </View>
+              <View className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500">
+                <Text className="text-2xl font-medium">{i18n.t("balanc")}</Text>
+                {doctorWallet ?
+                  <Text className="text-2xl font-semibold">{doctorWallet?.currency} {doctorWallet?.balance}</Text>
+                  :
+                  <Text className="text-xl font-medium">No Account, Refill First</Text>
+                }
+              </View>
+              {doctorWallet?.balance > 0 ? (
+                <>
+                  <View className=" flex-row justify-between items-center py-4 text-amber-500">
+                    <Button title="Transfer to Doctor" color="#841584" onPress={() => setShowTransfer(true)} />
+                    <Button title="Refill" color="green" onPress={() => setShowRefillDoctor(true)} />
+                  </View>
+                  <View className=" flex-row justify-between items-center text-amber-500">
+                    <Button title="Transfer to You" color="#78450f" />
+                  </View>
+                </>
+              )
+                :
+                <View className=" flex-row justify-end items-center py-4 text-amber-500">
+                  <Button title="Refill" color="green" onPress={() => setShowRefillDoctor(true)} />
+                </View>
+              }
+            </View>
+          </View>
+        )}
+
+        <Modal transparent={true} animationType="fade" visible={showRefill} onRequestClose={() => setShowRefill(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <Pressable className="absolute top-3 right-3" onPress={() => setShowRefill(false)}>
+                <AntDesign name="closecircle" size={24} color="#78450f" />
+              </Pressable>
+              <Text className="text-xl font-bold text-center mb-4 mt-7"> Enter the Amount to Refill</Text>
+              <TextInput onChangeText={setRefillAmt} value={refillAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
+              <View className=" flex-row justify-between items-center py-4">
+                <Button title="Cancel" color="red" onPress={() => setShowRefill(false)} />
+                <Button title="Refill" color="green" onPress={() => refill('patient')} />
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal transparent={true} animationType="fade" visible={showRefillDoctor} onRequestClose={() => setShowRefillDoctor(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <Pressable className="absolute top-3 right-3" onPress={() => setShowRefillDoctor(false)}>
+                <AntDesign name="closecircle" size={24} color="#78450f" />
+              </Pressable>
+              <Text className="text-xl font-bold text-center mb-4 mt-7"> Enter the Amount to Refill</Text>
+              <TextInput onChangeText={setRefillAmt} value={refillAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
+              <View className=" flex-row justify-between items-center py-4">
+                <Button title="Cancel" color="red" onPress={() => setShowRefillDoctor(false)} />
+                <Button title="Refill" color="green" onPress={() => refill('doctor')} />
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal transparent={true} animationType="fade" visible={showTransfer} onRequestClose={() => setShowTransfer(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <Pressable className="absolute top-3 right-3" onPress={() => setShowTransfer(false)}>
+                <AntDesign name="closecircle" size={24} color="#78450f" />
+              </Pressable>
+              <Text className="text-xl font-bold text-center mb-4 mt-7"> Enter the Amount to Transfer</Text>
+              <TextInput onChangeText={setTransferAmt} value={transferAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
+              <View className=" flex-row justify-between items-center py-4">
+                <Button title="Cancel" color="red" onPress={() => setShowTransfer(false)} />
+                <Button title="Transfer" color="green" onPress={() => transferToDoctor()} />
+              </View>
+            </View>
+          </View>
+        </Modal>
+
       </ScrollView>
     </SafeAreaView>
   );

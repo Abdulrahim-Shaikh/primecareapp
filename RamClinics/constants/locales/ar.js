@@ -107,6 +107,7 @@ const translations = {
         "Noapps": "No Approvals available.",
         "urwallet1": "Your Wallet",
         "urwallet2": "Your Wallet: ",
+        "doctorWalt": "Doctor Wallet: ",
         "balanc": "Balance: ",
         //Promotions
         "Offers": "Offers",
@@ -130,6 +131,8 @@ const translations = {
         "Hi": "Hi, ",
         "bookAppoint": "Book\nAppointment",
         "book": "Book",
+        "BOOK": "BOOK",
+        "appointment": "Appointment",
         "signintext": "Access your account securely. Sign in to manage your personalized experiences.",
         "mobileno": "Mobile No.",
         "sendotp": "Send OTP",
@@ -379,6 +382,8 @@ const translations = {
         "urwallet1": "محفظتك",
         "urwallet2": "محفظتك: ",
         "balanc": "الرصيد: ",
+        "doctorWalt": "محفظة الطبيب: ",
+        "appointment": "ميعاد",
         //Promotions
         "Offers": "العروض",
         "Packages": "الباقات",
@@ -401,6 +406,7 @@ const translations = {
         "Hi": "أهلاً، ",
         "bookAppoint": "حجز موعد",
         "book": "حجز",
+        "BOOK": "حجز",
         "signintext": "قم بالوصول إلى حسابك بأمان. سجل الدخول لإدارة تجربتك الشخصية.",
         "mobileno": "رقم الجوال",
         "sendotp": "إرسال رمز التحقق",

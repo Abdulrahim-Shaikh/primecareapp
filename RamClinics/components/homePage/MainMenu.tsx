@@ -45,15 +45,15 @@ const MainMenu = () => {
       title: "My Appoinments",
       link: "/MyAppoinment",
     },
+    // {
+    //   icon: "calendar-outline",
+    //   title: "Book Appoinment",
+    //   link: "/BookAppointment",
+    // },
     {
-      icon: "calendar-outline",
-      title: "Book Appoinment",
-      link: "/BookAppointment",
-    },
-    {
-      icon: "people-outline",
-      title: "Family Members",
-      link: "/FamilyFile",
+      icon: "receipt-outline",
+      title: "My Invoices",
+      link: "/MyInvoices",
     },
     {
       icon: "shield-checkmark-outline",
@@ -61,14 +61,19 @@ const MainMenu = () => {
       link: "/MyApprovals",
     },
     {
-      icon: "receipt-outline",
-      title: "My Invoices",
-      link: "/MyInvoices",
-    },
-    {
       icon: "document-text-outline",
       title: "My Prescriptions",
       link: "/MyPrescription",
+    },
+    {
+      icon: "people-outline",
+      title: "Family Members",
+      link: "/FamilyFile",
+    },
+    {
+      icon: "pricetag-outline",
+      title: "Promotions",
+      link: "/MyPromotionBookings",
     },
     {
       icon: "flask-outline",
@@ -79,11 +84,6 @@ const MainMenu = () => {
       icon: "radio-outline",
       title: "Radiology",
       link: "/MyRadialogy",
-    },
-    {
-      icon: "pricetag-outline",
-      title: "Promotions",
-      link: "/MyPromotionBookings",
     },
     {
       icon: "bandage-outline",

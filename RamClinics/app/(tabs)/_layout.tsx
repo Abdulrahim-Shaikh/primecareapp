@@ -156,8 +156,8 @@ const TabLayout = () => {
               <View style={[
                 Platform.OS === 'ios' ? {
                 //aiphone
-                width: 80,
-                height: 80,
+                width: 90,
+                height: 90,
                 borderWidth: 3,
                 borderRadius:50,
                 borderColor: "rgb(59, 35, 20)",
@@ -168,21 +168,23 @@ const TabLayout = () => {
                 shadowOffset: { width: 0, height: -5 }, 
                 shadowOpacity: 0.15,
                 shadowRadius: 3.84, 
-                bottom: 0,
+                bottom: 4,
+                left:2,
                 } : {
                 //yandroid
-                width: 75,
-                height: 75,
+                width: 90,
+                height: 90,
                 borderWidth: 3,
-                borderRadius: 10,
+                borderRadius: 50,
                 borderColor: "rgb(59, 35, 20)",
                 backgroundColor: focused? "rgb(132, 204, 22)" : "white",
                 justifyContent: 'center',
                 alignItems: 'center',
                 bottom: 10,
                 }]}>
-                {/* <FontAwesome className="text-center pl-0.5" name="calendar-plus-o" s ize={40} color={focused ? "white" : "rgb(59, 35, 20)"} /> */}
-                <Text className={`font-black text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>Book Appoint ment</Text>
+                <FontAwesome className="text-center pl-0.5 pt-0" name="calendar-plus-o" size={22} color={focused ? "white" : "rgb(59, 35, 20)"} />
+                <Text className={`font-extrabold text-2xl text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>{i18n.t('BOOK')}</Text>
+                <Text className={`font-bold text-xs pb-2 text-center ${focused ? " text-white" : "text-[rgb(59, 35, 20)]"}`}>{i18n.t('appointment')}</Text>
               </View>
             ),
           }}
