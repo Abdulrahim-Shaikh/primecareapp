@@ -200,12 +200,12 @@ const SlotsConfirmationPage = () => {
                             }}
                         />
                     </View>
-                    <View
+                    {/* <View
                         className="flex flex-row justify-between items-center pt-2 gap-4 ">
                         <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
                             On: {dateString}
                         </Text>
-                    </View>
+                    </View> */}
                     <View className="pt-3">
                         {
                             loader && <ActivityIndicator size="large" color="#454567" />
@@ -230,16 +230,16 @@ const SlotsConfirmationPage = () => {
                                 showsHorizontalScrollIndicator={false}
                                 contentContainerStyle={{ marginHorizontal: "auto" }}
                                 renderItem={({ item }) => (
-                                    <View className="flex flex-row p-1 m-1 w-32 h-32">
+                                    <View className="flex flex-row p-1 m-1 w-32">
                                         <Pressable
                                             onPress={() => {
                                                 selectSlot(item)
                                             }}
-                                            className="border border-pc-primary p-2 rounded-lg w-full">
-                                            <View className="py-2 items-center">
+                                            className="bg-[#3B2314] border border-pc-primary p-2 rounded-lg w-full">
+                                            {/* <View className="py-2 items-center">
                                                 <Ionicons name="time" size={36} color={"#3B2314"} />
-                                            </View>
-                                            <Text className="text-sm font-semibold text-center text-pc-primary pt-3 pb-2">{item[0]}</Text>
+                                            </View> */}
+                                            <Text className="text-sm text-white font-semibold text-center text-pc-primary pt-3 pb-2">{item[0]}</Text>
                                         </Pressable>
                                     </View>
                                 )}
