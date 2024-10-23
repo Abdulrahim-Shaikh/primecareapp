@@ -1,11 +1,11 @@
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { StyleSheet, FlatList, Modal, Pressable, ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
+import { StyleSheet, FlatList, Modal, Pressable, ScrollView, Text, TouchableOpacity, View, Alert, Image, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import React, { useCallback, useEffect, useState } from "react";
 import resourceService from "../../domain/services/ResourceService";
 import moment, { Moment } from "moment";
-import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useUserSate } from "../../domain/state/UserState";
 import branchService from "../../domain/services/BranchService";
@@ -15,18 +15,10 @@ import { useBranches } from "../../domain/contexts/BranchesContext";
 import { Calendar } from "react-native-calendars";
 import patientService from "../../domain/services/PatientService";
 
-const Separator = () => <View style={styles.separator} />;
-const styles = StyleSheet.create({
-    separator: {
-        marginVertical: 8,
-        borderBottomColor: '#737373',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-});
-
 const DoctorSelect = () => {
 
     const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline, shift, gender, slotSearchDate, selectedSlot, reservedSlots, doctorList } = useLocalSearchParams();
+    const [modalVisible, setModalVisible] = useState(false);
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [doctors, setDoctors] = useState(JSON.parse(doctorList.toString()));
@@ -38,6 +30,22 @@ const DoctorSelect = () => {
     const [slotsReserved, setSlotsReserved] = useState(JSON.parse(reservedSlots.toString()));
     const [patient, setPatient] = useState<any>(null)
     const [loader, setLoader] = useState(false);
+    const [displayedDoctor, setDisplayedDoctor] = useState<any>({});
+    const [minimalDoctorInfo, setMinimalDoctorInfo] = useState<any>({});
+
+    const showDoctor = (item: any) => {
+        setMinimalDoctorInfo(item)
+        resourceService.find(item.id)
+        .then((response) => {
+            console.log("item: ", item)
+            console.log("\n\n\nresponse: ", Object.keys(response.data))
+            setDisplayedDoctor(response.data)
+            console.log("\n\n\n\ndisplayedDoctor: ", displayedDoctor)
+        })
+        .catch((error) => {
+            console.error("resourceService error: ", error.response)
+        })
+    }
 
     useFocusEffect(
         useCallback(() => {
@@ -235,7 +243,6 @@ const DoctorSelect = () => {
                 <HeaderWithBackButton title="Booking Confirmation" isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
                     {/* <Text className="text-xl font-bold">Selected Appointment: {slotSearchDate} - {selectedSlot}</Text> */}
-                    <Separator />
                     {doctors.map((item: any) => (
                         <View
                             key={`key: ${item.id}`}
@@ -297,7 +304,12 @@ const DoctorSelect = () => {
                             </View>
                             <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
                                 <Pressable
-                                // onPress={() => router.back()} 
+                                    onPress={() => {
+                                        console.log("toggleiing")
+                                        console.log("modalVisible: ", modalVisible)
+                                        showDoctor(item)
+                                        setModalVisible(!modalVisible)
+                                    }}
                                 >
                                     <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center" >
                                         Doctor Information
@@ -307,15 +319,271 @@ const DoctorSelect = () => {
                                     <Text
                                         onPress={() => selectDoctor(item)}
                                         className="bg-[#3B2314] text-white border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
-                                        Book Appointment
+                                        Confirm Booking
                                     </Text>
                                 </Pressable>
+                                {/* <Pressable
+                                >
+                                    <Text
+                                        className="bg-[#3B2314] text-white border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
+                                        Confirm Booking
+                                    </Text>
+                                </Pressable> */}
                             </View>
                         </View>
                     ))}
                 </View>
             </ScrollView>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <ScrollView contentContainerStyle={styles.scrollContent}>
+                            <View className="flex flex-row border-b border-dashed border-pc-primary pb-6 justify-center">
+                                <View className="flex justify-center flex-wrap">
+                                    <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SefNqxMPw23P5tFdlgwEe9cfcdnf7d-Law&s' }} style={{ width: 100, height: 100 }} />
+                                    <Text className="pt-3 text-2xl">{displayedDoctor.name}</Text>
+                                </View>
+                            </View>
+                            <View className="flex flex-row grid grid-cols-2 gap-4">
+                                <View className="flex flex-col">
+                                    <View className="flex flex-row items-center gap-4 pt-6">
+                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                            <MaterialCommunityIcons
+                                                name="stethoscope"
+                                                size={30}
+                                                color={"#84cc16"}
+                                            />
+                                        </View>
+                                        <View className="flex flex-col">
+                                            <Text>Department</Text>
+                                            <Text className="font-bold text-xl">{displayedDoctor.department}</Text>
+                                        </View>
+                                    </View>
+                                    <View className="flex flex-row items-center gap-4 pt-6">
+                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                            <MaterialCommunityIcons
+                                                name="stethoscope"
+                                                size={30}
+                                                color={"#84cc16"}
+                                            />
+                                        </View>
+                                        <View className="flex flex-col">
+                                            <Text>Nationality</Text>
+                                            <Text className="font-bold text-xl">{displayedDoctor.nationality || minimalDoctorInfo.nationality || 'Unknown'}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View className="flex flex-col">
+                                    <View className="flex flex-row items-center gap-4 pt-6">
+                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                            <MaterialCommunityIcons
+                                                name="stethoscope"
+                                                size={30}
+                                                color={"#84cc16"}
+                                            />
+                                        </View>
+                                        <View className="flex flex-col">
+                                            <Text>Gender</Text>
+                                            <Text className="font-bold text-xl">{displayedDoctor.gender}</Text>
+                                        </View>
+                                    </View>
+                                    <View className="flex flex-row items-center gap-4 pt-6">
+                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                            <MaterialCommunityIcons
+                                                name="stethoscope"
+                                                size={30}
+                                                color={"#84cc16"}
+                                            />
+                                        </View>
+                                        <View className="flex flex-col">
+                                            <Text>Speciality</Text>
+                                            <Text className="font-bold text-xl">{displayedDoctor.speciality}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="stethoscope"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
+                                    </View>
+                                    <View className="flex flex-col">
+                                        <Text>Professional Classification</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.professionalClassification || 'Unknown'}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="stethoscope"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
+                                    </View>
+                                    <View className="flex flex-col">
+                                        <Text>Qualification</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.qualification || 'Unknown'}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="stethoscope"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
+                                    </View>
+                                    <View className="flex flex-col">
+                                        <Text>Graduation</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.graduation? "." + displayedDoctor.qualification + "." : 'Unknown'}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                {
+                                    displayedDoctor.resourceServiceList.array.forEach((element: any) => {
+                                        
+                                    })
+                                }
+                            </View>
+                        </ScrollView>
+
+                        <Button color="#3B2314" title="Close" onPress={() => setModalVisible(false)} />
+                    </View>
+                </View>
+            </Modal>
+            {/* <Modal
+                style={{ height: '100%' }}
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={styles.centeredView} className="w-full">
+                        <View style={styles.modalView} className="w-full">
+                            <Pressable className="absolute top-3 right-3" onPress={() => setModalVisible(!modalVisible)}>
+                                <AntDesign name="closecircle" size={24} color="#3B2314" />
+                            </Pressable>
+                            <SafeAreaView className="w-full">
+                                <ScrollView className="w-full">
+                                    <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SefNqxMPw23P5tFdlgwEe9cfcdnf7d-Law&s' }} style={{ width: 100, height: 100 }} />
+                                    <Text className="pt-3 text-2xl" style={styles.modalText}>{displayedDoctor.name}</Text>
+                                    <Separator />
+                                    <View className="w-full flex flex-col">
+                                    </View>
+                                </ScrollView>
+                            </SafeAreaView>
+                            <View className="pt-72 pl-2 flex flex-row absolute inset-y-0 left-0">
+                                <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                    <MaterialCommunityIcons
+                                        name="stethoscope"
+                                        size={30}
+                                        color={"#84cc16"}
+                                    />
+                                </View>
+                                <View className="flex">
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal> */}
         </SafeAreaView >
     )
 }
+// const styles = StyleSheet.create({
+//     centeredView: {
+//         flex: 1,
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         marginTop: 22,
+//         height: '100%',
+//         width: '100%',
+//     },
+//     modalView: {
+//         margin: 20,
+//         backgroundColor: 'white',
+//         borderRadius: 20,
+//         padding: 35,
+//         height: '100%',
+//         width: '100%',
+//         alignItems: 'center',
+//         shadowColor: '#000',
+//         shadowOffset: {
+//             width: 0,
+//             height: 2,
+//         },
+//         shadowOpacity: 0.25,
+//         shadowRadius: 4,
+//         elevation: 5,
+//     },
+//     button: {
+//         borderRadius: 20,
+//         padding: 10,
+//         elevation: 2,
+//     },
+//     buttonOpen: {
+//         backgroundColor: '#F194FF',
+//     },
+//     buttonClose: {
+//         backgroundColor: '#2196F3',
+//     },
+//     textStyle: {
+//         color: 'white',
+//         fontWeight: 'bold',
+//         textAlign: 'center',
+//     },
+//     modalText: {
+//         marginBottom: 15,
+//         textAlign: 'center',
+//     },
+//     separator: {
+//         marginVertical: 8,
+//         borderBottomColor: '#3B2314',
+//         borderBottomWidth: StyleSheet.hairlineWidth,
+//     },
+// });
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        width: '100%',
+        maxHeight: '100%', // Ensure the modal doesn't exceed screen height
+    },
+    scrollContent: {
+        paddingVertical: 10,
+    },
+    text: {
+        fontSize: 18,
+        marginVertical: 5,
+    },
+});
 export default DoctorSelect;

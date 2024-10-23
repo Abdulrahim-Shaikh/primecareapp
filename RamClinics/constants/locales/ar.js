@@ -7,6 +7,7 @@
 
 const translations = {
     en: {
+        "Confirm Booking": "Confirm Booking",
         "English": "English",
         "Arabic": "Arabic",
         "Select Language": "Select Language",
@@ -557,6 +558,7 @@ const translations = {
         "Select Language": "اختر اللغة",
         "English": "الإنجليزية",
         "Arabic": "العربية",
+        "Confirm Booking": "تأكيد الحجز",
     }
 }
 export default translations;

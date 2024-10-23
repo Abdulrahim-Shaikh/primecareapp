@@ -151,11 +151,11 @@ useFocusEffect(
               <DetailItem icon="reviews" label={i18n.t("reviews")} value={renderValue(doctor.reviews, "No reviews yet")} isAmber />
             </View>
           </View>
-          <View className={`p-2 bg-slate-50 ${Platform.OS === 'ios' ? 'pb-10' : 'pb-4'}`}>
+          {/* <View className={`p-2 bg-slate-50 ${Platform.OS === 'ios' ? 'pb-10' : 'pb-4'}`}>
             <View className="p-2 rounded-t-2xl">
             <LinkButton link="/Appoinment" text="Make an appointment" />
             </View>
-          </View>
+          </View> */}
         </View>
         </ScrollView>
         );

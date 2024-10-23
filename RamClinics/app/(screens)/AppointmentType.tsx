@@ -293,14 +293,14 @@ const AppointmentType = () => {
                     }
                     <View className="flex-1 space-y-4 ">
                         <FlatList
-                            contentContainerStyle={{ gap: 12 }}
+                            contentContainerStyle={{ gap: 9 }}
                             data={subServicesList}
                             keyExtractor={(item: any, index) => "key" + index}
                             renderItem={({ item }) => {
                                 return (
                                     <View className="w-full">
                                         <Pressable
-                                            className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
+                                            className="flex flex-row border border-pc-primary rounded-lg p-3 shadow-sm bg-white"
                                             onPress={() => { selectSubService(item, item.responsible, item.devices, item.mobileOrOnline) }}
                                         // onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
                                         >
