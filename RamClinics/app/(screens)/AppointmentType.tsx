@@ -1,5 +1,7 @@
 import {
+    ActivityIndicator,
     Alert,
+    FlatList,
     Image,
     Pressable,
     ScrollView,
@@ -39,6 +41,7 @@ const AppointmentTypePage = () => {
     const [searchValue, setSearchValue] = useState([]);
     const [user, setUser] = useState(useUserSate.getState().user);
     const [patientData, setPatientData] = useState(useUserSate.getState().user)
+    const [loader, setLoader] = useState(false);
     const [patientPolicyData, setPatientPolicyData] = useState({})
     const [mobile, setMobile] = useState("");
     const [doctorScheduleData, setDoctorScheduleData] = useState([])
@@ -269,25 +272,50 @@ const AppointmentTypePage = () => {
                 {/* <View className="pt-8 ">
                     <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
                 </View> */}
-                <View className="flex-row flex-wrap gap-4 pt-6 pb-16">
-                    {subServicesList.map(({ subServiceNameEn, subServiceNameAr, responsible, callOrReception, devices }, idx) => (
-                        <Pressable
-                            onPress={() => { selectSubService(responsible, devices, callOrReception) }}
-                            className="w-[45%] border border-pc-primary rounded-lg justify-center items-center p-4 bg-[rgb(59,35,20)]"
-                            key={idx}
-                        >
-                            <View className="p-3 rounded-md border border-pc-primary bg-white">
-                                <MaterialCommunityIcons
-                                    name="bullseye"
-                                    size={36}
-                                    color={"#3b2314"}
-                                />
-                                {/* <Image source={specialityIcon} /> */}
-                            </View>
-                            <Text className="text-base font-semibold pt-3 text-white">{subServiceNameEn}</Text>
-                            <Text className="text-base font-semibold text-white">{subServiceNameAr}</Text>
-                        </Pressable>
-                    ))}
+                <View className="pt-8">
+                    {
+                        loader && <ActivityIndicator size="large" color="#454567" />
+                    }
+                </View>
+                <View className="flex-row flex-wrap">
+                    {
+                        (subServicesList == null || subServicesList.length === 0) && !loader &&
+                        <Text className="w-full text-center text-lg text-gray-600">{i18n.t("No appointments found")}</Text>
+                    }
+                    <View className="flex-1 space-y-4 ">
+                        <FlatList
+                            contentContainerStyle={{ gap: 12 }}
+                            data={subServicesList}
+                            keyExtractor={(item: any, index) => "key" + index}
+                            renderItem={({ item }) => {
+                                return (
+                                    <View className="w-full">
+                                        <Pressable
+                                            className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
+                                            onPress={() => { selectSubService(item.responsible, item.devices, item.callOrReception) }}
+                                        // onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
+                                        >
+                                            <View className="rounded-full bg-white flex justify-center items-center w-18 h-18 border border-gray-200">
+                                                {/* <Image source={specialityIcon} style={{ width: 50, height: 50 }} /> */}
+                                                <MaterialCommunityIcons
+                                                    name="stethoscope"
+                                                    size={30}
+                                                    color={"#3b2314"}
+                                                />
+                                            </View>
+                                            <View className="w-full px-4 flex justify-center gap-3">
+                                                <View className="w-full flex flex-col items-start gap-2 font-semibold text-lg text-gray-800">
+                                                    <Text>
+                                                        {locale == "ar" ? item.subServiceNameAr : item.subServiceNameEn}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                        </Pressable>
+                                    </View>
+                                );
+                            }}
+                        />
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView >

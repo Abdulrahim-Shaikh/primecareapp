@@ -15,6 +15,7 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
+import SelectDropdown from "react-native-select-dropdown";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -137,31 +138,81 @@ const ShiftAndGenderOptions = () => {
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
-                <HeaderWithBackButton title={i18n.t("Shift and Gender")} isPushBack={true} />
+                <HeaderWithBackButton title={i18n.t("Shift and Doctor Gender")} isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
                     <View>
                         <Text className="text-base font-medium">Select Shift: </Text>
                         <View className="py-1">
-                            <View className="border border-indigo-950 rounded-lg mb-4">
-                                <Picker
+                            <View className="py-4 pl-4 border border-indigo-950 rounded-lg mb-4">
+                                <SelectDropdown
+                                    data={shiftOptions}
+                                    defaultValue={shiftOptions[0]}
+                                    onSelect={(selectedItem, index) => {
+                                        setSelectedShift(selectedItem)
+                                    }}
+                                    renderButton={(selectedItem, isOpened) => {
+                                        return (
+                                            <View>
+                                                <Text>
+                                                    {(selectedItem && selectedItem.name)}
+                                                </Text>
+                                            </View>
+                                        );
+                                    }}
+                                    renderItem={(item, index, isSelected) => {
+                                        return (
+                                            <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                                <Text>{item.name}</Text>
+                                            </View>
+                                        );
+                                    }}
+                                    dropdownStyle={styles.dropdownMenuStyle}
+                                    showsVerticalScrollIndicator={false}
+                                />
+                                {/* <Picker
                                     selectedValue={selectedShift} onValueChange={(itemValue) => { setSelectedShift(itemValue); }} className="h-12">
                                     <Picker.Item label={i18n.t("Select Shift")} value="" />
                                     {shiftOptions.map((branch: any) => (
                                         <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.name} />
                                     ))}
-                                </Picker>
+                                </Picker> */}
                             </View>
                         </View>
                         <Text className="text-base font-medium">Select Gender: </Text>
                         <View className="py-1">
-                            <View className="border border-indigo-950 rounded-lg mb-4">
-                                <Picker
+                            <View className="py-4 pl-4 border border-indigo-950 rounded-lg mb-4">
+                                <SelectDropdown
+                                    data={genderOptions}
+                                    defaultValue={genderOptions[0]}
+                                    onSelect={(selectedItem, index) => {
+                                        setSelectedGender(selectedItem)
+                                    }}
+                                    renderButton={(selectedItem, isOpened) => {
+                                        return (
+                                            <View>
+                                                <Text>
+                                                    {(selectedItem && selectedItem.name)}
+                                                </Text>
+                                            </View>
+                                        );
+                                    }}
+                                    renderItem={(item, index, isSelected) => {
+                                        return (
+                                            <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                                <Text>{item.name}</Text>
+                                            </View>
+                                        );
+                                    }}
+                                    dropdownStyle={styles.dropdownMenuStyle}
+                                    showsVerticalScrollIndicator={false}
+                                />
+                                {/* <Picker
                                     selectedValue={selectedGender} onValueChange={(itemValue) => { setSelectedGender(itemValue); }} className="h-12">
                                     <Picker.Item label={i18n.t("Select Gender")} value="" />
                                     {genderOptions.map((branch: any) => (
                                         <Picker.Item key={branch.id} label={i18n.t(branch.name)} value={branch.name} />
                                     ))}
-                                </Picker>
+                                </Picker> */}
                             </View>
                         </View>
                     </View>
@@ -169,14 +220,14 @@ const ShiftAndGenderOptions = () => {
                         <TouchableOpacity
                             onPress={() => search()}
                             style={{
-                                width: 150,
+                                width: 130,
                                 height: 80,
                                 backgroundColor: '#3B2314',
-                                borderRadius: 30,
+                                borderRadius: 130 / 2,
                             }}
-                            className="flex flex-row justify-between h-24 items-center pt-2 gap-4 ">
-                            <Text className="flex-1 text-xl font-bold text-white border border-[#3B2314] px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                                {i18n.t("Search")}
+                            className="flex flex-row justify-center h-24 items-center gap-4">
+                            <Text className="text-xl font-bold text-white">
+                                Search
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -206,6 +257,51 @@ const styles = StyleSheet.create({
     },
     search: {
         height: 100,
-    }
+    },
+    dropdownButtonStyle: {
+        width: 200,
+        height: 50,
+        backgroundColor: '#E9ECEF',
+        borderRadius: 12,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 12,
+    },
+    dropdownButtonTxtStyle: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownButtonArrowStyle: {
+        fontSize: 28,
+    },
+    dropdownButtonIconStyle: {
+        fontSize: 28,
+        marginRight: 8,
+    },
+    dropdownMenuStyle: {
+        backgroundColor: '#E9ECEF',
+        borderRadius: 8,
+    },
+    dropdownItemStyle: {
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 15,
+    },
+    dropdownItemTxtStyle: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownItemIconStyle: {
+        fontSize: 28,
+        marginRight: 8,
+    },
 });
 export default ShiftAndGenderOptions;

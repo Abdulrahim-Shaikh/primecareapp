@@ -36,6 +36,8 @@ import { all } from "axios";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import scheduleService from "../../domain/services/ScheduleService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
+import { Picker } from "@react-native-picker/picker";
+import SelectDropdown from "react-native-select-dropdown";
 
 const tabNames = ["Booked", "Checked In"];
 const i18n = new I18n(translations)
@@ -73,7 +75,14 @@ const Appoinment = () => {
   const [user, setUser] = useState(useUserSate.getState().user);
   const [loader, setLoader] = useState(false);
 
-  const toggleSwitch = (allAppointmentsData: any) => {
+  const filterOptions = [
+    { id: 1, name: "Last Month", months: 1 },
+    { id: 2, name: "All", months: -1 },
+    // { id: 3, name: "6 Months", months: 6 },
+  ]
+
+
+  const toggleSwitch = (allAppointmentsData: any, filter: any) => {
     setLoader(true)
     setIsEnabled(previousState => !previousState);
     const currentDate = new Date();
@@ -81,7 +90,7 @@ const Appoinment = () => {
     setToDate(currentDate);
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
-    if (isEnabled) {
+    if (filter.name === "Last Month") {
       setFromDate(firstDayOfMonth);
       let slicedAppointments: any = []
       for (let appt of allAppointmentsData) {
@@ -96,7 +105,7 @@ const Appoinment = () => {
       // console.log("slicedAppointments: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
-    } else {
+    } else if (filter.name === "All") {
       setFromDate(firstDayOfYear);
       let slicedAppointments: any = []
       allAppointmentsData.forEach((appt: any) => {
@@ -304,7 +313,44 @@ const Appoinment = () => {
           {/* <View className="pt-8">
             <Searchbox searchValue={searchValue} setSearchValue={setSearchValue}/>
           </View> */}
-          <View className="pt-3 flex w-full flex-row items-center justify-start gap-3">
+          <View className="mt-6 border py-4 pl-4 rounded-xl mb-2 w-1/3">
+            <SelectDropdown
+              data={filterOptions}
+              defaultValue={filterOptions[0]}
+              onSelect={(selectedItem, index) => {
+                toggleSwitch(allAppointments, selectedItem)
+                console.log(selectedItem, index);
+              }}
+              renderButton={(selectedItem, isOpened) => {
+                return (
+                  <View>
+                    <Text>
+                      {(selectedItem && selectedItem.name)}
+                    </Text>
+                  </View>
+                );
+              }}
+              renderItem={(item, index, isSelected) => {
+                return (
+                  <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                    <Text>{item.name}</Text>
+                  </View>
+                );
+              }}
+              dropdownStyle={styles.dropdownMenuStyle}
+              showsVerticalScrollIndicator={false}
+            />
+            {/* <Picker selectedValue={1} onValueChange={(filter) => {
+              changeFilter(filter)
+              setLoader(true)
+              toggleSwitch(allAppointments)
+            }} className="text-slate-800">
+              {filterOptions.map((filter: any) => (
+                <Picker.Item key={filter.id} label={i18n.t(filter.name)} value={filter.name} />
+              ))}
+            </Picker> */}
+          </View>
+          {/* <View className="pt-3 flex w-full flex-row items-center justify-start gap-3">
             <View>
               <Text className="text-lg">Last month</Text>
             </View>
@@ -324,13 +370,13 @@ const Appoinment = () => {
             <View>
               <Text className="text-lg">All</Text>
             </View>
-          </View>
-            {
-              loader && 
-              <View className="pt-8">
-                <ActivityIndicator size="large" color="#454567" />
-              </View>
-            }
+          </View> */}
+          {
+            loader &&
+            <View className="pt-2">
+              <ActivityIndicator size="large" color="#454567" />
+            </View>
+          }
           {/* <View className="flex-row justify-between my-4">
             <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
               <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
@@ -391,12 +437,15 @@ const Appoinment = () => {
                             {item.speciality}
                           </Text>
                         </View>
-                        <View>
-                          <Text
-                            className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
-                            {item.department}
-                          </Text>
-                        </View>
+                        {
+                          item.department != null && item.department != "" &&
+                          <View>
+                            <Text
+                              className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
+                              {item.department}
+                            </Text>
+                          </View>
+                        }
                         <View>
                           <Text
                             className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
@@ -510,4 +559,50 @@ const Appoinment = () => {
 
 export default Appoinment;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  dropdownButtonStyle: {
+    width: 200,
+    height: 50,
+    backgroundColor: '#E9ECEF',
+    borderRadius: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+  },
+  dropdownButtonTxtStyle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#151E26',
+  },
+  dropdownButtonArrowStyle: {
+    fontSize: 28,
+  },
+  dropdownButtonIconStyle: {
+    fontSize: 28,
+    marginRight: 8,
+  },
+  dropdownMenuStyle: {
+    backgroundColor: '#E9ECEF',
+    borderRadius: 8,
+  },
+  dropdownItemStyle: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  dropdownItemTxtStyle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#151E26',
+  },
+  dropdownItemIconStyle: {
+    fontSize: 28,
+    marginRight: 8,
+  },
+});

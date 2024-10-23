@@ -20,6 +20,9 @@ export class PatientService extends RestService<any> {
     getParentRelation(parentRelation: any) {
         return this.get("getParentRelation/" + parentRelation);
     }
+    patientDetails(patientDetails: any) {
+        return this.get(`patientDetails/${patientDetails}`);
+    }
     savePatient(patientDetails: any) {
         return this.save(patientDetails);
     }

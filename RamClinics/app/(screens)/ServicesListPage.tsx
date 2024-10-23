@@ -88,16 +88,16 @@ const ServicesListPage = () => {
                                         className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
                                         onPress={() => { selectService(item.serviceNameEn, item.subServices) }}
                                     >
-                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <View className="rounded-full bg-white flex justify-center items-center w-18 h-18 border border-gray-200">
                                             {/* <Image source={specialityIcon} style={{ width: 50, height: 50 }} /> */}
                                             <MaterialCommunityIcons
                                                 name="crowd"
-                                                size={40}
+                                                size={30}
                                                 color={"#3b2314"}
                                             />
                                         </View>
                                         <View className="w-full px-4 flex justify-center gap-3">
-                                            <View className="flex flex-col font-semibold text-lg text-gray-800">
+                                            <View className="flex flex-row justify-between flex-wrap font-semibold text-lg text-gray-800">
                                                 <View>
                                                     <Text className="text-base">
                                                         {item.serviceNameEn}
@@ -105,7 +105,7 @@ const ServicesListPage = () => {
                                                 </View>
                                                 <View
                                                     style={{
-                                                        paddingRight: 60,
+                                                        paddingRight: 25,
                                                     }}
                                                     >
                                                     <Text className="text-base">
