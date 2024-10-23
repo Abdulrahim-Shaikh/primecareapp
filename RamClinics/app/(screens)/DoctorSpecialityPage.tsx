@@ -170,14 +170,14 @@ const DoctorSpecialityPage = () => {
           }
           <View className="flex-1 space-y-4 ">
             <FlatList
-              contentContainerStyle={{ gap: 12 }}
+              contentContainerStyle={{ gap: 9 }}
               data={specialityList}
               keyExtractor={(item: any, index) => "key" + index}
               renderItem={({ item }) => {
                 return (
                   <View className="w-full">
                     <Pressable
-                      className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
+                      className="flex flex-row border border-pc-primary rounded-lg p-3 shadow-sm bg-white"
                       onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
                     >
                       <View className="rounded-full bg-white flex justify-center items-center w-18 h-18 border border-gray-200">
