@@ -85,7 +85,6 @@ const Wallets = () => {
       setPrimaryBranchId(primBranch.id);
       walletService.getAccountsByPatientId(patientId, primBranch.id)
         .then((response) => {
-          console.log('Patient Account >>>>>', response.data);
           if (response.data.length === 0) {
             setNoAccount(true);
           } else {
@@ -124,10 +123,9 @@ const Wallets = () => {
   useEffect(() => {
     walletService.getAccountsByPatientId(patientId, selectedBranchId)
       .then((response) => {
-        console.log('Accounts 2 >>>>', response.data);
+        console.log('Accounts >>>>', response.data);
         setPatientWallet(response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'));
         setDoctorWallet(response.data.find((wallet: any) => wallet.doctorId === selectedDoc));
-        console.log("General Wallet: ", response.data.find((wallet: any) => wallet.doctorName === 'GENERAL'), "\tDoctor Wallet: ", response.data.find((wallet: any) => wallet.doctorId === selectedDoc));
       })
       .catch((error) => {
         console.error("Failed to fetch Account (2):", error);
@@ -252,11 +250,11 @@ const Wallets = () => {
                 <>
                   {/* disabled={doctorWallet.balance <= 0} */}
                   <View className=" flex-row justify-between items-center py-4 text-amber-500">
-                    <Button title="Transfer to Doctor" color="#841584" onPress={() => setShowTransfer(true)} />
+                    <Button title="Transfer to Doctor" color="#841584" onPress={() => setShowTransfer(true)} disabled={patientWallet?.balance <= 0} />
                     <Button title="Refill" color="green" onPress={() => setShowRefillDoctor(true)} />
                   </View>
                   <View className=" flex-row justify-between items-center text-amber-500">
-                    <Button title="Transfer to You" color="#78450f" onPress={() => setShowTransferPat(true)} />
+                    <Button title="Transfer to You" color="#78450f" onPress={() => setShowTransferPat(true)} disabled={doctorWallet?.balance <= 0} />
                   </View>
                 </>
               )
