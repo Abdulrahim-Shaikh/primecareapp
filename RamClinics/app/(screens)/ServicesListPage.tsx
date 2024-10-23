@@ -49,8 +49,7 @@ const ServicesListPage = () => {
 
     useFocusEffect(
         useCallback(() => {
-            console.log("services: ", services)
-            setServicesList(JSON.parse(services.toString()))
+            setServicesList(JSON.parse(services.toString()).sort((a: any, b: any) => a.seqNo - b.seqNo))
         }, [])
     )
 
