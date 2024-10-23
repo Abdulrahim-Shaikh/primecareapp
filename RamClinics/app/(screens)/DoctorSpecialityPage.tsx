@@ -53,7 +53,7 @@ const DoctorSpecialityPage = () => {
       if (+callCenterFlow || +callCenterDoctorFlow) {
         specialityService.getSpecialityServiceByDepartmentTest(department)
           .then((response) => {
-            setSpecialityList(response.data)
+            setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "New Flow" || speciality.flowType === "Both")))
             setLoader(false)
           })
           .catch((error) => {
@@ -62,7 +62,7 @@ const DoctorSpecialityPage = () => {
       } else {
         specialityService.getByDept(department)
           .then((response) => {
-            setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "Old Flow" || speciality.flowType === "Both")))
+            setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "New Flow" || speciality.flowType === "Both")))
             setLoader(false)
           })
           .catch((error) => {
@@ -72,7 +72,7 @@ const DoctorSpecialityPage = () => {
     } else {
       specialityService.findAll()
         .then((response) => {
-          setSpecialityList(response.data)
+          setSpecialityList(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "New Flow" || speciality.flowType === "Both")))
           setLoader(false)
         })
         .catch((error) => {
@@ -90,9 +90,9 @@ const DoctorSpecialityPage = () => {
 
 
   function selectSpeciality(item: any, code: any, speciality: any, services: any) {
-    console.log("item: ", item.code)
-    console.log("fromSpeciality: ", fromSpeciality)
-    console.log("")
+    console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    console.log("code: ", code)
+    console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     if (+callCenterFlow) {
       router.push({
         pathname: "/ServicesListPage",
@@ -129,7 +129,7 @@ const DoctorSpecialityPage = () => {
             callCenterFlow: callCenterFlow,
             devices: JSON.stringify(""),
             responsible: "",
-            callOrReception: "",
+            mobileOrOnline: "",
             callCenterDoctorFlow: 0
           }
         })

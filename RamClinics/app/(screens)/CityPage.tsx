@@ -11,7 +11,7 @@ import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const CityPage = () => {
 
-    const { branchId, fromSpeciality, department, callCenterFlow, specialityCode, speciality, responsible, devices, callOrReception, callCenterDoctorFlow } = useLocalSearchParams();
+    const { branchId, fromSpeciality, department, callCenterFlow, specialityCode, speciality, responsible, devices, mobileOrOnline, callCenterDoctorFlow } = useLocalSearchParams();
     const [cities, setCities] = useState<any>([]);
     const [branchCounts, setBranchCounts] = useState(Object());
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
@@ -58,31 +58,32 @@ const CityPage = () => {
 
     useFocusEffect(
         useCallback(() => {
-            const fetchBranchCounts = async () => {
-                const counts: { [key: string]: number } = {};
-                for (const city of cities) {
-                    if (+callCenterDoctorFlow) {
-                        branchService.getAllBranchesInCity(city).then((res) => {
-                            let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled)
-                            counts[city] = newCallCenterEnabledBranches.length;
-                            setBranchCounts(counts);
-                        });
-                    } else {
-                        let deviceCode: any = ""
-                        for (let device of devicesList) {
-                            deviceCode += device.deviceCode + ","
-                        }
-                        resourceService.getBranchBySpecialityCity(specialityCode, city, deviceCode)
-                        .then((response) => {
-                            counts[city] = response.data.length;
-                            setBranchCounts(counts);
-                        })
+            const counts: { [key: string]: number } = {};
+            for (const city of cities) {
+                if (+callCenterDoctorFlow) {
+                    branchService.getAllBranchesInCity(city).then((res) => {
+                        let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled)
+                        counts[city] = newCallCenterEnabledBranches.length;
+                        setBranchCounts(counts);
+                        console.log("counts: ", counts)
+                    });
+                } else {
+                    let deviceCode: any = ""
+                    for (let device of devicesList) {
+                        deviceCode += device.deviceCode + ","
                     }
+                    resourceService.getBranchBySpecialityCity(specialityCode, city, deviceCode)
+                    .then((response) => {
+                        counts[city] = response.data.length;
+                        setBranchCounts(counts);
+                        console.log("counts1: ", counts)
+                    })
                 }
-            };
-            fetchBranchCounts();
+            }
         }, [cities])
     )
+
+    let renderNumBranches: any;
 
     return (
         <SafeAreaView>
@@ -110,7 +111,7 @@ const CityPage = () => {
                                                     callCenterFlow: callCenterFlow,
                                                     devices: devices,
                                                     responsible: responsible,
-                                                    callOrReception: callOrReception,
+                                                    mobileOrOnline: mobileOrOnline,
                                                     callCenterDoctorFlow: callCenterDoctorFlow
                                                 },
                                             })

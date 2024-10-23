@@ -21,7 +21,7 @@ i18n.enableFallback = true;
 
 const BranchPage = () => {
 
-    const { city, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception, callCenterDoctorFlow } = useLocalSearchParams();
+    const { city, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline, callCenterDoctorFlow } = useLocalSearchParams();
     const [ devicesList, setDevicesList ] = useState(JSON.parse(devices.toString()));
     const [ branchesData, setBranchesData ] = useState([]);
     const { language, changeLanguage } = useLanguage();
@@ -96,7 +96,7 @@ const BranchPage = () => {
                         callCenterFlow: callCenterFlow,
                         devices: devices,
                         responsible: responsible,
-                        callOrReception: callOrReception
+                        mobileOrOnline: mobileOrOnline
                     }
                 })
             } else {

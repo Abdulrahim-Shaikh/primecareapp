@@ -117,7 +117,6 @@ const ScheduleAppointment = () => {
 
     useEffect(() => {
         setSelectedSlots(new Set<number>())
-        console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nparams: ", params)
         if (params == null || params == "" || params.length <= 0) {
             Alert.alert('Note', 'Doctor Schedule not found', [
                 {
@@ -139,24 +138,17 @@ const ScheduleAppointment = () => {
             ],
             )
         } else {
-            console.log("\n\n\n\nslotsAux: ", slotsAux)
             slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
             let validSlots: any = []
             let tempDate = moment(slotSearchDate).format("YYYY-MM-DD")
             let currentTimeInstance = moment();
             slotsAux.forEach((slot: any) => {
-                console.log("one: ", moment(slot.startTime))
-                console.log("two: ", moment(currentTimeInstance))
-                console.log(moment(slot.startTime).isSameOrAfter(moment(currentTimeInstance)))
-                // console.log(moment(moment(`${tempDate} ${slot.startTime.trim()}`, "YYYY-MM-DD hh:mm A")).isSameOrAfter(moment(currentTimeInstance)))
-                console.log("\n")
                 if (moment(slot.startTime).isSameOrAfter(moment(currentTimeInstance))) {
                     validSlots.push(slot)
                 }
                 slot.selected = false
             })
             if (validSlots == null || validSlots.length <= 0) {
-                console.log("empty valid slots")
                 setSlots([])
             } else {
                 let sortedTimeSlots = slotsAux.sort((a: any, b: any) => {
@@ -192,10 +184,8 @@ const ScheduleAppointment = () => {
                     Alert.alert("Patient Policy Not Found")
                 } else {
                     setPatientPolicyDataJson(JSON.parse(patientPolicyData.toString()))
-                    // console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
                     branchService.find(Number(branchId))
                         .then((response) => {
-                            console.log("response.data: ", response.data)
                             setCity(response.data.city)
                             setBranchName(response.data.name)
                         })
@@ -220,7 +210,6 @@ const ScheduleAppointment = () => {
         }]
         scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
             .then((response) => {
-                console.log("recieved")
                 setDoctorScheduleData(response.data[0])
                 let slotsAux: any = Object.values(JSON.parse(params.toString()).slots)[0]
                 if (slotsAux == null || slotsAux.length <= 0) {
@@ -234,19 +223,16 @@ const ScheduleAppointment = () => {
                     )
                 } else {
                     slotsAux.sort((a: any, b: any) => a.slotName - b.slotName)
-                    console.log("sssslotsAux: ", slotsAux)
                     let validSlots: any = []
                     let tempDate = moment(new Date(selectedDate.timestamp)).format("YYYY-MM-DD")
                     let currentTimeInstance = moment();
                     slotsAux.forEach((slot: any) => {
-                        console.log("\n\n\nslot: ", slot.startTime)
                         if (moment(moment(`${tempDate} ${slot.startTime.trim()}`, "YYYY-MM-DD hh:mm A")).isSameOrAfter(moment(currentTimeInstance))) {
                             validSlots.push(slot)
                         }
                         slot.selected = false
                     })
                     if (validSlots == null || validSlots.length <= 0) {
-                        console.log("empty valid slots")
                         setSlots([])
                     } else {
                         setSlots(validSlots)
@@ -267,7 +253,6 @@ const ScheduleAppointment = () => {
     }
 
     function selectSlot(slot: any) {
-        console.log("slot: ", slot)
         setSelectedSlot(slot)
         setSlotStatus(slot.status)
         setSlotName(slot.slotName)
@@ -315,7 +300,6 @@ const ScheduleAppointment = () => {
                 )
             }
         }
-        console.log("selectedSlots: ", selectedSlots)
     }
 
     function statusChange(selectedStatus: any) {
@@ -328,7 +312,6 @@ const ScheduleAppointment = () => {
         let scheduleId = Object.values(doctorScheduleData.scheduleId)[0]
         let aptDate = Object.values(doctorScheduleData.date)[0]
         let appointmentDate = moment(aptDate || "").format("YYYY-MM-DDTHH:mm:ss")
-        console.log("\n\n\npatientDataJson: ", patientDataJson)
 
         let temporaryPayload: any = {
             mrno: patientDataJson.mrno,

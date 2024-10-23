@@ -61,7 +61,7 @@ useFocusEffect(
                 callCenterFlow: 0,
                 devices: JSON.stringify(""),
                 responsible: "",
-                callOrReception: "",
+                mobileOrOnline: "",
                 callCenterDoctorFlow: 0
             }
         },
@@ -79,7 +79,7 @@ useFocusEffect(
                 speciality: "",
                 responsible: "",
                 devices: JSON.stringify(""),
-                callOrReception: "",
+                mobileOrOnline: "",
                 callCenterDoctorFlow: 1
             }
         },

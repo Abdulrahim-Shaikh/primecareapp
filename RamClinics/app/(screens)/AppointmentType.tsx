@@ -28,11 +28,12 @@ import doctorService from "../../domain/services/DoctorService";
 import moment from "moment";
 import scheduleService from "../../domain/services/ScheduleService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
+import branchService from "../../domain/services/BranchService";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
 i18n.enableFallback = true;
-const AppointmentTypePage = () => {
+const AppointmentType = () => {
 
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
@@ -47,6 +48,9 @@ const AppointmentTypePage = () => {
     const [doctorScheduleData, setDoctorScheduleData] = useState([])
     const [date, setDate] = useState(new Date());  // State for start date
     const [specialityList, setSpeciality] = useState("");
+    const [doctorGender, setDoctorGender] = useState("");
+    const [serviceResponsible, setServiceResponsible] = useState("");
+    const [slotInterval, setSlotInterval] = useState(0);
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -55,12 +59,13 @@ const AppointmentTypePage = () => {
 
     useFocusEffect(
         useCallback(() => {
+            console.log('\n\n\n\n\n\n\n\n\n\n\n')
+            console.log("sspecialityCode: ", specialityCode)
+            console.log('\n\n\n\n\n\n\n\n\n\n\n')
             let newDate = new Date()
-            console.log("\n\n\n\nmomentdateday", moment(newDate).format("dddd"))
             if (useUserSate.getState().user != null) {
                 setUser(useUserSate.getState().user)
                 setPatientData(useUserSate.getState().user)
-                // console.log("useUserSate.getState().user: ", useUserSate.getState().user)
                 if (useUserSate.getState().user.mobile != null) {
                     const mobile = useUserSate.getState().user.mobile
                     setMobile(useUserSate.getState().user.mobile)
@@ -76,12 +81,10 @@ const AppointmentTypePage = () => {
             if (+callCenterDoctorFlow) {
                 if (resourceId != null) {
                     resourceService.find(+resourceId).then((response) => {
-                        // console.log("doctor response.data: ", response.data)
                     })
                 }
             }
             getPatientPolicyData()
-            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsubServices: ", subServices)
             if (subServices == null || subServices == undefined || subServices == "") {
                 Alert.alert('Note', 'Doctor Schedule not found', [
                     {
@@ -95,12 +98,10 @@ const AppointmentTypePage = () => {
             } else {
                 setSubServicesList(JSON.parse(subServices.toString()))
             }
-            console.log("subServices: ", subServices)
         }, [])
     )
 
     const getPatientPolicyData = async () => {
-        console.log("user: ", user)
         if (useUserSate.getState().loggedIn == false) {
             Alert.alert('Patient Not Found', 'You need to Sign in first', [
                 {
@@ -124,10 +125,10 @@ const AppointmentTypePage = () => {
         }
     }
 
-    const bookAppointment = () => {
-        console.log("bookAppointment")
+    const bookAppointment = (interval: any, responsible: any) => {
+        console.log("iinterval: ", interval)
+        console.log("rresponsible: ", responsible)
         if (patientData == null || Object.keys(patientData).length <= 0) {
-            console.log("here")
             Alert.alert('Patient Not Found', 'You need to Sign in first', [
                 {
                     text: 'BACK',
@@ -154,6 +155,7 @@ const AppointmentTypePage = () => {
             } else {
                 doctorService.find(+resourceId)
                     .then((response) => {
+                        setDoctorGender(response.data.gender)
                         // need to be checked
                         // let branchId = response.data.branchId[0];
 
@@ -198,28 +200,33 @@ const AppointmentTypePage = () => {
                                 wday: moment(date).format("dddd").substring(0, 3)
                             }]
 
-                            console.log("branchId: ", branchId)
-                            console.log("department: ", department)
-                            console.log("speciality: ", speciality)
-                            console.log("requestBody: ", requestBody)
                             scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
-                                .then((response) => {
+                                .then((response2) => {
                                     // setAppointmentEntry(true)
-                                    setDoctorScheduleData(response.data)
-                                    router.push({
-                                        pathname: "/ScheduleAppointment/",
-                                        params: {
-                                            branchId: branchId,
-                                            department: department,
-                                            speciality: speciality,
-                                            doctor: doctorName,
-                                            resourceId: resourceId,
-                                            date: (new Date(date)).toString(),
-                                            params: JSON.stringify(response.data[0]),
-                                            patientData: JSON.stringify(patientData),
-                                            patientPolicyData: JSON.stringify(patientPolicyData)
-                                        }
-                                    })
+                                    setDoctorScheduleData(response2.data)
+                                    branchService.find(+branchId)
+                                        .then((response3) => {
+                                            router.push({
+                                                pathname: "/SlotsConfirmationPage",
+                                                params: {
+                                                    city: response3.data.city,
+                                                    branch: response3.data.name,
+                                                    fromSpeciality: fromSpeciality,
+                                                    department: department,
+                                                    speciality: speciality,
+                                                    specialityCode: specialityCode,
+                                                    callCenterFlow: callCenterFlow,
+                                                    devices: JSON.stringify([]),
+                                                    responsible: responsible,
+                                                    mobileOrOnline: interval,
+                                                    shift: 'Both',
+                                                    gender: response.data.gender,
+                                                }
+                                            })
+                                        })
+                                        .catch((error) => {
+                                            console.log("branch not found: ", error)
+                                        })
                                 })
                                 .catch((err) => {
                                     Alert.alert('Note', 'Doctor Schedule not found', [
@@ -238,11 +245,13 @@ const AppointmentTypePage = () => {
         }
     }
 
-    function selectSubService(responsible: any, devices: any, callOrReception: any) {
+    function selectSubService(item: any, responsible: any, devices: any, mobileOrOnline: any) {
+        console.log("item: ", item)
+        setSlotInterval(mobileOrOnline)
+        setServiceResponsible((responsible == null || responsible == "" || responsible == undefined) ? "Doctor" : responsible)
         if (+callCenterDoctorFlow) {
-            bookAppointment()
+            bookAppointment(mobileOrOnline, responsible)
         } else {
-            console.log("devices: ", devices)
             router.push({
                 pathname: "/CityPage",
                 params: {
@@ -254,7 +263,7 @@ const AppointmentTypePage = () => {
                     speciality: speciality,
                     responsible: (responsible == null || responsible == "" || responsible == undefined) ? "Doctor" : responsible,
                     devices: JSON.stringify(devices),
-                    callOrReception: callOrReception,
+                    mobileOrOnline: mobileOrOnline,
                     callCenterDoctorFlow: 0
                 }
             })
@@ -292,7 +301,7 @@ const AppointmentTypePage = () => {
                                     <View className="w-full">
                                         <Pressable
                                             className="flex flex-row border border-pc-primary rounded-lg p-2 shadow-sm bg-white"
-                                            onPress={() => { selectSubService(item.responsible, item.devices, item.callOrReception) }}
+                                            onPress={() => { selectSubService(item, item.responsible, item.devices, item.mobileOrOnline) }}
                                         // onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
                                         >
                                             <View className="rounded-full bg-white flex justify-center items-center w-18 h-18 border border-gray-200">
@@ -322,6 +331,6 @@ const AppointmentTypePage = () => {
     );
 };
 
-export default AppointmentTypePage;
+export default AppointmentType;
 
 const styles = StyleSheet.create({});

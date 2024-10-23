@@ -85,8 +85,11 @@ const DoctorCard = ({
 
   useFocusEffect(
     useCallback(() => {
+            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            console.log("co: ", specialityCode)
+            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
       console.log("speciality: ", speciality)
-      console.log("specialityCode: ", specialityCode)
+      console.log("selectedSpecialityCode: ", selectedSpecialityCode)
       console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
       changeLocale(language)
       changeLanguage(language)
@@ -114,7 +117,6 @@ const DoctorCard = ({
 
 
   const getPatientPolicyData = async () => {
-    console.log("user: ", user)
     if (!useUserSate.getState().loggedIn) {
       Alert.alert('Patient Not Found', 'You need to Sign in first', [
         {
@@ -133,17 +135,14 @@ const DoctorCard = ({
           // console.log("respponse: ", response.data[0])
           setPatientPolicyData(response.data[0])
           // console.log("patientPolicyData: ", patientPolicyData)
-          if (callCenterDoctorFlow) {
-            console.log("\n\n\n\n\n\n\n\n\nbranchId: ", branchId)
-
+          if (+callCenterDoctorFlow) {
             let visitTypes = []
-            console.log("department: ", department)
             if (department == 'Dermatology') {
               visitTypes = [
-                { subServiceNameEn: 'New service Appointment', callOrReception: 20 },
-                { subServiceNameEn: 'Consultation Appointment', callOrReception: 20 },
-                { subServiceNameEn: 'Follow up Appointment', callOrReception: 20 },
-                { subServiceNameEn: 'Emergency Appointment', callOrReception: 20 },
+                { subServiceNameEn: 'New service Appointment', mobileOrOnline: 20 },
+                { subServiceNameEn: 'Consultation Appointment', mobileOrOnline: 10 },
+                { subServiceNameEn: 'Follow up Appointment', mobileOrOnline: 20 },
+                { subServiceNameEn: 'Emergency Appointment', mobileOrOnline: 20 },
               ]
               router.push({
                 pathname: "/AppointmentType",
@@ -153,7 +152,7 @@ const DoctorCard = ({
                   fromSpeciality: fromSpeciality,
                   department: department,
                   callCenterFlow: 0,
-                  specialityCode: specialityCode,
+                  specialityCode: selectedSpecialityCode,
                   speciality: speciality,
                   subServices: JSON.stringify(visitTypes),
                   callCenterDoctorFlow: 1,
@@ -162,12 +161,10 @@ const DoctorCard = ({
               })
             } else {
               specialityService.getSpecialityServiceByDepartmentTest(department).then((response) => {
-                console.log("\n\n\nspecialityService.getSpecialityServiceByDepartmentTest response: ", response.data)
                 let specialityList = [...response.data];
-                console.log("specialityCode: ", selectedSpecialityCode)
                 let selectedDoctorSpeciality = specialityList.find(speciality => speciality.code == selectedSpecialityCode);
                 visitTypes = selectedDoctorSpeciality?.services[0].subServices;
-                console.log("visitTypes: ", visitTypes)
+                console.log("1selectedSpecialityCode: ", selectedSpecialityCode)
                 router.push({
                   pathname: "/AppointmentType",
                   params: {
@@ -176,7 +173,7 @@ const DoctorCard = ({
                     fromSpeciality: fromSpeciality,
                     department: department,
                     callCenterFlow: 0,
-                    specialityCode: specialityCode,
+                    specialityCode: selectedSpecialityCode,
                     speciality: speciality,
                     subServices: JSON.stringify(visitTypes),
                     callCenterDoctorFlow: 1,
@@ -197,7 +194,8 @@ const DoctorCard = ({
             }
           } else {
             console.log("datePickerOpen")
-            setIsDatePickerOpen(true);
+            bookAppointment()
+            // setIsDatePickerOpen(true);
           }
         })
         .catch((error) => {
@@ -208,9 +206,7 @@ const DoctorCard = ({
 
   const bookAppointment = () => {
 
-    console.log("bookAppointment")
     if (patientData == null || Object.keys(patientData).length <= 0) {
-      console.log("here")
       Alert.alert('Patient Not Found', 'You need to Sign in first', [
         {
           text: 'BACK',
@@ -240,39 +236,9 @@ const DoctorCard = ({
           .then((response) => {
             let speciality = response.data.speciality;
             let doctorName = response.data.name;
-
-            // need to be checked
-            // let branchId = response.data.branchId[0];
-
-
             setSpeciality(response.data.speciality);
-            // setDoctorName(response.data.name);
-            // setBranchId(response.data.branchId[0]); // set first branchId from patient branch list if below API gives error
-            // branchService.getBranchByName(response.data.primaryBranch)
-            //   .then((response) => {
-            //     setBranchId(response.data.id);
-            //     if (department != null && date != null && specialityList != null && doctorName != null) {
-            //       let dateString = moment(date).format("YYYY-MM-DD");
-            //       let today = moment().format("YYYY-MM-DD");
-            //       let requestBody: any = [{
-            //         date: dateString,
-            //         day: 2,
-            //         resourceIds: [id],
-            //         wday: "Mon"
-            //       }]
-            //       scheduleService.getDoctorSchedule(branchId, department, specialityList, "false", requestBody)
-            //         .then((response) => {
-            //           setDoctorScheduleData(response.data)
-            //         })
-            //         .catch((err) => {
-            //           console.log(err);
-            //         })
-            //     }
-            //   })
-            //   .catch((error) => {
-            //     console.log("errorrrr: ", error)
-            //   })
-            if (department != null && date != null && speciality != null && doctorName != null) {
+            let today = new Date()
+            if (department != null && today != null && speciality != null && doctorName != null) {
               let dateString = moment(date).format("YYYY-MM-DD");
               let requestBody: any = [{
                 date: dateString,
@@ -302,7 +268,7 @@ const DoctorCard = ({
                         speciality: speciality,
                         doctor: doctorName,
                         resourceId: id,
-                        date: (new Date(date)).toString(),
+                        date: (today).toString(),
                         params: JSON.stringify(response.data[0]),
                         patientData: JSON.stringify(patientData),
                         patientPolicyData: JSON.stringify(patientPolicyData)
@@ -336,7 +302,6 @@ const DoctorCard = ({
 
     <TouchableOpacity
       onPress={() => {
-        console.log("DoctorCard Clicked");
         router.push({
           pathname: "/DoctorProfile",
           params: { id: id },
@@ -384,36 +349,15 @@ const DoctorCard = ({
             </View>
           </View>
         </View>
-        <View className="border border-pc-primary p-2 rounded-md ml-2">
-          {/* <Ionicons name="heart-outline" size={16} color={"rgb(132 204 22)"} /> */}
-          <MaterialIcons name="local-hospital" size={24} color={'rgb(132, 204, 22)'} />
-        </View>
       </View>
 
-      {isDatePickerOpen && (
-        <View>
-          <DateTimePicker
-            value={dateAux}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate: any) => {
-              if (event.type === 'set') {
-                // const currentDate = event.nativeEvent.timestamp || date;
-                var currentDate = moment.unix(event.nativeEvent.timestamp).toDate();
-                setDate(currentDate);
-                bookAppointment()
-              }
-            }}
-          />
-        </View>
-      )}
       <View className="flex flex-row justify-end ">
         <Pressable
           onPress={() => {
             getPatientPolicyData();
           }}
-          className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
-          <Text>{i18n.t("Book")}</Text>
+          className="bg-[#3B2314] text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
+          <Text className="text-white">{i18n.t("Book")}</Text>
         </Pressable>
       </View>
 
