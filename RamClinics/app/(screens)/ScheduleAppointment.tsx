@@ -106,6 +106,7 @@ const ScheduleAppointment = () => {
     const [slotStatus, setSlotStatus] = useState("");
     const [slotName, setSlotName] = useState("");
     const [branchName, setBranchName] = useState("");
+    const [city, setCity] = useState("");
     const [selectedSlots, setSelectedSlots] = useState(new Set<number>());
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
@@ -194,6 +195,8 @@ const ScheduleAppointment = () => {
                     // console.log("\n\n\n\npatientPolicyData: ", patientPolicyDataJson)
                     branchService.find(Number(branchId))
                         .then((response) => {
+                            console.log("response.data: ", response.data)
+                            setCity(response.data.city)
                             setBranchName(response.data.name)
                         })
                         .catch((error) => {
@@ -529,20 +532,25 @@ const ScheduleAppointment = () => {
                                             <View className="flex flex-row p-1 m-1 w-32 h-32">
                                                 <Pressable
                                                     onPress={() => {
-                                                        console.log("item: ", item)
-                                                        Alert.alert('Doctor ' + doctor, 'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + " -\nSlot: " + item.slotName, [
-                                                            {
-                                                                text: 'Confirm',
-                                                                onPress: () => {
-                                                                    loggedIn ? selectSlot(item) : router.push("/SignIn");
+                                                        // console.log("item: ", item)
+                                                        Alert.alert(
+                                                            // 'Doctor ' + doctor, 'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + " -\nSlot: " + item.slotName, 
+                                                            // 'Doctor ' + item.name,
+                                                            `${doctor},  ${branchName}, ${city},`,
+                                                            'Date: ' + moment(fromDate).format("DD-MMM-YYYY") + "\nTime: " + item.slotName,
+                                                            [
+                                                                {
+                                                                    text: 'Confirm',
+                                                                    onPress: () => {
+                                                                        loggedIn ? selectSlot(item) : router.push("/SignIn");
+                                                                    },
+                                                                    style: 'default'
                                                                 },
-                                                                style: 'default'
-                                                            },
-                                                            {
-                                                                text: 'Cancel',
-                                                                style: 'default'
-                                                            },
-                                                        ])
+                                                                {
+                                                                    text: 'Cancel',
+                                                                    style: 'default'
+                                                                },
+                                                            ])
 
                                                     }}
                                                     className={`border p-2 rounded-lg w-full ${selectedSlots.has(item) ? "border-lime-500" : "border-pc-primary"}`}

@@ -13,6 +13,7 @@ import slotService from "../../domain/services/SlotService";
 import appointmentService from "../../domain/services/AppointmentService";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import { Calendar } from "react-native-calendars";
+import patientService from "../../domain/services/PatientService";
 
 const Separator = () => <View style={styles.separator} />;
 const styles = StyleSheet.create({
@@ -35,10 +36,27 @@ const DoctorSelect = () => {
     const [loggedIn, setLoggedIn] = useState(useUserSate.getState().loggedIn);
     const { branches, setBranches } = useBranches();
     const [slotsReserved, setSlotsReserved] = useState(JSON.parse(reservedSlots.toString()));
+    const [patient, setPatient] = useState<any>(null)
+    const [loader, setLoader] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
-            console.log("city: ", city)
+            console.log("\n\nuser: ", useUserSate.getState())
+            patientService.patientDetails(useUserSate.getState().user.firstName)
+                .then((response) => {
+                    for (let i of response.data) {
+                        if (i.id == useUserSate.getState().user.id) {
+                            setPatient(i)
+                            break;
+                        }
+                    }
+                    // setPatient(response.data)
+                    // console.log("\n\n\n\n\n\npatientService.patientDetails response.data: ", response.data.length)
+                })
+                .catch((error) => {
+                    console.log("\n\n\n\n\n\npatientService.getByPatientId error: ", error)
+                })
+            console.log("useUserSate.getState().user: ", useUserSate.getState().user)
             setDoctors(JSON.parse(doctorList.toString()))
             setSlot(selectedSlot)
             setSlotsReserved(JSON.parse(reservedSlots.toString()))
@@ -49,6 +67,8 @@ const DoctorSelect = () => {
 
     const bookAppointment = async (doctor: any) => {
 
+        setLoader(true)
+
         // let branchResponse = await branchService.findAll();
         let branchId = branches.find((branch: any) => branch.name === doctor?.primaryBranch)?.id;
         let slotGroupIds = slotsReserved.flat().filter((slotDoc: any) => slotDoc.id == doctor?.id).map((slot: any) => slot.slotId).join('$')
@@ -56,7 +76,6 @@ const DoctorSelect = () => {
         slotService.slotsByIds(slotGroupIds)
             .then((response) => {
                 console.log("arrararararesponse.data: ", response.data)
-                console.log("useUserSate.getState().user: ", useUserSate.getState().user)
                 let app: any = {}
                 app.slots = [...response.data]
                 let start, end;
@@ -64,7 +83,7 @@ const DoctorSelect = () => {
                     start = app.slots[0].startTime
                     end = app.slots[app.slots.length - 1].endTime
                 }
-                app.mrno = useUserSate.getState().user.mrno
+                app.mrno = patient.mrno
                 app.patientId = useUserSate.getState().user.id
                 app.patientName = useUserSate.getState().user.firstName + " " + useUserSate.getState().user.lastName
                 app.practitionerName = doctor.name
@@ -72,11 +91,11 @@ const DoctorSelect = () => {
                 app.branchName = doctor.primaryBranch
                 app.department = department;
                 app.speciality = speciality;
-                app.gender = useUserSate.getState().user.gender
-                app.age = Math.ceil(useUserSate.getState().user.age)
+                app.gender = patient.gender
+                app.age = patient.age || patient.ageText
                 app.mobileNo = useUserSate.getState().user.mobile
-                app.nationality = useUserSate.getState().user.country
-                app.nationalId = useUserSate.getState().user.nationalityId
+                app.nationality = patient.nationality
+                app.nationalId = patient.nationalId
                 app.branchId = branchId;
                 app.status = "pending"
                 app.hisStatus = "Booked";
@@ -131,9 +150,11 @@ const DoctorSelect = () => {
                             console.log("app: ", app)
                             appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", app)
                                 .then((response) => {
+                                    setLoader(false)
                                     // setLoader(false)
                                     Alert.alert('Success', 'Appointment has been booked successfully', [
                                         {
+                                            onPress: () => router.back(),
                                             text: 'OK',
                                             style: 'default'
                                         },
@@ -142,7 +163,18 @@ const DoctorSelect = () => {
                                 })
                                 .catch((error) => {
                                     // setLoader(false)
-                                    console.log("appointmentService error", error)
+                                    setLoader(false)
+                                    console.error("appointmentService error", error.response?.data.errors[0].msg)
+                                    Alert.alert("Appointment booking failed", error.response?.data.errors[0].msg,
+                                        [
+                                            {
+                                                onPress: () => router.back(),
+                                                text: 'OK',
+                                                style: 'default'
+                                            },
+                                        ]
+
+                                    )
                                 })
                             // appointmentService.save(app)
                             //     .then((response: any) => {
@@ -156,11 +188,13 @@ const DoctorSelect = () => {
                         }
                     })
                     .catch((error: any) => {
-                        console.log("getAppointmentsBySlotId error: ", error)
+                        setLoader(false)
+                        console.error("getAppointmentsBySlotId error: ", error.response)
                         Alert.alert('Appointment booking failed', 'Failed to book appointment!')
                     })
             })
             .catch((error) => {
+                setLoader(false)
                 Alert.alert("Appointment booking failed", "There might be an existing appointment in the selected slot interval or with the same doctor!")
                 console.log("slotService error: ", error)
             })
@@ -178,9 +212,9 @@ const DoctorSelect = () => {
             )
         } else {
             Alert.alert(
-                `${item.name},  ${branch}${city},`,
+                `${item.name},  ${branch}, ${city},`,
                 // 'Doctor ' + item.name,
-                'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + " -\nSlot: " + selectedSlot,
+                'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot,
                 [
                     { text: 'Cancel', style: 'default' },
                     {
@@ -200,7 +234,7 @@ const DoctorSelect = () => {
             <ScrollView className="p-6">
                 <HeaderWithBackButton title="Booking Confirmation" isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
-                    <Text className="text-xl font-bold">Selected Appointment: {slotSearchDate} - {selectedSlot}</Text>
+                    {/* <Text className="text-xl font-bold">Selected Appointment: {slotSearchDate} - {selectedSlot}</Text> */}
                     <Separator />
                     {doctors.map((item: any) => (
                         <View
@@ -210,40 +244,46 @@ const DoctorSelect = () => {
                             <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-pc-primary pb-4">
                                 <View className="flex flex-row justify-start items-center ">
                                     <View>
-                                        <Text className="text-base font-medium pb-2">
-                                            {item.name} - {item.nationality}
-                                        </Text>
-                                        <View className="flex-row items-center gap-2">
+                                        <View className="flex flex-row justify-between">
                                             <View>
-                                                <Text
-                                                    className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
-                                                    {item.speciality}
+                                                <Text className="pb-4 text-base font-medium pb-2">
+                                                    {item.name} {item.nationality}
                                                 </Text>
                                             </View>
                                             <View>
-                                                <Text
-                                                    className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
-                                                    {item.gender}
+                                                <Text className="pb-4 text-base font-medium pb-2">
+                                                    {moment(slotSearchDate).format("DD-MMM-YYYY")}
                                                 </Text>
                                             </View>
-                                            {/* <View>
-                                                <Text
-                                                    className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
-                                                    {item.hisStatus}
+                                        </View>
+                                        <View className="w-full flex flex-row justify-between items-center gap-2">
+                                            <View className="flex-row gap-2">
+                                                <View>
+                                                    <Text
+                                                        className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
+                                                        {item.speciality}
+                                                    </Text>
+                                                </View>
+                                                <View>
+                                                    <Text
+                                                        className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
+                                                        {item.gender}
+                                                    </Text>
+                                                </View>
+                                                {/* <View>
+                                                    <Text
+                                                        className='text-[12px] text-[#5554DB] bg-[#d4d4fc] px-2 py-1 rounded-md'>
+                                                        {item.hisStatus}
+                                                    </Text>
+                                                </View> */}
+                                            </View>
+                                            <View className="flex justify-end">
+                                                <Text className="text-pc-primary">
+                                                    <AntDesign name="clockcircle" /> from {selectedSlot}
                                                 </Text>
-                                            </View> */}
+                                            </View>
                                         </View>
 
-                                        <Text className="text-[12px] pt-2">
-                                            {/* <Text> <AntDesign name="star" color={"#ffab00"} /> </Text>
-                                            Id: {item.empId}
-                                            <Text>
-                                                <Entypo name="dot-single" />
-                                            </Text> */}
-                                            <Text className="text-pc-primary">
-                                                <AntDesign name="clockcircle" /> from {selectedSlot}
-                                            </Text>
-                                        </Text>
                                     </View>
                                 </View>
 
@@ -256,20 +296,20 @@ const DoctorSelect = () => {
                                 </View> */}
                             </View>
                             <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                                <TouchableOpacity
-                                    onPress={() => router.back()}
+                                <Pressable
+                                // onPress={() => router.back()} 
                                 >
                                     <Text className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center" >
-                                        Cancel
+                                        Doctor Information
                                     </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity>
+                                </Pressable>
+                                <Pressable>
                                     <Text
                                         onPress={() => selectDoctor(item)}
                                         className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
                                         Book Appointment
                                     </Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                         </View>
                     ))}

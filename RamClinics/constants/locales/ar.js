@@ -7,6 +7,8 @@
 
 const translations = {
     en: {
+        "No appointments found": "No appointments found",
+        "Last Month": "Last Month",
         "Book Appointment": "Book Appointment",
         "Forgot Password": "Forgot Password",
         "Reset your password securely for uninterrupted access to your account.": "Reset your password securely for uninterrupted access to your account.",
@@ -289,6 +291,9 @@ const translations = {
         "Dental Specialities": "Dental Specialities",
         "Dermatology Specialities": "Dermatology Specialities",
         "Medical Specialities": "Medical Specialities",
+        "Shift and Doctor Gender": "Shift and Doctor Gender",
+        "Doctor Specialities": "Doctor Specialities",
+        "Specialities": "Specialities",
 
     },
     ar: {
@@ -582,7 +587,11 @@ const translations = {
         "Dental Specialities": "تخصصات الأسنان",
         "Dermatology Specialities": "تخصصات الجلدية",
         "Medical Specialities": "تخصصات الطب العام",
-
+        "Shift and Doctor Gender": "التوقيت وجنس الطبيب",
+        "Doctor Specialities": "تخصصات الأطباء",
+        "Specialities": "التخصصات",
+        "Last Month": "الشهر الماضي",
+        "No appointments found": "لا توجد مواعيد متاحة",
     }
 }
 export default translations;

@@ -38,7 +38,7 @@ const Home = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showFavouriteModal, setShowFavouriteModal] = useState(false);
   const { language, changeLanguage } = useLanguage();
-  const [ locale, setLocale ] = useState(i18n.locale);
+  const [locale, setLocale] = useState(i18n.locale);
   const { branchesData, changeBranches } = useBranches();
   const { doctors, changeDoctors } = useDoctors()
 
@@ -64,9 +64,9 @@ const Home = () => {
         branchService.findAll().then((res) => {
           changeBranches(res.data)
         })
-        .then(() => {
-          console.log("branches set")
-        })
+          .then(() => {
+            console.log("branches set")
+          })
       }
 
       changeLocale(language)
@@ -108,10 +108,12 @@ const Home = () => {
             <View className="py-4 w-full items-center">
               <View className="flex-row justify-between py-2 px-4 bg-[rgb(59,35,20)] rounded-2xl w-4/5 h-[4.5rem]">
                 {language === 'en' ?
-                  <><Text className="text-white pt-5 pl-1">{i18n.t("signinmsg")}</Text>
+                  <>
+                    <Text className="text-white pt-5 pl-1">{i18n.t("signinmsg")}</Text>
                     <Pressable className="bg-lime-500 p-2 my-2 rounded-lg border-[1px] border-primaryColor" onPress={() => router.push("/SignIn")}>
                       <Text className="text-black font-semibold"> {i18n.t("Sign In")} </Text>
-                    </Pressable></>
+                    </Pressable>
+                  </>
                   :
                   <><Pressable className="bg-lime-500 p-2 my-2 rounded-lg border-[1px] border-primaryColor" onPress={() => router.push("/SignIn")}>
                     <Text className="text-black font-semibold"> {i18n.t("Sign In")} </Text>
