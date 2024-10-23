@@ -13,7 +13,7 @@ import { useUserSate } from "../../domain/state/UserState";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
-i18n.enableFallback = true;
+i18n.enableFallback = false;
 
 const MainMenu = () => {
   const { language, changeLanguage } = useLanguage();
@@ -41,18 +41,27 @@ const MainMenu = () => {
     }, [])
   )
 
+  const loggedOutMenuItems = [
+    {
+      icon: 'medkit-outline',
+      title: 'Specialities',
+      link: '/Specialities',
+      showWhenLoggedOut: true
+    },
+  ]
+
   const menuItems = [
     {
       icon: 'medkit-outline',
       title: 'Specialities',
       link: '/Specialities',
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "calendar-number-outline",
       title: "My Appoinments",
       link: "/MyAppoinment",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     // {
     //   icon: "calendar-outline",
@@ -63,63 +72,80 @@ const MainMenu = () => {
       icon: "receipt-outline",
       title: "My Invoices",
       link: "/MyInvoices",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "shield-checkmark-outline",
       title: "My Approvals",
       link: "/MyApprovals",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "document-text-outline",
       title: "My Prescriptions",
       link: "/MyPrescription",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "people-outline",
       title: "Family Members",
       link: "/FamilyFile",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "pricetag-outline",
       title: "Promotions",
       link: "/MyPromotionBookings",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "flask-outline",
       title: "Laboratory",
       link: "/MyLabrotary",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "radio-outline",
       title: "Radiology",
       link: "/MyRadialogy",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "bandage-outline",
       title: "My Sick Leaves",
       link: "/MySickLeaves",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "fitness-outline",
       title: "My Vital Signs",
       link: "/MyVitalSigns",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
     {
       icon: "wallet-outline",
       title: "My Wallet",
       link: "/Wallets",
-      showOnLogin: true
+      showWhenLoggedOut: false
     },
   ];
+
+
+  let renderLoggedOutMenu: any = []
+
+  loggedOutMenuItems.forEach((item) => {
+    renderLoggedOutMenu.push(
+      <View className="flex flex-row p-1 m-1 w-32 h-32">
+        <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
+          <View className="py-2 items-center">
+            <Ionicons name={loggedOutMenuItems[0].icon as any} size={36} color={"rgb(132 204 22)"} />
+          </View>
+          <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(loggedOutMenuItems[0].title)}</Text>
+        </Pressable>
+      </View>
+    )
+  })
+
 
   return (
     <View className="pt-8 w-full">
@@ -127,38 +153,34 @@ const MainMenu = () => {
         <Text className=" text-xl font-semibold">{i18n.t("Main Menu")}</Text>
       </View>
       <View className="flex-row pt-5 px-4">
-        <FlatList
-          data={menuItems}
-          numColumns={3}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ marginHorizontal: "auto" }}
-          renderItem={({ item }) => (
-            <View>
-              {
-                loggedIn
-                ?
-                item.showOnLogin &&
-                <View className="flex flex-row p-1 m-1 w-32 h-32">
-                  <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
-                    <View className="py-2 items-center">
-                      <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
-                    </View>
-                    <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
-                  </Pressable>
+
+        {
+          loggedIn
+            ?
+            <FlatList
+              data={loggedIn ? menuItems : loggedOutMenuItems}
+              numColumns={3}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ marginHorizontal: "auto" }}
+              renderItem={({ item }) => (
+                <View>
+                  <View className="flex flex-row p-1 m-1 w-32 h-32">
+                    <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
+                      <View className="py-2 items-center">
+                        <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
+                      </View>
+                      <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
+                    </Pressable>
+                  </View>
                 </View>
-                :
-                <View className="flex flex-row p-1 m-1 w-32 h-32">
-                  <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
-                    <View className="py-2 items-center">
-                      <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
-                    </View>
-                    <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
-                  </Pressable>
-                </View>
-              }
+              )}
+            />
+            :
+            <View className="flex flex-row justify-evenly w-full">
+              {renderLoggedOutMenu}
             </View>
-          )}
-        />
+        }
+
       </View>
     </View >
   );
