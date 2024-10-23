@@ -36,7 +36,7 @@ const ShiftAndGenderOptions = () => {
         }, [])
     )
 
-    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception } = useLocalSearchParams();
+    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline } = useLocalSearchParams();
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [branches, setBranches] = useState([]);
     const [searchValue, setSearchValue] = useState('');
@@ -78,13 +78,13 @@ const ShiftAndGenderOptions = () => {
                     callCenterFlow: callCenterFlow,
                     devices: devices,
                     responsible: responsible,
-                    callOrReception: callOrReception,
+                    mobileOrOnline: mobileOrOnline,
                     shift: selectedShift,
                     gender: selectedGender
                 }
             })
         }
-        // let subServiceSlotInterval = +callOrReception
+        // let subServiceSlotInterval = +mobileOrOnline
         // if (+callCenterFlow) {
         //     let deviceCode: any = ""
         //     for (let device of devicesList) {

@@ -91,7 +91,7 @@ const MainMenu = () => {
     },
     {
       icon: "flask-outline",
-      title: "Labrotary",
+      title: "Laboratory",
       link: "/MyLabrotary",
       showOnLogin: true
     },
