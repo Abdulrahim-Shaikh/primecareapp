@@ -10,7 +10,7 @@ import { Picker } from "@react-native-picker/picker";
 import LinkButton from "../../components/LinkButton";
 import moment from "moment";
 
-const ShiftAndGenderOptions = () => {
+const AppointmentSlotPage = () => {
 
     const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible } = useLocalSearchParams();
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
@@ -34,4 +34,4 @@ const ShiftAndGenderOptions = () => {
     )
 }
 
-export default ShiftAndGenderOptions;
+export default AppointmentSlotPage;

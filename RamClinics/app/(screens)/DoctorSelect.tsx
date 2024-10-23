@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 
 const DoctorSelect = () => {
 
-    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception, shift, gender, slotSearchDate, selectedSlot, reservedSlots, doctorList } = useLocalSearchParams();
+    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline, shift, gender, slotSearchDate, selectedSlot, reservedSlots, doctorList } = useLocalSearchParams();
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [doctors, setDoctors] = useState(JSON.parse(doctorList.toString()));
@@ -306,7 +306,7 @@ const DoctorSelect = () => {
                                 <Pressable>
                                     <Text
                                         onPress={() => selectDoctor(item)}
-                                        className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
+                                        className="bg-[#3B2314] text-white border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center">
                                         Book Appointment
                                     </Text>
                                 </Pressable>

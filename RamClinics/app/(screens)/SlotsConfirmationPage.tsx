@@ -20,7 +20,7 @@ i18n.enableFallback = true;
 
 const SlotsConfirmationPage = () => {
 
-    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, callOrReception, shift, gender } = useLocalSearchParams();
+    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline, shift, gender } = useLocalSearchParams();
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [slotsAvailable, setSlotsAvailable] = useState(new Map<string, Array<number>>())
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -37,6 +37,20 @@ const SlotsConfirmationPage = () => {
 
     useEffect(() => {
         // setDevicesList(JSON.parse(devices.toString()))
+        console.log("\n\n\n\n")
+        console.log("city: ", city)
+        console.log("branch: ", branch)
+        console.log("fromSpeciality: ", fromSpeciality)
+        console.log("department: ", department)
+        console.log("speciality: ", speciality)
+        console.log("specialityCode: ", specialityCode)
+        console.log("callCenterFlow: ", callCenterFlow)
+        console.log("devices: ", devices)
+        console.log("responsible: ", responsible)
+        console.log("mobileOrOnline: ", mobileOrOnline)
+        console.log("shift: ", shift)
+        console.log("gender: ", gender)
+        console.log("\n\n\n\n")
         let today = moment().format("YYYY-MM-DD");
         setSlotsAvailable(new Map<string, Array<number>>())
         search(today)
@@ -54,7 +68,7 @@ const SlotsConfirmationPage = () => {
             return moment(`${today} ${a.trim()}`, "YYYY-MM-DD hh:mm A").diff(moment(`${today} ${b.trim()}`, "YYYY-MM-DD hh:mm A"))
         })
 
-        let iterations = +callOrReception / 5
+        let iterations = +mobileOrOnline / 5
         let reservedSlots: any = []
         for (let i = 0; i < sortedTimeSlots.length; i++) {
             if (sortedTimeSlots[i] == slot[0]) {
@@ -78,7 +92,7 @@ const SlotsConfirmationPage = () => {
                 callCenterFlow: callCenterFlow,
                 devices: JSON.stringify(devicesList),
                 responsible: responsible,
-                callOrReception: callOrReception,
+                mobileOrOnline: mobileOrOnline,
                 shift: shift,
                 gender: gender,
                 slotSearchDate: moment(slotSearchDate).format("YYYY-MM-DD"),
@@ -91,9 +105,9 @@ const SlotsConfirmationPage = () => {
 
     const search = (date: any) => {
         setLoader(true)
-        let subServiceSlotInterval = +callOrReception
+        let subServiceSlotInterval = +mobileOrOnline
         // console.log("subServiceSlotInterval: ", subServiceSlotInterval)
-        if (+callCenterFlow) {
+        if (true) {
             let deviceCode: any = ""
             for (let device of devicesList) {
                 deviceCode += device.deviceCode + ","
@@ -106,7 +120,8 @@ const SlotsConfirmationPage = () => {
             console.log("city: ", city)
             console.log("deviceCode: ", deviceCode)
             console.log("responsible: ", responsible)
-            resourceService.getResourceByLiveSlotSpeciality(specialityCode, date, branch, shift, city, deviceCode, responsible)
+            let tempResponsible: any = (responsible == undefined)? "" : responsible
+            resourceService.getResourceByLiveSlotSpeciality(specialityCode, date, branch, shift, city, deviceCode, tempResponsible)
                 .then((response) => {
                     setLoader(true)
                     let slots: any = response.data;

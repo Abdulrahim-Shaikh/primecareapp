@@ -46,6 +46,10 @@ const BranchDoctor = () => {
 
     useFocusEffect(
         useCallback(() => {
+
+            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            console.log("ccodeee: ", specialityCode)
+            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             changeLocale(language)
             changeLanguage(language)
             setLoader(true);
