@@ -5,7 +5,7 @@ import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import React, { useCallback, useEffect, useState } from "react";
 import resourceService from "../../domain/services/ResourceService";
 import moment, { Moment } from "moment";
-import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, FontAwesome, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useUserSate } from "../../domain/state/UserState";
 import branchService from "../../domain/services/BranchService";
@@ -36,15 +36,15 @@ const DoctorSelect = () => {
     const showDoctor = (item: any) => {
         setMinimalDoctorInfo(item)
         resourceService.find(item.id)
-        .then((response) => {
-            console.log("item: ", item)
-            console.log("\n\n\nresponse: ", Object.keys(response.data))
-            setDisplayedDoctor(response.data)
-            console.log("\n\n\n\ndisplayedDoctor: ", displayedDoctor)
-        })
-        .catch((error) => {
-            console.error("resourceService error: ", error.response)
-        })
+            .then((response) => {
+                console.log("item: ", item)
+                console.log("\n\n\nresponse: ", Object.keys(response.data))
+                setDisplayedDoctor(response.data)
+                console.log("\n\n\n\ndisplayedDoctor: ", displayedDoctor)
+            })
+            .catch((error) => {
+                console.error("resourceService error: ", error.response)
+            })
     }
 
     useFocusEffect(
@@ -153,7 +153,15 @@ const DoctorSelect = () => {
                 appointmentService.getAppointmentsBySlotId(slotsApi, app.branchId, moment(app.appointmentDate).format("yyyy-MM-DD"), app.practitionerId)
                     .then((response: any) => {
                         if (Object.keys(response.data).length > 0) {
-                            Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!')
+                            // Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!')
+                            setLoader(false)
+                            Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!', [
+                                {
+                                    onPress: () => router.back(),
+                                    text: 'OK',
+                                    style: 'default'
+                                },
+                            ])
                         } else {
                             console.log("app: ", app)
                             appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", app)
@@ -198,12 +206,26 @@ const DoctorSelect = () => {
                     .catch((error: any) => {
                         setLoader(false)
                         console.error("getAppointmentsBySlotId error: ", error.response)
-                        Alert.alert('Appointment booking failed', 'Failed to book appointment!')
+                        // Alert.alert('Appointment booking failed', 'Failed to book appointment!')
+                        Alert.alert('Appointment booking failed', 'Failed to book appointment!', [
+                            {
+                                onPress: () => router.back(),
+                                text: 'OK',
+                                style: 'default'
+                            },
+                        ])
                     })
             })
             .catch((error) => {
                 setLoader(false)
-                Alert.alert("Appointment booking failed", "There might be an existing appointment in the selected slot interval or with the same doctor!")
+                // Alert.alert("Appointment booking failed", "There might be an existing appointment in the selected slot interval or with the same doctor!")
+                Alert.alert('Appointment booking failed', 'Failed to book appointment!', [
+                    {
+                        onPress: () => router.back(),
+                        text: 'OK',
+                        style: 'default'
+                    },
+                ])
                 console.log("slotService error: ", error)
             })
 
@@ -354,7 +376,7 @@ const DoctorSelect = () => {
                                     <View className="flex flex-row items-center gap-4 pt-6">
                                         <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                             <MaterialCommunityIcons
-                                                name="stethoscope"
+                                                name="office-building"
                                                 size={30}
                                                 color={"#84cc16"}
                                             />
@@ -367,7 +389,7 @@ const DoctorSelect = () => {
                                     <View className="flex flex-row items-center gap-4 pt-6">
                                         <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                             <MaterialCommunityIcons
-                                                name="stethoscope"
+                                                name="flag-variant"
                                                 size={30}
                                                 color={"#84cc16"}
                                             />
@@ -382,7 +404,7 @@ const DoctorSelect = () => {
                                     <View className="flex flex-row items-center gap-4 pt-6">
                                         <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                             <MaterialCommunityIcons
-                                                name="stethoscope"
+                                                name="account-outline"
                                                 size={30}
                                                 color={"#84cc16"}
                                             />
@@ -411,7 +433,7 @@ const DoctorSelect = () => {
                                 <View className="flex flex-row items-center gap-4 pt-6">
                                     <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <MaterialCommunityIcons
-                                            name="stethoscope"
+                                            name="professional-hexagon"
                                             size={30}
                                             color={"#84cc16"}
                                         />
@@ -426,7 +448,7 @@ const DoctorSelect = () => {
                                 <View className="flex flex-row items-center gap-4 pt-6">
                                     <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <MaterialCommunityIcons
-                                            name="stethoscope"
+                                            name="certificate"
                                             size={30}
                                             color={"#84cc16"}
                                         />
@@ -441,22 +463,40 @@ const DoctorSelect = () => {
                                 <View className="flex flex-row items-center gap-4 pt-6">
                                     <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <MaterialCommunityIcons
-                                            name="stethoscope"
+                                            name="account-tie-hat-outline"
                                             size={30}
                                             color={"#84cc16"}
                                         />
                                     </View>
                                     <View className="flex flex-col">
                                         <Text>Graduation</Text>
-                                        <Text className="font-bold text-xl">{displayedDoctor.graduation? "." + displayedDoctor.qualification + "." : 'Unknown'}</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.graduation ? "." + displayedDoctor.qualification + "." : 'Unknown'}</Text>
                                     </View>
                                 </View>
                             </View>
                             <View>
                                 {
-                                    displayedDoctor.resourceServiceList.array.forEach((element: any) => {
-                                        
+                                    displayedDoctor.resourceServiceList != null?
+                                    displayedDoctor.resourceServiceList?.forEach((item: any) => {
+                                        <View className="pt-5" key={item.id}>
+                                            <View className="p-4 rounded-2xl border bg-white border-pc-primary flex flex-row justify-start items-center">
+                                                <View>
+                                                    <Text className="text-pc-primary p-4 rounded-full bg-amber-100 mr-4">
+                                                        {status === 'Cancelled' ? (
+                                                            <MaterialCommunityIcons name="close-box" size={24} />
+                                                        ) : (
+                                                            <FontAwesome name="calendar-check-o" size={24} />
+                                                        )}
+                                                    </Text>
+                                                </View>
+                                                <View className="flex-1">
+                                                    <Text className="text-base font-semibold">Appointment</Text>
+                                                </View>
+                                            </View>
+                                        </View>
                                     })
+                                    :
+                                    <></>
                                 }
                             </View>
                         </ScrollView>

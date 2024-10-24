@@ -79,7 +79,7 @@ const SingUp = () => {
   const [city, setCity] = useState('');
   const [showDatePicker, setShowPicker] = useState(false);
   const [dob, setDob] = useState(new Date());
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
   const [countryCode, setCountryCode] = useState('');
   const [selectedCountryCodeItem, setSelectedCountryCodeItem] = useState<any>(null);
   const [errorsExist, setErrorsExist] = useState(false);
@@ -288,7 +288,7 @@ const SingUp = () => {
 
             {selectedOption === 0 && (
               <>
-                <Text className="mb-2 font-medium">{i18n.t("country")}</Text>
+                <Text className="mb-2 font-medium">{i18n.t("country")} *</Text>
                 <View className="border rounded-xl mb-2">
                   <Picker selectedValue={selectedIdCountry} onValueChange={(cntry) => { setIdCountry(cntry) }} className="text-slate-800">
                     <Picker.Item label="Select Country Code" value="" style={{ color: 'grey', fontSize: 14 }} />

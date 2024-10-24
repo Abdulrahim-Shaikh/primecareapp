@@ -38,6 +38,7 @@ import scheduleService from "../../domain/services/ScheduleService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
 import { Picker } from "@react-native-picker/picker";
 import SelectDropdown from "react-native-select-dropdown";
+import specialityService from "../../domain/services/SpecialityService";
 
 const tabNames = ["Booked", "Checked In"];
 const i18n = new I18n(translations)
@@ -181,21 +182,56 @@ const Appoinment = () => {
             setPatientPolicyData(patientPolicyResponse.data[0])
             scheduleService.getDoctorSchedule(item.branchId, item.department, item.speciality, "false", requestBody)
               .then((response) => {
-                console.log("data")
-                router.push({
-                  pathname: "/ScheduleAppointment/",
-                  params: {
-                    branchId: branchId,
-                    department: item.department,
-                    speciality: item.speciality,
-                    doctor: item.doctorName,
-                    resourceId: item.resourceId,
-                    date: (new Date()).toString(),
-                    params: JSON.stringify(response.data[0]),
-                    patientData: JSON.stringify(patientData),
-                    patientPolicyData: JSON.stringify(patientPolicyResponse.data[0])
-                  }
-                })
+                let startTime = new Date(item.startTime)
+                let endTime = new Date(item.endTime)
+                const interval = moment(endTime).diff(moment(startTime), 'minutes')
+                console.log("item: ", item)
+                specialityService.getByDept(item.department)
+                  .then((specialityListResponse: any) => {
+                    for (let s of specialityListResponse.data) {
+                      console.log("\n\ns: ", s.name)
+                      if (s.name == item.speciality) {
+                        console.log("s: ", s)
+                        router.push({
+                          pathname: "/SlotsConfirmationPage",
+                          params: {
+                            city: item.city,
+                            branch: item.branchName,
+                            fromSpeciality: 0,
+                            department: item.department,
+                            speciality: item.speciality,
+                            specialityCode: s.code,
+                            callCenterFlow: 1,
+                            devices: JSON.stringify([]),
+                            responsible: "",
+                            mobileOrOnline: moment(endTime).diff(moment(startTime), 'minutes'),
+                            shift: 'Both',
+                            gender: response.data.gender,
+                            resourceId: response.data.practitionerId,
+                            callCenterDoctorFlow: 0,
+                          }
+                        })
+                        break;
+                      }
+                    }
+                  })
+                  .catch((error: any) => {
+                    console.log("specialityService.getByDept error: ", error.response)
+                  })
+                // router.push({
+                //   pathname: "/ScheduleAppointment/",
+                //   params: {
+                //     branchId: branchId,
+                //     department: item.department,
+                //     speciality: item.speciality,
+                //     doctor: item.doctorName,
+                //     resourceId: item.resourceId,
+                //     date: (new Date()).toString(),
+                //     params: JSON.stringify(response.data[0]),
+                //     patientData: JSON.stringify(patientData),
+                //     patientPolicyData: JSON.stringify(patientPolicyResponse.data[0])
+                //   }
+                // })
               })
               .catch((error) => {
                 Alert.alert('Note', 'Doctor Schedule not found')

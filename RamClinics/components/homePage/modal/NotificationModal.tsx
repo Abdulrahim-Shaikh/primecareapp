@@ -66,14 +66,12 @@ const NotificationModal = ({ showNotification, setShowNotification }: PropsType)
 
   const renderNotification = (notification: any) => {
     const { status, appointmentDate } = notification;
-    console.log("Appointment Date: ", appointmentDate);
     if (!appointmentDate || appointmentDate.length !== 3) {
       return (
         <Text className="text-red-500">Date not available</Text>
       );
     }
     const formattedDate = formatDate(new Date(appointmentDate[0], appointmentDate[1] - 1, appointmentDate[2]));
-    console.log("Formatted Date: ", formattedDate);
 
     let notificationMessage;
     switch (status) {
