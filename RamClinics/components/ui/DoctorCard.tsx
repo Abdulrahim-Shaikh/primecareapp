@@ -1,4 +1,4 @@
-import { Alert, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { AntDesign, Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
@@ -64,6 +64,7 @@ const DoctorCard = ({
     : emptyImg;
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // Control for start date picker modal
+  const [loader, setLoader] = useState(false); // Control for loader
   const [date, setDate] = useState(new Date());  // State for start date
   const [user, setUser] = useState(useUserSate.getState().user);
   const [specialityList, setSpeciality] = useState("");
@@ -73,6 +74,8 @@ const DoctorCard = ({
   const [doctorScheduleData, setDoctorScheduleData] = useState([])
   const [patientData, setPatientData] = useState(useUserSate.getState().user)
   const [patientPolicyData, setPatientPolicyData] = useState({})
+  const [modalVisible, setModalVisible] = useState(false);
+
 
   let dateAux = new Date();
   const { language, changeLanguage } = useLanguage();
@@ -117,6 +120,7 @@ const DoctorCard = ({
 
 
   const getPatientPolicyData = async () => {
+    setLoader(true)
     if (!useUserSate.getState().loggedIn) {
       Alert.alert('Patient Not Found', 'You need to Sign in first', [
         {
@@ -361,6 +365,13 @@ const DoctorCard = ({
         </Pressable>
       </View>
 
+        <Modal visible={loader} transparent={true} animationType="fade"onRequestClose={() => {
+            setLoader(!loader);
+          }}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+              <ActivityIndicator size="large" color="white" />
+          </View>
+        </Modal>
     </TouchableOpacity >
   );
 };

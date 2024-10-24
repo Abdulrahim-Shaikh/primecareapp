@@ -3,6 +3,7 @@ import {
     Alert,
     FlatList,
     Image,
+    Modal,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -51,6 +52,8 @@ const AppointmentType = () => {
     const [doctorGender, setDoctorGender] = useState("");
     const [serviceResponsible, setServiceResponsible] = useState("");
     const [slotInterval, setSlotInterval] = useState(0);
+    const [modalVisible, setModalVisible] = useState(false);
+
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -62,17 +65,14 @@ const AppointmentType = () => {
             console.log('\n\n\n\n\n\n\n\n\n\n\n')
             console.log("sspecialityCode: ", specialityCode)
             console.log('\n\n\n\n\n\n\n\n\n\n\n')
-            let newDate = new Date()
             if (useUserSate.getState().user != null) {
                 setUser(useUserSate.getState().user)
                 setPatientData(useUserSate.getState().user)
                 if (useUserSate.getState().user.mobile != null) {
-                    const mobile = useUserSate.getState().user.mobile
                     setMobile(useUserSate.getState().user.mobile)
                 }
             }
             if (useUserSate.getState().user != null && useUserSate.getState().user.mobile != null) {
-                const mobile = useUserSate.getState().user.mobile
                 setMobile(useUserSate.getState().user.mobile)
                 setPatientData(useUserSate.getState().user)
             }
@@ -221,6 +221,8 @@ const AppointmentType = () => {
                                                     mobileOrOnline: interval,
                                                     shift: 'Both',
                                                     gender: response.data.gender,
+                                                    resourceId: resourceId,
+                                                    callCenterDoctorFlow: callCenterDoctorFlow,
                                                 }
                                             })
                                         })
@@ -246,6 +248,7 @@ const AppointmentType = () => {
     }
 
     function selectSubService(item: any, responsible: any, devices: any, mobileOrOnline: any) {
+        setModalVisible(true)
         console.log("item: ", item)
         setSlotInterval(mobileOrOnline)
         setServiceResponsible((responsible == null || responsible == "" || responsible == undefined) ? "Doctor" : responsible)
@@ -326,6 +329,13 @@ const AppointmentType = () => {
                         />
                     </View>
                 </View>
+                <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={() => {
+                    setLoader(!modalVisible);
+                }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <ActivityIndicator size="large" color="white" />
+                    </View>
+                </Modal>
             </ScrollView>
         </SafeAreaView >
     );

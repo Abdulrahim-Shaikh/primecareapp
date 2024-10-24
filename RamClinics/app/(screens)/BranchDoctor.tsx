@@ -39,6 +39,10 @@ const BranchDoctor = () => {
     const { language, changeLanguage } = useLanguage();
     const [ locale, setLocale ] = useState(i18n.locale);
 
+
+    const generalDentistry = 'General Dentistry';
+    const generalDentistrySpecialityCode = 'GP';
+
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
         setLocale(locale);
@@ -56,20 +60,37 @@ const BranchDoctor = () => {
 
             if (+callCenterDoctorFlow) {
                 let doctorsByBranch: any = []
+                let generalDentistryDoctors: any = []
                 doctors.map((doctor: any) => {
                     if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(specialityCode) || doctor.speciality == speciality)) {
                         doctorsByBranch.push(doctor)
                     }
+                    if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(generalDentistrySpecialityCode) || doctor.speciality == generalDentistry)) {
+                        generalDentistryDoctors.push(doctor)
+                    }
                 })
-                setDoctorsData(doctorsByBranch)
+                // if (doctorsByBranch.length === 0) {
+                //     doctors.map((doctor: any) => {
+                //     })
+                // }
+                console.log("doctorsByBranch: ", doctorsByBranch)
+                setDoctorsData(doctorsByBranch.length === 0 ? generalDentistryDoctors : doctorsByBranch)
                 setLoader(false)
             } else {
                 if (branchId != null && department != null && speciality != null) {
                     resourceService.getResourceBySpeciality(branchId, department, speciality)
                         .then((response) => {
                             console.log("response: ", response.data)
-                            setDoctorsData(response.data)
-                            setLoader(false);
+                            if (response.data.length === 0) {
+                                resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
+                                .then((response) => {
+                                    setDoctorsData(response.data)
+                                    setLoader(false);
+                                })
+                            } else {
+                                setDoctorsData(response.data)
+                                setLoader(false);
+                            }
                         })
                         .catch((error) => {
                             console.log("error ", error)

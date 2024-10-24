@@ -8,10 +8,20 @@ import cityImg from "../../assets/images/Building.png";
 import branchService from "../../domain/services/BranchService";
 import resourceService from "../../domain/services/ResourceService";
 import { useBranches } from "../../domain/contexts/BranchesContext";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js'
+import * as Localization from 'expo-localization'
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const CityPage = () => {
 
     const { branchId, fromSpeciality, department, callCenterFlow, specialityCode, speciality, responsible, devices, mobileOrOnline, callCenterDoctorFlow } = useLocalSearchParams();
+    const { language, changeLanguage } = useLanguage();
+    const [locale, setLocale] = useState(i18n.locale);
     const [cities, setCities] = useState<any>([]);
     const [branchCounts, setBranchCounts] = useState(Object());
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
@@ -88,7 +98,7 @@ const CityPage = () => {
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
-                <HeaderWithBackButton title="Select City" isPushBack={true} />
+                <HeaderWithBackButton title={i18n.t("Select City")} isPushBack={true} />
                 <View className="flex-1 pt-8 space-y-4 ">
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
@@ -125,7 +135,7 @@ const CityPage = () => {
                                                 {item || item.city}
                                             </Text>
                                             <Text className="text-gray-600 pt-1">
-                                                {branchCounts[item] || 0} Branches
+                                                {branchCounts[item] || 0} {i18n.t("Branches")}
                                             </Text>
                                         </View>
                                     </Pressable>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UAT_LINK } from '@env';
+import {PROD_LINK} from '@env'
 import {
     useQuery
 } from "@tanstack/react-query";

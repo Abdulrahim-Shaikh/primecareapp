@@ -80,7 +80,9 @@ const ShiftAndGenderOptions = () => {
                     responsible: responsible,
                     mobileOrOnline: mobileOrOnline,
                     shift: selectedShift,
-                    gender: selectedGender
+                    gender: selectedGender,
+                    resourceId: -1,
+                    callCenterDoctorFlow: 0
                 }
             })
         }
