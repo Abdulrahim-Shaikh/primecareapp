@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LanguageProvider } from "../domain/contexts/LanguageContext";
 import { BranchesProvider } from "../domain/contexts/BranchesContext";
 import { DoctorsProvider } from "../domain/contexts/DoctorsContext";
+import { SpecialitiesProvider } from "../domain/contexts/SpecialitiesContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,33 +40,35 @@ const RootLayout = () => {
         <LanguageProvider>
           <BranchesProvider>
             <DoctorsProvider>
-              <Stack initialRouteName="(tabs)">
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="(his)" options={{ headerShown: false }} />
-                <Stack.Screen name="(auth)/SignIn" options={{ headerShown: false }} />
-                <Stack.Screen name="(auth)/SignUp" options={{ headerShown: false }} />
-                {/* <Stack.Screen name="index" options={{ headerShown: true }} /> */}
-                <Stack.Screen
-                  name="(auth)/OnBoardingSlider"
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="(auth)/VerifySuccessfully"
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="(auth)/ForgetPassword"
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="(auth)/VerifyOTP"
-                  options={{ headerShown: false }}
-                />
+              <SpecialitiesProvider>
+                <Stack initialRouteName="(tabs)">
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen name="(his)" options={{ headerShown: false }} />
+                  <Stack.Screen name="(auth)/SignIn" options={{ headerShown: false }} />
+                  <Stack.Screen name="(auth)/SignUp" options={{ headerShown: false }} />
+                  {/* <Stack.Screen name="index" options={{ headerShown: true }} /> */}
+                  <Stack.Screen
+                    name="(auth)/OnBoardingSlider"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(auth)/VerifySuccessfully"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(auth)/ForgetPassword"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(auth)/VerifyOTP"
+                    options={{ headerShown: false }}
+                  />
 
 
-                <Stack.Screen name="(user)" options={{ headerShown: false }} />
-                <Stack.Screen name="(screens)" options={{ headerShown: false }} />
-              </Stack>
+                  <Stack.Screen name="(user)" options={{ headerShown: false }} />
+                  <Stack.Screen name="(screens)" options={{ headerShown: false }} />
+                </Stack>
+              </SpecialitiesProvider>
             </DoctorsProvider>
           </BranchesProvider>
         </LanguageProvider>

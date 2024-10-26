@@ -21,6 +21,8 @@ import { useFocusEffect } from "expo-router";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import { useDoctors } from "../../domain/contexts/DoctorsContext";
 import resourceService from "../../domain/services/ResourceService";
+import { useSpecialities } from "../../domain/contexts/SpecialitiesContext";
+import specialityService from "../../domain/services/SpecialityService";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -41,6 +43,7 @@ const Home = () => {
   const [locale, setLocale] = useState(i18n.locale);
   const { branchesData, changeBranches } = useBranches();
   const { doctors, changeDoctors } = useDoctors()
+  const { allSpecialities, changeSpecialities } = useSpecialities();
 
   const changeLocale = (locale: any) => {
     i18n.locale = locale;
@@ -67,6 +70,14 @@ const Home = () => {
           .then(() => {
             console.log("branches set")
           })
+      }
+
+      if (allSpecialities == null || allSpecialities.length == 0) {
+        specialityService.findAll().then((res) => {
+          changeSpecialities(res.data)
+        }).then(() => {
+          console.log("specialities set")
+        })
       }
 
       changeLocale(language)

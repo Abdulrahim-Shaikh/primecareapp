@@ -23,6 +23,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import { Icon } from "react-native-elements";
 import { useBranches } from "../../domain/contexts/BranchesContext";
+import loginService from "../../domain/services/LoginService";
+import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
 const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
@@ -80,8 +82,8 @@ const SingUp = () => {
   const [showDatePicker, setShowPicker] = useState(false);
   const [dob, setDob] = useState(new Date());
   const [errors, setErrors] = useState<any>({});
-  const [countryCode, setCountryCode] = useState('');
-  const [selectedCountryCodeItem, setSelectedCountryCodeItem] = useState<any>(null);
+  const [countryCode, setCountryCode] = useState(countries[0].dial_code);
+  const [selectedCountryCodeItem, setSelectedCountryCodeItem] = useState<any>(countries[0]);
   const [errorsExist, setErrorsExist] = useState(false);
 
   let dateAux = new Date();
@@ -163,9 +165,175 @@ const SingUp = () => {
       "saveError": ""
     };
 
-    if (countryCode && firstName && lastName && dob && mobileNo && selectedBranch && gender) {
-      if (firstName != null && firstName != '' && !validateName(firstName)) {
+
+
+
+    // if (id == null || id == "") {
+    //   tempErrors.id = "ID is required";
+    // }
+
+    // if (firstName == null || firstName == "") {
+    //   tempErrors.firstName = "First Name is required";
+    // } else {
+    //   if (!validateName(firstName)) {
+    //     tempErrors.firstName = "Invalid first name";
+    //   }
+    // }
+
+    // if (secondName != null && secondName != "" && !validateName(secondName)) {
+    //   tempErrors.secondName = "Invalid second name";
+    // }
+
+    // if (firstName == null || firstName == "") {
+    //   tempErrors.firstName = "Last Name is required";
+    // } else {
+    //   if (!validateName(firstName)) {
+    //     tempErrors.firstName = "Invalid last name";
+    //   }
+    // }
+
+    // if (mobileNo == null || mobileNo == "") {
+    //   tempErrors.mobileNo = "Mobile number required";
+    // } else {
+    //   if (mobileNo.length < 9 || (mobileNo.length == 10 && !mobileNo.startsWith("0"))) {
+    //     tempErrors.mobileNo = "Invalid Mobile Number";
+    //   }
+    // }
+
+    // if (email != null && email != "" && !validateEmail(email)) {
+    //   tempErrors.email = "Invalid Email";
+    // }
+
+    // if (countryCode == "") {
+    //   tempErrors.countryCode = "Country Code is required";
+    // }
+    // if (dob == null) {
+    //   tempErrors.dob = "Date of birth required";
+    // }
+    // if (selectedBranch == "") {
+    //   tempErrors.selectedBranch = "Branch required";
+    // }
+    // if (gender == "") {
+    //   tempErrors.gender = "Gender required";
+    // }
+
+    // // validateIdLength(id) {}
+    // patientService.save(signupForm).then((res) => {
+    //   setErrors({});
+    //   setErrorsExist(false);
+    //   Alert.alert("Success", "Registered Successfully!", [
+    //     { text: "OK", onPress: () => router.push("/SignIn") }
+    //   ]);
+    // }).catch((error) => {
+    //   tempErrors.saveError = "Failed to save Patient";
+    //   setErrors(tempErrors)
+    //   setErrorsExist(true);
+    //   console.error("Failed to save Patient:", error);
+    //   Alert.alert("Error", "Please try again later.");
+    // });
+      
+
+
+
+    if (id != "" && countryCode != "" && firstName != '' && lastName != '' && dob != null && mobileNo != '' && selectedBranch != '' && gender != '') {
+      let allValid = true
+      if (id != null && id.length > 0 && id != '' && !validateNumber(id)) {
+        console.log("valid: ", id.length)
+        tempErrors.id = "Invalid ID";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        allValid = false
+      }
+      if (firstName != null && firstName.length > 0 && firstName != '' && !validateName(firstName)) {
+        console.log("valid: ", firstName.length)
+        tempErrors.firstName = "Invalid first name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        allValid = false
+      }
+      if (secondName != null && secondName.length > 0 && secondName != '' && !validateName(secondName)) {
         console.log("valid")
+        tempErrors.secondName = "Invalid second name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        allValid = false
+      }
+      if (lastName != null && lastName.length > 0 && lastName != '' && !validateName(lastName)) {
+        tempErrors.lastName = "Invalid last name";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        allValid = false
+      }
+      if (mobileNo.length < 10) {
+        tempErrors.mobileNo = "Invalid Mobile Number";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        allValid = false
+      }
+      if (email != null && email != '' && !validateEmail(email)) {
+        console.log("email invalid")
+        tempErrors.email = "Invalid Email";
+        setErrors(tempErrors)
+        setErrorsExist(true);
+        allValid = false
+      }
+
+      if (allValid) {
+        console.log("errors: ", errors);
+        console.log("signupForm: ", signupForm);
+        loginService.byMobileNo(mobileNo)
+        .then((response) => {
+          Alert.alert("Patient Already Exists with this mobile number", "Please Sign in or use another mobile number", [
+            {
+              text: 'BACK',
+              style: 'default'
+            },
+            {
+                text: 'Sign in',
+                onPress: () => {
+                  router.push('/SignIn')
+                },
+                style: 'default'
+            },
+          ])
+        })
+        .catch((error) => {
+          console.log("signupForm: ", signupForm);
+          loginService.generateOtp(mobileNo).then((response) => {
+            console.log('OTP response ..... ', response.data);
+            router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: response.data.otp, signUpFormData: JSON.stringify(signupForm) } });
+            // if (mobileNo == '568165257') {
+            //   router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: '9999' } });
+            // } else {
+            // }
+          }).catch((error) => {
+            console.log("Error sending OTP, ", error);
+            Alert.alert('Tecnincal Error', 'TE- ' + error)
+          });
+        })
+      }
+
+
+      // patientService.save(signupForm).then((res) => {
+      //   setErrors({});
+      //   setErrorsExist(false);
+      //   Alert.alert("Success", "Registered Successfully!", [
+      //     { text: "OK", onPress: () => router.push("/SignIn") }
+      //   ]);
+      // }).catch((error) => {
+      //   tempErrors.saveError = "Failed to save Patient";
+      //   setErrors(tempErrors)
+      //   setErrorsExist(true);
+      //   console.error("Failed to save Patient:", error);
+      //   Alert.alert("Error", "Please try again later.");
+      // });
+
+
+
+    } else {
+      console.log("countryCode: ", countryCode)
+      if (firstName != null && firstName != '' && !validateName(firstName)) {
+        console.log("valid: ", firstName.length)
         tempErrors.firstName = "Invalid first name";
         setErrors(tempErrors)
         setErrorsExist(true);
@@ -181,66 +349,23 @@ const SingUp = () => {
         setErrors(tempErrors)
         setErrorsExist(true);
       }
-      if (mobileNo.length < 9 || (mobileNo.length == 10 && !mobileNo.startsWith("0"))) {
-        tempErrors.mobileNo = "Invalid Mobile Number";
-        setErrors(tempErrors)
-        setErrorsExist(true);
-        return;
-      }
-      if (email != null && email != '' && !validateEmail(email)) {
-        console.log("email invalid")
-        tempErrors.email = "Invalid Email";
-        setErrors(tempErrors)
-        setErrorsExist(true);
-        return;
-      }
-      patientService.save(signupForm).then((res) => {
-        setErrors({});
-        setErrorsExist(false);
-        Alert.alert("Success", "Registered Successfully!", [
-          { text: "OK", onPress: () => router.push("/SignIn") }
-        ]);
-      }).catch((error) => {
-        tempErrors.saveError = "Failed to save Patient";
-        setErrors(tempErrors)
-        setErrorsExist(true);
-        console.error("Failed to save Patient:", error);
-        Alert.alert("Error", "Please try again later.");
-      });
-    } else {
-      if (firstName != null && !validateName(firstName)) {
-        console.log("valid")
-        tempErrors.firstName = "Invalid first name";
-        setErrors(tempErrors)
-        setErrorsExist(true);
-      }
-      if (secondName != null && !validateName(secondName)) {
-        console.log("valid")
-        tempErrors.secondName = "Invalid first name";
-        setErrors(tempErrors)
-        setErrorsExist(true);
-      }
-      if (lastName != null && !validateName(lastName)) {
-        tempErrors.lastName = "Invalid last name";
-        setErrors(tempErrors)
-        setErrorsExist(true);
-      }
       if (id != null && !validateNumber(id)) {
         tempErrors.id = "Invalid id, should be a number";
         setErrors(tempErrors)
         setErrorsExist(true);
       }
       if (mobileNo != null && !validateNumber(mobileNo)) {
-        tempErrors.mobileNo = "Invalid id, should be a number";
+        tempErrors.mobileNo = "Invalid mobile number, should be a number";
         setErrors(tempErrors)
         setErrorsExist(true);
       }
-      if (email != null && !validateEmail(email)) {
+      if (email != null && email != '' && !validateEmail(email)) {
         console.log("email invalid")
         tempErrors.email = "Invalid Email";
         setErrors(tempErrors)
         setErrorsExist(true);
       }
+      if (id == null || id == "") tempErrors.id = "ID is required";
       if (firstName == "") tempErrors.firstName = "First Name is required";
       if (lastName == "") tempErrors.lastName = "Last Name is required";
       if (countryCode == "") tempErrors.countryCode = "Country Code is required";
@@ -259,7 +384,10 @@ const SingUp = () => {
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
-        <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
+        <View className="px-4 pt-1">
+          <HeaderWithBackButton isPushBack={true} />
+        </View>
+        <View className="w-full justify-start min-h-[85vh] px-6 items-center ">
           <Text className="text-2xl font-bold text-center">
             {i18n.t('createacc')}
           </Text>
@@ -288,7 +416,10 @@ const SingUp = () => {
 
             {selectedOption === 0 && (
               <>
-                <Text className="mb-2 font-medium">{i18n.t("country")} *</Text>
+                <View className="flex flex-row">
+                  <Text className="mb-2 font-medium">{i18n.t("country")}</Text>
+                  <Text className="mb-2 font-medium text-red-500"> *</Text>
+                </View>
                 <View className="border rounded-xl mb-2">
                   <Picker selectedValue={selectedIdCountry} onValueChange={(cntry) => { setIdCountry(cntry) }} className="text-slate-800">
                     <Picker.Item label="Select Country Code" value="" style={{ color: 'grey', fontSize: 14 }} />
@@ -297,7 +428,7 @@ const SingUp = () => {
                     ))}
                   </Picker>
                 </View>
-                <FormField name={i18n.t("idno")} placeholder={i18n.t("idno")} otherStyle="mb-4" onChangeText={(e) => { setId(e) }} />
+                <FormField name={i18n.t("idno") + ' *'} placeholder={i18n.t("idno")} otherStyle="mb-4" onChangeText={(e) => { setId(e) }} />
               </>
             )}
             {selectedOption === 1 && (
@@ -323,6 +454,7 @@ const SingUp = () => {
                     <Picker
                       selectedValue={selectedCountryCodeItem}
                       onValueChange={(item) => {
+                        console.log("item: ", item);
                         setSelectedCountryCodeItem(item);
                         setCountryCode(item.dial_code)
                       }}
@@ -357,7 +489,13 @@ const SingUp = () => {
                 <Text className="text-lg">{moment(dob).format("DD-MMM-YYYY")}</Text>
               </Pressable>
               {showDatePicker && (
-                <DateTimePicker value={dob} mode="date" display="default" onChange={(event: DateTimePickerEvent, date: any) => { const selectedDate = date; setShowPicker(false); setDob(selectedDate) }} />
+                <DateTimePicker 
+                  value={dob} 
+                  mode="date" 
+                  display="default" 
+                  maximumDate={new Date()}
+                  onChange={(event: DateTimePickerEvent, date: any) => { const selectedDate = date; setShowPicker(false); setDob(selectedDate) }} 
+                />
               )}
             </View>
 

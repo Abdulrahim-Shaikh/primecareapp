@@ -79,7 +79,8 @@ const Offers = () => {
             setIsLoading(true);
             try {
                 const res = await promotionService.getPromotion();
-                setPromotions(res.data);
+                console.log("Promotions", res.data);
+                setPromotions(res.data.filter((promotion: any) => promotion.showOnline));
             } catch (error) {
                 console.error(error);
             } finally {

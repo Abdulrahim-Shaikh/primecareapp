@@ -38,9 +38,9 @@ const SignIn = () => {
     loginService.generateOtp(mobileNo).then((response) => {
       console.log('OTP response ..... ', response.data);
       if (mobileNo == '568165257') {
-        router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: '9999' } });
+        router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: '9999', signUpFormData: JSON.stringify("") } });
       } else {
-        router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: response.data.otp } });
+        router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: response.data.otp, signUpFormData: JSON.stringify("") } });
       }
     }).catch((error) => {
       console.log("Error sending OTP, ", error);
