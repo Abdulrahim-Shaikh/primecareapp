@@ -449,9 +449,46 @@ const SingUp = () => {
                 </View>
               </View>
               <View className="w-full mt-2 flex flex-row align-center items-center">
-                <View className="w-2/5">
+                <View className="w-1/4">
                   <View className={`border rounded-xl ${errorsExist && errors[mobileNo] != ""}`}>
-                    <Picker
+
+
+
+                    <Fragment>
+                      <SelectDropdown
+                        data={countries}
+                        defaultValue={selectedCountryCodeItem}
+                        search={true}
+                        onSelect={(selectedItem, index) => {
+                          console.log("selectedcountry: ", selectedItem, index);
+                          setSelectedCountryCodeItem(selectedItem);
+                          setCountryCode(selectedItem.dial_code)
+                        }}
+                        renderButton={(selectedItem, isOpened) => {
+                          return (
+                            <View style={styles.dropdownButtonStyle}>
+                              <Text style={styles.dropdownButtonTxtStyle}>
+                                {" (" + (selectedItem && selectedItem.dial_code) + ") " || 'Select Code'}
+                              </Text>
+                            </View>
+                          );
+                        }}
+                        renderItem={(item, index, isSelected) => {
+                          return (
+                            <View style={{ ...styles.dropdownItemStyle }}>
+                              <Icon name={item.icon} />
+                              <Text>{"(" + item.dial_code + ") " + item.name}</Text>
+                            </View>
+                          );
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        dropdownStyle={styles.dropdownMenuStyle}
+                      />
+                      <></>
+                    </Fragment>
+
+
+                    {/* <Picker
                       selectedValue={selectedCountryCodeItem}
                       onValueChange={(item) => {
                         console.log("item: ", item);
@@ -462,10 +499,10 @@ const SingUp = () => {
                       {countries.map((cntry: any) => (
                         <Picker.Item key={cntry.dial_code} label={" (" + cntry.dial_code + ") " + cntry.name} value={cntry} />
                       ))}
-                    </Picker>
+                    </Picker> */}
                   </View>
                 </View>
-                <View className={`px-4 py-3  border rounded-xl w-3/5 h-full`} >
+                <View className={`px-4 py-3  border rounded-xl w-3/4 h-full`} >
                   <TextInput
                     placeholder={i18n.t("mobileno")}
                     placeholderTextColor="#c3c3ce"
@@ -574,7 +611,7 @@ const SingUp = () => {
                 selectedValue={selectedBranch} onValueChange={(r) => { setSeletedBranch(r) }} className="text-slate-800">
                 <Picker.Item label={i18n.t("Register Branch")} value="" style={{ color: 'grey', fontSize: 14 }} />
                 {branches.map((branch: any) => (
-                  (branch.name != 'Technas' && branch.name != 'Doha Medical Complex' && branch.name != 'Saudi Swiss' && branch.name !+ 'Central Pharmacy Warehouse') 
+                  (branch.name != 'Technas' && branch.name != 'Doha Medical Complex' && branch.name != 'Saudi Swiss' && branch.name! + 'Central Pharmacy Warehouse')
                   && <Picker.Item key={branch.branchCode} label={`${branch.name}, ${branch.city ? branch.city.trim() : ""}`} value={branch.name} />
                 ))}
 
@@ -693,6 +730,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   dropdownItemStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dropdownItemStyleCountryCode: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
