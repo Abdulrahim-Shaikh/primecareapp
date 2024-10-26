@@ -47,24 +47,24 @@ useFocusEffect(
 
     // get departments by branch
     const optionsData = [
-        {
-            id: 1,
-            icon: 'hospital-building',
-            title: "By Branch",
-            link: "/BranchPage",
-            params: {
-                city: city,
-                fromSpeciality: fromSpeciality,
-                department: department,
-                speciality: "",
-                specialityCode: "",
-                callCenterFlow: 0,
-                devices: JSON.stringify(""),
-                responsible: "",
-                mobileOrOnline: "",
-                callCenterDoctorFlow: 0
-            }
-        },
+        // {
+        //     id: 1,
+        //     icon: 'hospital-building',
+        //     title: "By Branch",
+        //     link: "/BranchPage",
+        //     params: {
+        //         city: city,
+        //         fromSpeciality: fromSpeciality,
+        //         department: department,
+        //         speciality: "",
+        //         specialityCode: "",
+        //         callCenterFlow: 0,
+        //         devices: JSON.stringify(""),
+        //         responsible: "",
+        //         mobileOrOnline: "",
+        //         callCenterDoctorFlow: 0
+        //     }
+        // },
         {
             id: 2,
             icon: 'doctor',
