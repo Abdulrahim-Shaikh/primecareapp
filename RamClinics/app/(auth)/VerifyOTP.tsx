@@ -8,9 +8,10 @@ import NASButton from "../../components/NASButton";
 import { useUserSate } from "../../domain/state/UserState";
 import { UserContext } from "../../domain/contexts/UserContext";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
+import patientService from "../../domain/services/PatientService";
 
 const VerifyOTP = () => {
-  const { mobileNo, otpResp } = useLocalSearchParams();
+  const { mobileNo, otpResp, signUpFormData } = useLocalSearchParams();
 
   const { setUserData } = useContext(UserContext)
 
@@ -69,31 +70,76 @@ const VerifyOTP = () => {
     console.log("otp written", otp)
     if (otpResp && otpResp == otp) {
       console.log("otpResp and otp are same")
-      loginService.byMobileNo(mobileNo)
-        .then(res => {
-          // console.log("loginService.byMobileNo(mobileNo) res", res);
-          let user = res.data;
-          setUserInfo(user);
-          setUserData(user);
-        })
-        //   console.log("loginService.byMobileNo(mobileNo) err", err);
-        // })
-        .then(data => {
-          setLoader(false);
-          router.navigate('/(tabs)')
+      console.log("signUpFormData", signUpFormData)
+      console.log("signUpFormData.length", signUpFormData.length)
+
+      if (signUpFormData != null && signUpFormData != `""`) {
+        let signupForm = JSON.parse(Array.isArray(signUpFormData) ? signUpFormData[0] : signUpFormData);
+        patientService.save(signupForm).then((res) => {
+          Alert.alert("Success", "Registered Successfully!");
+          loginService.byMobileNo(mobileNo)
+            .then(res => {
+              let user = res.data;
+              setUserInfo(user);
+              setUserData(user);
+            })
+            .then(data => {
+              setLoader(false);
+              router.navigate('/(tabs)')
+            });
+        }).catch((error) => {
+          // tempErrors.saveError = "Failed to save Patient";
+          // setErrors(tempErrors)
+          // setErrorsExist(true);
+          Alert.alert('Patient Not Found', 'Failed to save patient', [
+            {
+              text: 'BACK',
+              onPress: () => router.back(),
+              style: 'default'
+            },
+            // {
+            //     text: 'SIGN IN',
+            //     onPress: () => router.push('/SignIn'),
+            //     style: 'default'
+            // },
+          ],
+          )
+
+          // console.error("Failed to save Patient:", error);
+          // Alert.alert("Error", "Please try again later.");
         });
+      } else {
+        loginService.byMobileNo(mobileNo)
+          .then(res => {
+            // console.log("loginService.byMobileNo(mobileNo) res", res);
+            let user = res.data;
+            setUserInfo(user);
+            setUserData(user);
+          })
+          //   console.log("loginService.byMobileNo(mobileNo) err", err);
+          // })
+          .then(data => {
+            setLoader(false);
+            router.navigate('/(tabs)')
+          });
+      }
 
     } else {
-      Alert.alert("Invalid OTP!")
+      if (signUpFormData != null && signUpFormData != '') {
+        let signupForm = JSON.parse(Array.isArray(signUpFormData) ? signUpFormData[0] : signUpFormData);
+        if (signupForm != null) {
+          Alert.alert("Invalid OTP!", "Mobile number not verified.")
+        }
+      }
     }
   };
-  
+
 
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
-      <View className="px-4 pt-1">
-        <HeaderWithBackButton isPushBack={true}/>
+        <View className="px-4 pt-1">
+          <HeaderWithBackButton isPushBack={true} />
         </View>
         <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
           <Text className="text-2xl font-bold text-center">Verify OTP</Text>

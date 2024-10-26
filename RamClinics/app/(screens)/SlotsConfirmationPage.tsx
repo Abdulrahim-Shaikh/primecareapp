@@ -15,6 +15,7 @@ import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import scheduleService from "../../domain/services/ScheduleService";
+import { useSpecialities } from "../../domain/contexts/SpecialitiesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -36,6 +37,7 @@ const SlotsConfirmationPage = () => {
     const [allSlots, setAllSlots] = useState([])
     const [branchId, setBranchId] = useState(null)
     const { branches, changeBranches } = useBranches();
+    const { allSpecialities, changeSpecialities } = useSpecialities();
 
 
     var slotsRender = [];
@@ -232,14 +234,24 @@ const SlotsConfirmationPage = () => {
         }
 
         console.log("specialityCode: ", specialityCode)
+        let tempSpecialityCode = ""
+        if (specialityCode == undefined || specialityCode == null || specialityCode == "") {
+            tempSpecialityCode = allSpecialities.find((s: any) => s.name == speciality)
+            console.log("tempSpecialityCode: ", tempSpecialityCode)
+        }
         console.log("date: ", date)
         console.log("branch: ", branch)
         console.log("shift: ", shift)
         console.log("city: ", city)
+        let cityBranch = ""
+        if (city == undefined || city == null || city == "") {
+            cityBranch = branches.find((b: any) => b.name == branch).city
+        }
+        console.log("cityBranch: ", cityBranch)
         console.log("deviceCode: ", deviceCode)
         console.log("responsible: ", responsible)
-        let tempResponsible: any = (responsible == undefined) ? "" : responsible
-        resourceService.getResourceByLiveSlotSpeciality(specialityCode, date, branch, shift, city, deviceCode, tempResponsible)
+        let tempResponsible: any = (responsible == undefined) ? "Doctor" : responsible
+        resourceService.getResourceByLiveSlotSpeciality(specialityCode ?? tempSpecialityCode, date, branch, shift, city ?? cityBranch, deviceCode, tempResponsible)
             .then((response) => {
                 console.log("\n\nresourceService.getResourceByLiveSlotSpeciality response: ", response.data)
                 setLoader(true)

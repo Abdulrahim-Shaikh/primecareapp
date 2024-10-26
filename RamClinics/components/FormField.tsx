@@ -25,8 +25,12 @@ const FormField = ({
   const [focus, setFocus] = useState(false);
   return (
     <View className={`w-full ${otherStyle}`}>
-      {name && 
-      <Text className="text-base font-medium">{name}</Text>
+      {name && name[name.length - 1] === "*" ? 
+      <View className="flex flex-row">
+        <Text className="text-base font-medium">{name.substring(0, name.length -2)}</Text>
+        <Text className="text-red-500"> *</Text>
+      </View>
+      : <Text className="text-base font-medium">{name}</Text>
       }
       <View
         className={`px-4 py-3  border rounded-xl w-full mt-2 ${

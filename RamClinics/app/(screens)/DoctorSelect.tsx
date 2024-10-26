@@ -14,6 +14,14 @@ import appointmentService from "../../domain/services/AppointmentService";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import { Calendar } from "react-native-calendars";
 import patientService from "../../domain/services/PatientService";
+import * as Localization from 'expo-localization'
+import { I18n } from "i18n-js";
+import translations from "../../constants/locales/ar";
+import { useLanguage } from "../../domain/contexts/LanguageContext";
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const DoctorSelect = () => {
 
@@ -32,15 +40,16 @@ const DoctorSelect = () => {
     const [loader, setLoader] = useState(false);
     const [displayedDoctor, setDisplayedDoctor] = useState<any>({});
     const [minimalDoctorInfo, setMinimalDoctorInfo] = useState<any>({});
+    const [locale, setLocale] = useState(i18n.locale);
 
     const showDoctor = (item: any) => {
         setMinimalDoctorInfo(item)
         resourceService.find(item.id)
             .then((response) => {
-                console.log("item: ", item)
-                console.log("\n\n\nresponse: ", Object.keys(response.data))
+                // console.log("item: ", item)
+                // console.log("\n\n\nresponse: ", Object.keys(response.data))
                 setDisplayedDoctor(response.data)
-                console.log("\n\n\n\ndisplayedDoctor: ", displayedDoctor)
+                console.log("\n\n\n\nresourceServiceList: ", response.data.resourceServiceList)
             })
             .catch((error) => {
                 console.error("resourceService error: ", error.response)
@@ -132,7 +141,8 @@ const DoctorSelect = () => {
                 }
                 app.slots = slots;
                 app.history = [];
-                app.createdBy = useUserSate.getState().user.name;
+                app.createdBy = useUserSate.getState().user.name + " - PrimeCare Mobile App";
+                app.updatedBy = "Booked on PrimeCare Mobile App on " + moment(new Date).format('DD-MMM-YYYY hh:mm A');
                 app.createdDate = today;
                 app.source = "CallCenter - PrimeCare Mobile App"
                 app.flowType = "CallCenter - NewFlow"
@@ -236,10 +246,7 @@ const DoctorSelect = () => {
         console.log("item: ", item)
         if (!loggedIn) {
             Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
-                { text: 'BACK', style: 'default' },
-                { text: 'SIGN IN', onPress: () => router.push('/SignIn'), style: 'default' },
-            ],
-            )
+                { text: 'BACK', style: 'default' }, { text: 'SIGN IN', onPress: () => router.push('/SignIn'), style: 'default' },],)
         } else {
             Alert.alert(
                 `${item.name},  ${branch}, ${city},`,
@@ -258,6 +265,29 @@ const DoctorSelect = () => {
             )
         }
     }
+
+
+    let resourceServiceListRender: any = []
+    displayedDoctor.resourceServiceList?.forEach((item: any) => {
+        console.log("\n\nitem: ", item)
+        resourceServiceListRender.push(
+            <View className="pt-5" key={item.id}>
+                <View className="p-4 rounded-2xl border bg-white border-pc-primary flex flex-row justify-start items-center">
+                    <View>
+                        <Text className="text-pc-primary p-4 rounded-full">
+                            {/* <MaterialCommunityIcons name="close-box" size={24} /> */}
+                            <FontAwesome name="calendar-check-o" color={'#3B2314'} size={24} />
+                        </Text>
+                    </View>
+                    <View className="flex-1">
+                        <Text className="text-base font-semibold">{item.serviceName}</Text>
+                    </View>
+                </View>
+            </View>
+        )
+    })
+
+
 
     return (
         <SafeAreaView>
@@ -474,31 +504,48 @@ const DoctorSelect = () => {
                                     </View>
                                 </View>
                             </View>
-                            <View>
-                                {
-                                    displayedDoctor.resourceServiceList != null?
-                                    displayedDoctor.resourceServiceList?.forEach((item: any) => {
-                                        <View className="pt-5" key={item.id}>
-                                            <View className="p-4 rounded-2xl border bg-white border-pc-primary flex flex-row justify-start items-center">
-                                                <View>
-                                                    <Text className="text-pc-primary p-4 rounded-full bg-amber-100 mr-4">
-                                                        {status === 'Cancelled' ? (
-                                                            <MaterialCommunityIcons name="close-box" size={24} />
-                                                        ) : (
-                                                            <FontAwesome name="calendar-check-o" size={24} />
-                                                        )}
-                                                    </Text>
-                                                </View>
-                                                <View className="flex-1">
-                                                    <Text className="text-base font-semibold">Appointment</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    })
-                                    :
-                                    <></>
-                                }
+                            {
+                                displayedDoctor.resourceServiceList != null && Object.keys(displayedDoctor).includes('resourceServiceList') && displayedDoctor.resourceServiceList.length > 0 &&
+                                <View className="pt-16">
+                                    <Text>Doctor Services: </Text>
+                                    {/* 951507876 */}
+                                    <View className="pt-3">
+                                        <FlatList
+                                            contentContainerStyle={{ gap: 9 }}
+                                            data={displayedDoctor.resourceServiceList}
+                                            keyExtractor={(item: any, index) => "key" + index}
+                                            renderItem={({ item }) => {
+                                                return (
+                                                    <View className="w-full">
+                                                        <Pressable
+                                                            className="flex flex-row border border-pc-primary rounded-lg p-3 shadow-sm bg-white"
+                                                        // onPress={() => { selectSubService(item, item.responsible, item.devices, item.mobileOrOnline) }}
+                                                        // onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
+                                                        >
+                                                            <View className="rounded-full bg-white flex justify-center items-center w-18 h-18 border border-gray-200">
+                                                                {/* <Image source={specialityIcon} style={{ width: 50, height: 50 }} /> */}
+                                                                <MaterialCommunityIcons
+                                                                    name="stethoscope"
+                                                                    size={30}
+                                                                    color={"#3b2314"}
+                                                                />
+                                                            </View>
+                                                            <View className="w-full px-4 flex justify-center gap-3">
+                                                                <View className="w-full flex flex-col items-start gap-2 font-semibold text-lg text-gray-800">
+                                                                    <Text>
+                                                                        {locale == "ar" ? item.serviceNameAr : item.serviceName}
+                                                                    </Text>
+                                                                </View>
+                                                            </View>
+                                                        </Pressable>
+                                                    </View>
+                                                );
+                                            }}
+                                        />
+                                    </View>
+                                {/* {resourceServiceListRender} */}
                             </View>
+                            }
                         </ScrollView>
 
                         <Button color="#3B2314" title="Close" onPress={() => setModalVisible(false)} />

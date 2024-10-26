@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ScrollView, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, Pressable, ScrollView, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,6 +14,10 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 import { useDoctors } from '../../domain/contexts/DoctorsContext';
 import branchService from '../../domain/services/BranchService';
+import appointmentService from '../../domain/services/AppointmentService';
+import { useUserSate } from '../../domain/state/UserState';
+import { useBranches } from '../../domain/contexts/BranchesContext';
+import moment from 'moment';
 
 const categoryList = [
     "All",
@@ -33,12 +37,15 @@ const BranchDoctor = () => {
     const [activeCategory, setActiveCategory] = useState(0);
 
     const { branchId, fromSpeciality, department, specialityCode, speciality, callCenterDoctorFlow } = useLocalSearchParams();
-    const [ doctorsData, setDoctorsData ] = useState([]);
-    const [ loader, setLoader ] = useState(true);
+    const [doctorsData, setDoctorsData] = useState([]);
+    const [loader, setLoader] = useState(true);
     const { doctors, changeDoctors } = useDoctors();
     const { language, changeLanguage } = useLanguage();
-    const [ locale, setLocale ] = useState(i18n.locale);
-
+    const [locale, setLocale] = useState(i18n.locale);
+    const [showLast3Appointments, setShowLast3Appointments] = useState(false);
+    const [patientData, setPatientData] = useState(useUserSate.getState().user)
+    const { branches, setBranches } = useBranches();
+    const [recentAppointments, setRecentAppointments] = useState<any>([]);
 
     const generalDentistry = 'General Dentistry';
     const generalDentistrySpecialityCode = 'GP';
@@ -51,12 +58,59 @@ const BranchDoctor = () => {
     useFocusEffect(
         useCallback(() => {
 
-            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-            console.log("ccodeee: ", specialityCode)
-            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             changeLocale(language)
             changeLanguage(language)
             setLoader(true);
+            appointmentService.getAppointments(patientData.id, branchId)
+                .then((response) => {
+                    // console.log("response: ", response.data)
+                    const sortedAppointments = response.data.sort((a: any, b: any) => {
+                        return new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+                        // return moment(new Date(a.startTime)).format("ddd DD-MM-YYYY hh:mm").diff(moment(new Date(a.startTime)).format("ddd DD-MM-YYYY hh:mm"))
+                    })
+                    // console.log("sortedTimeSlots: ", sortedTimeSlots)
+                    // for (let i of sortedTimeSlots) {
+                    //     console.log("\n\ni: ", i)
+                    // }
+                    let last3Appointments: any = []
+                    let last3AppointmentDoctors: any = new Map<any, any>()
+                    for (let i = sortedAppointments.length - 1; i >= 0; i--) {
+                        // console.log("\n\nsortedAppointments[i]: ", sortedAppointments[i])
+                        if (sortedAppointments[i].hisStatus != 'Cancelled') {
+                            if (!last3AppointmentDoctors.has(sortedAppointments[i].practitionerId)) {
+                                last3AppointmentDoctors.set(sortedAppointments[i].practitionerId, sortedAppointments[i])
+                                last3Appointments.push(sortedAppointments[i])
+                                if (last3AppointmentDoctors.length >= 3) {
+                                    break;
+                                }
+                            }
+                            // resourceService.find(sortedAppointments[i].practitionerId)
+                            // .then((response) => {
+                            // console.log("last3Appointments.length: ", last3Appointments.length)
+                            //     last3Appointments.push(response.data)
+                            // })
+                        }
+                    }
+                    for (let i of last3Appointments) {
+                        console.log("\n\ni: ", i)
+                        resourceService.find(i.practitionerId)
+                            .then((response) => {
+                                last3AppointmentDoctors.set(i.practitionerId, response.data)
+                                setRecentAppointments([...last3AppointmentDoctors.values()])
+                            })
+                    }
+                    // let last3AppointmentDoctors: any = new Map<any, any>()
+                    // let last3AppointmentDoctors: any = new Set<any>()
+                    // for (let i of last3Appointments) {
+                    //     if(!last3AppointmentDoctors.has(i.practitionerId)) {
+                    //         resourceService.find(i.practitionerId)
+                    //             .then((response) => {
+                    //                 last3AppointmentDoctors.set(i.practitionerId, response.data)
+                    //                 setRecentAppointments([...last3AppointmentDoctors.values()])
+                    //             })
+                    //     }
+                    // }
+                })
 
             if (+callCenterDoctorFlow) {
                 let doctorsByBranch: any = []
@@ -83,10 +137,10 @@ const BranchDoctor = () => {
                             console.log("response: ", response.data)
                             if (response.data.length === 0) {
                                 resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
-                                .then((response) => {
-                                    setDoctorsData(response.data)
-                                    setLoader(false);
-                                })
+                                    .then((response) => {
+                                        setDoctorsData(response.data)
+                                        setLoader(false);
+                                    })
                             } else {
                                 setDoctorsData(response.data)
                                 setLoader(false);
@@ -122,6 +176,7 @@ const BranchDoctor = () => {
         }, [])
     )
 
+
     return (
         <SafeAreaView>
             <ScrollView className="pt-6">
@@ -131,16 +186,43 @@ const BranchDoctor = () => {
 
                 <View className="pb-16 px-6">
                     {
+                        +callCenterDoctorFlow &&
+                        // <View className="pt-8 pb-5 border-b border-dashed border-pc-primary flex flex-row justify-between items-center">
+                        <View className="pb-5 border-b border-dashed border-pc-primary">
+                            <View className="mt-6 w-1/2">
+                                <Pressable
+                                    onPress={() => {
+                                        console.log("recentAppointments.length: ", recentAppointments.length)
+                                        if (showLast3Appointments) {
+                                            setShowLast3Appointments(false);
+                                        } else {
+                                            setShowLast3Appointments(true);
+                                        }
+                                        // getPatientPolicyData();
+                                    }}
+                                    className="bg-[#3B2314] text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
+                                    <Text className="text-white">{i18n.t("Last 3 Appointments")}</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    }
+                    {
                         !loader && (doctorsData.length === 0 || doctorsData == null)
-                            ? 
+                            ?
                             <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No doctors available for selected speciality")}</Text>
                             : loader
                                 ?
                                 <ActivityIndicator size="large" color="#454567" />
                                 :
-                                doctorsData.map(({ ...props }, idx) => (
-                                    <DoctorCard {...props } branchId={+branchId} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
-                                ))
+                                showLast3Appointments
+                                    ?
+                                    recentAppointments.map(({ ...props }, idx) => (
+                                        <DoctorCard {...props} branchId={+branchId} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
+                                    ))
+                                    :
+                                    doctorsData.map(({ ...props }, idx) => (
+                                        <DoctorCard {...props} branchId={+branchId} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
+                                    ))
                     }
                 </View>
             </ScrollView>

@@ -7,6 +7,7 @@
 
 const translations = {
     en: {
+        "Last 3 Appointments": "Last 3 Appointments",
         "1": "1",
         "2": "2",
         "3": "3",
@@ -603,6 +604,7 @@ const translations = {
         9: '٩',
         0: '٠',
         "Branches": "الفروع",
+        "Last 3 Appointments": "آخر 3 مواعيد",
     }
 }
 export default translations;
