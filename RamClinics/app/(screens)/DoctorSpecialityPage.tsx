@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,18 +9,14 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import { doctorSpecialityData2 } from "../../constants/data";
 import specialityService from "../../domain/services/SpecialityService";
-import specialityIcon from "../../assets/images/docton-speciality-icon-3.png";
-import Searchbox from "../../components/ui/Searchbox";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale

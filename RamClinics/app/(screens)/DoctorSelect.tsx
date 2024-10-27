@@ -1,23 +1,19 @@
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { StyleSheet, FlatList, Modal, Pressable, ScrollView, Text, TouchableOpacity, View, Alert, Image, Button } from "react-native";
+import { StyleSheet, FlatList, Modal, Pressable, ScrollView, Text, View, Alert, Image, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import resourceService from "../../domain/services/ResourceService";
-import moment, { Moment } from "moment";
-import { AntDesign, Entypo, FontAwesome, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import moment from "moment";
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useUserSate } from "../../domain/state/UserState";
-import branchService from "../../domain/services/BranchService";
 import slotService from "../../domain/services/SlotService";
 import appointmentService from "../../domain/services/AppointmentService";
 import { useBranches } from "../../domain/contexts/BranchesContext";
-import { Calendar } from "react-native-calendars";
 import patientService from "../../domain/services/PatientService";
 import * as Localization from 'expo-localization'
 import { I18n } from "i18n-js";
 import translations from "../../constants/locales/ar";
-import { useLanguage } from "../../domain/contexts/LanguageContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -25,7 +21,7 @@ i18n.enableFallback = true;
 
 const DoctorSelect = () => {
 
-    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline, shift, gender, slotSearchDate, selectedSlot, reservedSlots, doctorList } = useLocalSearchParams();
+    const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline, shift, gender, slotSearchDate, selectedSlot, reservedSlots, doctorList, callCenterDoctorFlow, callCenterDoctor } = useLocalSearchParams();
     const [modalVisible, setModalVisible] = useState(false);
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -41,6 +37,9 @@ const DoctorSelect = () => {
     const [displayedDoctor, setDisplayedDoctor] = useState<any>({});
     const [minimalDoctorInfo, setMinimalDoctorInfo] = useState<any>({});
     const [locale, setLocale] = useState(i18n.locale);
+    const [appointmentExists, setAppointmentExists] = useState(false);
+    const [confirmAppointmentModal, setConfirmAppointmentModal] = useState(false);
+    const [appointmentToConfirm, setAppointmentToConfirm] = useState<any>(null);
 
     const showDoctor = (item: any) => {
         setMinimalDoctorInfo(item)
@@ -59,6 +58,7 @@ const DoctorSelect = () => {
     useFocusEffect(
         useCallback(() => {
             console.log("\n\nuser: ", useUserSate.getState())
+            console.log("callCenterDoctor: ", callCenterDoctor)
             patientService.patientDetails(useUserSate.getState().user.firstName)
                 .then((response) => {
                     for (let i of response.data) {
@@ -74,7 +74,18 @@ const DoctorSelect = () => {
                     console.log("\n\n\n\n\n\npatientService.getByPatientId error: ", error)
                 })
             console.log("useUserSate.getState().user: ", useUserSate.getState().user)
-            setDoctors(JSON.parse(doctorList.toString()))
+            if (+callCenterDoctorFlow) {
+                resourceService.find(+callCenterDoctor)
+                    .then((response) => {
+                        console.log("response.data: ", response.data)
+                        setDoctors([response.data])
+                    })
+                    .catch((error: any) => {
+                        console.log("resourceService.find error: ", error.response)
+                    })
+            } else {
+                setDoctors(JSON.parse(doctorList.toString()))
+            }
             setSlot(selectedSlot)
             setSlotsReserved(JSON.parse(reservedSlots.toString()))
             setSearchDate(moment(slotSearchDate).toDate())
@@ -88,7 +99,15 @@ const DoctorSelect = () => {
 
         // let branchResponse = await branchService.findAll();
         let branchId = branches.find((branch: any) => branch.name === doctor?.primaryBranch)?.id;
-        let slotGroupIds = slotsReserved.flat().filter((slotDoc: any) => slotDoc.id == doctor?.id).map((slot: any) => slot.slotId).join('$')
+        console.log("\n\n\n\nslotsReserved: ", slotsReserved)
+        let slotGroupIds
+        if (+callCenterDoctorFlow) {
+            slotGroupIds = slotsReserved.flat().map((slot: any) => slot.id).join('$')
+        } else {
+            slotGroupIds = slotsReserved.flat().filter((slotDoc: any) => slotDoc.id == doctor?.id).map((slot: any) => slot.slotId).join('$')
+        }
+
+        console.log("slotGroupIds: ", slotGroupIds)
 
         slotService.slotsByIds(slotGroupIds)
             .then((response) => {
@@ -177,6 +196,7 @@ const DoctorSelect = () => {
                             appointmentService.bookAppointmentBySource("CallCenter", "NewFlow", app)
                                 .then((response) => {
                                     setLoader(false)
+                                    console.log("appointmentService response: ", response)
                                     // setLoader(false)
                                     Alert.alert('Success', 'Appointment has been booked successfully', [
                                         {
@@ -248,21 +268,23 @@ const DoctorSelect = () => {
             Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
                 { text: 'BACK', style: 'default' }, { text: 'SIGN IN', onPress: () => router.push('/SignIn'), style: 'default' },],)
         } else {
-            Alert.alert(
-                `${item.name},  ${branch}, ${city},`,
-                // 'Doctor ' + item.name,
-                'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot,
-                [
-                    { text: 'Cancel', style: 'default' },
-                    {
-                        text: 'Confirm',
-                        onPress: () => {
-                            loggedIn ? bookAppointment(item) : router.push("/SignIn");
-                        },
-                        style: 'default'
-                    },
-                ],
-            )
+            setAppointmentToConfirm(item)
+            setConfirmAppointmentModal(true)
+            // Alert.alert(
+            //     `${item.name},  ${branch}, ${city},`,
+            //     // 'Doctor ' + item.name,
+            //     'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot,
+            //     [
+            //         { text: 'Cancel', style: 'default' },
+            //         {
+            //             text: 'Confirm',
+            //             onPress: () => {
+            //                 loggedIn ? bookAppointment(item) : router.push("/SignIn");
+            //             },
+            //             style: 'default'
+            //         },
+            //     ],
+            // )
         }
     }
 
@@ -543,12 +565,78 @@ const DoctorSelect = () => {
                                             }}
                                         />
                                     </View>
-                                {/* {resourceServiceListRender} */}
-                            </View>
+                                    {/* {resourceServiceListRender} */}
+                                </View>
                             }
                         </ScrollView>
 
                         <Button color="#3B2314" title="Close" onPress={() => setModalVisible(false)} />
+                    </View>
+                </View>
+            </Modal>
+            <Modal transparent={true} animationType="fade" visible={confirmAppointmentModal} onRequestClose={() => setConfirmAppointmentModal(false)}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+                    setMobileEmptyVisible(false)
+                    router.back()
+                    }}>
+                    <AntDesign name="closecircle" size={24} color="#3B2314" />
+                    </Pressable> */}
+                        {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+                        {/* // Alert.alert(
+            //     `${item.name},  ${branch}, ${city},`,
+            //     // 'Doctor ' + item.name,
+            //     'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot,
+            //     [
+            //         { text: 'Cancel', style: 'default' },
+            //         {
+            //             text: 'Confirm',
+            //             onPress: () => {
+            //                 loggedIn ? bookAppointment(item) : router.push("/SignIn");
+            //             },
+            //             style: 'default'
+            //         },
+            //     ],
+            // ) */}
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">{appointmentToConfirm?.name}, {branch}, {city}</Text>
+                        <Text className="text-xl text-center mb-4">Date: {moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot}</Text>
+                        <View className=" flex-row justify-end gap-5 items-center py-4">
+                            <Pressable onPress={() => {
+                                setConfirmAppointmentModal(false)
+                            }} >
+                                <Text> Cancel </Text>
+                            </Pressable>
+                            <Pressable onPress={() => {
+                                setConfirmAppointmentModal(false)
+                                loggedIn ? bookAppointment(appointmentToConfirm) : router.push("/SignIn");
+                            }}>
+                                <Text> Confirm </Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal transparent={true} animationType="fade" visible={appointmentExists} onRequestClose={() => setAppointmentExists(false)}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+                    setMobileEmptyVisible(false)
+                    router.back()
+                    }}>
+                    <AntDesign name="closecircle" size={24} color="#3B2314" />
+                    </Pressable> */}
+                        {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment already exists</Text>
+                        <Text className="text-xl font-bold text-center mb-4">You already have an appointment in the selected slot interval!</Text>
+                        <View className=" flex-row justify-end gap-5 items-center py-4">
+                            <Pressable onPress={() => {
+                                setAppointmentExists(false)
+                                router.back()
+                            }}>
+                                <Text> Ok </Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
             </Modal>

@@ -1,4 +1,4 @@
-import { Alert, ScrollView, StyleSheet, Text, View, Image } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View, Image, Modal, Pressable } from "react-native";
 import React, { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
@@ -12,6 +12,7 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
@@ -23,6 +24,10 @@ const SignIn = () => {
 
   const { language, changeLanguage } = useLanguage();
   const [locale, setLocale] = useState(i18n.locale);
+  const [patientNotFoundModal, setPatientNotFoundModal] = useState(false);
+  const [createAccountModal, setCreateAccountModal] = useState(false);
+  const [mobileEmptyVisible, setMobileEmptyVisible] = useState(false);
+
   const changeLocale = (locale: any) => {
     i18n.locale = locale;
     setLocale(locale);
@@ -43,14 +48,15 @@ const SignIn = () => {
         router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: response.data.otp, signUpFormData: JSON.stringify("") } });
       }
     }).catch((error) => {
-      console.log("Error sending OTP, ", error);
+      console.log("Error sending OTP, ", error.response);
       Alert.alert('Tecnincal Error', 'TE- ' + error)
     });
   }
 
   const sendOtp = () => {
     if (!mobileNo) {
-      Alert.alert('Mobile No Should no be empty. ' + mobileNo);
+      // Alert.alert('Mobile No Should not be empty. ' + mobileNo);
+      setMobileEmptyVisible(true);
     } else {
       getData();
       // router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: otp } });
@@ -70,36 +76,39 @@ const SignIn = () => {
     }
     if (mobileNo.length == 9) {
       loginService.byMobileNo(mobileNo).then((response) => {
+        console.log("Patient Found: ", response.data);
         if (response && response.data != null || response.data.length > 0) {
           sendOtp();
         } else {
-          Alert.alert('Patient Not Found', 'You need to Sign up first', [
-            {
-              text: 'BACK',
-              style: 'default'
-            },
-            {
-              text: 'SIGN UP',
-              onPress: () => router.push('/SignUp'),
-              style: 'default'
-            },
-          ],
-          )
+          setPatientNotFoundModal(true);
+          // Alert.alert('Patient Not Found', 'You need to Sign up first', [
+          //   {
+          //     text: 'BACK',
+          //     style: 'default'
+          //   },
+          //   {
+          //     text: 'SIGN UP',
+          //     onPress: () => router.push('/SignUp'),
+          //     style: 'default'
+          //   },
+          // ],
+          // )
         }
       })
         .catch((error) => {
-          Alert.alert('Patient Not Found', 'You need to Sign Up first', [
-            {
-              text: 'BACK',
-              style: 'default'
-            },
-            {
-              text: 'Create Account',
-              onPress: () => router.push('/SignUp'),
-              style: 'default'
-            },
-          ],
-          )
+          setPatientNotFoundModal(true);
+          // Alert.alert('Patient Not Found', 'You need to Sign Up first', [
+          //   {
+          //     text: 'BACK',
+          //     style: 'default'
+          //   },
+          //   {
+          //     text: 'Create Account',
+          //     onPress: () => router.push('/SignUp'),
+          //     style: 'default'
+          //   },
+          // ],
+          // )
         })
 
     }
@@ -171,6 +180,83 @@ const SignIn = () => {
             </View>
           </View>
         </View>
+      <Modal transparent={true} animationType="fade" visible={createAccountModal} onRequestClose={() => setCreateAccountModal(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setCreateAccountModal(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+            <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
+            <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setCreateAccountModal(false)
+              }} >
+                <Text> Back </Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                setCreateAccountModal(false)
+                router.push('/SignUp')
+              }}>
+                <Text> Create Account </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setPatientNotFoundModal(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+            <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
+            <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setPatientNotFoundModal(false)
+              }} >
+                <Text> Back </Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                setPatientNotFoundModal(false)
+                router.push('/SignUp')
+              }}>
+                <Text> Sign up </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={mobileEmptyVisible} onRequestClose={() => setMobileEmptyVisible(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setMobileEmptyVisible(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+            <Text className="text-xl font-bold text-center mb-2 pt-3">Mobile Number shoud not be empty</Text>
+            <View className=" flex-row justify-end gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setMobileEmptyVisible(false)
+              }} >
+                <Text> Ok </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
       </ScrollView>
     </SafeAreaView>
   );

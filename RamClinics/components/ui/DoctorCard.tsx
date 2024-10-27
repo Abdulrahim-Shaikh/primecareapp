@@ -35,6 +35,7 @@ type Props = {
   speciality: string;
   specialityCode: string;
   branchId: number;
+  mainSpeciality: string;
   fromSpeciality: string;
   selectedSpecialityCode: string;
   callCenterDoctorFlow: boolean;
@@ -52,6 +53,7 @@ const DoctorCard = ({
   speciality,
   specialityCode,
   branchId,
+  mainSpeciality,
   fromSpeciality,
   selectedSpecialityCode,
   callCenterDoctorFlow
@@ -88,10 +90,12 @@ const DoctorCard = ({
 
   useFocusEffect(
     useCallback(() => {
-            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-            console.log("co: ", specialityCode)
-            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-      console.log("speciality: ", speciality)
+      console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+      console.log("co: ", specialityCode)
+      console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+      console.log("branchId: ", branchId)
+      console.log("ssssspeciality: ", speciality)
+      console.log("mainSpeciality: ", mainSpeciality)
       console.log("selectedSpecialityCode: ", selectedSpecialityCode)
       console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
       changeLocale(language)
@@ -157,7 +161,7 @@ const DoctorCard = ({
                   department: department,
                   callCenterFlow: 0,
                   specialityCode: selectedSpecialityCode,
-                  speciality: speciality,
+                  speciality: mainSpeciality,
                   subServices: JSON.stringify(visitTypes),
                   callCenterDoctorFlow: 1,
                   resourceId: id
@@ -168,7 +172,10 @@ const DoctorCard = ({
                 let specialityList = [...response.data];
                 let selectedDoctorSpeciality = specialityList.find(speciality => speciality.code == selectedSpecialityCode);
                 visitTypes = selectedDoctorSpeciality?.services[0].subServices;
-                console.log("1selectedSpecialityCode: ", selectedSpecialityCode)
+                for (let i of selectedDoctorSpeciality?.services) {
+                  console.log("\n\n\ni: ", i)
+                }
+                // console.log("1selectedSpecialityCode: ", selectedSpecialityCode)
                 router.push({
                   pathname: "/AppointmentType",
                   params: {
@@ -178,7 +185,7 @@ const DoctorCard = ({
                     department: department,
                     callCenterFlow: 0,
                     specialityCode: selectedSpecialityCode,
-                    speciality: speciality,
+                    speciality: mainSpeciality,
                     subServices: JSON.stringify(visitTypes),
                     callCenterDoctorFlow: 1,
                     resourceId: id

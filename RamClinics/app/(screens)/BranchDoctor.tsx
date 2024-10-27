@@ -1,9 +1,8 @@
-import { View, Text, Pressable, ScrollView, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HeaderWithBackButton from '../../components/ui/HeaderWithBackButton';
-import Searchbox from '../../components/ui/Searchbox';
 import DoctorCard from '../../components/ui/DoctorCard';
 import doctorService from '../../domain/services/DoctorService';
 import resourceService from '../../domain/services/ResourceService';
@@ -11,13 +10,11 @@ import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
 import { useDoctors } from '../../domain/contexts/DoctorsContext';
-import branchService from '../../domain/services/BranchService';
 import appointmentService from '../../domain/services/AppointmentService';
 import { useUserSate } from '../../domain/state/UserState';
 import { useBranches } from '../../domain/contexts/BranchesContext';
-import moment from 'moment';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const categoryList = [
     "All",
@@ -46,6 +43,7 @@ const BranchDoctor = () => {
     const [patientData, setPatientData] = useState(useUserSate.getState().user)
     const { branches, setBranches } = useBranches();
     const [recentAppointments, setRecentAppointments] = useState<any>([]);
+    const [branchIds, setBranchIds] = useState<any>({});
 
     const generalDentistry = 'General Dentistry';
     const generalDentistrySpecialityCode = 'GP';
@@ -57,6 +55,10 @@ const BranchDoctor = () => {
 
     useFocusEffect(
         useCallback(() => {
+            console.log('\n\n\n\n\n\n\n\n\n\n\n')
+            console.log("speciaity: ", speciality)
+            console.log("sspecialityCode: ", specialityCode)
+            console.log('\n\n\n\n\n\n\n\n\n\n\n')
 
             changeLocale(language)
             changeLanguage(language)
@@ -75,7 +77,6 @@ const BranchDoctor = () => {
                     let last3Appointments: any = []
                     let last3AppointmentDoctors: any = new Map<any, any>()
                     for (let i = sortedAppointments.length - 1; i >= 0; i--) {
-                        // console.log("\n\nsortedAppointments[i]: ", sortedAppointments[i])
                         if (sortedAppointments[i].hisStatus != 'Cancelled') {
                             if (!last3AppointmentDoctors.has(sortedAppointments[i].practitionerId)) {
                                 last3AppointmentDoctors.set(sortedAppointments[i].practitionerId, sortedAppointments[i])
@@ -84,32 +85,19 @@ const BranchDoctor = () => {
                                     break;
                                 }
                             }
-                            // resourceService.find(sortedAppointments[i].practitionerId)
-                            // .then((response) => {
-                            // console.log("last3Appointments.length: ", last3Appointments.length)
-                            //     last3Appointments.push(response.data)
-                            // })
                         }
                     }
-                    for (let i of last3Appointments) {
-                        console.log("\n\ni: ", i)
-                        resourceService.find(i.practitionerId)
+
+                    let branchIdsMap: any = {}
+                    for (let id of last3AppointmentDoctors.keys()) {
+                        resourceService.find(id)
                             .then((response) => {
-                                last3AppointmentDoctors.set(i.practitionerId, response.data)
+                                branchIdsMap[id] = last3AppointmentDoctors.get(id).branchId
+                                setBranchIds(branchIdsMap)
+                                last3AppointmentDoctors.set(id, response.data)
                                 setRecentAppointments([...last3AppointmentDoctors.values()])
                             })
                     }
-                    // let last3AppointmentDoctors: any = new Map<any, any>()
-                    // let last3AppointmentDoctors: any = new Set<any>()
-                    // for (let i of last3Appointments) {
-                    //     if(!last3AppointmentDoctors.has(i.practitionerId)) {
-                    //         resourceService.find(i.practitionerId)
-                    //             .then((response) => {
-                    //                 last3AppointmentDoctors.set(i.practitionerId, response.data)
-                    //                 setRecentAppointments([...last3AppointmentDoctors.values()])
-                    //             })
-                    //     }
-                    // }
                 })
 
             if (+callCenterDoctorFlow) {
@@ -188,8 +176,8 @@ const BranchDoctor = () => {
                     {
                         +callCenterDoctorFlow &&
                         // <View className="pt-8 pb-5 border-b border-dashed border-pc-primary flex flex-row justify-between items-center">
-                        <View className="pb-5 border-b border-dashed border-pc-primary">
-                            <View className="mt-6 w-1/2">
+                        <View className="pb-5 flex flex-row justify-start border-b border-dashed border-pc-primary">
+                            <View className="mt-6 w-3/4 flex flex-row justify-start items-center gap-2">
                                 <Pressable
                                     onPress={() => {
                                         console.log("recentAppointments.length: ", recentAppointments.length)
@@ -200,8 +188,21 @@ const BranchDoctor = () => {
                                         }
                                         // getPatientPolicyData();
                                     }}
-                                    className="bg-[#3B2314] text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
-                                    <Text className="text-white">{i18n.t("Last 3 Appointments")}</Text>
+                                    className="bg-[#3B2314] flex flex-row items-center gap-2 text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
+                                    <MaterialCommunityIcons
+                                        name={showLast3Appointments? 'eye-off-outline': 'eye-outline'}
+                                        size={24}
+                                        color={"white"}
+                                    />
+                                    <Text className="text-white flex flex-row justify-self-center">
+                                        {
+                                            showLast3Appointments?
+                                            i18n.t("Hide Last 3 Appointments")
+                                            :
+                                            i18n.t("Show Last 3 Appointments")
+                                        }
+                                        {/* {i18n.t("Show Last 3 Appointments")} */}
+                                    </Text>
                                 </Pressable>
                             </View>
                         </View>
@@ -217,11 +218,13 @@ const BranchDoctor = () => {
                                 showLast3Appointments
                                     ?
                                     recentAppointments.map(({ ...props }, idx) => (
-                                        <DoctorCard {...props} branchId={+branchId} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
+                                        <View>
+                                            <DoctorCard {...props} branchId={branchIds[props.id]} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
+                                        </View>
                                     ))
                                     :
                                     doctorsData.map(({ ...props }, idx) => (
-                                        <DoctorCard {...props} branchId={+branchId} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
+                                        <DoctorCard {...props} branchId={+branchId} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
                                     ))
                     }
                 </View>
