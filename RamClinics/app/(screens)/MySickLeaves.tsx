@@ -16,6 +16,8 @@ import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 import { useFocusEffect } from "expo-router";
+import SelectDropdown from "react-native-select-dropdown";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const tabNames = ["Pending", "Cancelled", "Completed"];
 const i18n = new I18n(translations)
@@ -37,6 +39,12 @@ const MySickLeaves = () => {
             changeLanguage(language)
         }, [])
     )
+
+    const filterOptions = [
+        { id: 1, name: "From Last Month", value: 'lastMonth' },
+        { id: 2, name: "All", value: 'all' },
+        // { id: 3, name: "6 Months", months: 6 },
+    ]
     let [branches, setBranches] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
     const [fromType, setFromType] = useState("lastMonth");
@@ -165,14 +173,96 @@ const MySickLeaves = () => {
                         )}
                     </View> */}
 
-                    <View className="bg-gray-200 rounded-lg mt-4 mb-3">
+                    <View className="rounded-lg mt-4">
+                        <View className="p-4 border rounded-lg mb-4">
+                            <SelectDropdown
+                                data={filterOptions}
+                                defaultValue={filterOptions[0]}
+                                onSelect={(selectedItem, index) => {
+                                    setFromType(selectedItem.value)
+                                }}
+                                renderButton={(selectedItem, isOpened) => {
+                                    return (
+                                        <View style={styles.dropdownButtonStyle}>
+                                            {selectedItem && (
+                                                <Icon name={selectedItem.icon} style={styles.dropdownButtonIconStyle} />
+                                            )}
+                                            <Text style={styles.dropdownButtonTxtStyle}>
+                                                {(selectedItem && selectedItem.name) || 'Select time period'}
+                                            </Text>
+                                            <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                                        </View>
+                                    );
+                                }}
+                                renderItem={(item, index, isSelected) => {
+                                    return (
+                                        <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                            <Text>{item.name}</Text>
+                                        </View>
+                                    );
+                                }}
+                                dropdownStyle={styles.dropdownMenuStyle}
+                                showsVerticalScrollIndicator={false}
+                            />
+                        </View>
+                        {/* <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
+                            <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
+                            <Picker.Item label={i18n.t("All")} value="all" />
+                        </Picker> */}
+                    </View>
+                    {/* <View className="bg-gray-200 rounded-lg mt-4 mb-3">
                         <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
                             <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
                             <Picker.Item label={i18n.t("All")} value="all" />
                         </Picker>
-                    </View>
+                    </View> */}
 
-                    <View className="border border-gray-300 rounded-lg mb-4">
+                    <View className="p-4 border rounded-lg mb-4">
+                        <SelectDropdown
+                            data={branches}
+                            search={true}
+                            defaultValue={selectedValue}
+                            onSelect={(selectedItem, index) => {
+                                setSelectedValue(selectedItem.value);
+                                // setFromType(selectedItem.value)
+                            }}
+                            renderButton={(selectedItem, isOpened) => {
+                                return (
+                                    <View style={styles.dropdownButtonStyle}>
+                                        {selectedItem && (
+                                            <Icon name={selectedItem.icon} style={styles.dropdownButtonIconStyle} />
+                                        )}
+                                        <Text style={styles.dropdownButtonTxtStyle}>
+                                            {(selectedItem && selectedItem.name) || 'Select Branch'}
+                                        </Text>
+                                        <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                                    </View>
+                                );
+                            }}
+                            renderItem={(item, index, isSelected) => {
+                                return (
+                                    <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                        <Text>{item.name}</Text>
+                                    </View>
+                                );
+                            }}
+                            dropdownStyle={styles.dropdownMenuStyle}
+                            showsVerticalScrollIndicator={false}
+                        />
+                        {/* <Picker
+                            selectedValue={selectedValue}
+                            onValueChange={(itemValue) => {
+                                setSelectedValue(itemValue);
+                            }}
+                            className="h-12"
+                        >
+                            <Picker.Item label={i18n.t("Select Branch")} value="" />
+                            {branches.map((branch: any) => (
+                                <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
+                            ))}
+                        </Picker> */}
+                    </View>
+                    {/* <View className="border border-gray-300 rounded-lg mb-4">
                         <Picker
                             selectedValue={selectedValue}
                             onValueChange={(itemValue) => {
@@ -185,7 +275,7 @@ const MySickLeaves = () => {
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker>
-                    </View>
+                    </View> */}
 
                     {/* <View className="flex-row justify-between mb-4">
                         {tabNames.map((item, idx) => (
@@ -276,5 +366,42 @@ const styles = StyleSheet.create({
     },
     closeButtonText: {
         color: 'white',
+    },
+    dropdownButtonStyle: {
+        borderRadius: 12,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    dropdownButtonTxtStyle: {
+        flex: 1,
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownButtonArrowStyle: {
+        fontSize: 25,
+    },
+    dropdownButtonIconStyle: {},
+    dropdownMenuStyle: {
+        backgroundColor: '#E9ECEF',
+        borderRadius: 8,
+    },
+    dropdownItemStyle: {
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 8,
+    },
+    dropdownItemTxtStyle: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownItemIconStyle: {
+        fontSize: 28,
+        marginRight: 8,
     },
 });

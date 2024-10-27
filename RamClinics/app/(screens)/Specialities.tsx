@@ -80,7 +80,7 @@ const Specialities = () => {
                                 <View className="flex flex-row justify-between items-center w-full px-6">
                                     <Text className="text-xl font-semibold">{i18n.t("Dental Specialities")}</Text>
                                 </View>
-                                <View className="pt-5">
+                                <View className="pt-5 pl-2 pr-2">
                                     {
                                         specialtyList.length === 0
                                             ?
@@ -128,12 +128,9 @@ const Specialities = () => {
                                 </View>
                                 <View className="flex flex-row justify-between items-center w-full px-6 pt-8 pt-6">
                                     <Text className=" text-xl font-semibold">{i18n.t("Dermatology Specialities")}</Text>
-                                    {/* <Text className=" font-semibold text-pc-primary">
-                View All
-              </Text> */}
                                 </View>
 
-                                <View className="pt-5">
+                                <View className="pt-5 pl-2 pr-2">
 
                                     {
                                         specialtyList.length === 0
@@ -182,15 +179,9 @@ const Specialities = () => {
                                 </View>
                                 <View className="flex flex-row justify-between items-center w-full px-6 pt-8">
                                     <Text className=" text-xl font-semibold">{i18n.t("Medical Specialities")}</Text>
-                                    {/* <Text
-                onPress={() => {
-                }}
-                className=" font-semibold text-pc-primary">
-                View All
-              </Text> */}
                                 </View>
 
-                                <View className="pt-5">
+                                <View className="pt-5 pl-2 pr-2">
 
                                     {
                                         specialtyList.length === 0

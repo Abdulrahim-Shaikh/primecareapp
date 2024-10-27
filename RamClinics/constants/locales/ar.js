@@ -7,6 +7,13 @@
 
 const translations = {
     en: {
+        "Select Referrer": "Select Referrer",
+        "Select Branch": "Select Branch",
+        "Select City": "Select City",
+        "Select Gender": "Select Gender",
+        "Select nationality": "Select nationality",
+        "Select Code": "Select Code",
+        "Select Country Code": "Select Country Code",
         "Last 3 Appointments": "Last 3 Appointments",
         "1": "1",
         "2": "2",
@@ -605,6 +612,13 @@ const translations = {
         0: '٠',
         "Branches": "الفروع",
         "Last 3 Appointments": "آخر 3 مواعيد",
+        "Select Country Code": "اختر رمز الدولة",
+        "Select Code": "اختر الرمز",
+        "Select nationality": "اختر الجنسية",
+        "Select Gender": "اختر الجنس",
+        "Select City": "اختر المدينة",
+        "Select Branch": "اختر الفرع",
+        "Select Referrer": "اختر الجهة المحالة",
     }
 }
 export default translations;

@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, ActivityIndicator, Platform } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import React, { useCallback, useEffect, useState } from "react";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -15,6 +16,7 @@ import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
 import { lang } from "moment";
+import SelectDropdown from "react-native-select-dropdown";
 
 const i18n =  new I18n(translations)
 i18n.locale = Localization.locale
@@ -41,6 +43,12 @@ const MyApprovals = () => {
     const [activeTab, setActiveTab] = useState("Pending");
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
+
+    const filterOptions = [
+        { id: 1, name: "From Last Month", value: 'lastMonth' },
+        { id: 2, name: "All", value: 'all' },
+        // { id: 3, name: "6 Months", months: 6 },
+    ]
 	
 	const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -156,21 +164,83 @@ const MyApprovals = () => {
                         )}
                     </View> */}
 
-                    <View className="bg-gray-200 rounded-lg mt-4 mb-3">
-                        <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
+                    <View className="rounded-lg mt-4">
+                        <View className="p-4 border rounded-lg mb-4">
+                            <SelectDropdown
+                                data={filterOptions}
+                                defaultValue={filterOptions[0]}
+                                onSelect={(selectedItem, index) => {
+                                    setFromType(selectedItem.value)
+                                }}
+                                renderButton={(selectedItem, isOpened) => {
+                                    return (
+                                        <View style={styles.dropdownButtonStyle}>
+                                            {selectedItem && (
+                                                <Icon name={selectedItem.icon} style={styles.dropdownButtonIconStyle} />
+                                            )}
+                                            <Text style={styles.dropdownButtonTxtStyle}>
+                                                {(selectedItem && selectedItem.name) || 'Select time period'}
+                                            </Text>
+                                            <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                                        </View>
+                                    );
+                                }}
+                                renderItem={(item, index, isSelected) => {
+                                    return (
+                                        <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                            <Text>{item.name}</Text>
+                                        </View>
+                                    );
+                                }}
+                                dropdownStyle={styles.dropdownMenuStyle}
+                                showsVerticalScrollIndicator={false}
+                            />
+                        </View>
+                        {/* <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
                             <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
                             <Picker.Item label={i18n.t("All")} value="all" />
-                        </Picker>
+                        </Picker> */}
                     </View>
 
-                    <View className="border border-indigo-950 rounded-lg mb-4">
-                        <Picker
+                    <View className="p-4 border rounded-lg mb-4">
+                        <SelectDropdown
+                            data={branches}
+                            search={true}
+                            defaultValue={selectedValue}
+                            onSelect={(selectedItem, index) => {
+                                setSelectedValue(selectedItem.value);
+                                // setFromType(selectedItem.value)
+                            }}
+                            renderButton={(selectedItem, isOpened) => {
+                                return (
+                                    <View style={styles.dropdownButtonStyle}>
+                                        {selectedItem && (
+                                            <Icon name={selectedItem.icon} style={styles.dropdownButtonIconStyle} />
+                                        )}
+                                        <Text style={styles.dropdownButtonTxtStyle}>
+                                            {(selectedItem && selectedItem.name) || 'Select Branch'}
+                                        </Text>
+                                        <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                                    </View>
+                                );
+                            }}
+                            renderItem={(item, index, isSelected) => {
+                                return (
+                                    <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                        <Text>{item.name}</Text>
+                                    </View>
+                                );
+                            }}
+                            dropdownStyle={styles.dropdownMenuStyle}
+                            showsVerticalScrollIndicator={false}
+                        />
+                        {/* <Picker
                             selectedValue={selectedValue} onValueChange={(itemValue) => { setSelectedValue(itemValue); }} className="h-12">
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
                             {branches.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
                             ))}
-                        </Picker>
+                        </Picker> */}
                     </View>
 
                     <Pressable onPress={() => search()} className="flex-1 bg-[rgb(59,35,20)] p-3 rounded-lg mb-6">
@@ -268,5 +338,42 @@ const styles = StyleSheet.create({
         marginTop: 2,
         fontSize: 14,
         color: '#555',
+    },
+    dropdownButtonStyle: {
+        borderRadius: 12,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    dropdownButtonTxtStyle: {
+        flex: 1,
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownButtonArrowStyle: {
+        fontSize: 25,
+    },
+    dropdownButtonIconStyle: {},
+    dropdownMenuStyle: {
+        backgroundColor: '#E9ECEF',
+        borderRadius: 8,
+    },
+    dropdownItemStyle: {
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 8,
+    },
+    dropdownItemTxtStyle: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownItemIconStyle: {
+        fontSize: 28,
+        marginRight: 8,
     },
 });
