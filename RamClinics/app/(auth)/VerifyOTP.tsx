@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
@@ -22,6 +22,9 @@ const VerifyOTP = () => {
   // const [otpResp, setOtpResp] = useState({ otp: '9999' });
   const [otp, setOtp] = useState('');
   const [loader, setLoader] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
+  const [patientNotFoundModal, setPatientNotFoundModal] = useState(false);
+  const [invalidOtpModal, setInvalidOtpModal] = useState(false);
 
   const { data, status } = loginService.useGenerateOtp(mobileNo);
   // let otp: string = '';
@@ -76,7 +79,8 @@ const VerifyOTP = () => {
       if (signUpFormData != null && signUpFormData != `""`) {
         let signupForm = JSON.parse(Array.isArray(signUpFormData) ? signUpFormData[0] : signUpFormData);
         patientService.save(signupForm).then((res) => {
-          Alert.alert("Success", "Registered Successfully!");
+          setSuccessModal(true);
+          // Alert.alert("Success", "Registered Successfully!");
           loginService.byMobileNo(mobileNo)
             .then(res => {
               let user = res.data;
@@ -91,19 +95,20 @@ const VerifyOTP = () => {
           // tempErrors.saveError = "Failed to save Patient";
           // setErrors(tempErrors)
           // setErrorsExist(true);
-          Alert.alert('Patient Not Found', 'Failed to save patient', [
-            {
-              text: 'BACK',
-              onPress: () => router.back(),
-              style: 'default'
-            },
-            // {
-            //     text: 'SIGN IN',
-            //     onPress: () => router.push('/SignIn'),
-            //     style: 'default'
-            // },
-          ],
-          )
+          setPatientNotFoundModal(true);
+          // Alert.alert('Patient Not Found', 'Failed to save patient', [
+          //   {
+          //     text: 'BACK',
+          //     onPress: () => router.back(),
+          //     style: 'default'
+          //   },
+          //   // {
+          //   //     text: 'SIGN IN',
+          //   //     onPress: () => router.push('/SignIn'),
+          //   //     style: 'default'
+          //   // },
+          // ],
+          // )
 
           // console.error("Failed to save Patient:", error);
           // Alert.alert("Error", "Please try again later.");
@@ -128,7 +133,8 @@ const VerifyOTP = () => {
       if (signUpFormData != null && signUpFormData != '') {
         let signupForm = JSON.parse(Array.isArray(signUpFormData) ? signUpFormData[0] : signUpFormData);
         if (signupForm != null) {
-          Alert.alert("Invalid OTP!", "Mobile number not verified.")
+          setInvalidOtpModal(true);
+          // Alert.alert("Invalid OTP!", "Mobile number not verified.")
         }
       }
     }
@@ -177,6 +183,72 @@ const VerifyOTP = () => {
 
           <NASButton title="Verify" onPress={verifyOtp} />
         </View>
+        <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setPatientNotFoundModal(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+              <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
+              <Text className="text-xl font-bold text-center mb-4">Failed to save patient</Text>
+              <View className=" flex-row justify-end gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setPatientNotFoundModal(false)
+                  router.back()
+                }} >
+                  <Text> Back </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal transparent={true} animationType="fade" visible={invalidOtpModal} onRequestClose={() => setInvalidOtpModal(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setPatientNotFoundModal(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+              <Text className="text-xl font-bold text-center mb-2 mt-1">Invalid OTP</Text>
+              <Text className="text-xl font-bold text-center mb-4">Mobile Number not verified</Text>
+              <View className=" flex-row justify-end gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setInvalidOtpModal(false)
+                }} >
+                  <Text> Ok </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal transparent={true} animationType="fade" visible={successModal} onRequestClose={() => setSuccessModal(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setPatientNotFoundModal(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+              <Text className="text-xl font-bold text-center mb-4 pt-3">Success, User Registered</Text>
+              <View className=" flex-row justify-end gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setSuccessModal(false)
+                }} >
+                  <Text> Ok </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );

@@ -271,7 +271,7 @@ const Wallets = () => {
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <View className="bg-white p-6 rounded-lg w-4/5 relative">
               <Pressable className="absolute top-3 right-3" onPress={() => setShowRefill(false)}>
-                <AntDesign name="closecircle" size={24} color="#78450f" />
+                <AntDesign name="closecircle" size={24} color="#3B2314" />
               </Pressable>
               <Text className="text-xl font-bold text-center mb-4 mt-7"> Enter the Amount to Refill</Text>
               <TextInput onChangeText={setRefillAmt} value={refillAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />

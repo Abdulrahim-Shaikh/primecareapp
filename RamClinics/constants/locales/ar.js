@@ -7,6 +7,8 @@
 
 const translations = {
     en: {
+        "Hide Last 3 Appointments": "Hide Last 3 Appointments",
+        "Show Last 3 Appointments": "Show Last 3 Appointments",
         "Select Referrer": "Select Referrer",
         "Select Branch": "Select Branch",
         "Select City": "Select City",
@@ -619,6 +621,8 @@ const translations = {
         "Select City": "اختر المدينة",
         "Select Branch": "اختر الفرع",
         "Select Referrer": "اختر الجهة المحالة",
+        "Show Last 3 Appointments": "عرض آخر 3 مواعيد",
+        "Hide Last 3 Appointments": "إخفاء آخر 3 مواعيد",
     }
 }
 export default translations;

@@ -1,6 +1,4 @@
 import {
-    Alert,
-    FlatList,
     ScrollView,
     Text,
     TouchableOpacity,

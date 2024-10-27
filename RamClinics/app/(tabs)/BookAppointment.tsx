@@ -1,12 +1,8 @@
 import {
-    Alert,
-    Platform,
-    FlatList,
     ScrollView,
     Text,
     TouchableOpacity,
     View,
-    Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, } from "@expo/vector-icons";

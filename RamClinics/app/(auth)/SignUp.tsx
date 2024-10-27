@@ -1,4 +1,4 @@
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -92,6 +92,8 @@ const SingUp = () => {
   const [countryCode, setCountryCode] = useState(countries[0].dial_code);
   const [selectedCountryCodeItem, setSelectedCountryCodeItem] = useState<any>(countries[0]);
   const [errorsExist, setErrorsExist] = useState(false);
+  const [patientAlreadyExists, setPatientAlreadyExists] = useState(false);
+  const [mandatoryFieldsMissing, setMandatoryFieldsMissing] = useState(false);
 
   let dateAux = new Date();
   const { language, changeLanguage } = useLanguage();
@@ -295,19 +297,20 @@ const SingUp = () => {
         console.log("signupForm: ", signupForm);
         loginService.byMobileNo(mobileNo)
           .then((response) => {
-            Alert.alert("Patient Already Exists with this mobile number", "Please Sign in or use another mobile number", [
-              {
-                text: 'BACK',
-                style: 'default'
-              },
-              {
-                text: 'Sign in',
-                onPress: () => {
-                  router.push('/SignIn')
-                },
-                style: 'default'
-              },
-            ])
+            setPatientAlreadyExists(true);
+            // Alert.alert("Patient Already Exists with this mobile number", "Please Sign in or use another mobile number", [
+            //   {
+            //     text: 'BACK',
+            //     style: 'default'
+            //   },
+            //   {
+            //     text: 'Sign in',
+            //     onPress: () => {
+            //       router.push('/SignIn')
+            //     },
+            //     style: 'default'
+            //   },
+            // ])
           })
           .catch((error) => {
             console.log("signupForm: ", signupForm);
@@ -389,7 +392,8 @@ const SingUp = () => {
       setErrorsExist(true);
       console.log("errors: ", tempErrors);
       console.log("Mandatory Fields Missing!");
-      Alert.alert("Mandatory Fields Missing!", "Please fill in all required fields.");
+      setMandatoryFieldsMissing(true);
+      // Alert.alert("Mandatory Fields Missing!", "Please fill in all required fields.");
     }
   };
 
@@ -890,7 +894,7 @@ const SingUp = () => {
               </View>
             </View> */}
 
-            <View className="pt-4">
+            <View className="pt-4 pb-8">
               <Text className="text-base text-pc-primary text-center">
                 {i18n.t("signuptext2")}{" "}
                 <Text
@@ -904,6 +908,62 @@ const SingUp = () => {
             </View>
           </View>
         </View>
+        <Modal transparent={true} animationType="fade" visible={patientAlreadyExists} onRequestClose={() => setPatientAlreadyExists(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setPatientNotFoundModal(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+              {/* Alert.alert("Patient Already Exists with this mobile number", "Please Sign in or use another mobile number", [ */}
+              <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Already Exists with this mobile number</Text>
+              <View className=" flex-row justify-between gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setPatientAlreadyExists(false)
+                }} >
+                  <Text> Back </Text>
+                </Pressable>
+                <Pressable onPress={() => {
+                  setPatientAlreadyExists(false)
+                  router.push('/SignIn')
+                }}>
+                  <Text> Sign in </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal transparent={true} animationType="fade" visible={mandatoryFieldsMissing} onRequestClose={() => setMandatoryFieldsMissing(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
+              setPatientNotFoundModal(false)
+              router.back()
+            }}>
+              <AntDesign name="closecircle" size={24} color="#3B2314" />
+            </Pressable> */}
+              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+              <Text className="text-xl font-bold text-center mb-2 mt-1">Mandatory Fields Missing</Text>
+              <Text className="text-xl font-bold text-center mb-4">Please fill in all required fields</Text>
+              <View className=" flex-row justify-between gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setMandatoryFieldsMissing(false)
+                }} >
+                  <Text> Back </Text>
+                </Pressable>
+                <Pressable onPress={() => {
+                  setMandatoryFieldsMissing(false)
+                  router.push('/SignUp')
+                }}>
+                  <Text> Sign up </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );
