@@ -15,8 +15,8 @@ class HttpService {
     private allowedDivisions = 'CHN'//Array<string> = ['CHN'];
 
     // private baseUrl = PROD_LINK;
-    private baseUrl = UAT_LINK;
-    // private baseUrl = CLAIMS_LINK;
+    // private baseUrl = UAT_LINK;
+    private baseUrl = CLAIMS_LINK;
 
 
     getHeaders() {

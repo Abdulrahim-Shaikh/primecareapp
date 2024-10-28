@@ -36,6 +36,7 @@ const SlotsConfirmationPage = () => {
     const { branches, changeBranches } = useBranches();
     const { allSpecialities, changeSpecialities } = useSpecialities();
     const [mainResourceId, setMainResourceId] = useState<any>("")
+    const [scheduleId, setScheduleId] = useState<any>("")
 
 
     var slotsRender = [];
@@ -108,7 +109,8 @@ const SlotsConfirmationPage = () => {
                 reservedSlots: JSON.stringify(reservedSlots),
                 doctorList: JSON.stringify(slot[1]),
                 callCenterDoctorFlow: callCenterDoctorFlow,
-                callCenterDoctor: resourceId
+                callCenterDoctor: resourceId,
+                scheduleId: scheduleId,
             }
         })
     }
@@ -132,6 +134,7 @@ const SlotsConfirmationPage = () => {
                         .then((response) => {
                             // console.log("doctorSchedule response: ", response.data)
                             let scheduleId = response.data[0].scheduleId[+moment(date).format("D")]
+                            setScheduleId(scheduleId)
                             scheduleService.find(+scheduleId)
                                 .then((response) => {
                                     // console.log("scheduleService.find response: ", response.data.slots)
