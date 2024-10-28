@@ -88,6 +88,7 @@ const AppointmentType = () => {
             }
             getPatientPolicyData()
             if (subServices == null || subServices == undefined || subServices == "") {
+                console.log("here")
                 setDoctorScheduleNotFoundModal(true)
                 // Alert.alert('Note', 'Doctor Schedule not found', [
                 //     {
@@ -238,6 +239,7 @@ const AppointmentType = () => {
                                         })
                                 })
                                 .catch((err) => {
+                                    console.log("here2")
                                     setDoctorScheduleNotFoundModal(true)
                                     // Alert.alert('Note', 'Doctor Schedule not found', [
                                     //     {
@@ -350,14 +352,14 @@ const AppointmentType = () => {
                 }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                            <Pressable className="absolute top-3 right-3" onPress={() => {
+                            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
                                 setDoctorScheduleNotFoundModal(false)
                                 router.back()
                             }}>
                                 <AntDesign name="closecircle" size={24} color="#3B2314" />
-                            </Pressable>
+                            </Pressable> */}
                             {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
-                            <Text className="text-xl font-bold text-center mb-4 mt-7">Doctor schedule not found</Text>
+                            <Text className="text-xl font-bold text-center mb-4 mt-1">Doctor schedule not found</Text>
                             <View className=" flex-row justify-end gap-5 items-center py-4">
                                 <Pressable onPress={() => {
                                     setDoctorScheduleNotFoundModal(false)
