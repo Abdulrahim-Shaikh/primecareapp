@@ -36,6 +36,7 @@ const SlotsConfirmationPage = () => {
     const { branches, changeBranches } = useBranches();
     const { allSpecialities, changeSpecialities } = useSpecialities();
     const [mainResourceId, setMainResourceId] = useState<any>("")
+    const [scheduleId, setScheduleId] = useState<any>("")
 
 
     var slotsRender = [];
@@ -72,7 +73,7 @@ const SlotsConfirmationPage = () => {
         setDoctorListPageRoute(true)
 
         const timeSlots = Object.keys(allSlots);
-        let today = moment().format("YYYY-MM-DD");
+        let today = moment(slotSearchDate).format("YYYY-MM-DD");
         const sortedTimeSlots: any = timeSlots.sort((a, b) => {
             return moment(`${today} ${a.trim()}`, "YYYY-MM-DD hh:mm A").diff(moment(`${today} ${b.trim()}`, "YYYY-MM-DD hh:mm A"))
         })
@@ -87,6 +88,7 @@ const SlotsConfirmationPage = () => {
                 break;
             }
         }
+
 
         router.push({
             pathname: "/DoctorSelect",
@@ -108,7 +110,8 @@ const SlotsConfirmationPage = () => {
                 reservedSlots: JSON.stringify(reservedSlots),
                 doctorList: JSON.stringify(slot[1]),
                 callCenterDoctorFlow: callCenterDoctorFlow,
-                callCenterDoctor: resourceId
+                callCenterDoctor: resourceId,
+                scheduleId: scheduleId,
             }
         })
     }
@@ -118,11 +121,12 @@ const SlotsConfirmationPage = () => {
         setLoader(true)
         if (resourceId != undefined && resourceId != null && resourceId != "" && +resourceId != -1) {
             let requestBody: any = [{
-                date: dateString,
-                day: +moment(date).format("D"),
+                date: moment(new Date(date)).format('YYYY-MM-DD'),
+                day: +moment(new Date(date)).format("D"),
                 resourceIds: [+resourceId],
-                wday: moment(date).format("dddd").substring(0, 3)
+                wday: moment(new Date(date)).format("dddd").substring(0, 3)
             }]
+            console.log("requestBody: ", requestBody)
             let branchId = null
             for (let b of branches) {
                 if (b.name == branch) {
@@ -131,7 +135,8 @@ const SlotsConfirmationPage = () => {
                     scheduleService.getDoctorSchedule(branchID, department, speciality, "true", requestBody)
                         .then((response) => {
                             // console.log("doctorSchedule response: ", response.data)
-                            let scheduleId = response.data[0].scheduleId[+moment(date).format("D")]
+                            let scheduleId = response.data[0].scheduleId[+moment(new Date(date)).format("D")]
+                            setScheduleId(scheduleId)
                             scheduleService.find(+scheduleId)
                                 .then((response) => {
                                     // console.log("scheduleService.find response: ", response.data.slots)
@@ -201,7 +206,6 @@ const SlotsConfirmationPage = () => {
                                         }
                                     }
                                     setLoader(false)
-                                    console.log("slotsAvailableAux2: ", slotsAvailableAux2)
                                     setSlotsAvailable(slotsAvailableAux2)
                                     // console.log("slotsAvailableAux2: ", slotsAvailableAux2)
                                 })
