@@ -5,40 +5,36 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons, MaterialCommunityIcons, } from "@expo/vector-icons";
+import { MaterialCommunityIcons, } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import { serviceData } from "../../constants/data";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
 import { useCallback, useState } from "react";
 
 
-const i18n =  new I18n(translations)
+const i18n = new I18n(translations)
 i18n.locale = Localization.locale
 i18n.enableFallback = true;
 
 const BookAppointmentOptions = () => {
 
     const { language, changeLanguage } = useLanguage();
-    var serviceDataRender = []
-  
     const [locale, setLocale] = useState(i18n.locale);
     const changeLocale = (locale: any) => {
-    i18n.locale = locale;
-    setLocale(locale);
-}
+        i18n.locale = locale;
+        setLocale(locale);
+    }
 
-useFocusEffect(
-  useCallback(() => {
-      changeLocale(language)
-      changeLanguage(language)
-  }, [])
-)
+    useFocusEffect(
+        useCallback(() => {
+            console.log("locale: ", locale)
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
     const router = useRouter();
     const { city, fromSpeciality, department } = useLocalSearchParams();
 
@@ -68,7 +64,7 @@ useFocusEffect(
             icon: 'doctor',
             title: "By Doctor",
             link: "/CityPage",
-            params: { 
+            params: {
                 branchId: "",
                 fromSpeciality: fromSpeciality,
                 department: department,

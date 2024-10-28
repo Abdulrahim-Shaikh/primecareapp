@@ -42,14 +42,14 @@ const DoctorSelect = () => {
     const [appointmentToConfirm, setAppointmentToConfirm] = useState<any>(null);
     const [appointmentServiceError, setAppointmentServiceError] = useState<any>(null);
     const [appointmentServiceErrorText, setAppointmentServiceErrorText] = useState<any>(null);
+    const [appointmentFailed, setAppointmentFailed] = useState<any>(null);
     const [bookingSuccess, setBookingSuccess] = useState(false);
+    const [patientNotFoundModal, setPatientNotFoundModal] = useState(false);
 
     const showDoctor = (item: any) => {
         setMinimalDoctorInfo(item)
         resourceService.find(item.id)
             .then((response) => {
-                // console.log("item: ", item)
-                // console.log("\n\n\nresponse: ", Object.keys(response.data))
                 setDisplayedDoctor(response.data)
                 console.log("\n\n\n\nresourceServiceList: ", response.data.resourceServiceList)
             })
@@ -70,8 +70,6 @@ const DoctorSelect = () => {
                             break;
                         }
                     }
-                    // setPatient(response.data)
-                    // console.log("\n\n\n\n\n\npatientService.patientDetails response.data: ", response.data.length)
                 })
                 .catch((error) => {
                     console.log("\n\n\n\n\n\npatientService.getByPatientId error: ", error)
@@ -100,7 +98,6 @@ const DoctorSelect = () => {
 
         setLoader(true)
 
-        // let branchResponse = await branchService.findAll();
         let branchId = branches.find((branch: any) => branch.name === doctor?.primaryBranch)?.id;
         console.log("\n\n\n\nslotsReserved: ", slotsReserved)
         let slotGroupIds
@@ -130,7 +127,7 @@ const DoctorSelect = () => {
         app.history = [
             {
                 status: "Booked",
-                updatedBy: "Booked on PrimeCare Mobile App on " + moment(new Date).format('DD-MMM-YYYY hh:mm A'),
+                updatedBy: `Booked by ${useUserSate.getState().user.firstName + " " + useUserSate.getState().user.lastName} via PrimeCare Mobile app on ${moment(new Date).format('DD-MMM-YYYY hh:mm A')}`,
                 updatedDate: (new Date).toISOString()
             }
         ];
@@ -184,77 +181,15 @@ const DoctorSelect = () => {
                     console.log("success: ")
                     setLoader(false)
                     console.log("appointmentService response: ", response.data)
-                    // setLoader(false)
                     setBookingSuccess(true)
-                    // Alert.alert('Success', 'Appointment has been booked successfully', [
-                    //     {
-                    //         onPress: () => router.back(),
-                    //         text: 'OK',
-                    //         style: 'default'
-                    //     },
-                    // ],
-                    // )
                 })
                 .catch((error) => {
-                    // setLoader(false)
                     console.log("failed: ", error.response)
                     setLoader(false)
                     console.error("appointmentService error", error.response?.data.errors[0].msg)
                     setAppointmentServiceErrorText(error.response?.data.errors[0].msg)
                     setAppointmentServiceError(true)
-                    // Alert.alert("Appointment booking failed", error.response?.data.errors[0].msg,
-                    //     [
-                    //         {
-                    //             onPress: () => router.back(),
-                    //             text: 'OK',
-                    //             style: 'default'
-                    //         },
-                    //     ]
-
-                    // )
                 })
-
-            // let slotsApi: any[] = [];
-            // slots.forEach((slot: any) => {
-            //     slotsApi.push(slot.slotName);
-            // })
-            // appointmentService.getAppointmentsBySlotId(slotsApi, app.branchId, moment(app.appointmentDate).format("yyyy-MM-DD"), app.practitionerId)
-            //     .then((response: any) => {
-            //         console.log("appointmentService.getAppointmentsBySlotId response success ", response)
-            //         if (Object.keys(response.data).length > 0) {
-            //             setLoader(false)
-            //             Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!', [
-            //                 {
-            //                     onPress: () => router.back(),
-            //                     text: 'OK',
-            //                     style: 'default'
-            //                 },
-            //             ])
-            //         } else {
-            //             console.log("appppp: ", app)
-            //             // appointmentService.save(app)
-            //             //     .then((response: any) => {
-            //             //         console.log("appointmentService.save: ", response)
-            //             //         Alert.alert('Appointment booked', 'Appointment has booked successfully!')
-            //             //     })
-            //             //     .catch((error: any) => {
-            //             //         console.log("appointmentService.save error: ", error)
-            //             //         Alert.alert('Appointment booking failed', 'Failed to book appointment!')
-            //             //     })
-            //         }
-            //     })
-            //     .catch((error: any) => {
-            //         setLoader(false)
-            //         console.error("getAppointmentsBySlotId error: ", error.response)
-            //         // Alert.alert('Appointment booking failed', 'Failed to book appointment!')
-            //         Alert.alert('Appointment booking failed', 'Failed to book appointment!', [
-            //             {
-            //                 onPress: () => router.back(),
-            //                 text: 'OK',
-            //                 style: 'default'
-            //             },
-            //         ])
-            //     })
         } else {
             slotService.slotsByIds(slotGroupIds)
                 .then((response) => {
@@ -285,15 +220,6 @@ const DoctorSelect = () => {
                     app.slots = slots;
                     app.endTime = end;
                     app.startTime = start;
-
-                    // app.updatedBy = "Booked on PrimeCare Mobile App on " + moment(new Date).format('DD-MMM-YYYY hh:mm A');
-                    // app.history = [];
-                    // app.source = "CallCenter - PrimeCare Mobile App"
-                    // app.flowType = "CallCenter - NewFlow"
-                    // history.status = "Booked";
-                    // history.updatedBy = useUserSate.getState().user.name;
-                    // history.updatedDate = new Date();
-                    // app.history.push(history);
                     let slotsApi: any[] = [];
                     slots.forEach((slot: any) => {
                         slotsApi.push(slot.slotName);
@@ -306,82 +232,34 @@ const DoctorSelect = () => {
                     appointmentService.getAppointmentsBySlotId(slotsApi, app.branchId, moment(app.appointmentDate).format("yyyy-MM-DD"), app.practitionerId)
                         .then((response: any) => {
                             if (Object.keys(response.data).length > 0) {
-                                // Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!')
                                 setLoader(false)
                                 setAppointmentExists(true)
-                                // Alert.alert('Appointment already exists', 'You already have an appointment in the selected slot interval!', [
-                                //     {
-                                //         onPress: () => router.back(),
-                                //         text: 'OK',
-                                //         style: 'default'
-                                //     },
-                                // ])
                             } else {
                                 console.log("appppp: ", app)
                                 appointmentService.bookAppointmentBySource(app)
                                     .then((response) => {
                                         setLoader(false)
                                         console.log("appointmentService response: ", response)
-                                        // setLoader(false)
-                                        Alert.alert('Success', 'Appointment has been booked successfully', [
-                                            {
-                                                onPress: () => router.back(),
-                                                text: 'OK',
-                                                style: 'default'
-                                            },
-                                        ],
-                                        )
+                                        setBookingSuccess(true)
                                     })
                                     .catch((error) => {
                                         // setLoader(false)
                                         setLoader(false)
                                         console.error("appointmentService error", error.response?.data.errors[0].msg)
-                                        Alert.alert("Appointment booking failed", error.response?.data.errors[0].msg,
-                                            [
-                                                {
-                                                    onPress: () => router.back(),
-                                                    text: 'OK',
-                                                    style: 'default'
-                                                },
-                                            ]
-
-                                        )
+                                        setAppointmentServiceErrorText(error.response?.data.errors[0].msg)
+                                        setAppointmentServiceError(true)
                                     })
-                                // appointmentService.save(app)
-                                //     .then((response: any) => {
-                                //         console.log("appointmentService.save: ", response)
-                                //         Alert.alert('Appointment booked', 'Appointment has booked successfully!')
-                                //     })
-                                //     .catch((error: any) => {
-                                //         console.log("appointmentService.save error: ", error)
-                                //         Alert.alert('Appointment booking failed', 'Failed to book appointment!')
-                                //     })
                             }
                         })
                         .catch((error: any) => {
                             setLoader(false)
                             console.error("getAppointmentsBySlotId error: ", error.response)
-                            // Alert.alert('Appointment booking failed', 'Failed to book appointment!')
-                            Alert.alert('Appointment booking failed', 'Failed to book appointment!', [
-                                {
-                                    onPress: () => router.back(),
-                                    text: 'OK',
-                                    style: 'default'
-                                },
-                            ])
+                            setAppointmentFailed(true)
                         })
                 })
                 .catch((error) => {
                     setLoader(false)
-                    // Alert.alert("Appointment booking failed", "There might be an existing appointment in the selected slot interval or with the same doctor!")
-                    Alert.alert('Appointment booking failed', 'Failed to book appointment!', [
-                        {
-                            onPress: () => router.back(),
-                            text: 'OK',
-                            style: 'default'
-                        },
-                    ])
-                    console.log("slotService error: ", error)
+                    setAppointmentFailed(true)
                 })
         }
 
@@ -391,26 +269,10 @@ const DoctorSelect = () => {
     function selectDoctor(item: any) {
         setSelectedDoctor(item)
         if (!loggedIn) {
-            Alert.alert('Patient not found', 'You need to Sign in to book an appointment', [
-                { text: 'BACK', style: 'default' }, { text: 'SIGN IN', onPress: () => router.push('/SignIn'), style: 'default' },],)
+            setPatientNotFoundModal(true)
         } else {
             setAppointmentToConfirm(item)
             setConfirmAppointmentModal(true)
-            // Alert.alert(
-            //     `${item.name},  ${branch}, ${city},`,
-            //     // 'Doctor ' + item.name,
-            //     'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot,
-            //     [
-            //         { text: 'Cancel', style: 'default' },
-            //         {
-            //             text: 'Confirm',
-            //             onPress: () => {
-            //                 loggedIn ? bookAppointment(item) : router.push("/SignIn");
-            //             },
-            //             style: 'default'
-            //         },
-            //     ],
-            // )
         }
     }
 
@@ -703,28 +565,6 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={confirmAppointmentModal} onRequestClose={() => setConfirmAppointmentModal(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                        {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-                    setMobileEmptyVisible(false)
-                    router.back()
-                    }}>
-                    <AntDesign name="closecircle" size={24} color="#3B2314" />
-                    </Pressable> */}
-                        {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
-                        {/* // Alert.alert(
-            //     `${item.name},  ${branch}, ${city},`,
-            //     // 'Doctor ' + item.name,
-            //     'Date: ' + moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot,
-            //     [
-            //         { text: 'Cancel', style: 'default' },
-            //         {
-            //             text: 'Confirm',
-            //             onPress: () => {
-            //                 loggedIn ? bookAppointment(item) : router.push("/SignIn");
-            //             },
-            //             style: 'default'
-            //         },
-            //     ],
-            // ) */}
                         <Text className="text-xl font-bold text-center mb-2 mt-1">{appointmentToConfirm?.name}, {branch}, {city}</Text>
                         <Text className="text-xl text-center mb-4">Date: {moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot}</Text>
                         <View className=" flex-row justify-between gap-5 items-center py-4">
@@ -745,42 +585,44 @@ const DoctorSelect = () => {
             </Modal>
             <Modal transparent={true} animationType="fade" visible={bookingSuccess} onRequestClose={() => setBookingSuccess(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                    {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-                    setPatientNotFoundModal(false)
-                    router.back()
-                    }}>
-                    <AntDesign name="closecircle" size={24} color="#3B2314" />
-                    </Pressable> */}
-                    {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
-                    <Text className="text-xl font-bold text-center mb-4 pt-3">Success - Appointment booked successfully</Text>
-                    <View className=" flex-row justify-between gap-5 items-center py-4">
-                    <Pressable onPress={() => {
-                        setBookingSuccess(false)
-                        router.back()
-                    }} >
-                        <Text> Back </Text>
-                    </Pressable>
-                    <Pressable onPress={() => {
-                        setBookingSuccess(false)
-                        router.back()
-                    }}>
-                        <Text> Ok </Text>
-                    </Pressable>
+                    <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <Text className="text-xl font-bold text-center mb-4 pt-3">Success - Appointment booked successfully</Text>
+                        <View className=" flex-row justify-between gap-5 items-center py-4">
+                            <Pressable onPress={() => {
+                                setBookingSuccess(false)
+                                router.back()
+                            }} >
+                                <Text> Back </Text>
+                            </Pressable>
+                            <Pressable onPress={() => {
+                                setBookingSuccess(false)
+                                router.back()
+                            }}>
+                                <Text> Ok </Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
+            </Modal>
+            <Modal transparent={true} animationType="fade" visible={appointmentFailed} onRequestClose={() => setAppointmentFailed(false)}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment booking failed</Text>
+                        <Text className="text-xl text-center mb-4">Failed to save appointment</Text>
+                        <View className=" flex-row justify-end gap-5 items-center py-4">
+                            <Pressable onPress={() => {
+                                setAppointmentFailed(false)
+                                router.back()
+                            }}>
+                                <Text> Ok </Text>
+                            </Pressable>
+                        </View>
+                    </View>
                 </View>
             </Modal>
             <Modal transparent={true} animationType="fade" visible={appointmentServiceError} onRequestClose={() => setAppointmentServiceError(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                        {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-                    setMobileEmptyVisible(false)
-                    router.back()
-                    }}>
-                    <AntDesign name="closecircle" size={24} color="#3B2314" />
-                    </Pressable> */}
-                        {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
                         <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment booking failed</Text>
                         <Text className="text-xl text-center mb-4">{appointmentServiceErrorText}</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
@@ -797,13 +639,6 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={appointmentExists} onRequestClose={() => setAppointmentExists(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                        {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-                    setMobileEmptyVisible(false)
-                    router.back()
-                    }}>
-                    <AntDesign name="closecircle" size={24} color="#3B2314" />
-                    </Pressable> */}
-                        {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
                         <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment already exists</Text>
                         <Text className="text-xl font-bold text-center mb-4">You already have an appointment in the selected slot interval!</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
@@ -817,6 +652,32 @@ const DoctorSelect = () => {
                     </View>
                 </View>
             </Modal>
+            <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
+                        <Text className="text-xl font-bold text-center mb-4">You need to Sign in to book an appointment</Text>
+                        <View className=" flex-row justify-between gap-5 items-center py-4">
+                            <Pressable onPress={() => {
+                                setPatientNotFoundModal(false)
+                            }} >
+                                <Text> Back </Text>
+                            </Pressable>
+                            <Pressable onPress={() => {
+                                setPatientNotFoundModal(false)
+                                router.push('/SignIn')
+                            }}>
+                                <Text> Sign in </Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+
+
+
+
             <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={() => {
                 setLoader(!modalVisible);
             }}>
@@ -824,100 +685,12 @@ const DoctorSelect = () => {
                     <ActivityIndicator size="large" color="white" />
                 </View>
             </Modal>
-            {/* <Modal
-                style={{ height: '100%' }}
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible);
-                }}>
-                <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                    <View style={styles.centeredView} className="w-full">
-                        <View style={styles.modalView} className="w-full">
-                            <Pressable className="absolute top-3 right-3" onPress={() => setModalVisible(!modalVisible)}>
-                                <AntDesign name="closecircle" size={24} color="#3B2314" />
-                            </Pressable>
-                            <SafeAreaView className="w-full">
-                                <ScrollView className="w-full">
-                                    <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SefNqxMPw23P5tFdlgwEe9cfcdnf7d-Law&s' }} style={{ width: 100, height: 100 }} />
-                                    <Text className="pt-3 text-2xl" style={styles.modalText}>{displayedDoctor.name}</Text>
-                                    <Separator />
-                                    <View className="w-full flex flex-col">
-                                    </View>
-                                </ScrollView>
-                            </SafeAreaView>
-                            <View className="pt-72 pl-2 flex flex-row absolute inset-y-0 left-0">
-                                <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                    <MaterialCommunityIcons
-                                        name="stethoscope"
-                                        size={30}
-                                        color={"#84cc16"}
-                                    />
-                                </View>
-                                <View className="flex">
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </Modal> */}
+
         </SafeAreaView >
     )
 }
-// const styles = StyleSheet.create({
-//     centeredView: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         marginTop: 22,
-//         height: '100%',
-//         width: '100%',
-//     },
-//     modalView: {
-//         margin: 20,
-//         backgroundColor: 'white',
-//         borderRadius: 20,
-//         padding: 35,
-//         height: '100%',
-//         width: '100%',
-//         alignItems: 'center',
-//         shadowColor: '#000',
-//         shadowOffset: {
-//             width: 0,
-//             height: 2,
-//         },
-//         shadowOpacity: 0.25,
-//         shadowRadius: 4,
-//         elevation: 5,
-//     },
-//     button: {
-//         borderRadius: 20,
-//         padding: 10,
-//         elevation: 2,
-//     },
-//     buttonOpen: {
-//         backgroundColor: '#F194FF',
-//     },
-//     buttonClose: {
-//         backgroundColor: '#2196F3',
-//     },
-//     textStyle: {
-//         color: 'white',
-//         fontWeight: 'bold',
-//         textAlign: 'center',
-//     },
-//     modalText: {
-//         marginBottom: 15,
-//         textAlign: 'center',
-//     },
-//     separator: {
-//         marginVertical: 8,
-//         borderBottomColor: '#3B2314',
-//         borderBottomWidth: StyleSheet.hairlineWidth,
-//     },
-// });
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

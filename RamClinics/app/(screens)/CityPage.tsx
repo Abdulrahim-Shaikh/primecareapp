@@ -26,9 +26,16 @@ const CityPage = () => {
     const [branchCounts, setBranchCounts] = useState(Object());
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const { branches, changeBranches} = useBranches();
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
 
     useFocusEffect(
         useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+            console.log("locale: ", locale)
             if (devices != null && devices != "") {
                 setDevicesList(JSON.parse(devices.toString()))
             }
@@ -130,9 +137,9 @@ const CityPage = () => {
                                         <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                             <Image source={cityImg} style={{ width: 50, height: 50 }} />
                                         </View>
-                                        <View className="px-4 flex justify-center">
+                                        <View className="px-4 w-3/4 flex justify-center">
                                             <Text className="font-semibold text-lg text-gray-800">
-                                                {item || item.city}
+                                                {i18n.t(item || item.city)}
                                             </Text>
                                             <Text className="text-gray-600 pt-1">
                                                 {branchCounts[item] || 0} {i18n.t("Branches")}

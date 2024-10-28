@@ -40,9 +40,11 @@ const Offers = () => {
     const [selectedPromotion, setSelectedPromotion] = useState<any>(null);
     const [confirmationMessage, setConfirmationMessage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    
+    const [signInRequiredModal, setSignInRequiredModal] = useState(false);
+
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
+    const [bookingError, setBookingError] = useState(false);
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -58,21 +60,6 @@ const Offers = () => {
 
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
-
-    // useEffect(() => {
-    //     const fetchBranch = async () => {
-    //         try {
-    //             const res = await branchService.findAll();
-    //             setBranches(res.data);
-    //             if (res.data.length > 0) {
-    //                 setSelectedBranch(res.data[0].name);
-    //             }
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     fetchBranch();
-    // }, []);
 
     useEffect(() => {
         const fetchPromotion = async () => {
@@ -90,18 +77,6 @@ const Offers = () => {
         fetchPromotion();
     }, []);
 
-    // useEffect(() => {
-    //     // if (selectedBranch) {
-    //     const filtered = promotions.filter((promotion: any) => {
-    //         return promotion.promotionBranches.some(
-    //             (branch: any) => branch.branchName === selectedBranch);
-    //     });
-    //     setFilteredPromotions(filtered);
-    //     // } else {
-    //     //     setFilteredPromotions(promotions);
-    //     // }
-    // }, [selectedBranch, promotions]);
-
     const handleBookPress = (item: any) => {
         setSelectedPromotion(item);
         setIsModalVisible(true);
@@ -114,7 +89,7 @@ const Offers = () => {
 
     const handleConfirmBooking = () => {
         if (!userId) {
-            Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
+            setSignInRequiredModal(true);
             return;
         }
 
@@ -230,6 +205,35 @@ const Offers = () => {
                                         </View>
                                     </>
                                 )}
+                            </View>
+                        </View>
+                    </Modal>
+                    <Modal transparent={true} animationType="fade" visible={bookingError} onRequestClose={() => setBookingError(false)}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <Text className="text-xl font-bold text-center mb-2 mt-7">An error occurred during the booking process</Text>
+                                <View className=" flex-row justify-end gap-5 items-center py-4">
+                                    <Pressable onPress={() => {
+                                        setBookingError(false)
+                                    }} >
+                                        <Text> Ok </Text>
+                                    </Pressable>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                    <Modal transparent={true} animationType="fade" visible={signInRequiredModal} onRequestClose={() => setSignInRequiredModal(false)}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('SignInRequired')}</Text>
+                                <Text className="text-xl font-bold text-center mb-4">{i18n.t('SignInMessage')}</Text>
+                                <View className=" flex-row justify-end gap-5 items-center py-4">
+                                    <Pressable onPress={() => {
+                                        setSignInRequiredModal(false)
+                                    }} >
+                                        <Text> Ok </Text>
+                                    </Pressable>
+                                </View>
                             </View>
                         </View>
                     </Modal>

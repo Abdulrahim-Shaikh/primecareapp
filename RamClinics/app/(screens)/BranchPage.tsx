@@ -158,27 +158,27 @@ const BranchPage = () => {
                                     <View className="rounded-smg bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <Image source={logoRamClinic} style={{ width: 50, height: 50 }} />
                                     </View>
-                                    <View className="px-4 flex justify-center">
+                                    <View className="px-4 w-3/4 flex justify-center">
                                         {
                                             typeof item === 'string'
                                                 ?
                                                 <Text className="font-semibold text-lg text-gray-800">
-                                                    {item}
+                                                    {i18n.t(item)}
                                                 </Text>
                                                 :
                                                 <Text className="font-semibold text-lg text-gray-800">
-                                                    {item?.name}
+                                                    {i18n.t(item?.name)}
                                                 </Text>
                                         }
                                         {
                                             +callCenterFlow
                                                 ?
                                                 <Text className="text-gray-600 pt-1">
-                                                    {city}
+                                                    {i18n.t(city)}
                                                 </Text>
                                                 :
                                                 <Text className="text-gray-600 pt-1">
-                                                    {item?.city}
+                                                    {i18n.t(item?.city)}
                                                 </Text>
                                         }
                                     </View>

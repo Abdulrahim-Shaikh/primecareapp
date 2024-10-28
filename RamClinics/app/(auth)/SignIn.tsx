@@ -55,7 +55,6 @@ const SignIn = () => {
 
   const sendOtp = () => {
     if (!mobileNo) {
-      // Alert.alert('Mobile No Should not be empty. ' + mobileNo);
       setMobileEmptyVisible(true);
     } else {
       getData();
@@ -81,34 +80,10 @@ const SignIn = () => {
           sendOtp();
         } else {
           setPatientNotFoundModal(true);
-          // Alert.alert('Patient Not Found', 'You need to Sign up first', [
-          //   {
-          //     text: 'BACK',
-          //     style: 'default'
-          //   },
-          //   {
-          //     text: 'SIGN UP',
-          //     onPress: () => router.push('/SignUp'),
-          //     style: 'default'
-          //   },
-          // ],
-          // )
         }
       })
         .catch((error) => {
           setPatientNotFoundModal(true);
-          // Alert.alert('Patient Not Found', 'You need to Sign Up first', [
-          //   {
-          //     text: 'BACK',
-          //     style: 'default'
-          //   },
-          //   {
-          //     text: 'Create Account',
-          //     onPress: () => router.push('/SignUp'),
-          //     style: 'default'
-          //   },
-          // ],
-          // )
         })
 
     }
@@ -211,13 +186,6 @@ const SignIn = () => {
       <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <View className="bg-white p-6 rounded-lg w-4/5 relative">
-            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setPatientNotFoundModal(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
             <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
             <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
             <View className=" flex-row justify-between gap-5 items-center py-4">
