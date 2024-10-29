@@ -124,7 +124,8 @@ const Offers = () => {
             })
             .catch((error) => {
                 console.error(error);
-                Alert.alert('An error occurred during the booking process');
+                setBookingError(true);
+                // Alert.alert('An error occurred during the booking process');
             })
     };
 
@@ -137,16 +138,6 @@ const Offers = () => {
                         <HeaderWithBackButton isPushBack={true} title={i18n.t("Offers")} />
                         <MaterialCommunityIcons name="gift-outline" size={24} color={"rgb(59, 35, 20)"} />
                     </View>
-                    {/* <View className="border border-pc-primary rounded-lg my-4">
-                        <Picker
-                            selectedValue={selectedBranch} onValueChange={(itemValue) => { setSelectedBranch(itemValue); }} className="h-12">
-                            <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
-                                <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
-                            ))}
-                        </Picker>
-                    </View> */}
-
                     {isLoading ? (
                         <View className="flex-1 items-center justify-center">
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
@@ -211,6 +202,13 @@ const Offers = () => {
                     <Modal transparent={true} animationType="fade" visible={bookingError} onRequestClose={() => setBookingError(false)}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                             <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <View className="flex flex-row justify-center">
+                                    <MaterialCommunityIcons
+                                        name="close-circle-outline"
+                                        size={60}
+                                        color={"#EF4444"}
+                                    />
+                                </View>
                                 <Text className="text-xl font-bold text-center mb-2 mt-7">An error occurred during the booking process</Text>
                                 <View className=" flex-row justify-end gap-5 items-center py-4">
                                     <Pressable onPress={() => {
@@ -225,6 +223,13 @@ const Offers = () => {
                     <Modal transparent={true} animationType="fade" visible={signInRequiredModal} onRequestClose={() => setSignInRequiredModal(false)}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                             <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <View className="flex flex-row justify-center">
+                                    <MaterialCommunityIcons
+                                        name="information-outline"
+                                        size={60}
+                                        color={"#737373"}
+                                    />
+                                </View>
                                 <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('SignInRequired')}</Text>
                                 <Text className="text-xl font-bold text-center mb-4">{i18n.t('SignInMessage')}</Text>
                                 <View className=" flex-row justify-end gap-5 items-center py-4">

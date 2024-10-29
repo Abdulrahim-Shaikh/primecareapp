@@ -314,12 +314,6 @@ const MySickLeaves = () => {
             <Modal visible={isModalVisible} transparent={false} animationType="slide" onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
                     <PdfViewer url={pdfSource.uri} invoiceId={selectedSickLeaves?.id} />
-                    {/* <SickLeavesReport
-                        isVisible={isModalVisible}
-                        pdfUri={pdfUri}
-                        patientId={selectedSickLeaves?.id}
-                        onClose={closeModal}
-                    /> */}
                     <Pressable onPress={closeModal} style={styles.closeButton}>
                         <Text style={styles.closeButtonText}>{i18n.t("Close")}</Text>
                     </Pressable>

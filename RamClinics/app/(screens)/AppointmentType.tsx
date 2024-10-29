@@ -271,6 +271,13 @@ const AppointmentType = () => {
                 }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                            <View className="flex flex-row justify-center">
+                                <MaterialCommunityIcons
+                                    name="information-outline"
+                                    size={60}
+                                    color={"#737373"}
+                                />
+                            </View>
                             <Text className="text-xl font-bold text-center mb-4 mt-1">Doctor schedule not found</Text>
                             <View className=" flex-row justify-end gap-5 items-center py-4">
                                 <Pressable onPress={() => {
@@ -286,6 +293,13 @@ const AppointmentType = () => {
                 <Modal transparent={true} animationType="fade" visible={signInModal} onRequestClose={() => setSignInModal(false)}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                            <View className="flex flex-row justify-center">
+                                <MaterialCommunityIcons
+                                    name="close-circle-outline"
+                                    size={60}
+                                    color={"#EF4444"}
+                                />
+                            </View>
                             <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
                             <Text className="text-xl font-bold text-center mb-4">You need to Sign in first</Text>
                             <View className=" flex-row justify-between gap-5 items-center py-4">
@@ -307,6 +321,13 @@ const AppointmentType = () => {
                 <Modal transparent={true} animationType="fade" visible={policyNotFound} onRequestClose={() => setPolicyNotFound(false)}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                            <View className="flex flex-row justify-center">
+                                <MaterialCommunityIcons
+                                    name="close-circle-outline"
+                                    size={60}
+                                    color={"#EF4444"}
+                                />
+                            </View>
                             <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Policy data not found</Text>
                             <View className=" flex-row justify-end gap-5 items-center py-4">
                                 <Pressable onPress={() => {

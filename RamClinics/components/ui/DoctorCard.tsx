@@ -1,6 +1,6 @@
 import { ActivityIndicator, Alert, Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { AntDesign, Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import emptyImg from "../../assets/images/EmptyDoctorImg.jpg";
@@ -77,6 +77,10 @@ const DoctorCard = ({
   const [patientData, setPatientData] = useState(useUserSate.getState().user)
   const [patientPolicyData, setPatientPolicyData] = useState({})
   const [modalVisible, setModalVisible] = useState(false);
+  const [signInModal, setSignInModal] = useState(false);
+  const [doctorScheduleNotFoundModal, setDoctorScheduleNotFoundModal] = useState(false);
+  const [policyNotFound, setPolicyNotFound] = useState(false);
+  const [appointmentTypesNotFound, setAppointmentTypesNotFound] = useState(false);
 
 
   let dateAux = new Date();
@@ -126,17 +130,18 @@ const DoctorCard = ({
   const getPatientPolicyData = async () => {
     setLoader(true)
     if (!useUserSate.getState().loggedIn) {
-      Alert.alert('Patient Not Found', 'You need to Sign in first', [
-        {
-          text: 'BACK',
-          style: 'default'
-        },
-        {
-          text: 'SIGN IN',
-          onPress: () => router.push('/SignIn'),
-          style: 'default'
-        },
-      ])
+      setSignInModal(true);
+      // Alert.alert('Patient Not Found', 'You need to Sign in first', [
+      //   {
+      //     text: 'BACK',
+      //     style: 'default'
+      //   },
+      //   {
+      //     text: 'SIGN IN',
+      //     onPress: () => router.push('/SignIn'),
+      //     style: 'default'
+      //   },
+      // ])
     } else {
       patientPolicyService.byPatientId(user.id)
         .then((response: any) => {
@@ -192,16 +197,16 @@ const DoctorCard = ({
                   }
                 })
               })
-              .catch((error) => {
-                Alert.alert('Note', 'Appointment types not found', [
-                    {
-                        text: 'OK',
-                        // onPress: () => router.back(),
-                        style: 'default'
-                    },
-                ],
-                )
-              })
+                .catch((error) => {
+                  setAppointmentTypesNotFound(true)
+                  // Alert.alert('Note', 'Appointment types not found', [
+                  //   {
+                  //     text: 'OK',
+                  //     style: 'default'
+                  //   },
+                  // ],
+                  // )
+                })
             }
           } else {
             console.log("datePickerOpen")
@@ -218,30 +223,29 @@ const DoctorCard = ({
   const bookAppointment = () => {
 
     if (patientData == null || Object.keys(patientData).length <= 0) {
-      Alert.alert('Patient Not Found', 'You need to Sign in first', [
-        {
-          text: 'BACK',
-          style: 'default'
-        },
-        {
-          text: 'SIGN IN',
-          onPress: () => router.push('/SignIn'),
-          style: 'default'
-        },
-      ])
+      setSignInModal(true)
+      // Alert.alert('Patient Not Found', 'You need to Sign in first', [
+      //   {
+      //     text: 'BACK',
+      //     style: 'default'
+      //   },
+      //   {
+      //     text: 'SIGN IN',
+      //     onPress: () => router.push('/SignIn'),
+      //     style: 'default'
+      //   },
+      // ])
     } else {
 
       if (patientPolicyData == null || Object.keys(patientPolicyData).length <= 0) {
-        Alert.alert('Note', 'Patient Policy data not found', [
-          {
-            text: 'OK',
-            // onPress: () => router.push({
-            //     pathname: "/BookAppointment",
-            // }),
-            style: 'default'
-          },
-        ],
-        )
+        setPolicyNotFound(true)
+        // Alert.alert('Note', 'Patient Policy data not found', [
+        //   {
+        //     text: 'OK',
+        //     style: 'default'
+        //   },
+        // ],
+        // )
       } else {
         doctorService.find(id)
           .then((response) => {
@@ -262,14 +266,14 @@ const DoctorCard = ({
                   // setAppointmentEntry(true)
                   setDoctorScheduleData(response.data)
                   if (response.data == null || response.data.length <= 0 || response.data[0] == null || response.data[0].length <= 0) {
-                    Alert.alert('Note', 'Doctor Schedule not found', [
-                      {
-                        text: 'BACK',
-                        // onPress: () => router.back(),
-                        style: 'default'
-                      },
-                    ],
-                    )
+                    setDoctorScheduleNotFoundModal(true)
+                    // Alert.alert('Note', 'Doctor Schedule not found', [
+                    //   {
+                    //     text: 'BACK',
+                    //     style: 'default'
+                    //   },
+                    // ],
+                    // )
                   } else {
                     router.push({
                       pathname: "/ScheduleAppointment/",
@@ -288,13 +292,14 @@ const DoctorCard = ({
                   }
                 })
                 .catch((err) => {
-                  Alert.alert('Note', 'Doctor Schedule not found', [
-                    {
-                      text: 'OK',
-                      style: 'default'
-                    },
-                  ],
-                  )
+                  setDoctorScheduleNotFoundModal(true)
+                  // Alert.alert('Note', 'Doctor Schedule not found', [
+                  //   {
+                  //     text: 'OK',
+                  //     style: 'default'
+                  //   },
+                  // ],
+                  // )
                   console.log(err);
                 })
             }
@@ -372,13 +377,111 @@ const DoctorCard = ({
         </Pressable>
       </View>
 
-        <Modal visible={loader} transparent={true} animationType="fade"onRequestClose={() => {
-            setLoader(!loader);
-          }}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-              <ActivityIndicator size="large" color="white" />
+      <Modal visible={loader} transparent={true} animationType="fade" onRequestClose={() => {
+        setLoader(!loader);
+      }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <ActivityIndicator size="large" color="white" />
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={signInModal} onRequestClose={() => setSignInModal(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="close-circle-outline"
+                size={60}
+                color={"#EF4444"}
+              />
+            </View>
+            <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
+            <Text className="text-xl font-bold text-center mb-4">You need to Sign in first</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setSignInModal(false)
+              }} >
+                <Text> Back </Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                setSignInModal(false)
+                router.push('/SignIn')
+              }}>
+                <Text> Sign In </Text>
+              </Pressable>
+            </View>
           </View>
-        </Modal>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={policyNotFound} onRequestClose={() => setPolicyNotFound(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="close-circle-outline"
+                size={60}
+                color={"#EF4444"}
+              />
+            </View>
+            <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Policy data not found</Text>
+            <View className=" flex-row justify-end gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setPolicyNotFound(false)
+              }} >
+                <Text> Ok </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={doctorScheduleNotFoundModal} onRequestClose={() => {
+        setDoctorScheduleNotFoundModal(false)
+      }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="information-outline"
+                size={60}
+                color={"#737373"}
+              />
+            </View>
+            <Text className="text-xl font-bold text-center mb-4 mt-1">Doctor schedule not found</Text>
+            <View className=" flex-row justify-end gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setDoctorScheduleNotFoundModal(false)
+                router.back()
+              }} >
+                <Text> Back </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={appointmentTypesNotFound} onRequestClose={() => {
+        setAppointmentTypesNotFound(false)
+        router.back()
+      }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="information-outline"
+                size={60}
+                color={"#737373"}
+              />
+            </View>
+            <Text className="text-xl font-bold text-center mb-4 mt-1">Appointment Types not found</Text>
+            <View className=" flex-row justify-end gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setAppointmentTypesNotFound(false)
+                router.back()
+              }} >
+                <Text> Back </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </TouchableOpacity >
   );
 };

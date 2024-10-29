@@ -1,4 +1,4 @@
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View, Text, TextInput } from "react-native";
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View, Text, TextInput, Modal, Pressable } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
@@ -15,6 +15,7 @@ import { useFocusEffect } from "expo-router";
 import { UserContext } from "../../domain/contexts/UserContext";
 import loginService from "../../domain/services/LoginService";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -45,6 +46,8 @@ const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dob, setDob] = useState(new Date());
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+
   useEffect(() => {
     patientService.find(user.id).then((res) => {
       // console.log("patientid", res.data)
@@ -62,7 +65,8 @@ const EditProfile = () => {
   const getPatient = () => {
     loginService.byMobileNo(user.mobile)
       .then((res) => {
-        Alert.alert("User Updated Successfully");
+        setSuccessModalVisible(true);
+        // Alert.alert("User Updated Successfully");
         setUser(res.data);
         setUserInfo(res.data);
         setUserData(res.data);
@@ -155,6 +159,27 @@ const EditProfile = () => {
             {/* <LinkButton link="/ProfileTab" text="Save" /> */}
           </View>
         </View>
+      <Modal transparent={true} animationType="fade" visible={successModalVisible} onRequestClose={() => setSuccessModalVisible(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="check-circle-outline"
+                size={60}
+                color={"#84CC16"}
+              />
+            </View>
+            <Text className="text-xl font-bold text-center mb-4 pt-3">Success - User Updated Successfully</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setSuccessModalVisible(false)
+              }}>
+                <Text> Ok </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
       </ScrollView>
     </SafeAreaView>
   );

@@ -315,12 +315,6 @@ const MyPrescription = () => {
             <Modal visible={isModalVisible} transparent={false} animationType="slide" onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
                     <PdfViewer url={pdfSource.uri} invoiceId={selectedPrescription?.orderId} />
-                    {/* <PrescriptionReport
-                        isVisible={isModalVisible}
-                        pdfUri={pdfUri}
-                        orderId={selectedPrescription?.orderId}
-                        onClose={closeModal}
-                    /> */}
                     <Pressable onPress={closeModal} style={styles.closeButton}>
                         <Text style={styles.closeButtonText}>{i18n.t("Close")}</Text>
                     </Pressable>
