@@ -46,6 +46,7 @@ const BranchDoctor = () => {
     const [branchIds, setBranchIds] = useState<any>({});
 
     const generalDentistry = 'General Dentistry';
+    const generalMedicine = "General Medicine";
     const generalDentistrySpecialityCode = 'GP';
 
     const changeLocale = (locale: any) => {
@@ -123,7 +124,7 @@ const BranchDoctor = () => {
                     resourceService.getResourceBySpeciality(branchId, department, speciality)
                         .then((response) => {
                             console.log("response: ", response.data)
-                            if (response.data.length === 0) {
+                            if (response.data.length === 0 && speciality != generalDentistry) {
                                 resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
                                     .then((response) => {
                                         setDoctorsData(response.data)

@@ -15,11 +15,6 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { router } from "expo-router";
-import img1 from "../../assets/images/onbording-screen-slider-img1.png";
-import img2 from "../../assets/images/onbording-screen-slider-img2.png";
-import img3 from "../../assets/images/onbording-screen-slider-img3.png";
-import img4 from "../../assets/images/onbording-screen-slider-img4.png";
-import img5 from "../../assets/images/onbording-screen-slider-img5.png";
 import OnBoardingSliderItem, { ItemProps } from "../../components/ui/OnBoardingSliderItem";
 import Pagination from "../../components/ui/Pagination";
 import SliderButton from "../../components/ui/SliderButton";
@@ -52,29 +47,29 @@ const OnBoardingSlider = () => {
         <View className="flex-row justify-between items-start w-full px-6">
           <View className="gap-4">
             <Image
-              source={img1}
+              source={require("../../assets/images/onbording-screen-slider-img1.png")}
               style={{ maxHeight: 180, maxWidth: 160, borderRadius: 20 }}
             />
             <Image
-              source={img2}
+              source={require("../../assets/images/onbording-screen-slider-img2.png")}
               style={{ maxHeight: 180, maxWidth: 160, borderRadius: 20 }}
             />
             <Image
-              source={img3}
+              source={require("../../assets/images/onbording-screen-slider-img3.png")}
               style={{ maxHeight: 180, maxWidth: 160, borderRadius: 20 }}
             />
           </View>
           <View className="gap-4">
             <Image
-              source={img4}
+              source={require("../../assets/images/onbording-screen-slider-img4.png")}
               style={{ maxHeight: 180, maxWidth: 160, borderRadius: 20 }}
             />
             <Image
-              source={img5}
+              source={require("../../assets/images/onbording-screen-slider-img5.png")}
               style={{ maxHeight: 180, maxWidth: 160, borderRadius: 20 }}
             />
             <Image
-              source={img1}
+              source={require("../../assets/images/onbording-screen-slider-img1.png")}
               style={{ maxHeight: 180, maxWidth: 160, borderRadius: 20 }}
             />
           </View>

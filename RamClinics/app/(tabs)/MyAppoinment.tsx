@@ -75,6 +75,67 @@ const Appoinment = () => {
     // { id: 3, name: "6 Months", months: 6 },
   ]
 
+  useFocusEffect(
+    useCallback(() => {
+      setLoader(true)
+      if (useUserSate.getState().loggedIn === false) {
+        setPatientNotFoundModal(true)
+      } else {
+        const patientId = useUserSate.getState().userId;
+        let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
+        setBranchId(branch.id)
+        appointmentService.getAppointments(patientId, branch.id)
+          .then((response) => {
+            setAllAppointments(response.data);
+            setLoader(true)
+            const currentDate = new Date();
+            const currentTimeInstance = moment()
+            setToDate(currentDate);
+            const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
+            if (isEnabled) {
+              setFromDate(firstDayOfMonth);
+              let slicedAppointments: any = []
+              for (let appt of response.data) {
+                if (Object.keys(appt).includes("appointmentDate")) {
+                  let apptDate = new Date(...appt.appointmentDate)
+                  const slotTimeInstance = moment(apptDate)
+                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                    slicedAppointments.push(appt)
+                  }
+                }
+              }
+              // console.log("slicedAppointments: ", slicedAppointments)
+              setAppointments(slicedAppointments)
+              changeTab(activeTab)
+              setLoader(false)
+            } else {
+              setFromDate(firstDayOfYear);
+              let slicedAppointments: any = []
+              response.data.forEach((appt: any) => {
+                if (Object.keys(appt).includes("appointmentDate")) {
+                  let apptDate = new Date(...appt.appointmentDate)
+                  console.log("apptDate: ", apptDate )
+                  const slotTimeInstance = moment(apptDate)
+                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                    slicedAppointments.push(appt)
+                  }
+                }
+
+              })
+              setAppointments(slicedAppointments)
+              changeTab(activeTab)
+              setLoader(false)
+            }
+          })
+          .catch((error: any) => {
+            console.log("errorer: ", error);
+            setLoader(false)
+          })
+      }
+
+    }, [])
+  )
 
   const toggleSwitch = (allAppointmentsData: any, filter: any) => {
     setLoader(true)
@@ -96,7 +157,6 @@ const Appoinment = () => {
           }
         }
       }
-      // console.log("slicedAppointments: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
     } else if (filter.name === "All") {
@@ -112,9 +172,6 @@ const Appoinment = () => {
         }
 
       })
-      // for (let appt of allAppointments) {
-      // }
-      // console.log("slicedAppointments2: ", slicedAppointments)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
     }
@@ -136,17 +193,12 @@ const Appoinment = () => {
   };
 
   const changeTab = (tab: string) => {
-    // console.log("here")
-    // setAppointments(appointments.filter((item) => item.hisStatus === tab))
     setActiveTab(tab)
   }
 
 
   function bookAgain(item: any) {
     setModalVisible(true)
-    console.log("item: ", item)
-    console.log("item.department: ", item.department)
-    console.log("item.speciality: ", item.speciality)
     let date = new Date()
     if (item.branchId != null && item.department != null && date != null && item.speciality != null) {
       let dateString = moment(date).format("YYYY-MM-DD");
@@ -157,7 +209,6 @@ const Appoinment = () => {
         resourceIds: [item.practitionerId],
         wday: moment(date).format("dddd").substring(0, 3)
       }]
-      console.log("user: ", user)
       if (useUserSate.getState().loggedIn == false) {
         setPatientNotFoundModal(true)
         // Alert.alert('Patient Not Found', 'You need to Sign in first', [
@@ -180,17 +231,10 @@ const Appoinment = () => {
                 let startTime = new Date(item.startTime)
                 let endTime = new Date(item.endTime)
                 const interval = moment(endTime).diff(moment(startTime), 'minutes')
-                console.log("item: ", item)
                 specialityService.getByDept(item.department)
                   .then((specialityListResponse: any) => {
                     for (let s of specialityListResponse.data) {
-                      console.log("\n\ns: ", s.name)
                       if (s.name == item.speciality) {
-                        console.log("s: ", s)
-                        console.log("item: ", item)
-                        console.log("item.branchId: ", item.branchId)
-                        console.log("response.data: ", response.data)
-                        console.log("response.data.practitionerId: ", response.data.practitionerId)
                         setModalVisible(false)
                         router.push({
                           pathname: "/SlotsConfirmationPage",
@@ -250,99 +294,6 @@ const Appoinment = () => {
     setModalVisible(false)
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      setLoader(true)
-      console.log("useUserSate.getState().loggedIn: ", useUserSate.getState().user)
-      if (useUserSate.getState().loggedIn === false) {
-        setPatientNotFoundModal(true)
-        // Alert.alert('Note', 'You must Sign In to view your appointments', [
-        //   {
-        //     text: 'BACK',
-        //     onPress: () => router.back(),
-        //     style: 'default'
-        //   },
-        //   {
-        //     text: 'SIGN IN',
-        //     onPress: () => router.push({
-        //       pathname: "/SignIn",
-        //     }),
-        //     style: 'default'
-        //   },
-        // ])
-      } else {
-        console.log("here")
-        const patientId = useUserSate.getState().userId;
-        let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
-        console.log("branch: ", branch)
-        console.log("patientId: ", patientId)
-        console.log("branch.id: ", branch.id)
-        setBranchId(branch.id)
-        appointmentService.getAppointments(patientId, branch.id)
-          .then((response) => {
-            console.log("completed success")
-            setAllAppointments(response.data);
-            setLoader(true)
-            // setIsEnabled(previousState => !previousState);
-            const currentDate = new Date();
-            const currentTimeInstance = moment()
-            setToDate(currentDate);
-            const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-            const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
-            if (isEnabled) {
-              setFromDate(firstDayOfMonth);
-              let slicedAppointments: any = []
-              for (let appt of response.data) {
-                if (Object.keys(appt).includes("appointmentDate")) {
-                  let apptDate = new Date(...appt.appointmentDate)
-                  const slotTimeInstance = moment(apptDate)
-                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
-                    slicedAppointments.push(appt)
-                  }
-                }
-              }
-              // console.log("slicedAppointments: ", slicedAppointments)
-              setAppointments(slicedAppointments)
-              changeTab(activeTab)
-              setLoader(false)
-            } else {
-              setFromDate(firstDayOfYear);
-              let slicedAppointments: any = []
-              response.data.forEach((appt: any) => {
-                if (Object.keys(appt).includes("appointmentDate")) {
-                  let apptDate = new Date(...appt.appointmentDate)
-                  const slotTimeInstance = moment(apptDate)
-                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
-                    slicedAppointments.push(appt)
-                  }
-                }
-
-              })
-              // for (let appt of allAppointments) {
-              // }
-              // console.log("slicedAppointments2: ", slicedAppointments)
-              setAppointments(slicedAppointments)
-              changeTab(activeTab)
-              setLoader(false)
-            }
-            // changeTab("Booked")
-          })
-          .catch((error: any) => {
-            console.log("errorer: ", error);
-            setLoader(false)
-          })
-        // appointmentService.getAppointments(patientId, branchId)
-        //   .then((response) => {
-        //     setAllAppointments(response.data);
-        //     changeTab("Booked")
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   })
-      }
-
-    }, [])
-  )
 
   return (
     <SafeAreaView>
@@ -361,7 +312,6 @@ const Appoinment = () => {
               defaultValue={filterOptions[0]}
               onSelect={(selectedItem, index) => {
                 toggleSwitch(allAppointments, selectedItem)
-                console.log(selectedItem, index);
               }}
               renderButton={(selectedItem, isOpened) => {
                 return (
@@ -570,6 +520,13 @@ const Appoinment = () => {
               <AntDesign name="closecircle" size={24} color="#78450f" />
             </Pressable> */}
             {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="close-circle-outline"
+                size={60}
+                color={"#EF4444"}
+              />
+            </View>
             <Text className="text-xl font-bold text-center mb-4 pt-3">Doctor schedule not found</Text>
             <View className=" flex-row justify-end gap-5 items-center py-4">
               <Pressable onPress={() => {
@@ -597,6 +554,13 @@ const Appoinment = () => {
               <AntDesign name="closecircle" size={24} color="#3B2314" />
             </Pressable> */}
             {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="information-outline"
+                size={60}
+                color={"#737373"}
+              />
+            </View>
             <Text className="text-xl font-bold text-center mb-4 pt-3">You must sign in to view all your appointments</Text>
             <View className=" flex-row justify-between gap-5 items-center py-4">
               <Pressable onPress={() => {

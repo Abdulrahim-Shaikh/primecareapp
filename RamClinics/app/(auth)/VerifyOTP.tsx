@@ -80,7 +80,6 @@ const VerifyOTP = () => {
         let signupForm = JSON.parse(Array.isArray(signUpFormData) ? signUpFormData[0] : signUpFormData);
         patientService.save(signupForm).then((res) => {
           setSuccessModal(true);
-          // Alert.alert("Success", "Registered Successfully!");
           loginService.byMobileNo(mobileNo)
             .then(res => {
               let user = res.data;
@@ -92,37 +91,15 @@ const VerifyOTP = () => {
               router.navigate('/(tabs)')
             });
         }).catch((error) => {
-          // tempErrors.saveError = "Failed to save Patient";
-          // setErrors(tempErrors)
-          // setErrorsExist(true);
           setPatientNotFoundModal(true);
-          // Alert.alert('Patient Not Found', 'Failed to save patient', [
-          //   {
-          //     text: 'BACK',
-          //     onPress: () => router.back(),
-          //     style: 'default'
-          //   },
-          //   // {
-          //   //     text: 'SIGN IN',
-          //   //     onPress: () => router.push('/SignIn'),
-          //   //     style: 'default'
-          //   // },
-          // ],
-          // )
-
-          // console.error("Failed to save Patient:", error);
-          // Alert.alert("Error", "Please try again later.");
         });
       } else {
         loginService.byMobileNo(mobileNo)
           .then(res => {
-            // console.log("loginService.byMobileNo(mobileNo) res", res);
             let user = res.data;
             setUserInfo(user);
             setUserData(user);
           })
-          //   console.log("loginService.byMobileNo(mobileNo) err", err);
-          // })
           .then(data => {
             setLoader(false);
             router.navigate('/(tabs)')
@@ -133,8 +110,8 @@ const VerifyOTP = () => {
       if (signUpFormData != null && signUpFormData != '') {
         let signupForm = JSON.parse(Array.isArray(signUpFormData) ? signUpFormData[0] : signUpFormData);
         if (signupForm != null) {
+          setLoader(false);
           setInvalidOtpModal(true);
-          // Alert.alert("Invalid OTP!", "Mobile number not verified.")
         }
       }
     }
@@ -186,13 +163,6 @@ const VerifyOTP = () => {
         <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <View className="bg-white p-6 rounded-lg w-4/5 relative">
-              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setPatientNotFoundModal(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
               <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
               <Text className="text-xl font-bold text-center mb-4">Failed to save patient</Text>
               <View className=" flex-row justify-end gap-5 items-center py-4">

@@ -125,7 +125,7 @@ const LanguageSettings = () => {
           <View className="w-full pt-8">
             <NASButton
               onPress={() => onSave()}
-              title="Save" 
+              title={i18n.t("Save")} 
             />
           </View>
         </View>

@@ -2,7 +2,6 @@ import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import addCardImg from "../../assets/images/add-card.png";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import FormField from "../../components/FormField";
 import LinkButton from "../../components/LinkButton";
@@ -20,7 +19,7 @@ const AddCardPage = () => {
             <HeaderWithBackButton title="Add Card" isPushBack={true} />
             <View className="pt-6 justify-center items-center ">
               <Image
-                source={addCardImg}
+                source={require("../../assets/images/add-card.png")}
                 style={{ maxWidth: "100%", objectFit: "contain" }}
               />
             </View>
