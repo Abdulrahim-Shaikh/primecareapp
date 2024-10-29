@@ -1,7 +1,5 @@
 import {
-  Alert,
   FlatList,
-  Image,
   ImageBackground,
   Modal,
   Pressable,
@@ -12,19 +10,17 @@ import {
   useWindowDimensions,
 } from "react-native";
 import React, { useCallback, useState } from "react";
-import arrow from "../../assets/images/arrow.png";
-import sliderImgBg from "../../assets/images/doctor_img_bg.png";
-import background from "../../assets/images/background.jpg"
+// import background from "../../assets/images/background.jpg"
 import promotionOrderService from "../../domain/services/PromotionOrderService";
 import { useUserSate } from "../../domain/state/UserState";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
 
-const i18n =  new I18n(translations);
+const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
 i18n.enableFallback = true;
 
@@ -41,18 +37,20 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { language, changeLanguage } = useLanguage();
   const [locale, setLocale] = useState(i18n.locale);
-	
-	const changeLocale = (locale: any) => {
-        i18n.locale = locale;
-        setLocale(locale);
-    }
-	
-	useFocusEffect(
-        useCallback(() => {
-            changeLocale(language)
-            changeLanguage(language)
-        }, [])
-    )
+  const [signInRequiredModal, setSignInRequiredModal] = useState(false);
+  const [bookingErrorModal, setBookingErrorModal] = useState(false);
+
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
 
   const handleBookPress = () => {
     setIsModalVisible(true);
@@ -65,7 +63,8 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
 
   const handleConfirmBooking = () => {
     if (!userId) {
-      Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
+      setSignInRequiredModal(true);
+      // Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
       return;
     }
     const orderData = {
@@ -99,7 +98,8 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
       })
       .catch((error) => {
         console.error(error);
-        Alert.alert('An error occurred during the booking process');
+        setBookingErrorModal(true);
+        // Alert.alert('An error occurred during the booking process');
       });
   };
 
@@ -113,7 +113,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
 
   return (
     <ImageBackground
-      source={background}
+      source={require("../../assets/images/background.jpg")}
       resizeMode="cover"
       style={{ width: SCREEN_WIDTH * 0.9, margin: SCREEN_WIDTH * 0.05 }}
       imageStyle={{ borderRadius: 20 }}>
@@ -182,6 +182,54 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
                     </View>
                   )}
                 />
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal transparent={true} animationType="fade" visible={signInRequiredModal} onRequestClose={() => setSignInRequiredModal(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <View className="flex flex-row justify-center">
+                <MaterialCommunityIcons
+                  name="close-circle-outline"
+                  size={60}
+                  color={"#EF4444"}
+                />
+              </View>
+              <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('SignInRequired')}</Text>
+              <Text className="text-xl font-bold text-center mb-4">{i18n.t('SignInMessage')}</Text>
+              <View className=" flex-row justify-between gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setSignInRequiredModal(false)
+                }} >
+                  <Text> Back </Text>
+                </Pressable>
+                <Pressable onPress={() => {
+                  setSignInRequiredModal(false)
+                }}>
+                  <Text> Sign in </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal transparent={true} animationType="fade" visible={bookingErrorModal} onRequestClose={() => setBookingErrorModal(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <View className="flex flex-row justify-center">
+                <MaterialCommunityIcons
+                  name="close-circle-outline"
+                  size={60}
+                  color={"#EF4444"}
+                />
+              </View>
+              <Text className="text-xl font-bold text-center mb-4 pt-3">An error occurred during the booking process</Text>
+              <View className=" flex-row justify-between gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setBookingErrorModal(false)
+                }} >
+                  <Text> Ok </Text>
+                </Pressable>
               </View>
             </View>
           </View>

@@ -317,12 +317,6 @@ const MyRadialogy = () => {
             <Modal visible={isModalVisible} transparent={false} animationType="slide" onRequestClose={closeModal}>
                 <View style={styles.modalContainer}>
                     <PdfViewer url={pdfSource.uri} invoiceId={selectedRadialogy?.orderId} />
-                    {/* <RadialogyReport
-                        isVisible={isModalVisible}
-                        pdfUri={pdfUri}
-                        orderId={selectedRadialogy?.orderId}
-                        onClose={closeModal}
-                    /> */}
                     <Pressable onPress={closeModal} style={styles.closeButton}>
                         <Text style={styles.closeButtonText}>{i18n.t("Close")}</Text>
                     </Pressable>

@@ -1,4 +1,4 @@
-import { ScrollView, View, Modal, Text, TouchableOpacity, Button, Alert } from "react-native";
+import { ScrollView, View, Modal, Text, TouchableOpacity, Button, Alert, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
@@ -6,6 +6,7 @@ import FormField from "../../components/FormField";
 import LinkButton from "../../components/LinkButton";
 import { useUserSate } from "../../domain/state/UserState";
 import patientService from "../../domain/services/PatientService";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const ChangePassword = () => {
   let user = useUserSate.getState().user;
@@ -15,6 +16,7 @@ const ChangePassword = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
 
   useEffect(() => {
     patientService.find(user.id).then((res) => {
@@ -42,7 +44,8 @@ const ChangePassword = () => {
     const updatedPatient = { ...patient, password: newPassword };
     patientService.update(updatedPatient)
       .then(() => {
-        Alert.alert("Success", "Password changed successfully");
+        setSuccessModalVisible(true);
+        // Alert.alert("Success", "Password changed successfully");
       })
       .catch((error) => {
         console.error(error);
@@ -129,6 +132,27 @@ const ChangePassword = () => {
             <TouchableOpacity className="bg-blue-500 p-2 rounded" onPress={closeModal}>
               <Text className="text-black font-bold">Close</Text>
             </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={successModalVisible} onRequestClose={() => setSuccessModalVisible(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="check-circle-outline"
+                size={60}
+                color={"#84CC16"}
+              />
+            </View>
+            <Text className="text-xl font-bold text-center mb-4 pt-3">Success - Password Changed Successfully</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setSuccessModalVisible(false)
+              }}>
+                <Text> Ok </Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
