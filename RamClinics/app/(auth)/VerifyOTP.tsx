@@ -9,7 +9,7 @@ import { useUserSate } from "../../domain/state/UserState";
 import { UserContext } from "../../domain/contexts/UserContext";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import patientService from "../../domain/services/PatientService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const VerifyOTP = () => {
   const { mobileNo, otpResp, signUpFormData } = useLocalSearchParams();
@@ -57,12 +57,12 @@ const VerifyOTP = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    const storageUser = AsyncStorage.getItem('username');
-    if (storageUser) {
-      setUser(storageUser);
-    }  
-  }, []);
+  // useEffect(() => {
+  //   const storageUser = AsyncStorage.getItem('username');
+  //   if (storageUser) {
+  //     setUser(storageUser);
+  //   }  
+  // }, []);
 
   useEffect(() => {
     if (otp && otp.length == 4) {
