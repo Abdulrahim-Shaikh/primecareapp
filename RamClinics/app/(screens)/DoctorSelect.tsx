@@ -119,7 +119,7 @@ const DoctorSelect = () => {
 
         app.age = patient.age || patient.ageText
         app.appointmentDate = moment(searchDate).locale('en').utcOffset('Asia/Riyadh').format().slice(0, 19);
-        app.createdBy = useUserSate.getState().user.name + " - PrimeCare Mobile App";
+        app.createdBy = useUserSate.getState().user.firstName + " " + useUserSate.getState().user.lastName + " - PrimeCare Mobile App";
         app.createdDate = today;
         app.department = department;
         app.gender = patient.gender
@@ -148,7 +148,7 @@ const DoctorSelect = () => {
         app.status = "pending"
         app.visitType = "Checkup"
         app.walkIn = null
-        if (+callCenterDoctor) {
+        if (+callCenterDoctorFlow) {
             let slots: any = [];
             let start: any, end: any;
             if (slotsReserved) {
@@ -173,7 +173,6 @@ const DoctorSelect = () => {
             app.slots = slots;
             app.endTime = end;
             app.startTime = start;
-            console.log("app:: ", app)
             setLoader(true)
             console.log("calling appointmentService.bookAppointmentBySource")
             appointmentService.bookAppointmentBySource(app)
@@ -565,6 +564,13 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={confirmAppointmentModal} onRequestClose={() => setConfirmAppointmentModal(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <View className="flex flex-row justify-center">
+                            <MaterialCommunityIcons
+                                name="information-outline"
+                                size={60}
+                                color={"#737373"}
+                            />
+                        </View>
                         <Text className="text-xl font-bold text-center mb-2 mt-1">{appointmentToConfirm?.name}, {branch}, {city}</Text>
                         <Text className="text-xl text-center mb-4">Date: {moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot}</Text>
                         <View className=" flex-row justify-between gap-5 items-center py-4">
@@ -586,6 +592,13 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={bookingSuccess} onRequestClose={() => setBookingSuccess(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <View className="flex flex-row justify-center">
+                            <MaterialCommunityIcons
+                                name="check-circle-outline"
+                                size={60}
+                                color={"#84CC16"}
+                            />
+                        </View>
                         <Text className="text-xl font-bold text-center mb-4 pt-3">Success - Appointment booked successfully</Text>
                         <View className=" flex-row justify-between gap-5 items-center py-4">
                             <Pressable onPress={() => {
@@ -607,6 +620,13 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={appointmentFailed} onRequestClose={() => setAppointmentFailed(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <View className="flex flex-row justify-center">
+                            <MaterialCommunityIcons
+                                name="close-circle-outline"
+                                size={60}
+                                color={"#EF4444"}
+                            />
+                        </View>
                         <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment booking failed</Text>
                         <Text className="text-xl text-center mb-4">Failed to save appointment</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
@@ -623,6 +643,13 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={appointmentServiceError} onRequestClose={() => setAppointmentServiceError(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <View className="flex flex-row justify-center">
+                            <MaterialCommunityIcons
+                                name="close-circle-outline"
+                                size={60}
+                                color={"#EF4444"}
+                            />
+                        </View>
                         <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment booking failed</Text>
                         <Text className="text-xl text-center mb-4">{appointmentServiceErrorText}</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
@@ -639,6 +666,13 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={appointmentExists} onRequestClose={() => setAppointmentExists(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <View className="flex flex-row justify-center">
+                            <MaterialCommunityIcons
+                                name="information-outline"
+                                size={60}
+                                color={"#737373"}
+                            />
+                        </View>
                         <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment already exists</Text>
                         <Text className="text-xl font-bold text-center mb-4">You already have an appointment in the selected slot interval!</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
@@ -655,6 +689,13 @@ const DoctorSelect = () => {
             <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <View className="flex flex-row justify-center">
+                            <MaterialCommunityIcons
+                                name="close-circle-outline"
+                                size={60}
+                                color={"#EF4444"}
+                            />
+                        </View>
                         <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
                         <Text className="text-xl font-bold text-center mb-4">You need to Sign in to book an appointment</Text>
                         <View className=" flex-row justify-between gap-5 items-center py-4">
@@ -678,8 +719,8 @@ const DoctorSelect = () => {
 
 
 
-            <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={() => {
-                setLoader(!modalVisible);
+            <Modal visible={loader} transparent={true} animationType="fade" onRequestClose={() => {
+                setLoader(!loader);
             }}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <ActivityIndicator size="large" color="white" />

@@ -110,6 +110,7 @@ const VerifyOTP = () => {
       if (signUpFormData != null && signUpFormData != '') {
         let signupForm = JSON.parse(Array.isArray(signUpFormData) ? signUpFormData[0] : signUpFormData);
         if (signupForm != null) {
+          setLoader(false);
           setInvalidOtpModal(true);
         }
       }

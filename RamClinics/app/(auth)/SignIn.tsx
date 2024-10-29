@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
 import NASButton from "../../components/NASButton";
-import logo from "../../assets/logo/logo-ram-clinic.png";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import loginService from "../../domain/services/LoginService";
 import translations from "../../constants/locales/ar";
@@ -12,7 +11,6 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
-import { AntDesign } from "@expo/vector-icons";
 
 const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
@@ -99,7 +97,7 @@ const SignIn = () => {
 
 
           <View className="items-center pb-6">
-            <Image source={logo} style={{ maxHeight: 140, maxWidth: 200 }} />
+            <Image source={require("../../assets/logo/logo-ram-clinic.png")} style={{ maxHeight: 140, maxWidth: 200 }} />
           </View>
           <Text className="text-2xl font-bold text-center">{i18n.t('Sign In')}</Text>
           <Text className="text-[14px] text-pc-primary text-center pt-3">
@@ -207,13 +205,6 @@ const SignIn = () => {
       <Modal transparent={true} animationType="fade" visible={mobileEmptyVisible} onRequestClose={() => setMobileEmptyVisible(false)}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <View className="bg-white p-6 rounded-lg w-4/5 relative">
-            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setMobileEmptyVisible(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
             <Text className="text-xl font-bold text-center mb-2 pt-3">Mobile Number shoud not be empty</Text>
             <View className=" flex-row justify-end gap-5 items-center py-4">
               <Pressable onPress={() => {

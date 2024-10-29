@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import branchService from "../../domain/services/BranchService";
 import { useCallback, useEffect, useState } from "react";
-import logoRamClinic from "../../assets/logo/logo-ram-clinic.png";
 import resourceService from "../../domain/services/ResourceService";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
@@ -130,7 +129,7 @@ const BranchPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Select Branch")} isPushBack={true} />
-                <View className="flex-1 pt-6 space-y-4 ">
+                <View className="flex-1 pt-2 space-y-4 ">
                     <View className="flex flex-row pl-2 pb-4">
                         {/* <View>
                             <Text>Skip</Text>
@@ -150,15 +149,19 @@ const BranchPage = () => {
                         renderItem={({ item }) => (
                             <View className="w-full">
                                 <Pressable
-                                    className="flex flex-row border border-pc-primary rounded-lg p-4 shadow-sm bg-white"
+                                    className="flex flex-row border border-pc-primary rounded-lg p-3 shadow-sm bg-white"
                                     onPress={() => {
                                         typeof item === 'string' ? selectCity(item) : selectCity(item)
                                     }
                                     }>
-                                    <View className="rounded-smg bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                        <Image source={logoRamClinic} style={{ width: 50, height: 50 }} />
+                                    <View className="rounded-smg bg-white flex justify-center items-centerborder-gray-200">
+                                        <Image source={require("../../assets/logo/logo-ram-clinic-square.png")} style={{ width: 50, height: 50 }} />
                                     </View>
-                                    <View className="px-4 w-3/4 flex justify-center">
+                                    <View className="w-full pl-4 flex justify-center"
+                                        style={{
+                                            paddingRight: 55,
+                                        }}
+                                    >
                                         {
                                             typeof item === 'string'
                                                 ?

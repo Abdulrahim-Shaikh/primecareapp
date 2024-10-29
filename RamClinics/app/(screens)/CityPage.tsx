@@ -1,10 +1,8 @@
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { FlatList, Linking, Image, Pressable, ScrollView, Text, View } from "react-native";
+import { FlatList, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import cityMasterService from "../../domain/services/CityMasterService";
-import { useCallback, useEffect, useState } from "react";
-import cityImg from "../../assets/images/Building.png";
+import { useCallback, useState } from "react";
 import branchService from "../../domain/services/BranchService";
 import resourceService from "../../domain/services/ResourceService";
 import { useBranches } from "../../domain/contexts/BranchesContext";
@@ -12,6 +10,9 @@ import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
+import { useCities } from "../../domain/contexts/CitiesContext";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { LogBox } from 'react-native';
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -22,10 +23,12 @@ const CityPage = () => {
     const { branchId, fromSpeciality, department, callCenterFlow, specialityCode, speciality, responsible, devices, mobileOrOnline, callCenterDoctorFlow } = useLocalSearchParams();
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
-    const [cities, setCities] = useState<any>([]);
+    const [citiesData, setCitiesData] = useState<any>([]);
     const [branchCounts, setBranchCounts] = useState(Object());
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
-    const { branches, changeBranches} = useBranches();
+    const { branches, changeBranches } = useBranches();
+    const { cities, changeCities } = useCities();
+
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
         setLocale(locale);
@@ -33,6 +36,7 @@ const CityPage = () => {
 
     useFocusEffect(
         useCallback(() => {
+            LogBox.ignoreAllLogs();
             changeLocale(language)
             changeLanguage(language)
             console.log("locale: ", locale)
@@ -44,11 +48,21 @@ const CityPage = () => {
                 for (let device of devicesList) {
                     deviceCode += device.deviceCode + ","
                 }
-                const getCitiesBySpeciality = async () => {
-                    let response = await resourceService.getCityBySpeciality(specialityCode, deviceCode)
-                    setCities(response.data)
+                const getCitiesDataBySpeciality = async () => {
+                    resourceService.getCityBySpeciality(specialityCode, deviceCode)
+                        .then((response) => {
+                            let citiesBySpeciality = []
+                            for (let cityString of response.data) {
+                                let city = cities.filter((city: any) => city.city === cityString)
+                                citiesBySpeciality.push(city[0])
+                            }
+                            console.log("citiesBySpeciality: ", citiesBySpeciality)
+                            setCitiesData(citiesBySpeciality)
+                        })
+                    // let response = await resourceService.getCityBySpeciality(specialityCode, deviceCode)
+                    // setCitiesData(response.data)
                 }
-                getCitiesBySpeciality()
+                getCitiesDataBySpeciality()
             } else {
                 if (+callCenterDoctorFlow) {
                     if (branches == null) {
@@ -62,11 +76,14 @@ const CityPage = () => {
                             citySet.add(branch.city)
                         }
                     })
-                    setCities(Array.from(citySet))
+                    let citiesBySpeciality = []
+                    for (let cityString of Array.from(citySet)) {
+                        let city = cities.filter((city: any) => city.city === cityString)
+                        citiesBySpeciality.push(city[0])
+                    }
+                    setCitiesData(citiesBySpeciality)
                 } else {
-                    cityMasterService.findAll().then((res) => {
-                        setCities(res.data);
-                    });
+                    setCitiesData(cities);
                 }
             }
         }, [])
@@ -76,11 +93,11 @@ const CityPage = () => {
     useFocusEffect(
         useCallback(() => {
             const counts: { [key: string]: number } = {};
-            for (const city of cities) {
+            for (const city of citiesData) {
                 if (+callCenterDoctorFlow) {
-                    branchService.getAllBranchesInCity(city).then((res) => {
+                    branchService.getAllBranchesInCity(city.city).then((res) => {
                         let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled)
-                        counts[city] = newCallCenterEnabledBranches.length;
+                        counts[city.city] = newCallCenterEnabledBranches.length;
                         setBranchCounts(counts);
                         console.log("counts: ", counts)
                     });
@@ -89,28 +106,31 @@ const CityPage = () => {
                     for (let device of devicesList) {
                         deviceCode += device.deviceCode + ","
                     }
-                    resourceService.getBranchBySpecialityCity(specialityCode, city, deviceCode)
-                    .then((response) => {
-                        counts[city] = response.data.length;
-                        setBranchCounts(counts);
-                        console.log("counts1: ", counts)
-                    })
+                    console.log("specialityCode: ", specialityCode)
+                    console.log("city: ", city.city)
+                    console.log("deviceCode: ", deviceCode)
+                    resourceService.getBranchBySpecialityCity(specialityCode, city.city, deviceCode)
+                        .then((response) => {
+                            counts[city.city] = response.data.length;
+                            setBranchCounts(counts);
+                            console.log("counts1: ", counts)
+                        })
                 }
             }
-        }, [cities])
+        }, [citiesData])
     )
-
-    let renderNumBranches: any;
 
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Select City")} isPushBack={true} />
-                <View className="flex-1 pt-8 space-y-4 ">
+                <View className="flex-1 pt-2 space-y-4 ">
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
-                        data={cities}
+                        data={citiesData}
                         keyExtractor={(item: any, index) => "key" + index}
+                        ListHeaderComponent={<></>}
+                        ListFooterComponent={<></>}
                         renderItem={({ item }) => {
                             return (
                                 <View className="w-full">
@@ -120,7 +140,7 @@ const CityPage = () => {
                                             router.push({
                                                 pathname: "/BranchPage",
                                                 params: {
-                                                    city: item,
+                                                    city: item.city,
                                                     fromSpeciality: fromSpeciality,
                                                     department: department,
                                                     speciality: speciality,
@@ -134,15 +154,30 @@ const CityPage = () => {
                                             })
                                         }
                                     >
-                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                            <Image source={cityImg} style={{ width: 50, height: 50 }} />
+                                        <View className="rounded-full bg-white flex justify-center items-center w-18 gap-2 pl-3">
+                                            {/* <Image source={cityImg} style={{ width: 50, height: 50 }} /> */}
+                                            <MaterialCommunityIcons
+                                                name="city-variant-outline"
+                                                size={30}
+                                                color={"#3b2314"}
+                                            />
                                         </View>
-                                        <View className="px-4 w-3/4 flex justify-center">
-                                            <Text className="font-semibold text-lg text-gray-800">
-                                                {i18n.t(item || item.city)}
-                                            </Text>
-                                            <Text className="text-gray-600 pt-1">
-                                                {branchCounts[item] || 0} {i18n.t("Branches")}
+                                        <View
+                                            className="pl-6 w-full flex justify-center"
+                                            style={{
+                                                paddingRight: 55,
+                                            }}
+                                        >
+                                            <View className="flex flex-row justify-between">
+                                                <Text className="font-semibold text-lg text-gray-800">
+                                                    {item.city}
+                                                </Text>
+                                                <Text className="font-semibold text-lg text-gray-800">
+                                                    {item.cityAr}
+                                                </Text>
+                                            </View>
+                                            <Text className="text-gray-600">
+                                                {branchCounts[item.city] || 0} {i18n.t("Branches")}
                                             </Text>
                                         </View>
                                     </Pressable>
