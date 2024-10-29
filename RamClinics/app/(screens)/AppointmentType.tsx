@@ -1,6 +1,5 @@
 import {
     ActivityIndicator,
-    Alert,
     FlatList,
     Modal,
     Pressable,
@@ -90,15 +89,6 @@ const AppointmentType = () => {
             if (subServices == null || subServices == undefined || subServices == "") {
                 console.log("here")
                 setDoctorScheduleNotFoundModal(true)
-                // Alert.alert('Note', 'Doctor Schedule not found', [
-                //     {
-                //         text: 'OK',
-                //         // onPress: () => router.back(),
-                //         style: 'default'
-                //     },
-                // ],
-                // )
-                // router.back()
             } else {
                 setSubServicesList(JSON.parse(subServices.toString()))
             }
@@ -108,17 +98,6 @@ const AppointmentType = () => {
     const getPatientPolicyData = async () => {
         if (useUserSate.getState().loggedIn == false) {
             setSignInModal(true)
-            // Alert.alert('Patient Not Found', 'You need to Sign in first', [
-            //     {
-            //         text: 'BACK',
-            //         style: 'default'
-            //     },
-            //     {
-            //         text: 'SIGN IN',
-            //         onPress: () => router.push('/SignIn'),
-            //         style: 'default'
-            //     },
-            // ])
         } else {
             patientPolicyService.byPatientId(user.id)
                 .then((response: any) => {
@@ -135,63 +114,13 @@ const AppointmentType = () => {
         console.log("rresponsible: ", responsible)
         if (patientData == null || Object.keys(patientData).length <= 0) {
             setSignInModal(true)
-            // Alert.alert('Patient Not Found', 'You need to Sign in first', [
-            //     {
-            //         text: 'BACK',
-            //         style: 'default'
-            //     },
-            //     {
-            //         text: 'SIGN IN',
-            //         onPress: () => router.push('/SignIn'),
-            //         style: 'default'
-            //     },
-            // ])
         } else {
             if (patientPolicyData == null || Object.keys(patientPolicyData).length <= 0) {
                 setPolicyNotFound(true)
-                // Alert.alert('Note', 'Patient Policy data not found', [
-                //     {
-                //         text: 'OK',
-                //         // onPress: () => router.push({
-                //         //     pathname: "/BookAppointment",
-                //         // }),
-                //         style: 'default'
-                //     },
-                // ],
-                // )
             } else {
                 doctorService.find(+resourceId)
                     .then((response) => {
                         setDoctorGender(response.data.gender)
-                        // need to be checked
-                        // let branchId = response.data.branchId[0];
-
-                        // setDoctorName(response.data.name);
-                        // setBranchId(response.data.branchId[0]); // set first branchId from patient branch list if below API gives error
-                        // branchService.getBranchByName(response.data.primaryBranch)
-                        //   .then((response) => {
-                        //     setBranchId(response.data.id);
-                        //     if (department != null && date != null && specialityList != null && doctorName != null) {
-                        //       let dateString = moment(date).format("YYYY-MM-DD");
-                        //       let today = moment().format("YYYY-MM-DD");
-                        //       let requestBody: any = [{
-                        //         date: dateString,
-                        //         day: 2,
-                        //         resourceIds: [id],
-                        //         wday: "Mon"
-                        //       }]
-                        //       scheduleService.getDoctorSchedule(branchId, department, specialityList, "false", requestBody)
-                        //         .then((response) => {
-                        //           setDoctorScheduleData(response.data)
-                        //         })
-                        //         .catch((err) => {
-                        //           console.log(err);
-                        //         })
-                        //     }
-                        //   })
-                        //   .catch((error) => {
-                        //     console.log("errorrrr: ", error)
-                        //   })
                         let speciality = response.data.speciality;
                         let doctorName = response.data.name;
                         setSpeciality(response.data.speciality);
@@ -241,13 +170,6 @@ const AppointmentType = () => {
                                 .catch((err) => {
                                     console.log("here2")
                                     setDoctorScheduleNotFoundModal(true)
-                                    // Alert.alert('Note', 'Doctor Schedule not found', [
-                                    //     {
-                                    //         text: 'OK',
-                                    //         style: 'default'
-                                    //     },
-                                    // ],
-                                    // )
                                     console.log(err);
                                 })
                         }
@@ -291,9 +213,6 @@ const AppointmentType = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Appointment Type")} isPushBack={true} />
-                {/* <View className="pt-8 ">
-                    <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
-                </View> */}
                 <View className="pt-8">
                     {
                         loader && <ActivityIndicator size="large" color="#454567" />
@@ -326,7 +245,7 @@ const AppointmentType = () => {
                                                 />
                                             </View>
                                             <View className="w-full px-4 flex justify-center gap-3">
-                                                <View className="w-full flex flex-col items-start gap-2 font-semibold text-lg text-gray-800">
+                                                <View className="w-full flex flex-col items-start gap-2 font-semibold text-xl text-gray-800">
                                                     <Text>
                                                         {locale == "ar" ? item.subServiceNameAr : item.subServiceNameEn}
                                                     </Text>
@@ -352,13 +271,6 @@ const AppointmentType = () => {
                 }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-                                setDoctorScheduleNotFoundModal(false)
-                                router.back()
-                            }}>
-                                <AntDesign name="closecircle" size={24} color="#3B2314" />
-                            </Pressable> */}
-                            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
                             <Text className="text-xl font-bold text-center mb-4 mt-1">Doctor schedule not found</Text>
                             <View className=" flex-row justify-end gap-5 items-center py-4">
                                 <Pressable onPress={() => {
@@ -374,13 +286,6 @@ const AppointmentType = () => {
                 <Modal transparent={true} animationType="fade" visible={signInModal} onRequestClose={() => setSignInModal(false)}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setPatientNotFoundModal(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-                            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
                             <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
                             <Text className="text-xl font-bold text-center mb-4">You need to Sign in first</Text>
                             <View className=" flex-row justify-between gap-5 items-center py-4">
@@ -402,13 +307,6 @@ const AppointmentType = () => {
                 <Modal transparent={true} animationType="fade" visible={policyNotFound} onRequestClose={() => setPolicyNotFound(false)}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
-                            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-                    setMobileEmptyVisible(false)
-                    router.back()
-                    }}>
-                    <AntDesign name="closecircle" size={24} color="#3B2314" />
-                    </Pressable> */}
-                            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
                             <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Policy data not found</Text>
                             <View className=" flex-row justify-end gap-5 items-center py-4">
                                 <Pressable onPress={() => {

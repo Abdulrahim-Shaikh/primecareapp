@@ -176,76 +176,6 @@ const SingUp = () => {
     };
 
 
-
-
-
-    // if (id == null || id == "") {
-    //   tempErrors.id = "ID is required";
-    // }
-
-    // if (firstName == null || firstName == "") {
-    //   tempErrors.firstName = "First Name is required";
-    // } else {
-    //   if (!validateName(firstName)) {
-    //     tempErrors.firstName = "Invalid first name";
-    //   }
-    // }
-
-    // if (secondName != null && secondName != "" && !validateName(secondName)) {
-    //   tempErrors.secondName = "Invalid second name";
-    // }
-
-    // if (firstName == null || firstName == "") {
-    //   tempErrors.firstName = "Last Name is required";
-    // } else {
-    //   if (!validateName(firstName)) {
-    //     tempErrors.firstName = "Invalid last name";
-    //   }
-    // }
-
-    // if (mobileNo == null || mobileNo == "") {
-    //   tempErrors.mobileNo = "Mobile number required";
-    // } else {
-    //   if (mobileNo.length < 9 || (mobileNo.length == 10 && !mobileNo.startsWith("0"))) {
-    //     tempErrors.mobileNo = "Invalid Mobile Number";
-    //   }
-    // }
-
-    // if (email != null && email != "" && !validateEmail(email)) {
-    //   tempErrors.email = "Invalid Email";
-    // }
-
-    // if (countryCode == "") {
-    //   tempErrors.countryCode = "Country Code is required";
-    // }
-    // if (dob == null) {
-    //   tempErrors.dob = "Date of birth required";
-    // }
-    // if (selectedBranch == "") {
-    //   tempErrors.selectedBranch = "Branch required";
-    // }
-    // if (gender == "") {
-    //   tempErrors.gender = "Gender required";
-    // }
-
-    // // validateIdLength(id) {}
-    // patientService.save(signupForm).then((res) => {
-    //   setErrors({});
-    //   setErrorsExist(false);
-    //   Alert.alert("Success", "Registered Successfully!", [
-    //     { text: "OK", onPress: () => router.push("/SignIn") }
-    //   ]);
-    // }).catch((error) => {
-    //   tempErrors.saveError = "Failed to save Patient";
-    //   setErrors(tempErrors)
-    //   setErrorsExist(true);
-    //   console.error("Failed to save Patient:", error);
-    //   Alert.alert("Error", "Please try again later.");
-    // });
-
-
-
-
     console.log("signupForm: ", signupForm);
     if (id != "" && countryCode != "" && firstName != '' && lastName != '' && dob != null && mobileNo != '' && selectedBranch != '' && gender != '') {
       let allValid = true
@@ -298,52 +228,18 @@ const SingUp = () => {
         loginService.byMobileNo(mobileNo)
           .then((response) => {
             setPatientAlreadyExists(true);
-            // Alert.alert("Patient Already Exists with this mobile number", "Please Sign in or use another mobile number", [
-            //   {
-            //     text: 'BACK',
-            //     style: 'default'
-            //   },
-            //   {
-            //     text: 'Sign in',
-            //     onPress: () => {
-            //       router.push('/SignIn')
-            //     },
-            //     style: 'default'
-            //   },
-            // ])
           })
           .catch((error) => {
             console.log("signupForm: ", signupForm);
             loginService.generateOtp(mobileNo).then((response) => {
               console.log('OTP response ..... ', response.data);
               router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: response.data.otp, signUpFormData: JSON.stringify(signupForm) } });
-              // if (mobileNo == '568165257') {
-              //   router.navigate({ pathname: '/VerifyOTP', params: { mobileNo: mobileNo, otpResp: '9999' } });
-              // } else {
-              // }
             }).catch((error) => {
               console.log("Error sending OTP, ", error);
               Alert.alert('Tecnincal Error', 'TE- ' + error)
             });
           })
       }
-
-
-      // patientService.save(signupForm).then((res) => {
-      //   setErrors({});
-      //   setErrorsExist(false);
-      //   Alert.alert("Success", "Registered Successfully!", [
-      //     { text: "OK", onPress: () => router.push("/SignIn") }
-      //   ]);
-      // }).catch((error) => {
-      //   tempErrors.saveError = "Failed to save Patient";
-      //   setErrors(tempErrors)
-      //   setErrorsExist(true);
-      //   console.error("Failed to save Patient:", error);
-      //   Alert.alert("Error", "Please try again later.");
-      // });
-
-
 
     } else {
       console.log("countryCode: ", countryCode)
@@ -393,7 +289,6 @@ const SingUp = () => {
       console.log("errors: ", tempErrors);
       console.log("Mandatory Fields Missing!");
       setMandatoryFieldsMissing(true);
-      // Alert.alert("Mandatory Fields Missing!", "Please fill in all required fields.");
     }
   };
 
@@ -911,14 +806,6 @@ const SingUp = () => {
         <Modal transparent={true} animationType="fade" visible={patientAlreadyExists} onRequestClose={() => setPatientAlreadyExists(false)}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <View className="bg-white p-6 rounded-lg w-4/5 relative">
-              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setPatientNotFoundModal(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
-              {/* Alert.alert("Patient Already Exists with this mobile number", "Please Sign in or use another mobile number", [ */}
               <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Already Exists with this mobile number</Text>
               <View className=" flex-row justify-between gap-5 items-center py-4">
                 <Pressable onPress={() => {
@@ -939,13 +826,6 @@ const SingUp = () => {
         <Modal transparent={true} animationType="fade" visible={mandatoryFieldsMissing} onRequestClose={() => setMandatoryFieldsMissing(false)}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <View className="bg-white p-6 rounded-lg w-4/5 relative">
-              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setPatientNotFoundModal(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
               <Text className="text-xl font-bold text-center mb-2 mt-1">Mandatory Fields Missing</Text>
               <Text className="text-xl font-bold text-center mb-4">Please fill in all required fields</Text>
               <View className=" flex-row justify-between gap-5 items-center py-4">

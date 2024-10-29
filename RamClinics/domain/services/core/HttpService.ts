@@ -7,16 +7,16 @@ import {
 } from "@tanstack/react-query";
 class HttpService {
 
-    private userId: string = '';
-    private username: string = '';
-    private token: string = '';
-    private companyCode = 'TECHNAS';
-    private divisionCode = 'CHN';    
-    private allowedDivisions = 'CHN'//Array<string> = ['CHN'];
-
+    private readonly userId: string = '';
+    private readonly username: string = '';
+    private readonly token: string = '';
+    // need to put the company code and division code in the environment variables
+    private readonly companyCode = 'TECHNAS';
+    private readonly divisionCode = 'CHN';    
+    private readonly allowedDivisions = 'CHN'//Array<string> = ['CHN'];
+    // private readonly baseUrl = CLAIMS_LINK;
     // private baseUrl = PROD_LINK;
-    // private baseUrl = UAT_LINK;
-    private baseUrl = CLAIMS_LINK;
+    private baseUrl = UAT_LINK;
 
 
     getHeaders() {
@@ -34,16 +34,16 @@ class HttpService {
     }
 
     getAPI(path: string) {
-        console.log(path);
+        console.log("---------- GET: " + path + " ----------");
         return axios.get(this.baseUrl + path, this.getHeaders());
     }
 
     getAPIQuery(path: string,options: any) {
-        console.log(path);
         return useQuery({queryKey: [path], queryFn:  async () => (await this.getAPI(path)).data,...options});
     }
 
     postAPI(path: string, entity: any) {
+        console.log("---------- POST: " + path + " ----------");
         return axios.post(this.baseUrl + path, entity, this.getHeaders());
         // return axios({
         //     method: 'post',
@@ -62,11 +62,12 @@ class HttpService {
     }
 
     putAPI(path: string, entity: any) {
-        console.log(path);
+        console.log("---------- PUT: " + path + " ----------");
         return axios.put(this.baseUrl + path, entity, this.getHeaders());
     }
 
     deleteAPI(path: string, id: number) {
+        console.log("---------- DELETE: " + path + " ----------");
         return axios.delete(this.baseUrl + path + id, this.getHeaders());
     }
 }

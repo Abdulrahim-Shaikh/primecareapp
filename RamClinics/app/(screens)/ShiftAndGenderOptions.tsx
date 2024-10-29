@@ -143,7 +143,7 @@ const ShiftAndGenderOptions = () => {
                 <HeaderWithBackButton title={i18n.t("Shift and Doctor Gender")} isPushBack={true} />
                 <View className="h-full flex flex-1 flex-col pt-8 space-y-4 ">
                     <View>
-                        <Text className="text-base font-medium">Select Shift: </Text>
+                        <Text className="text-base font-medium">{i18n.t('Select Shift')}: </Text>
                         <View className="py-1">
                             <View className="py-4 pl-4 border border-indigo-950 rounded-lg mb-4">
                                 <SelectDropdown
@@ -155,8 +155,8 @@ const ShiftAndGenderOptions = () => {
                                     renderButton={(selectedItem, isOpened) => {
                                         return (
                                             <View>
-                                                <Text>
-                                                    {(selectedItem && selectedItem.name)}
+                                                <Text className="px-3">
+                                                    {(selectedItem && i18n.t(selectedItem.name))}
                                                 </Text>
                                             </View>
                                         );
@@ -164,7 +164,9 @@ const ShiftAndGenderOptions = () => {
                                     renderItem={(item, index, isSelected) => {
                                         return (
                                             <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
-                                                <Text>{item.name}</Text>
+                                                <Text>
+                                                    {i18n.t(item.name)}
+                                                </Text>
                                             </View>
                                         );
                                     }}
@@ -180,7 +182,7 @@ const ShiftAndGenderOptions = () => {
                                 </Picker> */}
                             </View>
                         </View>
-                        <Text className="text-base font-medium">Select Gender: </Text>
+                        <Text className="text-base font-medium">{i18n.t('Select Gender')}: </Text>
                         <View className="py-1">
                             <View className="py-4 pl-4 border border-indigo-950 rounded-lg mb-4">
                                 <SelectDropdown
@@ -192,8 +194,8 @@ const ShiftAndGenderOptions = () => {
                                     renderButton={(selectedItem, isOpened) => {
                                         return (
                                             <View>
-                                                <Text>
-                                                    {(selectedItem && selectedItem.name)}
+                                                <Text className="px-3">
+                                                    {(selectedItem && i18n.t(selectedItem.name))}
                                                 </Text>
                                             </View>
                                         );
@@ -201,7 +203,7 @@ const ShiftAndGenderOptions = () => {
                                     renderItem={(item, index, isSelected) => {
                                         return (
                                             <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
-                                                <Text>{item.name}</Text>
+                                                <Text>{i18n.t(item.name)}</Text>
                                             </View>
                                         );
                                     }}
@@ -223,13 +225,13 @@ const ShiftAndGenderOptions = () => {
                             onPress={() => search()}
                             style={{
                                 width: 130,
-                                height: 80,
+                                height: 60,
                                 backgroundColor: '#3B2314',
                                 borderRadius: 130 / 2,
                             }}
                             className="flex flex-row justify-center h-24 items-center gap-4">
                             <Text className="text-xl font-bold text-white">
-                                Search
+                                {i18n.t('Search')}
                             </Text>
                         </TouchableOpacity>
                     </View>

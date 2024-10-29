@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
 import NASButton from "../../components/NASButton";
-import logo from "../../assets/logo/logo-ram-clinic.png";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import loginService from "../../domain/services/LoginService";
 import translations from "../../constants/locales/ar";
@@ -12,7 +11,6 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
-import { AntDesign } from "@expo/vector-icons";
 
 const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
@@ -55,7 +53,6 @@ const SignIn = () => {
 
   const sendOtp = () => {
     if (!mobileNo) {
-      // Alert.alert('Mobile No Should not be empty. ' + mobileNo);
       setMobileEmptyVisible(true);
     } else {
       getData();
@@ -81,34 +78,10 @@ const SignIn = () => {
           sendOtp();
         } else {
           setPatientNotFoundModal(true);
-          // Alert.alert('Patient Not Found', 'You need to Sign up first', [
-          //   {
-          //     text: 'BACK',
-          //     style: 'default'
-          //   },
-          //   {
-          //     text: 'SIGN UP',
-          //     onPress: () => router.push('/SignUp'),
-          //     style: 'default'
-          //   },
-          // ],
-          // )
         }
       })
         .catch((error) => {
           setPatientNotFoundModal(true);
-          // Alert.alert('Patient Not Found', 'You need to Sign Up first', [
-          //   {
-          //     text: 'BACK',
-          //     style: 'default'
-          //   },
-          //   {
-          //     text: 'Create Account',
-          //     onPress: () => router.push('/SignUp'),
-          //     style: 'default'
-          //   },
-          // ],
-          // )
         })
 
     }
@@ -124,7 +97,7 @@ const SignIn = () => {
 
           <View className="w-full justify-start min-h-[85vh] items-center">
             <View className="items-center pb-6">
-              <Image source={logo} style={{ maxHeight: 140, maxWidth: 200 }} />
+              <Image source={require("../../assets/logo/logo-ram-clinic.png")} style={{ maxHeight: 140, maxWidth: 200 }} />
             </View>
             <Text className="text-2xl font-bold text-center">{i18n.t('Sign In')}</Text>
             <Text className="text-[14px] text-pc-primary text-center pt-3">
@@ -190,74 +163,60 @@ const SignIn = () => {
             }}>
               <AntDesign name="closecircle" size={24} color="#3B2314" />
             </Pressable> */}
-              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
-              <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
-              <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
-              <View className=" flex-row justify-between gap-5 items-center py-4">
-                <Pressable onPress={() => {
-                  setCreateAccountModal(false)
-                }} >
-                  <Text> Back </Text>
-                </Pressable>
-                <Pressable onPress={() => {
-                  setCreateAccountModal(false)
-                  router.push('/SignUp')
-                }}>
-                  <Text> Create Account </Text>
-                </Pressable>
-              </View>
+            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
+            <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
+            <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setCreateAccountModal(false)
+              }} >
+                <Text> Back </Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                setCreateAccountModal(false)
+                router.push('/SignUp')
+              }}>
+                <Text> Create Account </Text>
+              </Pressable>
             </View>
           </View>
-        </Modal>
-        <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-            <View className="bg-white p-6 rounded-lg w-4/5 relative">
-              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setPatientNotFoundModal(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
-              <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
-              <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
-              <View className=" flex-row justify-between gap-5 items-center py-4">
-                <Pressable onPress={() => {
-                  setPatientNotFoundModal(false)
-                }} >
-                  <Text> Back </Text>
-                </Pressable>
-                <Pressable onPress={() => {
-                  setPatientNotFoundModal(false)
-                  router.push('/SignUp')
-                }}>
-                  <Text> Sign up </Text>
-                </Pressable>
-              </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
+            <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setPatientNotFoundModal(false)
+              }} >
+                <Text> Back </Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                setPatientNotFoundModal(false)
+                router.push('/SignUp')
+              }}>
+                <Text> Sign up </Text>
+              </Pressable>
             </View>
           </View>
-        </Modal>
-        <Modal transparent={true} animationType="fade" visible={mobileEmptyVisible} onRequestClose={() => setMobileEmptyVisible(false)}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-            <View className="bg-white p-6 rounded-lg w-4/5 relative">
-              {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setMobileEmptyVisible(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-              {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
-              <Text className="text-xl font-bold text-center mb-2 pt-3">Mobile Number shoud not be empty</Text>
-              <View className=" flex-row justify-end gap-5 items-center py-4">
-                <Pressable onPress={() => {
-                  setMobileEmptyVisible(false)
-                }} >
-                  <Text> Ok </Text>
-                </Pressable>
-              </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} animationType="fade" visible={mobileEmptyVisible} onRequestClose={() => setMobileEmptyVisible(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <Text className="text-xl font-bold text-center mb-2 pt-3">Mobile Number shoud not be empty</Text>
+            <View className=" flex-row justify-end gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setMobileEmptyVisible(false)
+              }} >
+                <Text> Ok </Text>
+              </Pressable>
             </View>
           </View>
-        </Modal>
+        </View>
+      </Modal>
       </ScrollView>
     </SafeAreaView>
   );
