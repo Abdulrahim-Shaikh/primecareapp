@@ -9,6 +9,7 @@ import { useUserSate } from "../../domain/state/UserState";
 import { UserContext } from "../../domain/contexts/UserContext";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import patientService from "../../domain/services/PatientService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const VerifyOTP = () => {
   const { mobileNo, otpResp, signUpFormData } = useLocalSearchParams();
@@ -55,6 +56,13 @@ const VerifyOTP = () => {
       setUser(user);
     }
   }, [user]);
+
+  useEffect(() => {
+    const storageUser = AsyncStorage.getItem('username');
+    if (storageUser) {
+      setUser(storageUser);
+    }  
+  }, []);
 
   useEffect(() => {
     if (otp && otp.length == 4) {
@@ -144,45 +152,48 @@ const VerifyOTP = () => {
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView>
-        <View className="px-4 pt-1">
-          <HeaderWithBackButton isPushBack={true} />
-        </View>
-        <View className="w-full justify-start min-h-[85vh] px-6 my-8 items-center ">
-          <Text className="text-2xl font-bold text-center">Verify OTP</Text>
-          <Text className="text-[14px] text-pc-primary text-center pt-3">
-            Enter OTP code received to authenticate your identity and complete verification - {status}
-          </Text>
-          <View className="w-full pt-8 pb-4 ">
-            <OtpInputField disabled={false} onPress={onPressOtp} />
+        <View className="p-6">
+          <View className="flex flex-row justify-start items-center gap-4 pt-2 pb-8">
+            <HeaderWithBackButton isPushBack={true} />
           </View>
 
-          <View className="pb-32">
-            <View className="flex flex-col">
-              <View>
-                <Text className="text-base text-pc-primary text-center ">
-                  Didn’t receive OTP?{" "}
-                  <Text
-                    className=" text-pc-primary"
-                    onPress={() => router.push("/SignUp")}
-                  >
-                    Resend
+          <View className="w-full justify-start min-h-[85vh] items-center">
+            <Text className="text-2xl font-bold text-center">Verify OTP</Text>
+            <Text className="text-[14px] text-pc-primary text-center pt-3">
+              Enter OTP code received to authenticate your identity and complete verification - {status}
+            </Text>
+            <View className="w-full pt-8 pb-4 ">
+              <OtpInputField disabled={false} onPress={onPressOtp} />
+            </View>
+
+            <View className="pb-32">
+              <View className="flex flex-col">
+                <View>
+                  <Text className="text-base text-pc-primary text-center ">
+                    Didn’t receive OTP?{" "}
+                    <Text
+                      className=" text-pc-primary"
+                      onPress={() => router.push("/SignUp")}
+                    >
+                      Resend
+                    </Text>
                   </Text>
-                </Text>
-              </View>
-              <View className="pt-8">
-                {
-                  loader &&
-                  <View className="flex-1 items-center justify-center">
-                    <ActivityIndicator size="large" color="#3B2314" style={{ marginTop: 20 }} />
-                  </View>
-                }
+                </View>
+                <View className="pt-8">
+                  {
+                    loader &&
+                    <View className="flex-1 items-center justify-center">
+                      <ActivityIndicator size="large" color="#3B2314" style={{ marginTop: 20 }} />
+                    </View>
+                  }
+                </View>
               </View>
             </View>
+
+
+            <NASButton title="Verify" onPress={verifyOtp} />
           </View>
-
-
-          <NASButton title="Verify" onPress={verifyOtp} />
-        </View>
+        </View>  
         <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <View className="bg-white p-6 rounded-lg w-4/5 relative">

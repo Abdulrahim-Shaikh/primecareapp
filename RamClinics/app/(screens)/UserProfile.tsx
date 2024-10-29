@@ -60,7 +60,7 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <View className="pt-12">
+    <View className="pt-2">
       <View className="h-full justify-between items-start w-full">
         <View className="flex-row justify-between items-center pt-6 px-6 w-full">
           <Text

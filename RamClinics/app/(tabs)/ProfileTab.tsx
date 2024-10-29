@@ -80,12 +80,12 @@ const ProfileTab = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View className=" pb-8 px-6">
-          <View className="flex flex-row justify-start items-center gap-4 pt-6 pb-8">
+        <View className="px-6">
+          <View className="flex flex-row justify-start items-center gap-4 py-8">
             <HeaderWithBackButton isPushBack={true} title={i18n.t("User Settings")} />
             <AntDesign name="user" size={24} color={"rgb(59, 35, 20)"} />
-
           </View>
+
           <View className="bg-[rgb(59,35,20)] rounded-[20px] p-6 flex flex-row justify-between items-center">
             <View className="flex-row gap-4">
               {user && user.profileImg && user.profileImg.length > 0 && user.profileImg[0].length > 0 ?
