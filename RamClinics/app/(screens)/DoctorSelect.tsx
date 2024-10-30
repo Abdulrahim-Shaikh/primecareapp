@@ -14,6 +14,7 @@ import patientService from "../../domain/services/PatientService";
 import * as Localization from 'expo-localization'
 import { I18n } from "i18n-js";
 import translations from "../../constants/locales/ar";
+import http from "../../domain/services/core/HttpService";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -23,14 +24,12 @@ const DoctorSelect = () => {
 
     const { city, branch, fromSpeciality, department, speciality, specialityCode, callCenterFlow, devices, responsible, mobileOrOnline, shift, gender, slotSearchDate, selectedSlot, reservedSlots, doctorList, callCenterDoctorFlow, callCenterDoctor, scheduleId } = useLocalSearchParams();
     const [modalVisible, setModalVisible] = useState(false);
-    const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
-    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [doctors, setDoctors] = useState(JSON.parse(doctorList.toString()));
     const [slot, setSlot] = useState(selectedSlot);
     const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
     const [searchDate, setSearchDate] = useState(moment(slotSearchDate).toDate());
     const [loggedIn, setLoggedIn] = useState(useUserSate.getState().loggedIn);
-    const { branches, setBranches } = useBranches();
+    const { branches, changeBranches } = useBranches();
     const [slotsReserved, setSlotsReserved] = useState(JSON.parse(reservedSlots.toString()));
     const [patient, setPatient] = useState<any>(null)
     const [loader, setLoader] = useState(false);
@@ -46,13 +45,14 @@ const DoctorSelect = () => {
     const [bookingSuccess, setBookingSuccess] = useState(false);
     const [patientNotFoundModal, setPatientNotFoundModal] = useState(false);
     const [doctorScheduleNotFoundModal, setDoctorScheduleNotFoundModal] = useState(false);
+    const [appointmentBranch, setAppointmentBranch] = useState<any>({});
 
     const showDoctor = (item: any) => {
         setMinimalDoctorInfo(item)
         resourceService.find(item.id)
             .then((response) => {
                 setDisplayedDoctor(response.data)
-                console.log("\n\n\n\nresourceServiceList: ", response.data.resourceServiceList)
+                // console.log("\n\n\n\nresourceServiceList: ", response.data.resourceServiceList)
             })
             .catch((error) => {
                 console.error("resourceService error: ", error.response)
@@ -61,6 +61,17 @@ const DoctorSelect = () => {
 
     useFocusEffect(
         useCallback(() => {
+            if (branch != null) {
+                for (let i of branches) {
+                    console.log("\n\ni: ", i.name)
+                    if (i.name == branch) {
+                        setAppointmentBranch(i)
+                        break;
+                    }
+                }
+                setAppointmentBranch(branches.filter((branch: any) => branch.name === branch)[0])
+                console.log("branch: ", branches.filter((branch: any) => branch.name === branch)[0])
+            }
             console.log("\n\nuser: ", useUserSate.getState())
             console.log("callCenterDoctor: ", callCenterDoctor)
             patientService.patientDetails(useUserSate.getState().user.firstName)
@@ -277,28 +288,6 @@ const DoctorSelect = () => {
     }
 
 
-    let resourceServiceListRender: any = []
-    displayedDoctor.resourceServiceList?.forEach((item: any) => {
-        console.log("\n\nitem: ", item)
-        resourceServiceListRender.push(
-            <View className="pt-5" key={item.id}>
-                <View className="p-4 rounded-2xl border bg-white border-pc-primary flex flex-row justify-start items-center">
-                    <View>
-                        <Text className="text-pc-primary p-4 rounded-full">
-                            {/* <MaterialCommunityIcons name="close-box" size={24} /> */}
-                            <FontAwesome name="calendar-check-o" color={'#3B2314'} size={24} />
-                        </Text>
-                    </View>
-                    <View className="flex-1">
-                        <Text className="text-base font-semibold">{item.serviceName}</Text>
-                    </View>
-                </View>
-            </View>
-        )
-    })
-
-
-
     return (
         <SafeAreaView>
             <ScrollView className="p-6">
@@ -406,66 +395,57 @@ const DoctorSelect = () => {
                     <View style={styles.modalContent}>
                         <ScrollView contentContainerStyle={styles.scrollContent}>
                             <View className="flex flex-row border-b border-dashed border-pc-primary pb-6 justify-center">
-                                <View className="flex justify-center flex-wrap">
-                                    <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SefNqxMPw23P5tFdlgwEe9cfcdnf7d-Law&s' }} style={{ width: 100, height: 100 }} />
+                                <View className="flex items-center justify-center flex-wrap">
+                                    <Image source={{ uri: 
+                                        displayedDoctor.photo == null || displayedDoctor.photo == '' ?
+                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SefNqxMPw23P5tFdlgwEe9cfcdnf7d-Law&s' 
+                                        : http.getURL() + 'resource/file/' + displayedDoctor.photo
+                                    }} style={{ width: 100, height: 100 }} />
                                     <Text className="pt-3 text-2xl">{displayedDoctor.name}</Text>
                                 </View>
                             </View>
-                            <View className="flex flex-row grid grid-cols-2 gap-4">
-                                <View className="flex flex-col">
-                                    <View className="flex flex-row items-center gap-4 pt-6">
-                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                            <MaterialCommunityIcons
-                                                name="office-building"
-                                                size={30}
-                                                color={"#84cc16"}
-                                            />
-                                        </View>
-                                        <View className="flex flex-col">
-                                            <Text>Department</Text>
-                                            <Text className="font-bold text-xl">{displayedDoctor.department}</Text>
-                                        </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="account-outline"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
                                     </View>
-                                    <View className="flex flex-row items-center gap-4 pt-6">
-                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                            <MaterialCommunityIcons
-                                                name="flag-variant"
-                                                size={30}
-                                                color={"#84cc16"}
-                                            />
-                                        </View>
-                                        <View className="flex flex-col">
-                                            <Text>Nationality</Text>
-                                            <Text className="font-bold text-xl">{displayedDoctor.nationality || minimalDoctorInfo.nationality || 'Unknown'}</Text>
-                                        </View>
+                                    <View className="flex flex-col">
+                                        <Text>Gender</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.gender}</Text>
                                     </View>
                                 </View>
-                                <View className="flex flex-col">
-                                    <View className="flex flex-row items-center gap-4 pt-6">
-                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                            <MaterialCommunityIcons
-                                                name="account-outline"
-                                                size={30}
-                                                color={"#84cc16"}
-                                            />
-                                        </View>
-                                        <View className="flex flex-col">
-                                            <Text>Gender</Text>
-                                            <Text className="font-bold text-xl">{displayedDoctor.gender}</Text>
-                                        </View>
+                            </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="stethoscope"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
                                     </View>
-                                    <View className="flex flex-row items-center gap-4 pt-6">
-                                        <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                            <MaterialCommunityIcons
-                                                name="stethoscope"
-                                                size={30}
-                                                color={"#84cc16"}
-                                            />
-                                        </View>
-                                        <View className="flex flex-col">
-                                            <Text>Speciality</Text>
-                                            <Text className="font-bold text-xl">{displayedDoctor.speciality}</Text>
-                                        </View>
+                                    <View className="flex flex-col">
+                                        <Text>Speciality</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.speciality}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="flag-variant"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
+                                    </View>
+                                    <View className="flex flex-col">
+                                        <Text>Nationality</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.nationality || minimalDoctorInfo.nationality || 'Unknown'}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -510,13 +490,30 @@ const DoctorSelect = () => {
                                     </View>
                                     <View className="flex flex-col">
                                         <Text>Graduation</Text>
-                                        <Text className="font-bold text-xl">{displayedDoctor.graduation ? "." + displayedDoctor.qualification + "." : 'Unknown'}</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.graduation ? displayedDoctor.qualification: 'Unknown'}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="account-tie-hat-outline"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
+                                    </View>
+                                    <View className="flex flex-col">
+                                        <Text>Consultation Fees</Text>
+                                        <View className="flex flex-row justify-start">
+                                            <Text className="font-bold text-xl flex flex-row justify-start">{'\uFDFC'} {displayedDoctor.consultationFee ? displayedDoctor.consultationFee: 'Unknown'}</Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
                             {
                                 displayedDoctor.resourceServiceList != null && Object.keys(displayedDoctor).includes('resourceServiceList') && displayedDoctor.resourceServiceList.length > 0 &&
-                                <View className="pt-16">
+                                <View className="pt-8">
                                     <Text>Doctor Services: </Text>
                                     {/* 951507876 */}
                                     <View className="pt-3">
@@ -572,19 +569,19 @@ const DoctorSelect = () => {
                                 color={"#737373"}
                             />
                         </View>
-                        <Text className="text-xl font-bold text-center mb-2 mt-1">{appointmentToConfirm?.name}, {branch}, {city}</Text>
-                        <Text className="text-xl text-center mb-4">Date: {moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot}</Text>
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">{appointmentToConfirm?.name}, {branch}, {appointmentBranch?.district}, {city}</Text>
+                        <Text className="text-xl text-center mb-4">{i18n.t('Date')}: {moment(searchDate).format("DD-MMM-YYYY") + "\nTime: " + selectedSlot}</Text>
                         <View className=" flex-row justify-between gap-5 items-center py-4">
                             <Pressable onPress={() => {
                                 setConfirmAppointmentModal(false)
                             }} >
-                                <Text> Cancel </Text>
+                                <Text> {i18n.t('Cancel')} </Text>
                             </Pressable>
                             <Pressable onPress={() => {
                                 setConfirmAppointmentModal(false)
                                 loggedIn ? bookAppointment(appointmentToConfirm) : router.push("/SignIn");
                             }}>
-                                <Text> Confirm </Text>
+                                <Text> {i18n.t('Confirm')} </Text>
                             </Pressable>
                         </View>
                     </View>
@@ -600,13 +597,13 @@ const DoctorSelect = () => {
                                 color={"#84CC16"}
                             />
                         </View>
-                        <Text className="text-xl font-bold text-center mb-4 pt-3">Success - Appointment booked successfully</Text>
+                        <Text className="text-xl font-bold text-center mb-4 pt-3">{i18n.t('Success - Appointment booked successfully')}</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
                             <Pressable onPress={() => {
                                 setBookingSuccess(false)
                                 router.back()
                             }}>
-                                <Text> Ok </Text>
+                                <Text> {i18n.t('Ok')} </Text>
                             </Pressable>
                         </View>
                     </View>
@@ -622,7 +619,7 @@ const DoctorSelect = () => {
                                 color={"#EF4444"}
                             />
                         </View>
-                        <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment booking failed</Text>
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Appointment booking failed')}</Text>
                         <Text className="text-xl text-center mb-4">Failed to save appointment</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
                             <Pressable onPress={() => {

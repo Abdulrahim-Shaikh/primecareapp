@@ -163,7 +163,7 @@ const DoctorSpecialityPage = () => {
             (specialityList == null || specialityList.length === 0) && !loader &&
             <Text className="w-full text-center text-lg text-gray-600">{i18n.t("No specialities found")}</Text>
           }
-          <View className="flex-1 space-y-4 ">
+          <View className="flex-1 pb-16 space-y-4 ">
             <FlatList
               contentContainerStyle={{ gap: 9 }}
               data={specialityList}
@@ -184,9 +184,25 @@ const DoctorSpecialityPage = () => {
                         />
                       </View>
                       <View className="w-full px-4 flex justify-center gap-3">
-                        <View className="w-full flex flex-col items-start gap-2 font-semibold text-lg text-gray-800">
-                          <Text>{item.name}</Text>
+                        <View className="flex flex-row justify-between flex-wrap font-semibold text-lg text-gray-800">
+                            <View>
+                                <Text className="text-base">
+                                    {item.name}
+                                </Text>
+                            </View>
+                            <View
+                                style={{
+                                    paddingRight: 25,
+                                }}
+                                >
+                                <Text className="text-base">
+                                    {item.nameAr}
+                                </Text>
+                            </View>
                         </View>
+                        {/* <View className="w-full flex flex-col items-start gap-2 font-semibold text-lg text-gray-800">
+                          <Text>{item.name}</Text>
+                        </View> */}
                       </View>
                     </Pressable>
                   </View>

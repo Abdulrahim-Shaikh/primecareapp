@@ -94,6 +94,7 @@ const SingUp = () => {
   const [errorsExist, setErrorsExist] = useState(false);
   const [patientAlreadyExists, setPatientAlreadyExists] = useState(false);
   const [mandatoryFieldsMissing, setMandatoryFieldsMissing] = useState(false);
+  const [branchOptions, setBranchOptions] = useState<any>([]);
 
   let dateAux = new Date();
   const { language, changeLanguage } = useLanguage();
@@ -106,8 +107,11 @@ const SingUp = () => {
     useCallback(() => {
       if (branches == null) {
         branchService.findAll().then((response) => {
-          setBranches(response.data)
+          setBranchOptions(response.data.filter((branch: any) => branch.showInMobileApp != null && branch.showInMobileApp === true))
+          // setBranches(response.data)
         })
+      } else {
+          setBranchOptions(branches.filter((branch: any) => branch.showInMobileApp != null && branch.showInMobileApp === true))
       }
       changeLocale(language)
       changeLanguage(language)
@@ -432,7 +436,7 @@ const SingUp = () => {
                           );
                         }}
                         showsVerticalScrollIndicator={false}
-                        dropdownStyle={styles.dropdownMenuStyle}
+                        dropdownStyle={styles.mobileCodeDropdownMenuStyle}
                       />
                       <></>
                     </Fragment>
@@ -655,7 +659,7 @@ const SingUp = () => {
             </View>
             <View className="border rounded-xl p-4">
               <SelectDropdown
-                data={branches}
+                data={branchOptions}
                 defaultValue={selectedBranch}
                 search={true}
                 onSelect={(selectedItem, index) => {
@@ -813,18 +817,18 @@ const SingUp = () => {
                   color={"#737373"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Already Exists with this mobile number</Text>
+              <Text className="text-xl font-bold text-center mb-2 pt-3">{i18n.t('Patient Already Exists with this mobile number')}</Text>
               <View className=" flex-row justify-between gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setPatientAlreadyExists(false)
                 }} >
-                  <Text> Back </Text>
+                  <Text> {i18n.t('Back')} </Text>
                 </Pressable>
                 <Pressable onPress={() => {
                   setPatientAlreadyExists(false)
                   router.push('/SignIn')
                 }}>
-                  <Text> Sign in </Text>
+                  <Text> {i18n.t('Sign in')} </Text>
                 </Pressable>
               </View>
             </View>
@@ -840,13 +844,13 @@ const SingUp = () => {
                   color={"#EF4444"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-2 mt-1">Mandatory Fields Missing</Text>
-              <Text className="text-xl font-bold text-center mb-4">Please fill in all required fields</Text>
+              <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Mandatory Fields Missing')}</Text>
+              <Text className="text-xl font-bold text-center mb-4">{i18n.t('Please fill in all required fields')}</Text>
               <View className=" flex-row justify-end gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setMandatoryFieldsMissing(false)
                 }} >
-                  <Text> Back </Text>
+                  <Text>{i18n.t('Back')}</Text>
                 </Pressable>
               </View>
             </View>
@@ -875,9 +879,21 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   dropdownButtonIconStyle: {},
-  dropdownMenuStyle: {
+  mobileCodeDropdownMenuStyle: {
     width: '75%',
+    height: '100%',
     backgroundColor: '#E9ECEF',
+    flex: 1,
+    alignContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  dropdownMenuStyle: {
+    height: '100%',
+    backgroundColor: '#E9ECEF',
+    flex: 1,
+    alignContent: 'center',
+    alignItems: 'center',
     borderRadius: 8,
   },
   dropdownItemStyle: {

@@ -25,6 +25,7 @@ import { useSpecialities } from "../../domain/contexts/SpecialitiesContext";
 import specialityService from "../../domain/services/SpecialityService";
 import { useCities } from "../../domain/contexts/CitiesContext";
 import cityMasterService from "../../domain/services/CityMasterService";
+import http from "../../domain/services/core/HttpService";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -55,7 +56,7 @@ const Home = () => {
 
   useFocusEffect(
     useCallback(() => {
-
+      const url = http.getURL();
       if (doctors == null || doctors.length == 0) {
         resourceService.getAllDoctorsByDesignation('Doctor').then((res) => {
           changeDoctors(res.data)

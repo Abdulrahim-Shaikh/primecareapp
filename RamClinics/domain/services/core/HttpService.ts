@@ -15,8 +15,12 @@ class HttpService {
     private readonly divisionCode = 'CHN';    
     private readonly allowedDivisions = 'CHN'//Array<string> = ['CHN'];
     // private readonly baseUrl = CLAIMS_LINK;
-    // private baseUrl = PROD_LINK;
-    private baseUrl = UAT_LINK;
+    private readonly baseUrl = PROD_LINK;
+    // private readonly baseUrl = UAT_LINK;
+
+    getURL() {
+        return this.baseUrl;
+    }
 
 
     getHeaders() {
@@ -34,7 +38,7 @@ class HttpService {
     }
 
     getAPI(path: string) {
-        console.log("---------- GET: " + path + " ----------");
+        console.log("---------- GET: " + path);
         return axios.get(this.baseUrl + path, this.getHeaders());
     }
 
@@ -43,7 +47,7 @@ class HttpService {
     }
 
     postAPI(path: string, entity: any) {
-        console.log("---------- POST: " + path + " ----------");
+        console.log("---------- POST: " + path);
         return axios.post(this.baseUrl + path, entity, this.getHeaders());
         // return axios({
         //     method: 'post',
@@ -62,12 +66,12 @@ class HttpService {
     }
 
     putAPI(path: string, entity: any) {
-        console.log("---------- PUT: " + path + " ----------");
+        console.log("---------- PUT: " + path);
         return axios.put(this.baseUrl + path, entity, this.getHeaders());
     }
 
     deleteAPI(path: string, id: number) {
-        console.log("---------- DELETE: " + path + " ----------");
+        console.log("---------- DELETE: " + path);
         return axios.delete(this.baseUrl + path + id, this.getHeaders());
     }
 }

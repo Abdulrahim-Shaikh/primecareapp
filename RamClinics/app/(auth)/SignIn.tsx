@@ -124,7 +124,7 @@ const SignIn = () => {
             <View className="pt-8">
               <View>
                 <Text className="text-[14px] font-semibold text-center">
-                  Or Continue With
+                  {i18n.t('Or Continue With')}
                 </Text>
               </View>
 
@@ -164,19 +164,19 @@ const SignIn = () => {
                   color={"#EF4444"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
-              <Text className="text-xl font-bold text-center mb-4">You need to Sign Up first</Text>
+              <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Patient Not Found')}</Text>
+              <Text className="text-xl font-bold text-center mb-4">{i18n.t('You need to Sign Up first')}</Text>
               <View className=" flex-row justify-between gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setPatientNotFoundModal(false)
                 }} >
-                  <Text> Back </Text>
+                  <Text> {i18n.t('Back')} </Text>
                 </Pressable>
                 <Pressable onPress={() => {
                   setPatientNotFoundModal(false)
                   router.push('/SignUp')
                 }}>
-                  <Text> Sign up </Text>
+                  <Text> {i18n.t('Sign up')} </Text>
                 </Pressable>
               </View>
             </View>
@@ -192,12 +192,12 @@ const SignIn = () => {
                   color={"#737373"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-2 pt-3">Mobile Number shoud not be empty</Text>
+              <Text className="text-xl font-bold text-center mb-2 pt-3">{i18n.t('Mobile Number shoud not be empty')}</Text>
               <View className=" flex-row justify-end gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setMobileEmptyVisible(false)
                 }} >
-                  <Text> Ok </Text>
+                  <Text> {i18n.t('Ok')} </Text>
                 </Pressable>
               </View>
             </View>

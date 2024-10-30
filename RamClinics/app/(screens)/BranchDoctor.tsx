@@ -41,13 +41,13 @@ const BranchDoctor = () => {
     const [locale, setLocale] = useState(i18n.locale);
     const [showLast3Appointments, setShowLast3Appointments] = useState(false);
     const [patientData, setPatientData] = useState(useUserSate.getState().user)
-    const { branches, setBranches } = useBranches();
     const [recentAppointments, setRecentAppointments] = useState<any>([]);
     const [branchIds, setBranchIds] = useState<any>({});
 
     const generalDentistry = 'General Dentistry';
     const generalMedicine = "General Medicine";
     const generalDentistrySpecialityCode = 'GP';
+    const generalMedicineSpecialityCode = 'GM';
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -104,6 +104,7 @@ const BranchDoctor = () => {
             if (+callCenterDoctorFlow) {
                 let doctorsByBranch: any = []
                 let generalDentistryDoctors: any = []
+                let generalMedicineDoctors: any = []
                 doctors.map((doctor: any) => {
                     if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(specialityCode) || doctor.speciality == speciality)) {
                         doctorsByBranch.push(doctor)
@@ -111,13 +112,20 @@ const BranchDoctor = () => {
                     if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(generalDentistrySpecialityCode) || doctor.speciality == generalDentistry)) {
                         generalDentistryDoctors.push(doctor)
                     }
+                    if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(generalMedicineSpecialityCode) || doctor.speciality == generalMedicine)) {
+                        generalMedicineDoctors.push(doctor)
+                    }
                 })
                 // if (doctorsByBranch.length === 0) {
                 //     doctors.map((doctor: any) => {
                 //     })
                 // }
                 console.log("doctorsByBranch: ", doctorsByBranch)
-                setDoctorsData(doctorsByBranch.length === 0 ? generalDentistryDoctors : doctorsByBranch)
+                if (department == 'Dental') {
+                    setDoctorsData(doctorsByBranch.length === 0 ? generalDentistryDoctors : doctorsByBranch)
+                } else if (department == 'Medical') {
+                    setDoctorsData(doctorsByBranch.length === 0 ? generalMedicineDoctors: doctorsByBranch)
+                }
                 setLoader(false)
             } else {
                 if (branchId != null && department != null && speciality != null) {
