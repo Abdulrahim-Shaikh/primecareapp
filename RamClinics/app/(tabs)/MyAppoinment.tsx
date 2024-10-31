@@ -281,7 +281,8 @@ const Appoinment = () => {
               })
               .catch((error) => {
                 setModalVisible(false)
-                Alert.alert('Note', 'Doctor Schedule not found')
+                setDoctorScheduleNotFoundModal(true)
+                // Alert.alert('Note', 'Doctor Schedule not found')
                 console.log("error doctor schedule: ", error)
               })
           })
@@ -514,12 +515,6 @@ const Appoinment = () => {
       }}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <View className="bg-white p-6 rounded-lg w-4/5 relative">
-            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setDoctorScheduleNotFoundModal(false)
-            }}>
-              <AntDesign name="closecircle" size={24} color="#78450f" />
-            </Pressable> */}
-            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
             <View className="flex flex-row justify-center">
               <MaterialCommunityIcons
                 name="close-circle-outline"
@@ -533,11 +528,6 @@ const Appoinment = () => {
                 setDoctorScheduleNotFoundModal(false)
               }} >
                 <Text> Back </Text>
-                <MaterialCommunityIcons
-                  name="chevron-left"
-                  size={24}
-                  color={"#dc2626"}
-                />
               </Pressable>
             </View>
           </View>
@@ -547,13 +537,6 @@ const Appoinment = () => {
       <Modal transparent={true} animationType="fade" visible={patientNotFoundModal} onRequestClose={() => setPatientNotFoundModal(false)}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <View className="bg-white p-6 rounded-lg w-4/5 relative">
-            {/* <Pressable className="absolute top-3 right-3" onPress={() => {
-              setPatientNotFoundModal(false)
-              router.back()
-            }}>
-              <AntDesign name="closecircle" size={24} color="#3B2314" />
-            </Pressable> */}
-            {/* <Text className="text-xl font-bold text-center mb-4 mt-7">Note</Text> */}
             <View className="flex flex-row justify-center">
               <MaterialCommunityIcons
                 name="information-outline"

@@ -57,6 +57,10 @@ const Wallets = () => {
   const [showTransfer, setShowTransfer] = useState(false);
   const [showTransferPatient, setShowTransferPat] = useState(false);
   const [transferAmount, setTransferAmt] = useState('');
+  const [successModal, setSuccessModal] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState('');
+  const [refillWalletFailed, setRefillWalletFailed] = useState(false);
+
   let refillAccountNo = '';
   let account = {
     "status": "Active",
@@ -159,11 +163,14 @@ const Wallets = () => {
     walletService.refillWallet(refillAccountNo, 'paymentLink', +refillAmount, +branchId, +doctorId, patientId)
       .then((response) => {
         let msg = 'Entered Amount ' + refillAmount + ', sent payment link to patient Successfully! (Check SMS)';
-        Alert.alert('Success', msg);
+        setSuccessModalMessage(msg);
+        setSuccessModal(true);
+        // Alert.alert('Success', msg);
         setRefillAmt('0');
       })
       .catch((error) => {
-        Alert.alert('Error', 'Failed to refill wallet');
+        setRefillWalletFailed(true);
+        // Alert.alert('Error', 'Failed to refill wallet');
         console.error("Failed to refill wallet", error);
       })
   };
@@ -172,12 +179,15 @@ const Wallets = () => {
     walletService.transferToDoctorWallet(patientWallet?.accountId, +transferAmount, +selectedBranchId, +selectedDoc, patientId)
       .then((response) => {
         let msg = 'Entered Amount ' + transferAmount + ' transferred Successfully!';
-        Alert.alert('Success', msg);
+        setSuccessModalMessage(msg);
+        setSuccessModal(true);
+        // Alert.alert('Success', msg);
         setTransferAmt('0');
         setShowTransfer(false);
       })
       .catch((error) => {
-        Alert.alert('Error', 'Failed to transfer to doctor');
+        setRefillWalletFailed(true);
+        // Alert.alert('Error', 'Failed to transfer to doctor');
         console.error("Failed to refill wallet:", error.response ? error.response.data : error.message);
       })
   };
@@ -328,6 +338,28 @@ const Wallets = () => {
                 <Button title="Cancel" color="red" onPress={() => setShowTransfer(false)} />
                 <Button title="Transfer" color="green" onPress={() => transferToDoctor()} />
               </View> */}
+            </View>
+          </View>
+        </Modal>
+        <Modal transparent={true} animationType="fade" visible={successModal} onRequestClose={() => setSuccessModal(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <View className="flex flex-row justify-center">
+                <MaterialCommunityIcons
+                  name="check-circle-outline"
+                  size={60}
+                  color={"#84CC16"}
+                />
+              </View>
+              <Text className="text-xl font-bold text-center mb-2 mt-1">Error</Text>
+              <Text className="text-xl font-bold text-center mb-4">Failed to refill wallet</Text>
+              <View className=" flex-row justify-between gap-5 items-center py-4">
+                <Pressable onPress={() => {
+                  setSuccessModal(false)
+                }}>
+                  <Text> Ok </Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </Modal>

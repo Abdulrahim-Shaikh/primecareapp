@@ -70,10 +70,6 @@ const UpcomingSlider = () => {
       });
   }, [])
 
-  useEffect(() => {
-    console.log('promotion servicees lenghth', promotionServices.length.toString());
-  }, [])
-
   const flatListRef = useAnimatedRef<FlatList<ItemProps>>();
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);

@@ -806,6 +806,13 @@ const SingUp = () => {
         <Modal transparent={true} animationType="fade" visible={patientAlreadyExists} onRequestClose={() => setPatientAlreadyExists(false)}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <View className="flex flex-row justify-center">
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={60}
+                  color={"#737373"}
+                />
+              </View>
               <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Already Exists with this mobile number</Text>
               <View className=" flex-row justify-between gap-5 items-center py-4">
                 <Pressable onPress={() => {
@@ -826,19 +833,20 @@ const SingUp = () => {
         <Modal transparent={true} animationType="fade" visible={mandatoryFieldsMissing} onRequestClose={() => setMandatoryFieldsMissing(false)}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <View className="bg-white p-6 rounded-lg w-4/5 relative">
+              <View className="flex flex-row justify-center">
+                <MaterialCommunityIcons
+                  name="close-circle-outline"
+                  size={60}
+                  color={"#EF4444"}
+                />
+              </View>
               <Text className="text-xl font-bold text-center mb-2 mt-1">Mandatory Fields Missing</Text>
               <Text className="text-xl font-bold text-center mb-4">Please fill in all required fields</Text>
-              <View className=" flex-row justify-between gap-5 items-center py-4">
+              <View className=" flex-row justify-end gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setMandatoryFieldsMissing(false)
                 }} >
                   <Text> Back </Text>
-                </Pressable>
-                <Pressable onPress={() => {
-                  setMandatoryFieldsMissing(false)
-                  router.push('/SignUp')
-                }}>
-                  <Text> Sign up </Text>
                 </Pressable>
               </View>
             </View>

@@ -36,9 +36,12 @@ const Packages = () => {
     const [qrCodeData, setQrCodeData] = useState<any>();
     const [isLoadingQr, setIsLoadingQr] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [signInRequiredModal, setSignInRequiredModal] = useState(false);
+    const [qrFetchError, setQrFetchError] = useState(false);
 
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
+    const [bookingError, setBookingError] = useState(false);
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -54,21 +57,6 @@ const Packages = () => {
 
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;
-
-    // useEffect(() => {
-    //     const fetchBranch = async () => {
-    //         try {
-    //             const res = await branchService.findAll();
-    //             setBranches(res.data);
-    //             if (res.data.length > 0) {
-    //                 setSelectedBranch(res.data[0].name);
-    //             }
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     fetchBranch();
-    // }, []);
 
     useEffect(() => {
         const fetchPackages = async () => {
@@ -86,18 +74,6 @@ const Packages = () => {
         fetchPackages();
     }, []);
 
-    // useEffect(() => {
-    //     // if (selectedBranch) {
-    //     const filtered = packages.filter((pack: any) => {
-    //         return pack.packageBranchs.some(
-    //             (branch: any) => branch.branchName === selectedBranch);
-    //     });
-    //     setFilteredPackages(filtered);
-    //     // } else {
-    //     //     setFilteredPackages(packages);
-    //     // }
-    // }, [selectedBranch, packages]);
-
     const handleBookPress = (item: any) => {
         setSelectedPackage(item);
         setQrCodeData(null);
@@ -111,7 +87,8 @@ const Packages = () => {
 
     const handleConfirmBooking = () => {
         if (!userId) {
-            Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
+            setSignInRequiredModal(true);
+            // Alert.alert(i18n.t('SignInRequired'), i18n.t('SignInMessage'));
             return;
         }
 
@@ -147,12 +124,12 @@ const Packages = () => {
                     // console.log("QR Code Response", qrCodeResponse);
                     setQrCodeData(qrCodeResponse.data);
                 } else {
-                    Alert.alert('Failed to fetch QR Code');
+                    setQrFetchError(true);
                 }
             })
             .catch((error) => {
                 console.error(error);
-                Alert.alert('An error occurred during the booking process');
+                setBookingError(true);
             })
             .finally(() => {
                 setIsLoadingQr(false);
@@ -249,6 +226,75 @@ const Packages = () => {
                                     </View>
                                 )
                                 }
+                            </View>
+                        </View>
+                    </Modal>
+                    <Modal transparent={true} animationType="fade" visible={signInRequiredModal} onRequestClose={() => setSignInRequiredModal(false)}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <View className="flex flex-row justify-center">
+                                    <MaterialCommunityIcons
+                                        name="close-circle-outline"
+                                        size={60}
+                                        color={"#EF4444"}
+                                    />
+                                </View>
+                                <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('SignInRequired')}</Text>
+                                <Text className="text-xl font-bold text-center mb-4">{i18n.t('SignInMessage')}</Text>
+                                <View className=" flex-row justify-between gap-5 items-center py-4">
+                                    <Pressable onPress={() => {
+                                        setSignInRequiredModal(false)
+                                    }} >
+                                        <Text> Back </Text>
+                                    </Pressable>
+                                    <Pressable onPress={() => {
+                                        setSignInRequiredModal(false)
+                                    }}>
+                                        <Text> Sign in </Text>
+                                    </Pressable>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                    <Modal transparent={true} animationType="fade" visible={qrFetchError} onRequestClose={() => setQrFetchError(false)}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <View className="flex flex-row justify-center">
+                                    <MaterialCommunityIcons
+                                        name="close-circle-outline"
+                                        size={60}
+                                        color={"#EF4444"}
+                                    />
+                                </View>
+                                <Text className="text-xl font-bold text-center mb-2 pt-3">Failed to fetch QR Code</Text>
+                                <View className=" flex-row justify-end gap-5 items-center py-4">
+                                    <Pressable onPress={() => {
+                                        setQrFetchError(false)
+                                    }}>
+                                        <Text> Ok </Text>
+                                    </Pressable>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                    <Modal transparent={true} animationType="fade" visible={bookingError} onRequestClose={() => setBookingError(false)}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                            <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                                <View className="flex flex-row justify-center">
+                                    <MaterialCommunityIcons
+                                        name="close-circle-outline"
+                                        size={60}
+                                        color={"#EF4444"}
+                                    />
+                                </View>
+                                <Text className="text-xl font-bold text-center mb-2 mt-7">An error occurred during the booking process</Text>
+                                <View className=" flex-row justify-end gap-5 items-center py-4">
+                                    <Pressable onPress={() => {
+                                        setBookingError(false)
+                                    }} >
+                                        <Text> Ok </Text>
+                                    </Pressable>
+                                </View>
                             </View>
                         </View>
                     </Modal>

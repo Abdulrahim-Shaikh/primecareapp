@@ -45,6 +45,7 @@ const DoctorSelect = () => {
     const [appointmentFailed, setAppointmentFailed] = useState<any>(null);
     const [bookingSuccess, setBookingSuccess] = useState(false);
     const [patientNotFoundModal, setPatientNotFoundModal] = useState(false);
+    const [doctorScheduleNotFoundModal, setDoctorScheduleNotFoundModal] = useState(false);
 
     const showDoctor = (item: any) => {
         setMinimalDoctorInfo(item)
@@ -600,13 +601,7 @@ const DoctorSelect = () => {
                             />
                         </View>
                         <Text className="text-xl font-bold text-center mb-4 pt-3">Success - Appointment booked successfully</Text>
-                        <View className=" flex-row justify-between gap-5 items-center py-4">
-                            <Pressable onPress={() => {
-                                setBookingSuccess(false)
-                                router.back()
-                            }} >
-                                <Text> Back </Text>
-                            </Pressable>
+                        <View className=" flex-row justify-end gap-5 items-center py-4">
                             <Pressable onPress={() => {
                                 setBookingSuccess(false)
                                 router.back()
@@ -681,6 +676,34 @@ const DoctorSelect = () => {
                                 router.back()
                             }}>
                                 <Text> Ok </Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal transparent={true} animationType="fade" visible={doctorScheduleNotFoundModal} onRequestClose={() => {
+                setDoctorScheduleNotFoundModal(false)
+            }}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                        <View className="flex flex-row justify-center">
+                            <MaterialCommunityIcons
+                                name="close-circle-outline"
+                                size={60}
+                                color={"#EF4444"}
+                            />
+                        </View>
+                        <Text className="text-xl font-bold text-center mb-4 pt-3">Doctor schedule not found</Text>
+                        <View className=" flex-row justify-end gap-5 items-center py-4">
+                            <Pressable onPress={() => {
+                                setDoctorScheduleNotFoundModal(false)
+                            }} >
+                                <Text> Back </Text>
+                                <MaterialCommunityIcons
+                                    name="chevron-left"
+                                    size={24}
+                                    color={"#dc2626"}
+                                />
                             </Pressable>
                         </View>
                     </View>
