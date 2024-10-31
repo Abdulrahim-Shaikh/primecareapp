@@ -10,6 +10,7 @@ import { UserContext } from "../../domain/contexts/UserContext";
 import branchService from "../../domain/services/BranchService";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import { useUserSate } from "../../domain/state/UserState";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -148,41 +149,48 @@ const MainMenu = () => {
 
 
   return (
-    <View className="pt-8 w-full">
-      <View className="flex flex-row justify-between px-6">
-        <Text className=" text-xl font-semibold">{i18n.t("Main Menu")}</Text>
-      </View>
-      <View className="flex-row pt-5 px-4">
-
-        {
-          loggedIn
-            ?
-            <FlatList
-              data={loggedIn ? menuItems : loggedOutMenuItems}
-              numColumns={3}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ marginHorizontal: "auto" }}
-              renderItem={({ item }) => (
-                <View>
-                  <View className="flex flex-row p-1 m-1 w-32 h-32">
-                    <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
-                      <View className="py-2 items-center">
-                        <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
-                      </View>
-                      <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              )}
-            />
-            :
-            <View className="flex flex-row justify-evenly w-full">
-              {renderLoggedOutMenu}
+    <SafeAreaView>
+      <ScrollView>
+        <View className="w-full flex flex-row" style={{ padding: '4%' }}>
+          <View className="pt-8 w-full">
+            <View className="flex flex-row justify-between">
+              <Text className=" text-xl font-semibold">{i18n.t("Main Menu")}</Text>
             </View>
-        }
+            <View className="flex-row pt-5">
 
-      </View>
-    </View >
+              {
+                loggedIn
+                  ?
+                  <FlatList
+                    data={loggedIn ? menuItems : loggedOutMenuItems}
+                    numColumns={3}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ marginHorizontal: "auto" }}
+                    renderItem={({ item }) => (
+                      <View>
+                        <View className="flex flex-row p-1 m-1 w-32 h-32">
+                          <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
+                            <View className="py-2 items-center">
+                              <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
+                            </View>
+                            <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
+                          </Pressable>
+                        </View>
+                      </View>
+                    )}
+                  />
+                  :
+                  <View className="flex flex-row justify-evenly w-full">
+                    {renderLoggedOutMenu}
+                  </View>
+              }
+
+            </View>
+          </View >
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+
   );
 };
 

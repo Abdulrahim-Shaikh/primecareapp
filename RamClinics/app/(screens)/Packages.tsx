@@ -63,7 +63,8 @@ const Packages = () => {
             setIsLoading(true);
             try {
                 const res = await packageService.getPackages();
-                setPackages(res.data);
+                let today = new Date();
+                setPackages(res.data.filter((pack: any) => pack.showOnline && pack.validTo>=today));
             } catch (error) {
                 console.error(error);
             } finally {
@@ -164,19 +165,21 @@ const Packages = () => {
                         <View className="flex-1 items-center justify-center">
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         </View>
-                    ) : filteredPackages.length > 0 ? (
-                        <FlatList data={filteredPackages}
+                    ) : packages.length > 0 ? (
+                        <FlatList data={packages}
                             keyExtractor={(item: any) => item.id.toString()}
                             renderItem={({ item }) => {
-                                const photoUrl = (item.photo && Array.isArray(item.photo) && item.photo.length > 0 && item.photo[0])
-                                    ? { uri: `${sourceUrl}${encodeURIComponent(item.photo[0])}` }
+                                const photoUrl = (item.offerImages && Array.isArray(item.offerImages) && item.offerImages.length > 0 && item.offerImages[0])
+                                    ? { uri: `${sourceUrl}${encodeURIComponent(item.offerImages[0])}` }
                                     : emptyOfferImage;
                                 return (
                                     <View className="flex-row border border-pc-primary rounded-lg mb-4 overflow-hidden">
                                         <Image source={photoUrl} style={{ width: 128, height: 128 }} />
                                         <View className="flex-1 p-4">
-                                            <Text className="text-base font-bold mb-1">{item.packageName}</Text>
-                                            <Text className="text-sm text-gray-500 mb-4">{item.serviceName}</Text>
+                                            {/* <Text className="text-base font-bold mb-1">{item.packageName}</Text> */}
+                                            {/* <Text className="text-sm text-gray-500 mb-4">{item.serviceName}</Text> */}
+                                            <Text className="text-lg font-medium mb-4">{item.description}</Text>
+                                            <Text className="text-lg font-medium mb-4">{item.descriptionAr}</Text>
                                             <Pressable className="bg-[rgb(59,35,20)] flex-row items-center justify-center rounded-md py-2 px-4"
                                                 onPress={() => handleBookPress(item)} style={{ alignSelf: 'flex-start' }}
                                             >
