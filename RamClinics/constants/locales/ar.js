@@ -7,6 +7,7 @@
 
 const translations = {
      en: {
+        "Showing last 3 appointments' doctors": "Showing last 3 appointments' doctors",
         "Appointment booking failed": "Appointment booking failed",
         "Success - Appointment booked successfully": "Success - Appointment booked successfully",
         "Cancel": "Cancel",
@@ -762,7 +763,7 @@ const translations = {
         "Doctor schedule not found": "جدول الطبيب غير موجود",
         "Patient Policy data not found": "بيانات سياسة المريض غير موجودة",
         "Success - Appointment booked successfully": "تم حجز الموعد بنجاح",
-        "Appointment booking failed": "فشل حجز الموعد",
+        "Showing last 3 appointments' doctors": "عرض آخر 3 أطباء للمواعيد",
     }
 }
 export default translations;
