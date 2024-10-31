@@ -138,7 +138,8 @@ const DoctorSpecialityPage = () => {
             department: department,
             specialityCode: code,
             speciality: speciality,
-            callCenterDoctorFlow: callCenterDoctorFlow
+            callCenterDoctorFlow: callCenterDoctorFlow,
+            last3AppointmentsFlow: 0
           }
         })
       }

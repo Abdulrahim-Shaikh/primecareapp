@@ -46,7 +46,7 @@ const Home = () => {
   const [locale, setLocale] = useState(i18n.locale);
   const { branchesData, changeBranches } = useBranches();
   const { doctors, changeDoctors } = useDoctors()
-  const {cities, changeCities} = useCities()
+  const { cities, changeCities } = useCities()
   const { allSpecialities, changeSpecialities } = useSpecialities();
 
   const changeLocale = (locale: any) => {
@@ -86,9 +86,9 @@ const Home = () => {
         cityMasterService.findAll().then((res) => {
           changeCities(res.data)
         })
-        .then(() => {
-          console.log("cities set")
-        })
+          .then(() => {
+            console.log("cities set")
+          })
       }
 
       changeLocale(language)

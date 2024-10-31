@@ -15,8 +15,8 @@ class HttpService {
     private readonly divisionCode = 'CHN';    
     private readonly allowedDivisions = 'CHN'//Array<string> = ['CHN'];
     // private readonly baseUrl = CLAIMS_LINK;
-    private readonly baseUrl = PROD_LINK;
-    // private readonly baseUrl = UAT_LINK;
+    // private readonly baseUrl = PROD_LINK;
+    private readonly baseUrl = UAT_LINK;
 
     getURL() {
         return this.baseUrl;

@@ -13,6 +13,8 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useCities } from "../../domain/contexts/CitiesContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LogBox } from 'react-native';
+import appointmentService from "../../domain/services/AppointmentService";
+import { useUserSate } from "../../domain/state/UserState";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -28,6 +30,7 @@ const CityPage = () => {
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const { branches, changeBranches } = useBranches();
     const { cities, changeCities } = useCities();
+    const [patientData, setPatientData] = useState(useUserSate.getState().user)
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -37,6 +40,8 @@ const CityPage = () => {
     useFocusEffect(
         useCallback(() => {
             LogBox.ignoreAllLogs();
+            setPatientData(useUserSate.getState().user)
+            if (branchId == null)
             changeLocale(language)
             changeLanguage(language)
             console.log("locale: ", locale)
@@ -124,7 +129,40 @@ const CityPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Select City")} isPushBack={true} />
-                <View className="flex-1 pt-2 space-y-4 ">
+                <View className="flex-1 space-y-4 ">
+                    {
+                        +callCenterDoctorFlow &&
+                        // <View className="pt-8 pb-5 border-b border-dashed border-pc-primary flex flex-row justify-between items-center">
+                        <View className="pb-5 flex flex-row justify-start border-b border-dashed border-pc-primary">
+                            <View className="mt-6 w-3/4 flex flex-row justify-start items-center gap-2">
+                                <Pressable
+                                onPress={() => {
+                                    router.push({
+                                        pathname: "/BranchDoctor",
+                                        params: {
+                                            branchId: "",
+                                            fromSpeciality: fromSpeciality,
+                                            department: department,
+                                            specialityCode: "",
+                                            speciality: speciality,
+                                            callCenterDoctorFlow: 0,
+                                            last3AppointmentsFlow: 1
+                                        }
+                                    })
+                                }}
+                                    className="bg-[#3B2314] flex flex-row items-center gap-2 text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
+                                    <Text className="text-white flex flex-row justify-self-center">
+                                        Go to last 3 appointments
+                                    </Text>
+                                    <MaterialCommunityIcons
+                                        name='arrow-right-drop-circle-outline'
+                                        size={24}
+                                        color={"white"}
+                                    />
+                                </Pressable>
+                            </View>
+                        </View>
+                    }
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
                         data={citiesData}

@@ -105,20 +105,7 @@ const SignIn = () => {
             </Text>
             <View className="w-full pt-8 pb-8">
               <FormField name={i18n.t('mobileno')} placeholder="05..." onChangeText={onChangeText} onEnter={sendOtp} keyboardType="numeric" />
-              {/* <FormField name="Password" placeholder="*******" otherStyle="mt-4" /> */}
             </View>
-            {/* <View className="text-amber-500 flex items-end w-full pt-2 pb-7">
-              <Link
-                href={"/ForgetPassword"}
-                className="text-[14px] text-text-amber-500 font-bold"
-              >
-                Forgot password?
-              </Link>
-            </View> */}
-            {/* <LinkButton link="/VerifyOTP" text="Send Otp" /> */}
-
-            {/* <Button onPress={sendOtp} title="Send OTP"> </Button> */}
-
             <NASButton title={i18n.t('sendotp')} onPress={sendOtp} />
 
             <View className="pt-8">
@@ -127,19 +114,6 @@ const SignIn = () => {
                   {i18n.t('Or Continue With')}
                 </Text>
               </View>
-
-              {/* <View className="flex flex-row gap-4 pt-8 justify-center items-center">
-                <View className="border border-pc-primary rounded-full p-3">
-                  <Image source={fb} />
-                </View>
-                <View className="border border-pc-primary rounded-full p-3">
-                  <Image source={google} />
-                </View>
-                <View className="border border-pc-primary rounded-full p-3">
-                  <Image source={apple} />
-                </View>
-              </View> */}
-
               <View className="pt-4">
                 <Text className="text-base text-pc-primary text-center">
                   {i18n.t('dont')}{" "}

@@ -1,18 +1,15 @@
-import { Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { router } from "expo-router";
 import FormField from "../../components/FormField";
-import LinkButton from "../../components/LinkButton";
 import CheckBox from "react-native-elements/dist/checkbox/CheckBox";
-import { Picker } from "@react-native-picker/picker";
 import { countries } from "../../constants/data";
 import branchService from "../../domain/services/BranchService";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 import moment from "moment";
-import patientService from "../../domain/services/PatientService";
 import NASButton from "../../components/NASButton";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js';
@@ -365,12 +362,6 @@ const SingUp = () => {
                     dropdownStyle={styles.dropdownMenuStyle}
                     showsVerticalScrollIndicator={false}
                   />
-                  {/* <Picker selectedValue={selectedIdCountry} onValueChange={(cntry) => { setIdCountry(cntry) }} className="text-slate-800">
-                    <Picker.Item label="Select Country Code" value="" style={{ color: 'grey', fontSize: 14 }} />
-                    {IDCountries.map((cntry: any) => (
-                      <Picker.Item key={cntry.id} label={i18n.t(cntry.name)} value={cntry.name} />
-                    ))}
-                  </Picker> */}
                 </View>
                 <View className="mt-3">
                   <FormField name={i18n.t("idno") + ' *'} placeholder={i18n.t("idno")} otherStyle="mb-4" onChangeText={(e) => { setId(e) }} />
@@ -420,11 +411,6 @@ const SingUp = () => {
                               </Text>
                               <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
                             </View>
-                            // <View style={styles.dropdownButtonStyle}>
-                            //   <Text style={styles.dropdownButtonTxtStyle}>
-                            //     {" (" + (selectedItem && selectedItem.dial_code) + ") " || 'Select Code'}
-                            //   </Text>
-                            // </View>
                           );
                         }}
                         renderItem={(item, index, isSelected) => {
@@ -441,19 +427,6 @@ const SingUp = () => {
                       <></>
                     </Fragment>
 
-
-                    {/* <Picker
-                      selectedValue={selectedCountryCodeItem}
-                      onValueChange={(item) => {
-                        console.log("item: ", item);
-                        setSelectedCountryCodeItem(item);
-                        setCountryCode(item.dial_code)
-                      }}
-                      className="text-slate-800">
-                      {countries.map((cntry: any) => (
-                        <Picker.Item key={cntry.dial_code} label={" (" + cntry.dial_code + ") " + cntry.name} value={cntry} />
-                      ))}
-                    </Picker> */}
                   </View>
                 </View>
                 <View className={`px-4 py-3  border rounded-xl w-3/4 h-full`} >
@@ -524,11 +497,6 @@ const SingUp = () => {
                       </Text>
                       <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
                     </View>
-                    // <View style={styles.dropdownButtonStyle}>
-                    //   <Text style={styles.dropdownButtonTxtStyle}>
-                    //     {(selectedItem && selectedItem.name) || 'Select nationality'}
-                    //   </Text>
-                    // </View>
                   );
                 }}
                 renderItem={(item, index, isSelected) => {
@@ -542,12 +510,6 @@ const SingUp = () => {
                 showsVerticalScrollIndicator={false}
                 dropdownStyle={styles.dropdownMenuStyle}
               />
-              {/* <Picker
-                selectedValue={gender} onValueChange={(g) => { setGender(g) }} className="text-slate-800">
-                <Picker.Item label={i18n.t("gender")} value="" style={{ color: 'grey', fontSize: 14 }} />
-                <Picker.Item label={i18n.t("male")} value="Male" style={{ fontSize: 16 }} />
-                <Picker.Item label={i18n.t("female")} value="Female" style={{ fontSize: 16 }} />
-              </Picker> */}
             </View>
 
             <View className="mt-3">
@@ -573,11 +535,6 @@ const SingUp = () => {
                         </Text>
                         <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
                       </View>
-                      // <View style={styles.dropdownButtonStyle}>
-                      //   <Text style={styles.dropdownButtonTxtStyle}>
-                      //     {(selectedItem && selectedItem.name) || 'Select nationality'}
-                      //   </Text>
-                      // </View>
                     );
                   }}
                   renderItem={(item, index, isSelected) => {
@@ -594,17 +551,6 @@ const SingUp = () => {
                 <></>
               </Fragment>
             </View>
-
-            {/* <Text className="my-2 font-medium">{i18n.t("Nationality")}</Text>
-            <View className="border rounded-xl">
-              <Picker
-                selectedValue={nationality} onValueChange={(cntry) => { setNationality(cntry) }} className="text-slate-800">
-                <Picker.Item label={i18n.t("Nationality")} value="" style={{ color: 'grey', fontSize: 14 }} />
-                {countries.map((cntry: any) => (
-                  <Picker.Item key={cntry.code} label={cntry.name} value={cntry.name} />
-                ))}
-              </Picker>
-            </View> */}
 
             <FormField name={i18n.t("Email")} placeholder={i18n.t("Email")} otherStyle="mt-4" onChangeText={(e) => { setEmail(e) }} />
 
@@ -644,13 +590,6 @@ const SingUp = () => {
                 dropdownStyle={styles.dropdownMenuStyle}
                 showsVerticalScrollIndicator={false}
               />
-              {/* <Picker
-                selectedValue={city} onValueChange={(c) => { setCity(c) }} className="text-slate-800">
-                <Picker.Item label={i18n.t("City")} value="" style={{ color: 'grey', fontSize: 14 }} />
-                {cities.map((c: any) => (
-                  <Picker.Item key={c.id} label={i18n.t(c.name)} value={c.name} />
-                ))}
-              </Picker> */}
             </View>
 
             <View className="mt-3 flex flex-row">
@@ -688,14 +627,6 @@ const SingUp = () => {
                 dropdownStyle={styles.dropdownMenuStyle}
                 showsVerticalScrollIndicator={false}
               />
-              {/* <Picker
-                selectedValue={selectedBranch} onValueChange={(r) => { setSeletedBranch(r) }} className="text-slate-800">
-                <Picker.Item label={i18n.t("Register Branch")} value="" style={{ color: 'grey', fontSize: 14 }} />
-                {branches.map((branch: any) => (
-                  (branch.name != 'Technas' && branch.name != 'Doha Medical Complex' && branch.name != 'Saudi Swiss' && branch.name! + 'Central Pharmacy Warehouse')
-                  && <Picker.Item key={branch.branchCode} label={`${branch.name}, ${branch.city ? branch.city.trim() : ""}`} value={branch.name} />
-                ))}
-              </Picker> */}
             </View>
 
             <View className="mt-3">
@@ -732,13 +663,6 @@ const SingUp = () => {
                 dropdownStyle={styles.dropdownMenuStyle}
                 showsVerticalScrollIndicator={false}
               />
-              {/* <Picker
-                selectedValue={referredBy} onValueChange={(r) => { setReferredBy(r) }} className="text-slate-800">
-                <Picker.Item label={i18n.t("Referred By")} value="" style={{ color: 'grey', fontSize: 14 }} />
-                {referredByList.map((r: any) => (
-                  <Picker.Item key={r.id} label={i18n.t(r.name)} value={r.name} />
-                ))}
-              </Picker> */}
             </View>
             {
               errorsExist &&
@@ -761,38 +685,10 @@ const SingUp = () => {
                 </View>
               </View>
             }
-            {/* <FormField
-              name="Password"
-              placeholder="*******"
-              otherStyle="mt-4"
-            />
-            <FormField
-              name="Confirm Password"
-              placeholder="*******"
-              otherStyle="mt-4"
-            /> */}
           </View>
           <NASButton title={i18n.t("Register")} onPress={savePatient} />
 
           <View className="pt-8">
-            {/* <View>
-              <Text className="text-[14px] font-semibold text-center">
-                Or Continue With
-              </Text>
-            </View>
-
-            <View className="flex flex-row gap-4 pt-8 justify-center items-center">
-              <View className="border border-pc-primary rounded-full p-3">
-                <Image source={fb} />
-              </View>
-              <View className="border border-pc-primary rounded-full p-3">
-                <Image source={google} />
-              </View>
-              <View className="border border-pc-primary rounded-full p-3">
-                <Image source={apple} />
-              </View>
-            </View> */}
-
             <View className="pt-4 pb-8">
               <Text className="text-base text-pc-primary text-center">
                 {i18n.t("signuptext2")}{" "}

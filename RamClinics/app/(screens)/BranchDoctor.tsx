@@ -13,8 +13,6 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useDoctors } from '../../domain/contexts/DoctorsContext';
 import appointmentService from '../../domain/services/AppointmentService';
 import { useUserSate } from '../../domain/state/UserState';
-import { useBranches } from '../../domain/contexts/BranchesContext';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const categoryList = [
     "All",
@@ -30,10 +28,7 @@ i18n.enableFallback = true;
 
 const BranchDoctor = () => {
 
-    const [searchValue, setSearchValue] = useState('');
-    const [activeCategory, setActiveCategory] = useState(0);
-
-    const { branchId, fromSpeciality, department, specialityCode, speciality, callCenterDoctorFlow } = useLocalSearchParams();
+    const { branchId, fromSpeciality, department, specialityCode, speciality, callCenterDoctorFlow, last3AppointmentsFlow } = useLocalSearchParams();
     const [doctorsData, setDoctorsData] = useState([]);
     const [loader, setLoader] = useState(true);
     const { doctors, changeDoctors } = useDoctors();
@@ -64,42 +59,36 @@ const BranchDoctor = () => {
             changeLocale(language)
             changeLanguage(language)
             setLoader(true);
-            appointmentService.getAppointments(patientData.id, branchId)
+            if (+last3AppointmentsFlow) {
+                appointmentService.getLastThreeAppointments(patientData.id)
                 .then((response) => {
-                    // console.log("response: ", response.data)
-                    const sortedAppointments = response.data.sort((a: any, b: any) => {
-                        return new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
-                        // return moment(new Date(a.startTime)).format("ddd DD-MM-YYYY hh:mm").diff(moment(new Date(a.startTime)).format("ddd DD-MM-YYYY hh:mm"))
-                    })
-                    // console.log("sortedTimeSlots: ", sortedTimeSlots)
-                    // for (let i of sortedTimeSlots) {
-                    //     console.log("\n\ni: ", i)
-                    // }
-                    let last3Appointments: any = []
-                    let last3AppointmentDoctors: any = new Map<any, any>()
-                    for (let i = sortedAppointments.length - 1; i >= 0; i--) {
-                        if (sortedAppointments[i].hisStatus != 'Cancelled') {
-                            if (!last3AppointmentDoctors.has(sortedAppointments[i].practitionerId)) {
-                                last3AppointmentDoctors.set(sortedAppointments[i].practitionerId, sortedAppointments[i])
-                                last3Appointments.push(sortedAppointments[i])
-                                if (last3AppointmentDoctors.length >= 3) {
-                                    break;
-                                }
-                            }
+                    console.log("getLastThreeAppointments response: ", response.data)
+                    let lastAppts: any[] = []
+                    let lastApptsPractionerIds: any = new Set<any>()
+                    for (let appt of response.data) {
+                        if (lastApptsPractionerIds.has(appt.practitionerId)) {
+                            continue
+                        }
+                        lastAppts.push(appt)
+                        lastApptsPractionerIds.add(appt.practitionerId)
+                    }
+                    let lastApptsDoctors: any[] = []
+                    for (let it = 0; it < lastAppts.length; it++) {
+                        resourceService.find(lastAppts[it].practitionerId)
+                        .then((response) => {
+                            lastApptsDoctors.push(response.data)
+                            setRecentAppointments(lastApptsDoctors)
+                        })
+                        .catch((error) => {
+                            console.error("resourceService.find", error.response)
+                        })
+                        if (it == lastAppts.length - 1) {
+                            setLoader(false)
+                            setShowLast3Appointments(true)
                         }
                     }
-
-                    let branchIdsMap: any = {}
-                    for (let id of last3AppointmentDoctors.keys()) {
-                        resourceService.find(id)
-                            .then((response) => {
-                                branchIdsMap[id] = last3AppointmentDoctors.get(id).branchId
-                                setBranchIds(branchIdsMap)
-                                last3AppointmentDoctors.set(id, response.data)
-                                setRecentAppointments([...last3AppointmentDoctors.values()])
-                            })
-                    }
                 })
+            }
 
             if (+callCenterDoctorFlow) {
                 let doctorsByBranch: any = []
@@ -132,12 +121,20 @@ const BranchDoctor = () => {
                     resourceService.getResourceBySpeciality(branchId, department, speciality)
                         .then((response) => {
                             console.log("response: ", response.data)
-                            if (response.data.length === 0 && speciality != generalDentistry) {
-                                resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
-                                    .then((response) => {
-                                        setDoctorsData(response.data)
-                                        setLoader(false);
-                                    })
+                            if (response.data.length == 0) {
+                                if (department == 'Dental' && speciality != generalDentistry) {
+                                    resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
+                                        .then((response) => {
+                                            setDoctorsData(response.data)
+                                            setLoader(false);
+                                        })
+                                } else if (department == 'Medical' && speciality != generalMedicine) {
+                                    resourceService.getResourceBySpeciality(branchId, department, generalMedicine)
+                                        .then((response) => {
+                                            setDoctorsData(response.data)
+                                            setLoader(false);
+                                        })
+                                }
                             } else {
                                 setDoctorsData(response.data)
                                 setLoader(false);
@@ -182,40 +179,6 @@ const BranchDoctor = () => {
                 </View>
 
                 <View className="pb-16 px-6">
-                    {
-                        +callCenterDoctorFlow &&
-                        // <View className="pt-8 pb-5 border-b border-dashed border-pc-primary flex flex-row justify-between items-center">
-                        <View className="pb-5 flex flex-row justify-start border-b border-dashed border-pc-primary">
-                            <View className="mt-6 w-3/4 flex flex-row justify-start items-center gap-2">
-                                <Pressable
-                                    onPress={() => {
-                                        console.log("recentAppointments.length: ", recentAppointments.length)
-                                        if (showLast3Appointments) {
-                                            setShowLast3Appointments(false);
-                                        } else {
-                                            setShowLast3Appointments(true);
-                                        }
-                                        // getPatientPolicyData();
-                                    }}
-                                    className="bg-[#3B2314] flex flex-row items-center gap-2 text-primaryColor border-[1px] border-primaryColor px-5 py-2 rounded-lg">
-                                    <MaterialCommunityIcons
-                                        name={showLast3Appointments? 'eye-off-outline': 'eye-outline'}
-                                        size={24}
-                                        color={"white"}
-                                    />
-                                    <Text className="text-white flex flex-row justify-self-center">
-                                        {
-                                            showLast3Appointments?
-                                            i18n.t("Hide Last 3 Appointments")
-                                            :
-                                            i18n.t("Show Last 3 Appointments")
-                                        }
-                                        {/* {i18n.t("Show Last 3 Appointments")} */}
-                                    </Text>
-                                </Pressable>
-                            </View>
-                        </View>
-                    }
                     {
                         !loader && (doctorsData.length === 0 || doctorsData == null)
                             ?

@@ -160,6 +160,7 @@ const DoctorSelect = () => {
         app.status = "pending"
         app.visitType = "Checkup"
         app.walkIn = null
+        app.bookedFrom = "PrimeCare Mobile App"
         if (+callCenterDoctorFlow) {
             let slots: any = [];
             let start: any, end: any;
