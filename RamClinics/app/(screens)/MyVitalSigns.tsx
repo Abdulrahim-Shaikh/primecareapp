@@ -17,6 +17,7 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 import { useFocusEffect } from "expo-router";
 import SelectDropdown from "react-native-select-dropdown";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const tabNames = [
     { label: "In Progress", value: "in-progress" },
@@ -48,7 +49,8 @@ const MyVitalSigns = () => {
         { id: 2, name: "All", value: 'all' },
         // { id: 3, name: "6 Months", months: 6 },
     ]
-    let [branches, setBranches] = useState([]);
+    const [branchesData, setBranchesData] = useState([]);
+    const {branches, changeBranches} = useBranches();
     const [selectedValue, setSelectedValue] = useState("");
     const [fromType, setFromType] = useState("lastMonth");
     const [fromDate, setFromDate] = useState(new Date());
@@ -117,10 +119,14 @@ const MyVitalSigns = () => {
 
     const fetchData = async () => {
         try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
+            if (branches == undefined || branches == null || branches.length == 0) {
+                const branchesDataResponse = await branchService.findAll();
+                setBranchesData(branchesDataResponse.data);
+            } else {
+                setBranchesData(branches);
+            }
         } catch (error) {
-            console.error("Failed to fetch branches:", error);
+            console.error("Failed to fetch branchesData:", error);
         }
     };
 
@@ -218,7 +224,7 @@ const MyVitalSigns = () => {
 
                     <View className="p-4 border rounded-lg mb-4">
                         <SelectDropdown
-                            data={branches}
+                            data={branchesData}
                             search={true}
                             defaultValue={selectedValue}
                             onSelect={(selectedItem, index) => {
@@ -256,7 +262,7 @@ const MyVitalSigns = () => {
                             className="h-12"
                         >
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker> */}
@@ -270,7 +276,7 @@ const MyVitalSigns = () => {
                             className="h-12"
                         >
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker>

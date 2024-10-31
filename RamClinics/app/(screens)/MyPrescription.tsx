@@ -18,6 +18,7 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 import { useFocusEffect } from "expo-router";
 import SelectDropdown from "react-native-select-dropdown";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
 const i18n = new I18n(translations)
@@ -39,39 +40,25 @@ const MyPrescription = () => {
             changeLanguage(language)
         }, [])
     )
-    let [branches, setBranches] = useState([]);
+    const [branchesData, setBranchesData] = useState([]);
+    const {branches, changeBranches} = useBranches();
     const [selectedValue, setSelectedValue] = useState("");
     const [fromType, setFromType] = useState("lastMonth");
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
-    const [showFromPicker, setShowFromPicker] = useState(false);
-    const [showToPicker, setShowToPicker] = useState(false);
     const [prescription, setPrescription] = useState([]);
     const [filteredPrescription, setFilteredPrescription] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedPrescription, setSelectedPrescription] = useState<any>(null);
     const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
     // const [pdfUri, setPdfUri] = useState('');
-    const [loading, setLoading] = useState(true);
-    let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
-    const onChangeFrom = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || fromDate;
-        setShowFromPicker(false);
-        setFromDate(currentDate);
-    };
 
     const filterOptions = [
         { id: 1, name: "From Last Month", value: 'lastMonth' },
         { id: 2, name: "All", value: 'all' },
         // { id: 3, name: "6 Months", months: 6 },
     ]
-
-    const onChangeTo = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || toDate;
-        setShowToPicker(false);
-        setToDate(currentDate);
-    };
 
     const filterPrescription = () => {
         let filtered = prescription?.filter((item: any) => item.invoiceStatus === activeTab) || [];
@@ -114,10 +101,14 @@ const MyPrescription = () => {
 
     const fetchData = async () => {
         try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
+            if (branches == undefined || branches == null || branches.length == 0) {
+                const branchesDataResponse = await branchService.findAll();
+                setBranchesData(branchesDataResponse.data);
+            } else {
+                setBranchesData(branches);
+            }
         } catch (error) {
-            console.error("Failed to fetch branches:", error);
+            console.error("Failed to fetch branchesData:", error);
         }
     };
 
@@ -217,7 +208,7 @@ const MyPrescription = () => {
 
                     <View className="p-4 border rounded-lg mb-4">
                         <SelectDropdown
-                            data={branches}
+                            data={branchesData}
                             search={true}
                             defaultValue={selectedValue}
                             onSelect={(selectedItem, index) => {
@@ -255,7 +246,7 @@ const MyPrescription = () => {
                             className="h-12"
                         >
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker> */}
@@ -269,7 +260,7 @@ const MyPrescription = () => {
                             className="h-12"
                         >
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker>

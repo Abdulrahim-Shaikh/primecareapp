@@ -15,8 +15,8 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
-import { lang } from "moment";
 import SelectDropdown from "react-native-select-dropdown";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const i18n =  new I18n(translations)
 i18n.locale = Localization.locale
@@ -31,7 +31,7 @@ const MyApprovals = () => {
     const [fromDate, setFromDate] = useState(new Date());
     const [fromType, setFromType] = useState("lastMonth");
     const [toDate, setToDate] = useState(new Date());
-    const [branches, setBranches] = useState([]);
+    const [branchesData, setBranchesData] = useState([]);
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
     const [selectedValue, setSelectedValue] = useState("");
@@ -43,6 +43,7 @@ const MyApprovals = () => {
     const [activeTab, setActiveTab] = useState("Pending");
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
+    const {branches, changeBranches} = useBranches();
 
     const filterOptions = [
         { id: 1, name: "From Last Month", value: 'lastMonth' },
@@ -99,10 +100,14 @@ const MyApprovals = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
+            if (branches == undefined || branches == null  || branches.length === 0) {
+                const branchesDataResponse = await branchService.findAll();
+                setBranchesData(branchesDataResponse.data);
+            } else {
+                setBranchesData(branches);
+            }
         } catch (error) {
-            console.error("Failed to fetch branches:", error);
+            console.error("Failed to fetch branchesData:", error);
         }
 
         try {
@@ -204,7 +209,7 @@ const MyApprovals = () => {
 
                     <View className="p-4 border rounded-lg mb-4">
                         <SelectDropdown
-                            data={branches}
+                            data={branchesData}
                             search={true}
                             defaultValue={selectedValue}
                             onSelect={(selectedItem, index) => {
@@ -237,7 +242,7 @@ const MyApprovals = () => {
                         {/* <Picker
                             selectedValue={selectedValue} onValueChange={(itemValue) => { setSelectedValue(itemValue); }} className="h-12">
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
                             ))}
                         </Picker> */}

@@ -1,26 +1,21 @@
-import { SafeAreaView, ScrollView, View, Text, FlatList, Pressable, ViewToken, Alert, ActivityIndicator } from "react-native";
+import { SafeAreaView, ScrollView, View, Pressable, ActivityIndicator } from "react-native";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import Searchbox from "../../components/ui/Searchbox";
 import React, { useCallback, useEffect, useState } from "react";
 import DoctorCard from "../../components/ui/DoctorCard";
-import { myAppoinmentData, topDoctorData } from "../../constants/data";
-import { router, useFocusEffect, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import { useAnimatedRef, useSharedValue, useAnimatedScrollHandler } from "react-native-reanimated";
+import { topDoctorData } from "../../constants/data";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useSharedValue } from "react-native-reanimated";
 import branchService from "../../domain/services/BranchService";
 import patientPolicyService from "../../domain/services/PatientPolicyService";
 import patientService from "../../domain/services/PatientService";
 import specialityService from "../../domain/services/SpecialityService";
 import { useUserSate } from "../../domain/state/UserState";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from "moment";
-import scheduleService from "../../domain/services/ScheduleService";
-import resourceService from "../../domain/services/ResourceService";
 import doctorService from "../../domain/services/DoctorService";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -39,22 +34,23 @@ const specialityList = [
 
 const SpecialityListPage = () => {
     const { language, changeLanguage } = useLanguage();
-  const [locale, setLocale] = useState(i18n.locale);
+    const [locale, setLocale] = useState(i18n.locale);
 
-  const changeLocale = (locale: any) => {
-    i18n.locale = locale;
-    setLocale(locale);
-  }
+    const changeLocale = (locale: any) => {
+        i18n.locale = locale;
+        setLocale(locale);
+    }
 
-  useFocusEffect(
-    useCallback(() => {
-      changeLocale(language)
-      changeLanguage(language)
-    }, [])
-  )
+    useFocusEffect(
+        useCallback(() => {
+            changeLocale(language)
+            changeLanguage(language)
+        }, [])
+    )
     const [activeCategory, setActiveCategory] = useState(0);
     const [activeSpeciality, setActiveSpeciality] = useState(0);
     const [branchOptions, setBranchOptions] = useState([])
+    const { branches, changeBranches } = useBranches();
     const [specialityOptions, setSpecialityOptions] = useState([])
     const [doctor, setDoctor] = useState(null)
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -116,13 +112,18 @@ const SpecialityListPage = () => {
                 console.log("errorrrr: ", error)
             })
 
-        branchService.findAll()
-            .then((response) => {
-                setBranchOptions(response.data)
-            })
-            .catch((error) => {
-                console.log("branchService.findAll() error: ", error)
-            })
+        if (branches == undefined || branches == null || branches.length == 0) {
+            branchService.findAll()
+                .then((response) => {
+                    setBranchOptions(response.data)
+                })
+                .catch((error) => {
+                    console.log("branchService.findAll() error: ", error)
+                })
+
+        } else {
+            setBranchOptions(branches)
+        }
 
         specialityService.getByDept(department)
             .then((response) => {
@@ -148,15 +149,15 @@ const SpecialityListPage = () => {
 
                 <View className="pb-16 px-6">
                     {
-                        loader 
-                        ?
+                        loader
+                            ?
                             <ActivityIndicator className="mt-80" size="large" color="#00ff00" />
-                        :
-                        filteredDoctors.map((doctor, idx) => (
-                            <Pressable>
-                                <DoctorCard {...doctor} key={idx} />
-                            </Pressable>
-                        ))
+                            :
+                            filteredDoctors.map((doctor, idx) => (
+                                <Pressable>
+                                    <DoctorCard {...doctor} key={idx} />
+                                </Pressable>
+                            ))
                     }
                 </View>
             </ScrollView>

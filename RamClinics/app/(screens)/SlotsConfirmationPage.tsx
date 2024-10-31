@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { FlatList, Pressable, ScrollView, Text, View, ActivityIndicator } from "react-native";
+import { FlatList, Pressable, ScrollView, Text, View, ActivityIndicator, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import React, { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import scheduleService from "../../domain/services/ScheduleService";
 import { useSpecialities } from "../../domain/contexts/SpecialitiesContext";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -36,6 +37,7 @@ const SlotsConfirmationPage = () => {
     const { branches, changeBranches } = useBranches();
     const { allSpecialities, changeSpecialities } = useSpecialities();
     const [mainResourceId, setMainResourceId] = useState<any>("")
+    const [doctorScheduleNotFoundModal, setDoctorScheduleNotFoundModal] = useState(false);
     const [scheduleId, setScheduleId] = useState<any>("")
 
 
@@ -134,85 +136,93 @@ const SlotsConfirmationPage = () => {
                     setBranchId(branchId)
                     scheduleService.getDoctorSchedule(branchID, department, speciality, "true", requestBody)
                         .then((response) => {
-                            // console.log("doctorSchedule response: ", response.data)
-                            let scheduleId = response.data[0].scheduleId[+moment(new Date(date)).format("D")]
-                            setScheduleId(scheduleId)
-                            scheduleService.find(+scheduleId)
-                                .then((response) => {
-                                    // console.log("scheduleService.find response: ", response.data.slots)
-                                    setLoader(true)
-                                    let masterObj: any = {}
-                                    for (let i of response.data.slots) {
-                                        let date = new Date(i.startTime);
-                                        let timestr = moment(date).format("hh:mm A")
-                                        masterObj[timestr] = [i]
-                                    }
-                                    // console.log("masterObj: ", masterObj)
-                                    let slots: any = masterObj
-                                    setAllSlots(masterObj)
-                                    // console.log("moment: ", moment())
-                                    // console.log("moment2: ", new Date())
-                                    const currentTimeInstance = moment();
-                                    // const currentTimeInstance = moment(date).format("YYYY-MM-DD hh:mm A");
-                                    // let doctorsAvailableAgainstSlots: Map<number, Array<any>> = new Map<number, Array<any>>()
-                                    let slotsAvailableAux: Map<string, Array<any>> = new Map<string, Array<number>>()
-                                    let pastSlotLimit: Map<number, any> = new Map<number, any>()
-                                    let pastSlotLimitAux: Map<number, any> = new Map<number, any>()
-                                    const timeSlots = Object.keys(masterObj);
-                                    const sortedTimeSlots = timeSlots.sort((a, b) => {
-                                        return moment(`${date} ${a.trim()}`, "YYYY-MM-DD hh:mm A").diff(moment(`${date} ${b.trim()}`, "YYYY-MM-DD hh:mm A"))
-                                    })
+                            console.log("doctorSchedule response: ", response.data)
+                            if (response.data[0].scheduleId == null || Object.keys(response.data[0].scheduleId).length == 0) {
+                                setDoctorScheduleNotFoundModal(true)
+                            } else {
+                                // console.log("doctorSchedule response: ", response.data)
+                                let scheduleId = response.data[0].scheduleId[+moment(new Date(date)).format("D")]
+                                setScheduleId(scheduleId)
+                                scheduleService.find(+scheduleId)
+                                    .then((response) => {
+                                        // console.log("scheduleService.find response: ", response.data.slots)
+                                        setLoader(true)
+                                        let masterObj: any = {}
+                                        for (let i of response.data.slots) {
+                                            let date = new Date(i.startTime);
+                                            let timestr = moment(date).format("hh:mm A")
+                                            masterObj[timestr] = [i]
+                                        }
+                                        // console.log("masterObj: ", masterObj)
+                                        let slots: any = masterObj
+                                        setAllSlots(masterObj)
+                                        // console.log("moment: ", moment())
+                                        // console.log("moment2: ", new Date())
+                                        const currentTimeInstance = moment();
+                                        // const currentTimeInstance = moment(date).format("YYYY-MM-DD hh:mm A");
+                                        // let doctorsAvailableAgainstSlots: Map<number, Array<any>> = new Map<number, Array<any>>()
+                                        let slotsAvailableAux: Map<string, Array<any>> = new Map<string, Array<number>>()
+                                        let pastSlotLimit: Map<number, any> = new Map<number, any>()
+                                        let pastSlotLimitAux: Map<number, any> = new Map<number, any>()
+                                        const timeSlots = Object.keys(masterObj);
+                                        const sortedTimeSlots = timeSlots.sort((a, b) => {
+                                            return moment(`${date} ${a.trim()}`, "YYYY-MM-DD hh:mm A").diff(moment(`${date} ${b.trim()}`, "YYYY-MM-DD hh:mm A"))
+                                        })
 
-                                    let slotsAvailableAux2: Map<string, Array<any>> = new Map<string, Array<number>>()
+                                        let slotsAvailableAux2: Map<string, Array<any>> = new Map<string, Array<number>>()
 
 
-                                    for (let slot of sortedTimeSlots) {
-                                        const slotTimeInstance = moment(`${date} ${slot.trim()}`, "YYYY-MM-DD hh:mm A");
-                                        if (moment(slotTimeInstance).isSameOrAfter(moment(currentTimeInstance))) {
-                                            let schedules = slots[slot]
-                                            if (schedules != null && schedules.length > 0) {
-                                                for (let doctorSchedule of schedules) {
-                                                    // console.log("pastSlotLimit: ", pastSlotLimit)
-                                                    if (pastSlotLimit.has(mainResourceId)) {
-                                                        let previousSlotString = pastSlotLimitAux.get(mainResourceId)
-                                                        let upperLimitTimeInstance = pastSlotLimit.get(mainResourceId)
-                                                        if (slotTimeInstance.diff(upperLimitTimeInstance, 'minutes') >= subServiceSlotInterval) {
-                                                            if (slotsAvailableAux.has(previousSlotString)) {
-                                                                slotsAvailableAux.set(previousSlotString, [...(slotsAvailableAux.get(slot) || []), doctorSchedule])
-                                                                slotsAvailableAux2 = slotsAvailableAux;
-                                                            } else {
-                                                                slotsAvailableAux.set(previousSlotString, [doctorSchedule])
-                                                                slotsAvailableAux2 = slotsAvailableAux;
+                                        for (let slot of sortedTimeSlots) {
+                                            console.log("\n\n\n\n")
+                                            console.log("slot: ", slot)
+                                            console.log("\n\n\n\n")
+                                            const slotTimeInstance = moment(`${date} ${slot.trim()}`, "YYYY-MM-DD hh:mm A");
+                                            if (moment(slotTimeInstance).isSameOrAfter(moment(currentTimeInstance))) {
+                                                let schedules = slots[slot]
+                                                if (schedules != null && schedules.length > 0) {
+                                                    for (let doctorSchedule of schedules) {
+                                                        // console.log("pastSlotLimit: ", pastSlotLimit)
+                                                        if (pastSlotLimit.has(mainResourceId)) {
+                                                            let previousSlotString = pastSlotLimitAux.get(mainResourceId)
+                                                            let upperLimitTimeInstance = pastSlotLimit.get(mainResourceId)
+                                                            if (slotTimeInstance.diff(upperLimitTimeInstance, 'minutes') >= subServiceSlotInterval) {
+                                                                if (slotsAvailableAux.has(previousSlotString)) {
+                                                                    slotsAvailableAux.set(previousSlotString, [...(slotsAvailableAux.get(slot) || []), doctorSchedule])
+                                                                    slotsAvailableAux2 = slotsAvailableAux;
+                                                                } else {
+                                                                    slotsAvailableAux.set(previousSlotString, [doctorSchedule])
+                                                                    slotsAvailableAux2 = slotsAvailableAux;
+                                                                }
+                                                                if (doctorSchedule.status == null || (doctorSchedule.status != null && doctorSchedule.status != 'Busy')) {
+                                                                    pastSlotLimit.set(mainResourceId, slotTimeInstance)
+                                                                    pastSlotLimitAux.set(mainResourceId, slot)
+                                                                    continue;
+                                                                }
                                                             }
+                                                            if (doctorSchedule.status != null && doctorSchedule.status == 'Busy') {
+                                                                pastSlotLimitAux.delete(mainResourceId)
+                                                                pastSlotLimit.delete(mainResourceId)
+                                                            }
+                                                        } else {
                                                             if (doctorSchedule.status == null || (doctorSchedule.status != null && doctorSchedule.status != 'Busy')) {
-                                                                pastSlotLimit.set(mainResourceId, slotTimeInstance)
                                                                 pastSlotLimitAux.set(mainResourceId, slot)
-                                                                continue;
+                                                                pastSlotLimit.set(mainResourceId, slotTimeInstance)
                                                             }
-                                                        }
-                                                        if (doctorSchedule.status != null && doctorSchedule.status == 'Busy') {
-                                                            pastSlotLimitAux.delete(mainResourceId)
-                                                            pastSlotLimit.delete(mainResourceId)
-                                                        }
-                                                    } else {
-                                                        if (doctorSchedule.status == null || (doctorSchedule.status != null && doctorSchedule.status != 'Busy')) {
-                                                            pastSlotLimitAux.set(mainResourceId, slot)
-                                                            pastSlotLimit.set(mainResourceId, slotTimeInstance)
                                                         }
                                                     }
                                                 }
+                                                // } else {
                                             }
-                                            // } else {
                                         }
-                                    }
-                                    setLoader(false)
-                                    setSlotsAvailable(slotsAvailableAux2)
-                                    // console.log("slotsAvailableAux2: ", slotsAvailableAux2)
-                                })
-                                .catch((error) => {
-                                    console.error("error: ", error.response)
-                                    console.error("error: ", error)
-                                })
+                                        setLoader(false)
+                                        setSlotsAvailable(slotsAvailableAux2)
+                                        // console.log("slotsAvailableAux2: ", slotsAvailableAux2)
+                                    })
+                                    .catch((error) => {
+                                        console.error("error: ", error.response)
+                                        console.error("error: ", error)
+                                    })
+                            }
                         })
                         .catch((error) => {
                             console.log("getDoctorSchedule error: ", error.response)
@@ -244,15 +254,10 @@ const SlotsConfirmationPage = () => {
         let tempResponsible: any = (responsible == undefined || responsible == null || responsible == "") ? "Doctor" : responsible
         resourceService.getResourceByLiveSlotSpeciality(specialityCode ?? tempSpecialityCode, date, branch, shift, city ?? cityBranch, deviceCode, tempResponsible)
             .then((response) => {
-                // console.log("response.data: ", response.data)
                 setLoader(true)
                 let slots: any = response.data;
                 setAllSlots(response.data)
-                // console.log("moment: ", moment())
-                // console.log("moment2: ", new Date())
                 const currentTimeInstance = moment();
-                // const currentTimeInstance = moment(date).format("YYYY-MM-DD hh:mm A");
-                // let doctorsAvailableAgainstSlots: Map<number, Array<any>> = new Map<number, Array<any>>()
                 let slotsAvailableAux: Map<string, Array<any>> = new Map<string, Array<number>>()
                 let pastSlotLimit: Map<number, any> = new Map<number, any>()
                 let pastSlotLimitAux: Map<number, any> = new Map<number, any>()
@@ -263,7 +268,10 @@ const SlotsConfirmationPage = () => {
 
                 let slotsAvailableAux2: Map<string, Array<any>> = new Map<string, Array<number>>()
 
+                let lastSlot = ''
+
                 for (let slot of sortedTimeSlots) {
+                    lastSlot = slot
                     const slotTimeInstance = moment(`${date} ${slot.trim()}`, "YYYY-MM-DD hh:mm A");
                     if (moment(slotTimeInstance).isSameOrAfter(moment(currentTimeInstance))) {
                         let schedules = slots[slot]
@@ -298,7 +306,25 @@ const SlotsConfirmationPage = () => {
                                 }
                             }
                         }
-                        // } else {
+                    }
+                }
+                const slotTimeInstance = moment(`${date} ${lastSlot.trim()}`, "YYYY-MM-DD hh:mm A");
+                let schedules = slots[lastSlot]
+                for (let doctorSchedule of schedules) {
+                    if (pastSlotLimit.has(doctorSchedule.id)) {
+                        let previousSlotString = pastSlotLimitAux.get(doctorSchedule.id)
+                        if (slotsAvailableAux.has(previousSlotString)) {
+                            slotsAvailableAux.set(previousSlotString, [...(slotsAvailableAux.get(lastSlot) || []), doctorSchedule])
+                            slotsAvailableAux2 = slotsAvailableAux;
+                        } else {
+                            slotsAvailableAux.set(previousSlotString, [doctorSchedule])
+                            slotsAvailableAux2 = slotsAvailableAux;
+                        }
+                        if (doctorSchedule.status == null || (doctorSchedule.status != null && doctorSchedule.status != 'Busy')) {
+                            pastSlotLimit.set(doctorSchedule.id, slotTimeInstance)
+                            pastSlotLimitAux.set(doctorSchedule.id, lastSlot)
+                            continue;
+                        }
                     }
                 }
                 setLoader(false)
@@ -365,28 +391,59 @@ const SlotsConfirmationPage = () => {
                             ?
                             <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No slots available for selected date")}</Text>
                             :
-                            <FlatList
-                                data={Array.from(slotsAvailable)}
-                                numColumns={3}
-                                showsHorizontalScrollIndicator={false}
-                                contentContainerStyle={{ marginHorizontal: "auto" }}
-                                renderItem={({ item }) => (
-                                    <View className="flex flex-row p-1 m-1 w-32">
-                                        <Pressable
-                                            onPress={() => {
-                                                selectSlot(item)
-                                            }}
-                                            className="bg-[#3B2314] border border-pc-primary p-2 rounded-lg w-full">
-                                            {/* <View className="py-2 items-center">
-                                                <Ionicons name="time" size={36} color={"#3B2314"} />
-                                            </View> */}
-                                            <Text className="text-sm text-white font-semibold text-center text-pc-primary pt-3 pb-2">{item[0]}</Text>
-                                        </Pressable>
-                                    </View>
-                                )}
-                            />
+                            <View className="pb-8">
+                                <FlatList
+                                    data={Array.from(slotsAvailable)}
+                                    numColumns={3}
+                                    showsHorizontalScrollIndicator={false}
+                                    contentContainerStyle={{ marginHorizontal: "auto" }}
+                                    renderItem={({ item }) => (
+                                        <View className="flex flex-row p-1 m-1 w-32">
+                                            <Pressable
+                                                onPress={() => {
+                                                    selectSlot(item)
+                                                }}
+                                                className="bg-[#3B2314] border border-pc-primary p-2 rounded-lg w-full">
+                                                {/* <View className="py-2 items-center">
+                                                    <Ionicons name="time" size={36} color={"#3B2314"} />
+                                                </View> */}
+                                                <Text className="text-sm text-white font-semibold text-center text-pc-primary pt-3 pb-2">{item[0]}</Text>
+                                            </Pressable>
+                                        </View>
+                                    )}
+                                />
+                            </View>
                     }
                 </View>
+                <Modal transparent={true} animationType="fade" visible={doctorScheduleNotFoundModal} onRequestClose={() => {
+                    setDoctorScheduleNotFoundModal(false)
+                }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <View className="bg-white p-6 rounded-lg w-4/5 relative">
+                            <View className="flex flex-row justify-center">
+                                <MaterialCommunityIcons
+                                    name="information-outline"
+                                    size={60}
+                                    color={"#737373"}
+                                />
+                            </View>
+                            <Text className="text-xl font-bold text-center mb-4 mt-1">Schedules not found for {moment(slotSearchDate).format("DD-MMMM-yyyy")} for</Text>
+                            <View className=" flex-row justify-between gap-5 items-center py-4">
+                                <Pressable onPress={() => {
+                                    setDoctorScheduleNotFoundModal(false)
+                                    router.back()
+                                }} >
+                                    <Text> Back </Text>
+                                </Pressable>
+                                <Pressable onPress={() => {
+                                    setDoctorScheduleNotFoundModal(false)
+                                }} >
+                                    <Text> Ok </Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </ScrollView>
         </SafeAreaView>
     )
