@@ -14,7 +14,8 @@ import {
 import React, { useCallback, useState } from "react";
 import arrow from "../../assets/images/arrow.png";
 import sliderImgBg from "../../assets/images/doctor_img_bg.png";
-import background from "../../assets/images/background.jpg"
+import background from "../../assets/images/background.jpg";
+import emptyOfferImage from "../../assets/images/png-transparent-special-offer-.png";
 import promotionOrderService from "../../domain/services/PromotionOrderService";
 import { useUserSate } from "../../domain/state/UserState";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
@@ -29,9 +30,9 @@ i18n.locale = Localization.locale;
 i18n.enableFallback = true;
 
 type PromotionService = { serviceName: string; totalAmount: number; };
-type Props = { id: number; promotionName: string; description: string; photo: any, promotionServices: PromotionService[] };
+type Props = { id: number; promotionName: string; description: string; photo: any, promotionServices: PromotionService[], promotionService: any };
 
-const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionServices }: Props) => {
+const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionServices, promotionService }: Props) => {
 
   let userId = useUserSate.getState().userId;
   let patientName = useUserSate.getState().patientName;
@@ -41,7 +42,11 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { language, changeLanguage } = useLanguage();
   const [locale, setLocale] = useState(i18n.locale);
-	
+
+  const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/promotion/file/";
+  const photoUrl = (promotionService.offerImages && Array.isArray(promotionService.offerImages) && promotionService.offerImages.length > 0 && promotionService.offerImages[0])
+  ? { uri: `${sourceUrl}${encodeURIComponent(promotionService.offerImages[0])}` } : null;
+
 	const changeLocale = (locale: any) => {
         i18n.locale = locale;
         setLocale(locale);
@@ -85,7 +90,7 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
       speciality: "",
       paymentReference: "121",
       paymentStatus: "Pending",
-      amount: 0,
+      amount: promotionService.totalAmount,
       packageOrder: true,
     };
 
@@ -113,21 +118,21 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
 
   return (
     <ImageBackground
-      source={background}
+    // source={background}
+    source={photoUrl ? photoUrl : background}
       resizeMode="cover"
       style={{ width: SCREEN_WIDTH * 0.9, margin: SCREEN_WIDTH * 0.05 }}
       imageStyle={{ borderRadius: 20 }}>
       <View style={{ flex: 1, position: 'relative' }}>
         <View className="flex flex-row justify-between items-center w-full pt-8">
           <View className="max-w-[230px] pl-5 relative z-10">
-            <Text className="text-lg font-semibold">
-              {promotionName}
-            </Text>
-            <Text className="text-base pt-1">{description}</Text>
+            <Text className={`text-lg font-semibold ${photoUrl ? ' text-white': ''}`}>{promotionName}</Text>
+            {/* <Text className="text-base pt-1">{description}</Text> */}
+            <Text className={`text-lg font-semibold ${photoUrl ? ' text-white': ''}`}>{description}</Text>
           </View>
           <TouchableOpacity onPress={handleShowServices} className="px-6 py-2">
-            <FontAwesome name="list" size={24} color="#1e1b4b" style={{ marginBottom: 35 }} />
-          </TouchableOpacity>
+            <FontAwesome name="list" size={24} color={`${photoUrl ? "white": "#1e1b4b"}`} style={{ marginBottom: 35 }} />
+          </TouchableOpacity> 
         </View>
         <TouchableOpacity
           className="bg-lime-500 text-primaryColor border-[1px] border-primaryColor px-4 py-2 rounded-lg"
@@ -166,9 +171,10 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
               <Pressable className="absolute top-3 right-3" onPress={handleCloseServicesModal}>
                 <AntDesign name="closecircle" size={24} color="#78450f" />
               </Pressable>
-              <Text className="text-xl font-bold text-center mb-4 mt-4">{i18n.t("ListOfServices")}</Text>
+              {/* <Text className="text-xl font-bold text-center mb-4 mt-4">{i18n.t("ListOfServices")}</Text> */}
+              <Text className="text-xl font-bold text-center mb-4 mt-4">{i18n.t("ServiceDetails")}</Text>
               <View style={{ maxHeight: 400 }}>
-                <FlatList
+                {/* <FlatList
                   data={promotionServices}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
@@ -181,7 +187,15 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
                       </View>
                     </View>
                   )}
-                />
+                /> */}
+                    <View className="flex-row border border-pc-primary rounded-lg mb-4 p-4 bg-white shadow-md">
+                      <View className="flex-1">
+                        <Text className="text-base font-bold mb-1">{promotionService.serviceName}</Text>
+                        <Text className="text-sm" style={{ color: '#04522b', fontWeight: '600' }}>
+                          {i18n.t("Amount")}: {promotionService.totalAmount.toFixed(2)} SAR
+                        </Text>
+                      </View>
+                    </View>
               </View>
             </View>
           </View>

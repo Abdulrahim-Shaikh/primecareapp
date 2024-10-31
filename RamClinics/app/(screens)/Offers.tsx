@@ -15,6 +15,7 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useFocusEffect } from "expo-router";
+import promotionServicesService, { PromotionServicesService } from "../../domain/services/PromotionSerivcesService";
 
 const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
@@ -34,6 +35,7 @@ const Offers = () => {
     const [selectedBranch, setSelectedBranch] = useState('');
 
     const [promotions, setPromotions] = useState([]);
+    const [promotionServices, setPromotionServices] = useState([]);
     const [filteredPromotions, setFilteredPromotions] = useState([]);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -62,19 +64,35 @@ const Offers = () => {
     let patientName = useUserSate.getState().patientName;
 
     useEffect(() => {
-        const fetchPromotion = async () => {
+        // const fetchPromotion = async () => {
+        //     setIsLoading(true);
+        //     try {
+        //         let today = new Date();
+        //         const res = await promotionService.getPromotion();
+        //         console.log("Promotions", res.data);
+        //         setPromotions(res.data.filter((promo: any) => promo.showOnline && promo.validTo >= today));
+        //     } catch (error) {
+        //         console.error(error);
+        //     } finally {
+        //         setIsLoading(false);
+        //     }
+        // };
+        const fetchPromotionServices = async () => {
             setIsLoading(true);
             try {
-                const res = await promotionService.getPromotion();
-                console.log("Promotions", res.data);
-                setPromotions(res.data.filter((promotion: any) => promotion.showOnline));
+                let today = new Date();
+                const res = await promotionServicesService.getAllServices();
+                console.log("Promotion Services", res.data);
+                // setPromotionServices(res.data.filter((promo: any) => promo.showOnline));
+                setPromotionServices(res.data);
             } catch (error) {
                 console.error(error);
             } finally {
                 setIsLoading(false);
             }
         };
-        fetchPromotion();
+        // fetchPromotion();
+        fetchPromotionServices();
     }, []);
 
     const handleBookPress = (item: any) => {
@@ -95,7 +113,8 @@ const Offers = () => {
 
         let orderData = {
             id: null,
-            promotionName: selectedPromotion.promotionName,
+            promotionName: selectedPromotion.serviceName,
+            // promotionName: selectedPromotion.promotionName,
             promotionId: selectedPromotion.id,
             status: "Pending",
             orderDate: new Date().toISOString(),
@@ -110,7 +129,8 @@ const Offers = () => {
             speciality: "",
             paymentReference: "121",
             paymentStatus: "Pending",
-            amount: selectedPromotion.servPrice,
+            // amount: selectedPromotion.servPrice,
+            amount: selectedPromotion.totalAmount,
             packageOrder: true,
         };
 
@@ -151,20 +171,23 @@ const Offers = () => {
                         <View className="flex-1 items-center justify-center">
                             <ActivityIndicator size="large" color="rgb(132 204 22)" style={{ marginTop: 20 }} />
                         </View>
-                    ) : promotions.length > 0 ? (
+                    ) : promotionServices.length > 0 ? (
                         <FlatList
-                            data={promotions}
-                            keyExtractor={(item: any) => item.id.toString()}
+                            data={promotionServices}
+                            keyExtractor={(service: any) => service.id.toString()}
                             renderItem={({ item }) => {
-                                const photoUrl = (item.photo && Array.isArray(item.photo) && item.photo.length > 0 && item.photo[0])
-                                    ? { uri: `${sourceUrl}${encodeURIComponent(item.photo[0])}` }
+                                const photoUrl = (item.offerImages && Array.isArray(item.offerImages) && item.offerImages.length > 0 && item.offerImages[0]) ?
+                                    { uri: `${sourceUrl}${encodeURIComponent(item.offerImages[0])}` }
                                     : emptyOfferImage;
                                 return (
                                     <View className="flex-row border border-pc-primary rounded-lg mb-4 overflow-hidden">
                                         <Image source={photoUrl} style={{ width: 128, height: 128 }} />
                                         <View className="flex-1 p-4">
-                                            <Text className="text-base font-bold mb-1">{item.promotionName}</Text>
-                                            <Text className="text-sm text-gray-500 mb-4">{item.description}</Text>
+                                            {/* <Text className="text-base font-bold mb-1">{item.promotionName}</Text> */}
+                                            {/* <Text className="text-sm text-gray-500 mb-4">{item.description}</Text> */}
+                                            <Text className="text-lg font-medium mb-4">{item.description}</Text>
+                                            <Text className="text-lg font-medium mb-4">{item.descriptionAr}</Text>
+                                            <Text className="text-base font-medium text-amber-950 mb-4">{item.serviceName}</Text>
                                             <Pressable
                                                 className="bg-[rgb(59,35,20)] flex-row items-center justify-center rounded-md py-2 px-4"
                                                 onPress={() => handleBookPress(item)}
