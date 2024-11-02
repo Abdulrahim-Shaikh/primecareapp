@@ -120,13 +120,16 @@ const MyApprovals = () => {
         setMrNo();
         let fDate = moment(fromDate).format("YYYY-MM-DD");
         let tDate = moment(toDate).format("YYYY-MM-DD");
-
+        setLoading(true);
         invoiceService.invoiceApprovals(selectedValue, fDate, tDate, mrno)
             .then((res) => {
                 setApprovals(res.data);
+                setLoading(false);
             })
             .catch((error) => {
+                setLoading(false);
                 console.error("\n\nFailed to fetch approvals:", error);
+
             });
     };
 

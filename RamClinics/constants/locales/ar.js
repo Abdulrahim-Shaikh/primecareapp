@@ -329,6 +329,7 @@ const translations = {
         "I just want to cancel": "I just want to cancel",
         "I don't want to tell": "I don't want to tell",
         "Others": "Others",
+        "complaintsorsuggestions": "Complaints or Suggestions",
 
         //UserProfile
         "firstname": "First Name",
@@ -587,6 +588,7 @@ const translations = {
         "I just want to cancel": "أريد فقط الإلغاء",
         "I don't want to tell": "لا أريد أن أخبر",
         "Others": "أخرى",
+        "complaintsorsuggestions": "الشكاوى أو الاقتراحات",
 
         //UserProfile
         "firstname": "الاسم الأول",

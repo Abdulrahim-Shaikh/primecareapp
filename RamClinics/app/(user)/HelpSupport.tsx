@@ -9,6 +9,7 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
+import NASButton from "../../components/NASButton";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -40,6 +41,7 @@ const HelpSupport = () => {
             <Text className="text-lg py-3">
               {i18n.t("Your inquiries, suggestions, and complains all are most welcomed")}.
             </Text>
+            <NASButton title={i18n.t('complaintsorsuggestions')} onPress={() => {}} />
             {/* <Pressable
               onPress={() => router.push("/FaqPage")}
               className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500"
