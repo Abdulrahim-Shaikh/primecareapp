@@ -145,7 +145,7 @@ const CityPage = () => {
                                             department: department,
                                             specialityCode: "",
                                             speciality: speciality,
-                                            callCenterDoctorFlow: 0,
+                                            callCenterDoctorFlow: 1,
                                             last3AppointmentsFlow: 1
                                         }
                                     })

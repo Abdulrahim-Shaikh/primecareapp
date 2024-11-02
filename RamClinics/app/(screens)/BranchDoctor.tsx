@@ -61,115 +61,150 @@ const BranchDoctor = () => {
             setLoader(true);
             if (+last3AppointmentsFlow) {
                 appointmentService.getLastThreeAppointments(patientData.id)
-                .then((response) => {
-                    console.log("getLastThreeAppointments response: ", response.data)
-                    let lastAppts: any[] = []
-                    let lastApptsPractionerIds: any = new Set<any>()
-                    for (let appt of response.data) {
-                        if (lastApptsPractionerIds.has(appt.practitionerId)) {
-                            continue
+                    .then((response) => {
+                        for (let i of response.data) {
+                            console.log("i: ", i.practitionerId)
                         }
-                        lastAppts.push(appt)
-                        lastApptsPractionerIds.add(appt.practitionerId)
-                    }
-                    let lastApptsDoctors: any[] = []
-                    for (let it = 0; it < lastAppts.length; it++) {
-                        resourceService.find(lastAppts[it].practitionerId)
-                        .then((response) => {
-                            lastApptsDoctors.push(response.data)
-                            setRecentAppointments(lastApptsDoctors)
-                        })
-                        .catch((error) => {
-                            console.error("resourceService.find", error.response)
-                        })
-                        if (it == lastAppts.length - 1) {
-                            setLoader(false)
-                            setShowLast3Appointments(true)
-                        }
-                    }
-                })
-            }
 
-            if (+callCenterDoctorFlow) {
-                let doctorsByBranch: any = []
-                let generalDentistryDoctors: any = []
-                let generalMedicineDoctors: any = []
-                doctors.map((doctor: any) => {
-                    if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(specialityCode) || doctor.speciality == speciality)) {
-                        doctorsByBranch.push(doctor)
-                    }
-                    if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(generalDentistrySpecialityCode) || doctor.speciality == generalDentistry)) {
-                        generalDentistryDoctors.push(doctor)
-                    }
-                    if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(generalMedicineSpecialityCode) || doctor.speciality == generalMedicine)) {
-                        generalMedicineDoctors.push(doctor)
-                    }
-                })
-                // if (doctorsByBranch.length === 0) {
-                //     doctors.map((doctor: any) => {
-                //     })
-                // }
-                console.log("doctorsByBranch: ", doctorsByBranch)
-                if (department == 'Dental') {
-                    setDoctorsData(doctorsByBranch.length === 0 ? generalDentistryDoctors : doctorsByBranch)
-                } else if (department == 'Medical') {
-                    setDoctorsData(doctorsByBranch.length === 0 ? generalMedicineDoctors: doctorsByBranch)
-                }
-                setLoader(false)
-            } else {
-                if (branchId != null && department != null && speciality != null) {
-                    resourceService.getResourceBySpeciality(branchId, department, speciality)
-                        .then((response) => {
-                            console.log("response: ", response.data)
-                            if (response.data.length == 0) {
-                                if (department == 'Dental' && speciality != generalDentistry) {
-                                    resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
-                                        .then((response) => {
-                                            setDoctorsData(response.data)
-                                            setLoader(false);
-                                        })
-                                } else if (department == 'Medical' && speciality != generalMedicine) {
-                                    resourceService.getResourceBySpeciality(branchId, department, generalMedicine)
-                                        .then((response) => {
-                                            setDoctorsData(response.data)
-                                            setLoader(false);
-                                        })
-                                }
-                            } else {
-                                setDoctorsData(response.data)
-                                setLoader(false);
+                        let lastAppts: any[] = []
+                        let lastApptsPractionerIds: any = new Set<any>()
+                        for (let appt of response.data) {
+                            if (lastApptsPractionerIds.has(appt.practitionerId)) {
+                                continue
                             }
-                        })
-                        .catch((error) => {
-                            console.log("error ", error)
-                        })
+                            lastAppts.push(appt)
+                            lastApptsPractionerIds.add(appt.practitionerId)
+                        }
+                        let lastApptsDoctors: any[] = []
+                        for (let it = 0; it < lastAppts.length; it++) {
+                            resourceService.find(lastAppts[it].practitionerId)
+                                .then((response) => {
+                                    lastApptsDoctors.push(response.data)
+                                    setRecentAppointments(lastApptsDoctors)
+                                })
+                                .catch((error) => {
+                                    console.error("resourceService.find", error.response)
+                                })
+                            if (it == lastAppts.length - 1) {
+                                setLoader(false)
+                                setShowLast3Appointments(true)
+                            }
+                        }
+                    })
+            } else {
+                if (+callCenterDoctorFlow) {
+                    let doctorsByBranch: any = []
+                    let generalDentistryDoctors: any = []
+                    let generalMedicineDoctors: any = []
+                    doctors.map((doctor: any) => {
+                        if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(specialityCode) || doctor.speciality == speciality)) {
+                            doctorsByBranch.push(doctor)
+                        }
+                        if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(generalDentistrySpecialityCode) || doctor.speciality == generalDentistry)) {
+                            generalDentistryDoctors.push(doctor)
+                        }
+                        if (doctor.department == department && doctor.branchId.includes(+branchId) && (doctor.specialityCode.includes(generalMedicineSpecialityCode) || doctor.speciality == generalMedicine)) {
+                            generalMedicineDoctors.push(doctor)
+                        }
+                    })
+                    // if (doctorsByBranch.length === 0) {
+                    //     doctors.map((doctor: any) => {
+                    //     })
+                    // }
+                    console.log("doctorsByBranch: ", doctorsByBranch)
+                    if (department == 'Dental') {
+                        setDoctorsData(doctorsByBranch.length === 0 ? generalDentistryDoctors : doctorsByBranch)
+                    } else if (department == 'Medical') {
+                        setDoctorsData(doctorsByBranch.length === 0 ? generalMedicineDoctors : doctorsByBranch)
+                    }
+                    setLoader(false)
                 } else {
-                    if (branchId == null) {
-                        doctorService.getAllDoctors()
+                    if (branchId != null && department != null && speciality != null) {
+                        resourceService.getResourceBySpeciality(branchId, department, speciality)
                             .then((response) => {
-                                // console.log("\ndoctorService.getAllDoctors(): \n", response)
-                                setDoctorsData(response.data);
-                                setLoader(false);
+                                console.log("response: ", response.data)
+                                if (response.data.length == 0) {
+                                    if (department == 'Dental' && speciality != generalDentistry) {
+                                        resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
+                                            .then((response) => {
+                                                setDoctorsData(response.data)
+                                                setLoader(false);
+                                            })
+                                    } else if (department == 'Medical' && speciality != generalMedicine) {
+                                        resourceService.getResourceBySpeciality(branchId, department, generalMedicine)
+                                            .then((response) => {
+                                                setDoctorsData(response.data)
+                                                setLoader(false);
+                                            })
+                                    }
+                                } else {
+                                    setDoctorsData(response.data)
+                                    setLoader(false);
+                                }
                             })
                             .catch((error) => {
-                                console.log("\ndoctorService.getAllDoctors(): \n", error)
+                                console.log("error ", error)
                             })
                     } else {
-                        doctorService.getAllDoctorsByBranch(branchId)
-                            .then((response) => {
-                                setDoctorsData(response.data.filter((doctor: any) => doctor.speciality === speciality));
-                                setLoader(false);
-                                // console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
-                            })
-                            .catch((error) => {
-                                console.log("\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) error", error);
-                            })
+                        if (branchId == null) {
+                            doctorService.getAllDoctors()
+                                .then((response) => {
+                                    // console.log("\ndoctorService.getAllDoctors(): \n", response)
+                                    setDoctorsData(response.data);
+                                    setLoader(false);
+                                })
+                                .catch((error) => {
+                                    console.log("\ndoctorService.getAllDoctors(): \n", error)
+                                })
+                        } else {
+                            doctorService.getAllDoctorsByBranch(branchId)
+                                .then((response) => {
+                                    setDoctorsData(response.data.filter((doctor: any) => doctor.speciality === speciality));
+                                    setLoader(false);
+                                    // console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
+                                })
+                                .catch((error) => {
+                                    console.log("\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) error", error);
+                                })
+                        }
                     }
                 }
             }
+
         }, [])
     )
 
+    let content;
+    if (showLast3Appointments) {
+        if (!loader && (recentAppointments == null || recentAppointments.length < 1)) {
+            content = <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No doctors available for selected speciality")}</Text>;
+        } else if (loader) {
+            content = <ActivityIndicator size="large" color="#454567" />;
+        } else {
+            content = (
+                <View className="pt-3">
+                    <Text>{i18n.t("Showing last 3 appointments' doctors")}</Text>
+                    {
+                        recentAppointments.map((props: any) => (
+                            <View key={props.id}>
+                                <DoctorCard {...props} branchId={branchIds[props.id]} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} />
+                            </View>
+                        ))
+                    }
+                </View>
+            );
+        }
+    } else {
+        if (!loader && (doctorsData == null || doctorsData.length < 1)) {
+            content = <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No doctors available for selected speciality")}</Text>;
+        } else if (loader) {
+            content = <ActivityIndicator size="large" color="#454567" />;
+        } else {
+            content = doctorsData.map((props: any) => (
+                <DoctorCard {...props} branchId={+branchId} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={props.id} />
+            ));
+        }
+    }
 
     return (
         <SafeAreaView>
@@ -179,26 +214,7 @@ const BranchDoctor = () => {
                 </View>
 
                 <View className="pb-16 px-6">
-                    {
-                        !loader && (doctorsData.length === 0 || doctorsData == null)
-                            ?
-                            <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No doctors available for selected speciality")}</Text>
-                            : loader
-                                ?
-                                <ActivityIndicator size="large" color="#454567" />
-                                :
-                                showLast3Appointments
-                                    ?
-                                    recentAppointments.map(({ ...props }, idx) => (
-                                        <View>
-                                            <DoctorCard {...props} branchId={branchIds[props.id]} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
-                                        </View>
-                                    ))
-                                    :
-                                    doctorsData.map(({ ...props }, idx) => (
-                                        <DoctorCard {...props} branchId={+branchId} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} key={idx} />
-                                    ))
-                    }
+                    {content}
                 </View>
             </ScrollView>
         </SafeAreaView>

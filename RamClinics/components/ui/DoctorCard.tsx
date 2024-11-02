@@ -143,8 +143,10 @@ const DoctorCard = ({
       //   },
       // ])
     } else {
+      console.log("user.id: ", user.id)
       patientPolicyService.byPatientId(user.id)
         .then((response: any) => {
+          console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
           // console.log("respponse: ", response.data[0])
           setPatientPolicyData(response.data[0])
           // console.log("patientPolicyData: ", patientPolicyData)
@@ -209,7 +211,6 @@ const DoctorCard = ({
                 })
             }
           } else {
-            console.log("datePickerOpen")
             bookAppointment()
             // setIsDatePickerOpen(true);
           }
