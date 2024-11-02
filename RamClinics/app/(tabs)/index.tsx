@@ -25,6 +25,7 @@ import { useSpecialities } from "../../domain/contexts/SpecialitiesContext";
 import specialityService from "../../domain/services/SpecialityService";
 import { useCities } from "../../domain/contexts/CitiesContext";
 import cityMasterService from "../../domain/services/CityMasterService";
+import http from "../../domain/services/core/HttpService";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -45,7 +46,7 @@ const Home = () => {
   const [locale, setLocale] = useState(i18n.locale);
   const { branchesData, changeBranches } = useBranches();
   const { doctors, changeDoctors } = useDoctors()
-  const {cities, changeCities} = useCities()
+  const { cities, changeCities } = useCities()
   const { allSpecialities, changeSpecialities } = useSpecialities();
 
   const changeLocale = (locale: any) => {
@@ -55,7 +56,7 @@ const Home = () => {
 
   useFocusEffect(
     useCallback(() => {
-
+      const url = http.getURL();
       if (doctors == null || doctors.length == 0) {
         resourceService.getAllDoctorsByDesignation('Doctor').then((res) => {
           changeDoctors(res.data)
@@ -85,9 +86,9 @@ const Home = () => {
         cityMasterService.findAll().then((res) => {
           changeCities(res.data)
         })
-        .then(() => {
-          console.log("cities set")
-        })
+          .then(() => {
+            console.log("cities set")
+          })
       }
 
       changeLocale(language)

@@ -105,7 +105,8 @@ const BranchPage = () => {
                             department: department,
                             specialityCode: item.code,
                             speciality: speciality,
-                            callCenterDoctorFlow: 0
+                            callCenterDoctorFlow: 0,
+                            last3AppointmentsFlow: 0
                         }
                     })
                 } else {

@@ -1,27 +1,21 @@
 
 import {
     FlatList,
-    Image,
     Pressable,
     ScrollView,
     StyleSheet,
     Text,
     View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
-import { doctorSpecialityData2, servicesList } from "../../constants/data";
-import specialityService from "../../domain/services/SpecialityService";
-import specialityIcon from "../../assets/images/docton-speciality-icon-3.png";
-import Searchbox from "../../components/ui/Searchbox";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -31,7 +25,6 @@ const ServicesListPage = () => {
 
     const { city, fromSpeciality, department, callCenterFlow, specialityCode, speciality, services } = useLocalSearchParams();
     const [servicesList, setServicesList] = useState([]);
-    const [searchValue, setSearchValue] = useState([]);
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
 
@@ -75,7 +68,7 @@ const ServicesListPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Services")} isPushBack={true} />
-                <View className="flex-1 space-y-4 pt-8">
+                <View className="flex-1 space-y-4 pt-8 pb-16">
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
                         data={servicesList}

@@ -1,7 +1,7 @@
 import { ActivityIndicator, Alert, Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import OtpInputField from "../../components/OtpInputField";
 import loginService from "../../domain/services/LoginService";
 import NASButton from "../../components/NASButton";
@@ -10,9 +10,20 @@ import { UserContext } from "../../domain/contexts/UserContext";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import patientService from "../../domain/services/PatientService";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import translations from "../../constants/locales/ar";
+import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
+import { useLanguage } from "../../domain/contexts/LanguageContext";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const i18n = new I18n(translations);
+i18n.locale = Localization.locale;
+i18n.enableFallback = true;
+
 const VerifyOTP = () => {
+
+  const { language, changeLanguage } = useLanguage();
+  const [locale, setLocale] = useState(i18n.locale);
   const { mobileNo, otpResp, signUpFormData } = useLocalSearchParams();
 
   const { setUserData } = useContext(UserContext)
@@ -29,6 +40,17 @@ const VerifyOTP = () => {
   const [invalidOtpModal, setInvalidOtpModal] = useState(false);
 
   const { data, status } = loginService.useGenerateOtp(mobileNo);
+
+  const changeLocale = (locale: any) => {
+    i18n.locale = locale;
+    setLocale(locale);
+  }
+  useFocusEffect(
+    useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
+    }, [])
+  )
   // let otp: string = '';
 
   // useEffect(() => {
@@ -182,14 +204,14 @@ const VerifyOTP = () => {
                   color={"#EF4444"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
-              <Text className="text-xl font-bold text-center mb-4">Failed to save patient</Text>
+              <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Patient Not Found')}</Text>
+              <Text className="text-xl font-bold text-center mb-4">{i18n.t('Failed to save patient')}</Text>
               <View className=" flex-row justify-end gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setPatientNotFoundModal(false)
                   router.back()
                 }} >
-                  <Text> Back </Text>
+                  <Text> {i18n.t('Back')} </Text>
                 </Pressable>
               </View>
             </View>
@@ -205,13 +227,13 @@ const VerifyOTP = () => {
                   color={"#EF4444"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-2 mt-1">Invalid OTP</Text>
-              <Text className="text-xl font-bold text-center mb-4">Mobile Number not verified</Text>
+              <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Invalid OTP')}</Text>
+              <Text className="text-xl font-bold text-center mb-4">{i18n.t('Mobile Number not verified')}</Text>
               <View className=" flex-row justify-end gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setInvalidOtpModal(false)
                 }} >
-                  <Text> Ok </Text>
+                  <Text> {i18n.t('Ok')} </Text>
                 </Pressable>
               </View>
             </View>
@@ -227,12 +249,12 @@ const VerifyOTP = () => {
                   color={"#84CC16"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-4 pt-3">Success, User Registered</Text>
+              <Text className="text-xl font-bold text-center mb-4 pt-3">{i18n.t('Success, User Registered')}</Text>
               <View className=" flex-row justify-end gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setSuccessModal(false)
                 }} >
-                  <Text> Ok </Text>
+                  <Text> {i18n.t('Ok')} </Text>
                 </Pressable>
               </View>
             </View>

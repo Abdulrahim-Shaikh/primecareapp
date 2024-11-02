@@ -39,20 +39,23 @@ const Specialities = () => {
     useFocusEffect(
         useCallback(() => {
             specialityService.getByDept("Dental").then((response) => {
-                setDentalSpeciality(response.data)
+                setDentalSpeciality(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "New Flow" || speciality.flowType === "Both")))
+                // setDentalSpeciality(response.data)
                 console.log("dental response: ", response.data.length)
             })
                 .catch((error) => {
                     console.log("dental error: ", error)
                 })
             specialityService.getByDept("Dermatology").then((response) => {
-                setDermatologySpeciality(response.data)
+                setDermatologySpeciality(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "New Flow" || speciality.flowType === "Both")))
+                // setDermatologySpeciality(response.data)
             })
                 .catch((error) => {
                     console.log("derma error: ", error)
                 })
             specialityService.getByDept("Medical").then((response) => {
-                setMedicalSpeciality(response.data)
+                setMedicalSpeciality(response.data.filter((speciality: any) => speciality.flowType != null && (speciality.flowType === "New Flow" || speciality.flowType === "Both")))
+                // setMedicalSpeciality(response.data)
             })
                 .catch((error) => {
                     console.log("medical error: ", error)

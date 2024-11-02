@@ -19,8 +19,8 @@ import {
   MaterialCommunityIcons,
   MaterialIcons
 } from "@expo/vector-icons";
-import profileImg from "../../assets/images/done-profile-img.png";
-import profileImg2 from "../../assets/images/chat-reply-img.png";
+// import profileImg from "../../assets/images/done-profile-img.png";
+// import profileImg2 from "../../assets/images/chat-reply-img.png";
 import { router } from "expo-router";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 
@@ -36,7 +36,7 @@ const ChatBox = () => {
             <HeaderWithBackButton isPushBack={true} isTextWhite={true} />
             <View className="flex-row justify-start items-center gap-3 pl-2">
               <View>
-                <Image source={profileImg} style={{ width: 60, height: 60 }} />
+                <Image source={require("../../assets/images/done-profile-img.png")} style={{ width: 60, height: 60 }} />
               </View>
               <View>
                 <Text className="text-lg font-semibold text-white">
@@ -118,7 +118,7 @@ const ChatBox = () => {
           <View className="pt-8">
             <View className=" justify-start flex-row items-start gap-2">
               <View>
-                <Image source={profileImg2} />
+                <Image source={require("../../assets/images/chat-reply-img.png")} />
                 <Text className="text-xs text-pc-primary text-center">09.12</Text>
               </View>
 

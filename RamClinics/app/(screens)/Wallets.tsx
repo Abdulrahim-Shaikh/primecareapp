@@ -16,6 +16,7 @@ import { lang } from "moment";
 import doctorService from "../../domain/services/DoctorService";
 import branchService from "../../domain/services/BranchService";
 import { Picker } from "@react-native-picker/picker";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -39,10 +40,11 @@ const Wallets = () => {
 
   let patientId = useUserSate.getState().userId;
   let primaryBranch = useUserSate.getState().branch;
-  const [branches, setBranches] = useState([]);
+  const [branchesData, setBranchesData] = useState([]);
   const [selectedBranchId, setSelectedBranchId] = useState('');
   const [primaryBranchId, setPrimaryBranchId] = useState('');
-  const [showBranches, setShowBranches] = useState(false);
+  const [showBranchesData, setShowBranchesData] = useState(false);
+  const { branches, changeBranches } = useBranches();
   const [doctors, setDoctors] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState('');
   const [noAccount, setNoAccount] = useState(true);
@@ -72,18 +74,20 @@ const Wallets = () => {
 
   const fetchData = async () => {
     try {
-      const branchesResponse = await branchService.findAll();
-      setBranches(branchesResponse.data);
+      if (branches == undefined || branches == null || branches.length == 0) {
+        const branchesDataResponse = await branchService.findAll();
+        setBranchesData(branchesDataResponse.data);
+      } else {
+        setBranchesData(branches);
+      }
     } catch (error) {
-      console.error("Failed to fetch branches:", error);
-    }
-    finally {
+      console.error("Failed to fetch branchesData:", error);
     }
   };
 
   //get acccount by primary branch
   useEffect(() => {
-    let primBranch: any = branches.find((b: any) => b.name === primaryBranch);
+    let primBranch: any = branchesData.find((b: any) => b.name === primaryBranch);
     if (primBranch) {
       console.log('primBranch', primBranch.id);
       setPrimaryBranchId(primBranch.id);
@@ -101,7 +105,7 @@ const Wallets = () => {
           console.error("Failed to fetch Account:", error);
         })
     }
-  }, [branches]);
+  }, [branchesData]);
 
 
   //get doctors by branch
@@ -117,7 +121,7 @@ const Wallets = () => {
 
 
   useEffect(() => {
-    setShowBranches(false);
+    setShowBranchesData(false);
     const doctor = doctors.find((doc: any) => doc.id === selectedDoc);
     setDoctorName(doctor?.name);
   }, [selectedDoc]);
@@ -214,18 +218,18 @@ const Wallets = () => {
               }
             </View>
             <View className=" flex-row justify-between items-center py-4 text-amber-500">
-              <Button title={selectedDoc ? "Change Doctor" : "Transfer to Doctor"} color="#841584" onPress={() => setShowBranches(true)} />
+              <Button title={selectedDoc ? "Change Doctor" : "Transfer to Doctor"} color="#841584" onPress={() => setShowBranchesData(true)} />
               <Button title="Refill" color="green" onPress={() => setShowRefill(true)} />
             </View>
           </View>
         </View>
-        {showBranches && (
+        {showBranchesData && (
           <View className="pt-5 p-3">
             <View className="border border-indigo-950 rounded-lg mb-4">
               <Picker
                 selectedValue={selectedBranchId} onValueChange={(itemValue) => { setSelectedBranchId(itemValue); }} className="h-12">
                 <Picker.Item label={i18n.t("Select Branch")} value="" />
-                {branches.map((branch: any) => (
+                {branchesData.map((branch: any) => (
                   <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
                 ))}
               </Picker>

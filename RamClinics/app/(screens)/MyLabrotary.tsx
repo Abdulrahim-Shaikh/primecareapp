@@ -1,26 +1,22 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Picker } from '@react-native-picker/picker';
 import React, { useCallback, useEffect, useState } from "react";
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import branchService from "../../domain/services/BranchService";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderWithBackButton from "../../components/ui/HeaderWithBackButton";
 import labratoryService from "../../domain/services/LabratoryService";
 import { useUserSate } from "../../domain/state/UserState";
-import LabratoryReport from "./LabratoryReport";
-import WebView from "react-native-webview";
 import PdfViewer from "./PDFViewer";
 import moment from "moment";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
-import { lang } from "moment";
 import { useFocusEffect } from "expo-router";
 import SelectDropdown from "react-native-select-dropdown";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
-const tabNames = ["Pending", "Cancelled", "Invoiced"];
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
 i18n.enableFallback = true;
@@ -28,6 +24,25 @@ i18n.enableFallback = true;
 const MyLabrotary = () => {
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
+    const filterOptions = [
+        { id: 1, name: "From Last Month", value: 'lastMonth' },
+        { id: 2, name: "All", value: 'all' },
+        // { id: 3, name: "6 Months", months: 6 },
+    ]
+    const [branchesData, setBranchesData] = useState([]);
+    const {branches, changeBranches} = useBranches();
+    const [selectedValue, setSelectedValue] = useState("");
+    const [fromType, setFromType] = useState("lastMonth");
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date());
+    const [labratory, setLabratory] = useState([]);
+    const [filteredLabratory, setFilteredLabratory] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedLabratory, setSelectedLabratory] = useState<any>(null);
+    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
+    //  const [pdfUri, setPdfUri] = useState('');
+    let userId = useUserSate.getState().userId;
+    const { data, status, isLoading } = labratoryService.byPatientIds(userId);
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -41,41 +56,6 @@ const MyLabrotary = () => {
         }, [])
     )
 
-    const filterOptions = [
-        { id: 1, name: "From Last Month", value: 'lastMonth' },
-        { id: 2, name: "All", value: 'all' },
-        // { id: 3, name: "6 Months", months: 6 },
-    ]
-    let [branches, setBranches] = useState([]);
-    const [selectedValue, setSelectedValue] = useState("");
-    const [fromType, setFromType] = useState("lastMonth");
-    const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(new Date());
-    const [showFromPicker, setShowFromPicker] = useState(false);
-    const [showToPicker, setShowToPicker] = useState(false);
-    const [labratory, setLabratory] = useState([]);
-    const [filteredLabratory, setFilteredLabratory] = useState([]);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedLabratory, setSelectedLabratory] = useState<any>(null);
-    const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
-    //  const [pdfUri, setPdfUri] = useState('');
-    const [loading, setLoading] = useState(true);
-    let setUser = useUserSate.getState().setUser;
-    let userId = useUserSate.getState().userId;
-    const onChangeFrom = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || fromDate;
-        setShowFromPicker(false);
-        setFromDate(currentDate);
-    };
-
-    const onChangeTo = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || toDate;
-        setShowToPicker(false);
-        setToDate(currentDate);
-    };
-
-    const [activeTab, setActiveTab] = useState("Pending");
-    const { data, status, isLoading } = labratoryService.byPatientIds(userId);
 
     useEffect(() => {
         // console.log('API response', data, status);
@@ -115,10 +95,14 @@ const MyLabrotary = () => {
 
     const fetchData = async () => {
         try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
+            if (branches == undefined || branches == null || branches.length == 0) {
+                const branchesDataResponse = await branchService.findAll();
+                setBranchesData(branchesDataResponse.data);
+            } else {
+                setBranchesData(branches);
+            }
         } catch (error) {
-            console.error("Failed to fetch branches:", error);
+            console.error("Failed to fetch branchesData:", error);
         }
     };
 
@@ -211,7 +195,7 @@ const MyLabrotary = () => {
                     </View>
                     <View className="p-4 border rounded-lg mb-4">
                         <SelectDropdown
-                            data={branches}
+                            data={branchesData}
                             search={true}
                             defaultValue={selectedValue}
                             onSelect={(selectedItem, index) => {
@@ -249,7 +233,7 @@ const MyLabrotary = () => {
                             className="h-12"
                         >
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker> */}
@@ -270,7 +254,7 @@ const MyLabrotary = () => {
                             className="h-12"
                         >
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker>

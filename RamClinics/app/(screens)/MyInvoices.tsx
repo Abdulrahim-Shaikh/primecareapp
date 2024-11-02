@@ -17,6 +17,7 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 import { useFocusEffect, useRouter } from "expo-router";
 import SelectDropdown from "react-native-select-dropdown";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
 const i18n = new I18n(translations)
@@ -49,7 +50,7 @@ const MyInvoices = () => {
     ]
     const [invoices, setInvoices] = useState([]);
     const [filteredInvoices, setFilteredInvoices] = useState([]);
-    const [branches, setBranches] = useState([]);
+    const [branchesData, setBranchesData] = useState([]);
     const [selectedValue, setSelectedValue] = useState("");
     const [fromType, setFromType] = useState("lastMonth");
     const [fromDate, setFromDate] = useState(new Date());
@@ -59,23 +60,10 @@ const MyInvoices = () => {
     const [activeTab, setActiveTab] = useState("Pending");
     const [modalVisible, setIsModalVisible] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+    const {branches, changeBranches} = useBranches();
     // const [pdfUri, setPdfUri] = useState('');
     const [pdfSource, setpdfSource] = useState({ uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true });
-    let setUser = useUserSate.getState().setUser;
     let userId = useUserSate.getState().userId;
-
-    const onChangeFrom = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || fromDate;
-        setShowFromPicker(false);
-        setFromDate(currentDate);
-    };
-
-    const onChangeTo = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || toDate;
-        setShowToPicker(false);
-        setToDate(currentDate);
-    };
 
     const { data, status, isLoading } = invoiceService.invoicesByPatientIds(userId);
 
@@ -116,31 +104,16 @@ const MyInvoices = () => {
 
     const fetchData = async () => {
         try {
-            const branchesResponse = await branchService.findAll();
-            setBranches(branchesResponse.data);
+            if (branches == undefined || branches == null  || branches.length === 0) {
+                const branchesDataResponse = await branchService.findAll();
+                setBranchesData(branchesDataResponse.data);
+            } else {
+                setBranchesData(branches);
+            }
         } catch (error) {
-            console.error("Failed to fetch branches:", error);
+            console.error("Failed to fetch branchesData:", error);
         }
     };
-
-    // useEffect(() => {
-    //     setLoading(true);
-    //     branchService.findAll().then((res) => {
-    //         setBranches(res.data);
-    //     }).catch((error) => {
-    //         console.error("Failed to fetch branches:", error);
-    //     }).finally(() => {
-    //         invoiceService.invoicesByPatientId(userId).then((res) => {
-    //             console.log("Fetched invoices:", res.data);
-    //             setInvoices(res.data);
-    //             setFilteredInvoices(res.data);
-    //         }).catch((error) => {
-    //             console.error("Failed to fetch invoices:", error);
-    //         }).finally(() => {
-    //             setLoading(false);
-    //         });
-    //     });
-    // }, []);
 
     useEffect(() => {
         filterInvoices();
@@ -228,7 +201,7 @@ const MyInvoices = () => {
 
                     <View className="p-4 border rounded-lg mb-4">
                         <SelectDropdown
-                            data={branches}
+                            data={branchesData}
                             search={true}
                             defaultValue={selectedValue}
                             onSelect={(selectedItem, index) => {
@@ -266,7 +239,7 @@ const MyInvoices = () => {
                             className="h-12"
                         >
                             <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branches.map((branch: any) => (
+                            {branchesData.map((branch: any) => (
                                 <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
                             ))}
                         </Picker> */}
