@@ -41,7 +41,7 @@ const HelpSupport = () => {
             <Text className="text-lg py-3">
               {i18n.t("Your inquiries, suggestions, and complains all are most welcomed")}.
             </Text>
-            <NASButton title={i18n.t('complaintsorsuggestions')} onPress={() => {}} />
+            <NASButton title={i18n.t('complaintsorsuggestions')} onPress={() => router.navigate({pathname: 'https://ramclinics.net/complaints-and-inquiries?lang=en'})} />
             {/* <Pressable
               onPress={() => router.push("/FaqPage")}
               className=" flex-row justify-between items-center pt-6 pb-4 border-b border-dashed text-amber-500"
