@@ -1,6 +1,6 @@
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useContext, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import translations from "../../constants/locales/ar";
 import { I18n } from 'i18n-js'
@@ -44,9 +44,39 @@ const MainMenu = () => {
 
   const loggedOutMenuItems = [
     {
-      icon: 'medkit-outline',
-      title: 'Specialities',
-      link: '/Specialities',
+      icon: 'gift-open-outline',
+      title: 'Offers',
+      link: '/Offers',
+      showWhenLoggedOut: true
+    },
+    {
+      icon: 'calendar-plus',
+      title: 'Book Appointment',
+      link: '/BookAppointment',
+      showWhenLoggedOut: true
+    },
+    {
+      icon: 'tag-heart-outline',
+      title: 'Promotions',
+      link: '/Promotions',
+      showWhenLoggedOut: true
+    },
+    {
+      icon: 'card-bulleted',
+      title: 'Wallets',
+      link: '/Wallets',
+      showWhenLoggedOut: true
+    },
+    {
+      icon: 'hospital-building',
+      title: 'About Us',
+      link: '/AboutUs',
+      showWhenLoggedOut: true
+    },
+    {
+      icon: 'phone',
+      title: 'Contact Us',
+      link: '/HelpSupport',
       showWhenLoggedOut: true
     },
   ]
@@ -158,9 +188,6 @@ const MainMenu = () => {
             </View>
             <View className="flex-row pt-5">
 
-              {
-                loggedIn
-                  ?
                   <FlatList
                     data={loggedIn ? menuItems : loggedOutMenuItems}
                     numColumns={3}
@@ -171,7 +198,17 @@ const MainMenu = () => {
                         <View className="flex flex-row p-1 m-1 w-32 h-32">
                           <Pressable className="border border-pc-primary bg-[rgb(59,35,20)] p-2 rounded-lg w-full" onPress={() => router.navigate(item.link)}>
                             <View className="py-2 items-center">
-                              <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
+                              {
+                                !loggedIn
+                                  ?
+                                    <MaterialCommunityIcons
+                                        name={item.icon as any}
+                                        size={36}
+                                        color={"rgb(132 204 22)"}
+                                    />
+                                  :
+                                    <Ionicons name={item.icon as any} size={36} color={"rgb(132 204 22)"} />
+                              }
                             </View>
                             <Text className="text-sm font-semibold text-center text-white pt-3 pb-2">{i18n.t(item.title)}</Text>
                           </Pressable>
@@ -179,11 +216,6 @@ const MainMenu = () => {
                       </View>
                     )}
                   />
-                  :
-                  <View className="flex flex-row justify-evenly w-full">
-                    {renderLoggedOutMenu}
-                  </View>
-              }
 
             </View>
           </View >

@@ -7,6 +7,7 @@
 
 const translations = {
      en: {
+        "Wallets": "Wallets",
         "Showing last 3 appointments' doctors": "Showing last 3 appointments' doctors",
         "Appointment booking failed": "Appointment booking failed",
         "Success - Appointment booked successfully": "Success - Appointment booked successfully",
@@ -766,6 +767,7 @@ const translations = {
         "Patient Policy data not found": "بيانات سياسة المريض غير موجودة",
         "Success - Appointment booked successfully": "تم حجز الموعد بنجاح",
         "Showing last 3 appointments' doctors": "عرض آخر 3 أطباء للمواعيد",
+        "Wallets": "المحافظ",
     }
 }
 export default translations;
