@@ -108,7 +108,6 @@ const SingUp = () => {
           // setBranches(response.data)
         })
       } else {
-          console.log("branches: ", branches)
           setBranchOptions(branches.filter((branch: any) => branch.showInMobileApp != null && branch.showInMobileApp === true))
       }
       changeLocale(language)
