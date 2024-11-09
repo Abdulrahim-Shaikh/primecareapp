@@ -619,8 +619,13 @@ const SingUp = () => {
                 }}
                 renderItem={(item, index, isSelected) => {
                   return (
-                    <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
-                      <Text>{item.name}</Text>
+                    <View className="flex flex-column flex-wrap">
+                        <View className="flex flex-row justify-between flex-wrap" style={{ ...styles.dropdownItemStyleBranch, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                            <View>
+                                <Text>{item.name}, {item.plotNo}, {item.buildingNo}, {item.street} - {item.streetAr}, {item.district} - {item.districtAr}, {item.state} - {item.stateAr}, {item.country}, {item.postalZone}, {item.googleLocation}</Text>
+                            </View>
+                        </View>
+                        <View style={{ paddingTop: 10, padding: 10, borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, }} />
                     </View>
                   );
                 }}
@@ -791,6 +796,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+  },
+  dropdownItemStyleBranch: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
   dropdownItemStyle: {
     width: '100%',
