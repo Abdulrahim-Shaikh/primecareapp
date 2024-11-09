@@ -367,31 +367,17 @@ const SlotsConfirmationPage = () => {
                             }}
                         />
                     </View>
-                    {/* <View
-                        className="flex flex-row justify-between items-center pt-2 gap-4 ">
-                        <Text className="flex-1 text-white border border-pc-primary px-4 py-2 rounded-lg bg-[#3B2314] text-center" >
-                            On: {dateString}
-                        </Text>
-                    </View> */}
                     <View className="pt-3">
                         {
                             loader && <ActivityIndicator size="large" color="#454567" />
                         }
                     </View>
-                    {/* <View>
-                        <Text>{isDatePickerOpen}</Text>
-                        {isDatePickerOpen && (
-                            <DateTimePicker value={slotSearchDate} mode="date" display="default" onChange={onDateChange} />
-                        )}
-                    </View> */}
-
-
                     {
                         Array.from(slotsAvailable).length == 0 && !loader
                             ?
                             <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No slots available for selected date")}</Text>
                             :
-                            <View className="pb-8">
+                            <View className="flex-row pb-8">
                                 <FlatList
                                     data={Array.from(slotsAvailable)}
                                     numColumns={3}
