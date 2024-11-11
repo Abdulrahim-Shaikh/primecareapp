@@ -40,6 +40,8 @@ const CityPage = () => {
     useFocusEffect(
         useCallback(() => {
             LogBox.ignoreAllLogs();
+            // console.log("devices: ", devices)
+            console.log("devices: ", devices)
             setPatientData(useUserSate.getState().user)
             if (branchId == null)
             changeLocale(language)
@@ -129,10 +131,9 @@ const CityPage = () => {
         <SafeAreaView>
             <ScrollView className="p-6">
                 <HeaderWithBackButton title={i18n.t("Select City")} isPushBack={true} />
-                <View className="flex-1 space-y-4 ">
+                <View className="flex-1 pt-3">
                     {
-                        +callCenterDoctorFlow &&
-                        // <View className="pt-8 pb-5 border-b border-dashed border-pc-primary flex flex-row justify-between items-center">
+                        +callCenterDoctorFlow ?
                         <View className="pb-5 flex flex-row justify-start border-b border-dashed border-pc-primary">
                             <View className="mt-6 w-3/4 flex flex-row justify-start items-center gap-2">
                                 <Pressable
@@ -162,13 +163,14 @@ const CityPage = () => {
                                 </Pressable>
                             </View>
                         </View>
+                        : null
                     }
                     <FlatList
                         contentContainerStyle={{ gap: 12 }}
                         data={citiesData}
                         keyExtractor={(item: any, index) => "key" + index}
-                        ListHeaderComponent={<></>}
-                        ListFooterComponent={<></>}
+                        ListHeaderComponent={<View></View>}
+                        ListFooterComponent={<View></View>}
                         renderItem={({ item }) => {
                             return (
                                 <View className="w-full">
@@ -193,7 +195,6 @@ const CityPage = () => {
                                         }
                                     >
                                         <View className="rounded-full bg-white flex justify-center items-center w-18 gap-2 pl-3">
-                                            {/* <Image source={cityImg} style={{ width: 50, height: 50 }} /> */}
                                             <MaterialCommunityIcons
                                                 name="city-variant-outline"
                                                 size={30}

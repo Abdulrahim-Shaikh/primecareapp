@@ -10,6 +10,7 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useBranches } from "../../domain/contexts/BranchesContext";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -49,7 +50,13 @@ const BranchPage = () => {
             const getBranchBySpecialityCity = async () => {
                 let response = await resourceService.getBranchBySpecialityCity(specialityCode, city, deviceCode)
                 console.log("getBranchBySpecialityCity response.data: ", response.data)
-                setBranchesData(response.data)
+                let tempBranches: any = []
+                for (let b of response.data) {
+                    let branchSearch = branches.filter((branch: any) => branch.name == b)
+                    tempBranches.push(branchSearch[0])
+                }
+                console.log("tempBranches: ", tempBranches.length)
+                setBranchesData(tempBranches)
             }
             getBranchBySpecialityCity()
         } else {
@@ -155,37 +162,59 @@ const BranchPage = () => {
                                         typeof item === 'string' ? selectCity(item) : selectCity(item)
                                     }
                                     }>
-                                    <View className="rounded-smg bg-white flex justify-center items-centerborder-gray-200">
-                                        <Image source={require("../../assets/logo/logo-ram-clinic-square.png")} style={{ width: 50, height: 50 }} />
+                                    <View className="rounded-smg bg-white flex justify-center items-center border-gray-200">
+                                        {/*<Image source={require("../../assets/logo/logo-ram-clinic-square.png")} style={{ width: 50, height: 50 }} />*/}
+
+                                        <MaterialCommunityIcons
+                                            name="hospital-building"
+                                            size={30}
+                                            color={"#3b2314"}
+                                        />
                                     </View>
-                                    <View className="w-full pl-4 flex justify-center"
+                                    <View
                                         style={{
-                                            paddingRight: 55,
+                                            paddingRight: 35,
                                         }}
-                                    >
-                                        {
-                                            typeof item === 'string'
-                                                ?
-                                                <Text className="font-semibold text-lg text-gray-800">
-                                                    {i18n.t(item)}
-                                                </Text>
-                                                :
-                                                <Text className="font-semibold text-lg text-gray-800">
-                                                    {i18n.t(item?.name)}
-                                                </Text>
-                                        }
-                                        {
-                                            +callCenterFlow
-                                                ?
-                                                <Text className="text-gray-600 pt-1">
-                                                    {i18n.t(city)}
-                                                </Text>
-                                                :
-                                                <Text className="text-gray-600 pt-1">
-                                                    {i18n.t(item?.city)}
-                                                </Text>
-                                        }
+                                        className="w-full pl-2 flex content-center items-center flex-row justify-between flex-wrap">
+                                        <View>
+                                            <Text className="font-semibold text-gray-800">
+                                                {item.name}
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <Text className="font-semibold text-lg text-gray-800">
+                                                {item.nameAr}
+                                            </Text>
+                                        </View>
                                     </View>
+                                    {/*<View className="w-full pl-4 flex justify-center"*/}
+                                    {/*    style={{*/}
+                                    {/*        paddingRight: 55,*/}
+                                    {/*    }}*/}
+                                    {/*>*/}
+                                    {/*    {*/}
+                                    {/*        typeof item === 'string'*/}
+                                    {/*            ?*/}
+                                    {/*            <Text className="font-semibold text-lg text-gray-800">*/}
+                                    {/*                {i18n.t(item)}*/}
+                                    {/*            </Text>*/}
+                                    {/*            :*/}
+                                    {/*            <Text className="font-semibold text-lg text-gray-800">*/}
+                                    {/*                {i18n.t(item?.name)}*/}
+                                    {/*            </Text>*/}
+                                    {/*    }*/}
+                                    {/*    {*/}
+                                    {/*        +callCenterFlow*/}
+                                    {/*            ?*/}
+                                    {/*            <Text className="text-gray-600 pt-1">*/}
+                                    {/*                {i18n.t(city)}*/}
+                                    {/*            </Text>*/}
+                                    {/*            :*/}
+                                    {/*            <Text className="text-gray-600 pt-1">*/}
+                                    {/*                {i18n.t(item?.city)}*/}
+                                    {/*            </Text>*/}
+                                    {/*    }*/}
+                                    {/*</View>*/}
                                 </Pressable>
                             </View>
                         )}

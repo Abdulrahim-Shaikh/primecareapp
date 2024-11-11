@@ -7,6 +7,7 @@
 
 const translations = {
      en: {
+        "Our Branches": "Our Branches",
         "Wallets": "Wallets",
         "Showing last 3 appointments' doctors": "Showing last 3 appointments' doctors",
         "Appointment booking failed": "Appointment booking failed",
@@ -29,6 +30,7 @@ const translations = {
         "Patient Not Found": "Patient Not Found",
         'Failed to save patient': 'Failed to save patient',
         "You need to Sign Up first": "You need to Sign Up first",
+        "You need to Sign in first": "You need to Sign in first",
         "Or Continue With": "Or Continue With",
         "Anesthesia Clinic": "Anesthesia Clinic",
         "General Medicine": "General Medicine",
@@ -770,6 +772,8 @@ const translations = {
         "Success - Appointment booked successfully": "تم حجز الموعد بنجاح",
         "Showing last 3 appointments' doctors": "عرض آخر 3 أطباء للمواعيد",
         "Wallets": "المحافظ",
+        "Our Branches": "فروعنا",
+        "You need to Sign in first": "يجب عليك تسجيل الدخول أولاً",
     }
 }
 export default translations;

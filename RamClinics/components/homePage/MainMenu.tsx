@@ -50,19 +50,19 @@ const MainMenu = () => {
       showWhenLoggedOut: true
     },
     {
-      icon: 'calendar-plus',
-      title: 'Book Appointment',
-      link: '/BookAppointment',
+      icon: 'city-variant-outline',
+      title: 'Our Branches',
+      link: '/CityPage',
       showWhenLoggedOut: true
     },
     {
       icon: 'tag-heart-outline',
-      title: 'Promotions',
-      link: '/Promotions',
+      title: 'Packages',
+      link: '/Packages',
       showWhenLoggedOut: true
     },
     {
-      icon: 'medkit-outline',
+      icon: 'doctor',
       title: 'Specialities',
       link: '/Specialities',
       showWhenLoggedOut: true
