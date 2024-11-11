@@ -387,6 +387,7 @@ const translations = {
         "Shift and Doctor Gender": "Shift and Doctor Gender",
         "Doctor Specialities": "Doctor Specialities",
         "Specialities": "Specialities",
+        "No branches in this city": "No branches in this city.",
 
     },
     ar: {
@@ -774,6 +775,7 @@ const translations = {
         "Wallets": "المحافظ",
         "Our Branches": "فروعنا",
         "You need to Sign in first": "يجب عليك تسجيل الدخول أولاً",
+        "No branches in this city": "لم يتم العثور على فروع في هذه المدينة",
     }
 }
 export default translations;

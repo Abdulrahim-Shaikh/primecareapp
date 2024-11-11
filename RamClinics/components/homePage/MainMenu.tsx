@@ -52,7 +52,7 @@ const MainMenu = () => {
     {
       icon: 'city-variant-outline',
       title: 'Our Branches',
-      link: '/CityPage',
+      link: '/OurBranchesCities',
       showWhenLoggedOut: true
     },
     {
