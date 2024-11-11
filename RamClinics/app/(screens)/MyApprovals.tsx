@@ -285,8 +285,10 @@ const MyApprovals = () => {
                                             <Text className="mt-1 text-lg text-gray-800">
                                                 Total Amount: <Text className="font-bold text-lime-600">{apprval.total}</Text>
                                             </Text>
-                                            <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {moment(apprval.invoiceDate).format("DD-MMM-YYYY")}</Text>
-                                            <Text className="mt-1 text-md text-gray-600"></Text>
+                                            <View className="flex-row justify-between">
+                                                <Text className="mt-1 text-md text-gray-600">{i18n.t("Date")}: {moment(apprval.invoiceDate).format("DD-MMM-YYYY")}</Text>
+                                                <Text className="mt-1 text-md text-gray-600">Status: <Text className="text-lime-600">{apprval.status}</Text></Text>
+                                            </View>
                                         </View>
                                     ))
                                     :
@@ -302,8 +304,10 @@ const MyApprovals = () => {
                                                 <Text className="mt-1 text-lg text-gray-800">
                                                     Total Amount: <Text className="font-bold text-lime-600">{apprval.total}</Text>
                                                 </Text>
-                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {moment(apprval.invoiceDate).format("DD-MMM-YYYY")}</Text>
-                                                <Text className="mt-1 text-md text-gray-600"></Text>
+                                                <View className="flex-row justify-between">
+                                                    <Text className="mt-1 text-md text-gray-600">{i18n.t("Date")}: {moment(apprval.invoiceDate).format("DD-MMM-YYYY")}</Text>
+                                                    <Text className="mt-1 text-md text-gray-600">Status: <Text className="text-lime-600">{apprval.status}</Text></Text>
+                                                </View>
                                             </View>
                                         ))
                                         :
@@ -318,8 +322,10 @@ const MyApprovals = () => {
                                                 <Text className="mt-1 text-lg text-gray-800">
                                                     Total Amount: <Text className="font-bold text-lime-600">{apprval.total}</Text>
                                                 </Text>
-                                                <Text className="mt-1 text-md text-gray-600"> Invoice Status: <Text className="text-lime-600">{apprval.status}</Text> &emsp; Invoice Date: {moment(apprval.invoiceDate).format("DD-MMM-YYYY")}</Text>
-                                                <Text className="mt-1 text-md text-gray-600"></Text>
+                                                <View className="flex-row justify-between">
+                                                    <Text className="mt-1 text-md text-gray-600">{i18n.t("Date")}: {moment(apprval.invoiceDate).format("DD-MMM-YYYY")}</Text>
+                                                    <Text className="mt-1 text-md text-gray-600">Status: <Text className="text-lime-600">{apprval.status}</Text></Text>
+                                                </View>
                                             </View>
                                         ))
                             )

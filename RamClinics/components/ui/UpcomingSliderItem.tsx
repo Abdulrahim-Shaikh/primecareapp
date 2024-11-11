@@ -41,7 +41,10 @@ const UpcomingSliderItem = ({ id, promotionName, description, photo, promotionSe
   const [signInRequiredModal, setSignInRequiredModal] = useState(false);
   const [bookingErrorModal, setBookingErrorModal] = useState(false);
 
-  const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/promotion/file/";
+  // const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/promotion/file/";
+  // const sourceUrl = "http://157.175.208.117:8080/HISAdmin/api/promotion/file/";
+  const sourceUrl = "http://ramprimecare.com:8080/HISAdmin/api/promotion/file/";
+
   const photoUrl = (promotionService.offerImages && Array.isArray(promotionService.offerImages) && promotionService.offerImages.length > 0 && promotionService.offerImages[0])
     ? { uri: `${sourceUrl}${encodeURIComponent(promotionService.offerImages[0])}` } : null;
 

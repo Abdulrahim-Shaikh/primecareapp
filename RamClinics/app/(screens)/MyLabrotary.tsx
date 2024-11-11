@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform, Alert } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useCallback, useEffect, useState } from "react";
 import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -112,12 +112,16 @@ const MyLabrotary = () => {
 
     const openModal = async (labratory: any) => {
         setSelectedLabratory(labratory);
-        const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/report/getLabReport/${labratory.orderId}`;
-        setpdfSource({ uri: pdfUrl, cache: true })
-        //  setPdfUri(pdfUrl);
-        console.log("Opening modal with ID:", labratory.id);
-        console.log("PDF URL:", pdfUrl);
-        setIsModalVisible(true);
+        if (labratory.status === 'RC' || labratory.status === 'Reported' || labratory.status === 'External Result') {
+            const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/report/getLabReport/${labratory.orderId}`;
+            setpdfSource({ uri: pdfUrl, cache: true })
+            //  setPdfUri(pdfUrl);
+            console.log("Opening modal with ID:", labratory.id);
+            console.log("PDF URL:", pdfUrl);
+            setIsModalVisible(true);
+        } else {
+            Alert.alert(i18n.t("Not Yet Reported!"));
+        }
     };
 
     const closeModal = () => {
@@ -290,7 +294,10 @@ const MyLabrotary = () => {
                                             {i18n.t("Total Amount")}: <Text style={styles.amount}>{labratorys.total}</Text>
                                         </Text>
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {labratorys.branch}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(labratorys.orderDate).format("DD-MMM-YYYY")}</Text>
+                                        <View className="flex-row justify-between">
+                                            <Text className="mt-1 text-md text-gray-600">{i18n.t("Date")}: {moment(labratorys.invoiceDate).format("DD-MMM-YYYY")}</Text>
+                                            <Text className="mt-1 text-md text-gray-600">Status: <Text className="text-lime-600">{labratorys.status}</Text></Text>
+                                        </View>
                                     </Pressable>
                                 ))
                             )}

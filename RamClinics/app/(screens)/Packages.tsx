@@ -21,7 +21,9 @@ const i18n = new I18n(translations);
 i18n.locale = Localization.locale;
 i18n.enableFallback = true;
 
-const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/servicepackage/file/";
+// const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/servicepackage/file/";
+// const sourceUrl = "http://157.175.208.117:8080/HISAdmin/api/servicepackage/file/";
+const sourceUrl = "http://ramprimecare.com:8080/HISAdmin/api/servicepackage/file/";
 
 const Packages = () => {
     const [branches, setBranches] = useState([]);
@@ -54,6 +56,10 @@ const Packages = () => {
             changeLanguage(language)
         }, [])
     )
+
+    useEffect(() => {
+        console.log('backages', packages);
+        }, [packages]);
 
     let userId = useUserSate.getState().userId;
     let patientName = useUserSate.getState().patientName;

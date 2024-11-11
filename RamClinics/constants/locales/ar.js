@@ -350,6 +350,7 @@ const translations = {
         "I don't want to tell": "I don't want to tell",
         "Others": "Others",
         "complaintsorsuggestions": "Complaints or Suggestions",
+        "Not Yet Reported!": "Not Yet Reported!",
 
         //UserProfile
         "firstname": "First Name",
@@ -609,6 +610,7 @@ const translations = {
         "I don't want to tell": "لا أريد أن أخبر",
         "Others": "أخرى",
         "complaintsorsuggestions": "الشكاوى أو الاقتراحات",
+        "Not Yet Reported!": "لم يتم الإبلاغ عنه بعد!",
 
         //UserProfile
         "firstname": "الاسم الأول",

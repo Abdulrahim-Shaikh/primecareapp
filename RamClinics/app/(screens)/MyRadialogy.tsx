@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Pressable, Modal, ActivityIndicator, Platform, Alert } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import React, { useCallback, useEffect, useState } from "react";
@@ -18,6 +18,7 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
 import { useFocusEffect } from "expo-router";
 import SelectDropdown from "react-native-select-dropdown";
+import { useBranches } from "../../domain/contexts/BranchesContext";
 
 const tabNames = ["Pending", "Invoiced", "Cancelled"];
 const i18n = new I18n(translations)
@@ -134,12 +135,16 @@ const MyRadialogy = () => {
 
     const openModal = async (radialogy: any) => {
         setSelectedRadialogy(radialogy);
-        const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/report/risReport/${radialogy.orderId}`;
-        setpdfSource({ uri: pdfUrl, cache: true })
-        //  setPdfUri(pdfUrl);
-        console.log("Opening modal with ID:", radialogy.id);
-        console.log("PDF URL:", pdfUrl);
-        setIsModalVisible(true);
+        if (radialogy.status === 'Reported' || radialogy.status === 'External Report') {
+            const pdfUrl = `http://16.24.11.104:8080/HISAdmin/api/report/risReport/${radialogy.orderId}`;
+            setpdfSource({ uri: pdfUrl, cache: true })
+            //  setPdfUri(pdfUrl);
+            console.log("Opening modal with ID:", radialogy.id);
+            console.log("PDF URL:", pdfUrl);
+            setIsModalVisible(true);
+        } else {
+            Alert.alert(i18n.t("Not Yet Reported!"));
+        }
     };
 
     const closeModal = () => {
@@ -312,7 +317,10 @@ const MyRadialogy = () => {
                                             {i18n.t("Total Amount")}: <Text style={styles.amount}>{radialogys.total}</Text>
                                         </Text>
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {radialogys.branchName}</Text>
-                                        <Text className="mt-1 text-sm text-gray-600">{i18n.t("Date")}: {moment(radialogys.invoiceDate).format("DD-MMM-YYYY")}</Text>
+                                        <View className="flex-row justify-between">
+                                            <Text className="mt-1 text-md text-gray-600">{i18n.t("Date")}: {moment(radialogys.invoiceDate).format("DD-MMM-YYYY")}</Text>
+                                            <Text className="mt-1 text-md text-gray-600">Status: <Text className="text-lime-600">{radialogys.status}</Text></Text>
+                                        </View>
                                     </Pressable>
                                 ))
                             )}

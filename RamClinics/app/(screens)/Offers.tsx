@@ -28,7 +28,9 @@ type Props = {
     description: string;
 };
 
-const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/promotion/file/";
+// const sourceUrl = "http://16.24.11.104:8080/HISAdmin/api/promotion/file/";
+// const sourceUrl = "http://157.175.208.117:8080/HISAdmin/api/promotion/file/";
+const sourceUrl = "http://ramprimecare.com:8080/HISAdmin/api/promotion/file/";
 
 const Offers = () => {
     const [branches, setBranches] = useState([]);

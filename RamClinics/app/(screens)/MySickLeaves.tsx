@@ -83,7 +83,8 @@ const MySickLeaves = () => {
     useEffect(() => {
         // console.log('API response', data, status);
         if (data && status === "success") {
-            setSickLeaves(data);
+            setSickLeaves(data.filter((sick: any) => sick.consentFormName === "Sick Leave"));
+            console.log('daytuh', data);
             let today = new Date();
             if (fromType === 'lastMonth') {
                 let lastMonth = new Date();
