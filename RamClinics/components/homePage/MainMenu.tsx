@@ -62,9 +62,9 @@ const MainMenu = () => {
       showWhenLoggedOut: true
     },
     {
-      icon: 'card-bulleted',
-      title: 'Wallets',
-      link: '/Wallets',
+      icon: 'medkit-outline',
+      title: 'Specialities',
+      link: '/Specialities',
       showWhenLoggedOut: true
     },
     {
