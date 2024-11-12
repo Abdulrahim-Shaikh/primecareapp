@@ -44,9 +44,15 @@ const MainMenu = () => {
 
   const loggedOutMenuItems = [
     {
-      icon: 'gift-open-outline',
-      title: 'Offers',
-      link: '/Offers',
+      icon: 'doctor',
+      title: 'Services',
+      link: '/Specialities',
+      showWhenLoggedOut: true
+    },
+    {
+      icon: 'calendar-plus',
+      title: 'Book Appointment',
+      link: '/BookAppointment',
       showWhenLoggedOut: true
     },
     {
@@ -56,15 +62,9 @@ const MainMenu = () => {
       showWhenLoggedOut: true
     },
     {
-      icon: 'tag-heart-outline',
-      title: 'Packages',
-      link: '/Packages',
-      showWhenLoggedOut: true
-    },
-    {
-      icon: 'doctor',
-      title: 'Specialities',
-      link: '/Specialities',
+      icon: 'gift-outline',
+      title: 'Promotions',
+      link: '/Promotions',
       showWhenLoggedOut: true
     },
     {
