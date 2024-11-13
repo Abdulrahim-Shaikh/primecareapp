@@ -131,25 +131,12 @@ const DoctorCard = ({
     setLoader(true)
     if (!useUserSate.getState().loggedIn) {
       setSignInModal(true);
-      // Alert.alert('Patient Not Found', 'You need to Sign in first', [
-      //   {
-      //     text: 'BACK',
-      //     style: 'default'
-      //   },
-      //   {
-      //     text: 'SIGN IN',
-      //     onPress: () => router.push('/SignIn'),
-      //     style: 'default'
-      //   },
-      // ])
     } else {
       console.log("user.id: ", user.id)
       patientPolicyService.byPatientId(user.id)
         .then((response: any) => {
           console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
-          // console.log("respponse: ", response.data[0])
           setPatientPolicyData(response.data[0])
-          // console.log("patientPolicyData: ", patientPolicyData)
           if (+callCenterDoctorFlow) {
             let visitTypes = []
             if (department == 'Dermatology') {
@@ -175,6 +162,7 @@ const DoctorCard = ({
                 }
               })
             } else {
+              console.log('selectedSpecialityCode: ', selectedSpecialityCode)
               specialityService.getSpecialityServiceByDepartmentTest(department).then((response) => {
                 let specialityList = [...response.data];
                 let selectedDoctorSpeciality = specialityList.find(speciality => speciality.code == selectedSpecialityCode);
@@ -201,18 +189,10 @@ const DoctorCard = ({
               })
                 .catch((error) => {
                   setAppointmentTypesNotFound(true)
-                  // Alert.alert('Note', 'Appointment types not found', [
-                  //   {
-                  //     text: 'OK',
-                  //     style: 'default'
-                  //   },
-                  // ],
-                  // )
                 })
             }
           } else {
             bookAppointment()
-            // setIsDatePickerOpen(true);
           }
         })
         .catch((error) => {
@@ -225,28 +205,9 @@ const DoctorCard = ({
 
     if (patientData == null || Object.keys(patientData).length <= 0) {
       setSignInModal(true)
-      // Alert.alert('Patient Not Found', 'You need to Sign in first', [
-      //   {
-      //     text: 'BACK',
-      //     style: 'default'
-      //   },
-      //   {
-      //     text: 'SIGN IN',
-      //     onPress: () => router.push('/SignIn'),
-      //     style: 'default'
-      //   },
-      // ])
     } else {
-
       if (patientPolicyData == null || Object.keys(patientPolicyData).length <= 0) {
         setPolicyNotFound(true)
-        // Alert.alert('Note', 'Patient Policy data not found', [
-        //   {
-        //     text: 'OK',
-        //     style: 'default'
-        //   },
-        // ],
-        // )
       } else {
         doctorService.find(id)
           .then((response) => {
@@ -264,17 +225,9 @@ const DoctorCard = ({
               }]
               scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
                 .then((response) => {
-                  // setAppointmentEntry(true)
                   setDoctorScheduleData(response.data)
                   if (response.data == null || response.data.length <= 0 || response.data[0] == null || response.data[0].length <= 0) {
                     setDoctorScheduleNotFoundModal(true)
-                    // Alert.alert('Note', 'Doctor Schedule not found', [
-                    //   {
-                    //     text: 'BACK',
-                    //     style: 'default'
-                    //   },
-                    // ],
-                    // )
                   } else {
                     router.push({
                       pathname: "/ScheduleAppointment/",
@@ -460,7 +413,6 @@ const DoctorCard = ({
       </Modal>
       <Modal transparent={true} animationType="fade" visible={appointmentTypesNotFound} onRequestClose={() => {
         setAppointmentTypesNotFound(false)
-        router.back()
       }}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <View className="bg-white p-6 rounded-lg w-4/5 relative">
@@ -475,7 +427,6 @@ const DoctorCard = ({
             <View className=" flex-row justify-end gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setAppointmentTypesNotFound(false)
-                router.back()
               }} >
                 <Text> Back </Text>
               </Pressable>

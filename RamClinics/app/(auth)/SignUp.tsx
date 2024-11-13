@@ -622,7 +622,7 @@ const SingUp = () => {
                     <View className="flex flex-column flex-wrap">
                         <View className="flex flex-row justify-between flex-wrap" style={{ ...styles.dropdownItemStyleBranch, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
                             <View>
-                                <Text>{item.name}, {item.plotNo}, {item.buildingNo}, {item.street} - {item.streetAr}, {item.district} - {item.districtAr}, {item.state} - {item.stateAr}, {item.country}, {item.postalZone}, {item.googleLocation}</Text>
+                                <Text>{item.name}, {item.plotNo}, {item.buildingNo}, {item.street} - {item.streetAr}, {item.district} - {item.districtAr}, {item.state} - {item.stateAR}, {item.country}, {item.postalZone}, {item.googleLocation}</Text>
                             </View>
                         </View>
                         <View style={{ paddingTop: 10, padding: 10, borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, }} />

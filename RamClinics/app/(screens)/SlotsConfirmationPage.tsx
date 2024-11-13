@@ -45,22 +45,7 @@ const SlotsConfirmationPage = () => {
 
     useEffect(() => {
         // setDevicesList(JSON.parse(devices.toString()))
-        console.log("\n\n\n\n")
-        console.log("resourceId: ", resourceId)
         setMainResourceId(JSON.parse(resourceId.toString()))
-        console.log("branch: ", branch)
-        console.log("fromSpeciality: ", fromSpeciality)
-        console.log("department: ", department)
-        console.log("speciality: ", speciality)
-        console.log("specialityCode: ", specialityCode)
-        console.log("callCenterFlow: ", callCenterFlow)
-        console.log("devices: ", devices)
-        console.log("responsible: ", responsible)
-        console.log("mobileOrOnline: ", mobileOrOnline)
-        console.log("shift: ", shift)
-        console.log("gender: ", gender)
-        console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
-        console.log("\n\n\n\n")
         let today = moment().format("YYYY-MM-DD");
         setSlotsAvailable(new Map<string, Array<number>>())
         if (+callCenterDoctorFlow) {
@@ -128,7 +113,6 @@ const SlotsConfirmationPage = () => {
                 resourceIds: [+resourceId],
                 wday: moment(new Date(date)).format("dddd").substring(0, 3)
             }]
-            console.log("requestBody: ", requestBody)
             let branchId = null
             for (let b of branches) {
                 if (b.name == branch) {
@@ -136,16 +120,13 @@ const SlotsConfirmationPage = () => {
                     setBranchId(branchId)
                     scheduleService.getDoctorSchedule(branchID, department, speciality, "true", requestBody)
                         .then((response) => {
-                            console.log("doctorSchedule response: ", response.data)
                             if (response.data[0].scheduleId == null || Object.keys(response.data[0].scheduleId).length == 0) {
                                 setDoctorScheduleNotFoundModal(true)
                             } else {
-                                // console.log("doctorSchedule response: ", response.data)
                                 let scheduleId = response.data[0].scheduleId[+moment(new Date(date)).format("D")]
                                 setScheduleId(scheduleId)
                                 scheduleService.find(+scheduleId)
                                     .then((response) => {
-                                        // console.log("scheduleService.find response: ", response.data.slots)
                                         setLoader(true)
                                         let masterObj: any = {}
                                         for (let i of response.data.slots) {
@@ -153,11 +134,8 @@ const SlotsConfirmationPage = () => {
                                             let timestr = moment(date).format("hh:mm A")
                                             masterObj[timestr] = [i]
                                         }
-                                        // console.log("masterObj: ", masterObj)
                                         let slots: any = masterObj
                                         setAllSlots(masterObj)
-                                        // console.log("moment: ", moment())
-                                        // console.log("moment2: ", new Date())
                                         const currentTimeInstance = moment();
                                         // const currentTimeInstance = moment(date).format("YYYY-MM-DD hh:mm A");
                                         // let doctorsAvailableAgainstSlots: Map<number, Array<any>> = new Map<number, Array<any>>()
@@ -173,15 +151,11 @@ const SlotsConfirmationPage = () => {
 
 
                                         for (let slot of sortedTimeSlots) {
-                                            console.log("\n\n\n\n")
-                                            console.log("slot: ", slot)
-                                            console.log("\n\n\n\n")
                                             const slotTimeInstance = moment(`${date} ${slot.trim()}`, "YYYY-MM-DD hh:mm A");
                                             if (moment(slotTimeInstance).isSameOrAfter(moment(currentTimeInstance))) {
                                                 let schedules = slots[slot]
                                                 if (schedules != null && schedules.length > 0) {
                                                     for (let doctorSchedule of schedules) {
-                                                        // console.log("pastSlotLimit: ", pastSlotLimit)
                                                         if (pastSlotLimit.has(mainResourceId)) {
                                                             let previousSlotString = pastSlotLimitAux.get(mainResourceId)
                                                             let upperLimitTimeInstance = pastSlotLimit.get(mainResourceId)
@@ -216,7 +190,6 @@ const SlotsConfirmationPage = () => {
                                         }
                                         setLoader(false)
                                         setSlotsAvailable(slotsAvailableAux2)
-                                        // console.log("slotsAvailableAux2: ", slotsAvailableAux2)
                                     })
                                     .catch((error) => {
                                         console.error("error: ", error.response)
@@ -226,6 +199,7 @@ const SlotsConfirmationPage = () => {
                         })
                         .catch((error) => {
                             console.log("getDoctorSchedule error: ", error.response)
+                            setDoctorScheduleNotFoundModal(true)
                         })
 
                     break;
@@ -237,7 +211,6 @@ const SlotsConfirmationPage = () => {
     const search = (date: any) => {
         setLoader(true)
         let subServiceSlotInterval = +mobileOrOnline
-        // console.log("subServiceSlotInterval: ", subServiceSlotInterval)
         let deviceCode: any = ""
         for (let device of devicesList) {
             deviceCode += device.deviceCode + ","
@@ -329,7 +302,6 @@ const SlotsConfirmationPage = () => {
                 }
                 setLoader(false)
                 setSlotsAvailable(slotsAvailableAux2)
-                // console.log("slotsAvailableAux2: ", slotsAvailableAux2)
             })
             .catch((error) => {
                 setLoader(false)

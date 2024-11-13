@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, View, Text } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View, Text, LogBox } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingSlider from "../../components/homePage/UpcomingSlider";
@@ -56,6 +56,7 @@ const Home = () => {
 
   useFocusEffect(
     useCallback(() => {
+      LogBox.ignoreAllLogs()
       const url = http.getURL();
       if (doctors == null || doctors.length == 0) {
         resourceService.getAllDoctorsByDesignation('Doctor').then((res) => {

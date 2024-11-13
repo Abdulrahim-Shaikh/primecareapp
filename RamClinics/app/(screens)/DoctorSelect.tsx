@@ -279,6 +279,7 @@ const DoctorSelect = () => {
     }
 
     function selectDoctor(item: any) {
+        console.log("selectDoctor: ", item)
         setSelectedDoctor(item)
         if (!loggedIn) {
             setPatientNotFoundModal(true)
@@ -306,7 +307,7 @@ const DoctorSelect = () => {
                                         <View className="flex flex-row justify-between">
                                             <View>
                                                 <Text className="pb-4 text-base font-medium pb-2">
-                                                    {item.name} {item.nationality}
+                                                    {item.name} - {item.nationality}
                                                 </Text>
                                             </View>
                                             <View>

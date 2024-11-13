@@ -60,12 +60,7 @@ const AppointmentType = () => {
 
     useFocusEffect(
         useCallback(() => {
-            console.log('\n\n\n\n\n\n\n\n\n\n\n')
-            console.log("branchId: ", branchId)
-            console.log("speciaity: ", speciality)
-            console.log("sspecialityCode: ", specialityCode)
             setMainSpeciality(speciality)
-            console.log('\n\n\n\n\n\n\n\n\n\n\n')
             if (useUserSate.getState().user != null) {
                 setUser(useUserSate.getState().user)
                 setPatientData(useUserSate.getState().user)
@@ -87,7 +82,6 @@ const AppointmentType = () => {
             }
             getPatientPolicyData()
             if (subServices == null || subServices == undefined || subServices == "") {
-                console.log("here")
                 setDoctorScheduleNotFoundModal(true)
             } else {
                 setSubServicesList(JSON.parse(subServices.toString()))
@@ -110,8 +104,6 @@ const AppointmentType = () => {
     }
 
     const bookAppointment = (interval: any, responsible: any) => {
-        console.log("iinterval: ", interval)
-        console.log("rresponsible: ", responsible)
         if (patientData == null || Object.keys(patientData).length <= 0) {
             setSignInModal(true)
         } else {
@@ -125,53 +117,48 @@ const AppointmentType = () => {
                         let doctorName = response.data.name;
                         setSpeciality(response.data.speciality);
                         if (department != null && date != null && speciality != null && doctorName != null) {
-                            let dateString = moment(date).format("YYYY-MM-DD");
-
-
-                            // serious issue
-                            let requestBody: any = [{
-                                date: dateString,
-                                day: +moment(date).format("D"),
-                                resourceIds: [resourceId],
-                                wday: moment(date).format("dddd").substring(0, 3)
-                            }]
-
-                            scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
-                                .then((response2) => {
-                                    // setAppointmentEntry(true)
-                                    setDoctorScheduleData(response2.data)
-                                    branchService.find(+branchId)
-                                        .then((response3) => {
-                                            router.push({
-                                                pathname: "/SlotsConfirmationPage",
-                                                params: {
-                                                    city: response3.data.city,
-                                                    branchID: branchId,
-                                                    branch: response3.data.name,
-                                                    fromSpeciality: fromSpeciality,
-                                                    department: department,
-                                                    speciality: mainSpeciality,
-                                                    specialityCode: specialityCode,
-                                                    callCenterFlow: callCenterFlow,
-                                                    devices: JSON.stringify([]),
-                                                    responsible: responsible,
-                                                    mobileOrOnline: interval,
-                                                    shift: 'Both',
-                                                    gender: response.data.gender,
-                                                    resourceId: resourceId,
-                                                    callCenterDoctorFlow: callCenterDoctorFlow,
-                                                }
-                                            })
-                                        })
-                                        .catch((error) => {
-                                            console.log("branch not found: ", error)
-                                        })
+                            branchService.find(+branchId)
+                                .then((response3) => {
+                                    router.push({
+                                        pathname: "/SlotsConfirmationPage",
+                                        params: {
+                                            city: response3.data.city,
+                                            branchID: branchId,
+                                            branch: response3.data.name,
+                                            fromSpeciality: fromSpeciality,
+                                            department: department,
+                                            speciality: mainSpeciality == null || mainSpeciality == "" ? speciality : mainSpeciality,
+                                            specialityCode: specialityCode,
+                                            callCenterFlow: callCenterFlow,
+                                            devices: JSON.stringify([]),
+                                            responsible: responsible,
+                                            mobileOrOnline: interval,
+                                            shift: 'Both',
+                                            gender: response.data.gender,
+                                            resourceId: resourceId,
+                                            callCenterDoctorFlow: callCenterDoctorFlow,
+                                        }
+                                    })
                                 })
-                                .catch((err) => {
-                                    console.log("here2")
-                                    setDoctorScheduleNotFoundModal(true)
-                                    console.log(err);
+                                .catch((error) => {
+                                    console.log("branch not found: ", error)
                                 })
+                            // let dateString = moment(date).format("YYYY-MM-DD");
+                            // let requestBody: any = [{
+                            //     date: dateString,
+                            //     day: +moment(date).format("D"),
+                            //     resourceIds: [resourceId],
+                            //     wday: moment(date).format("dddd").substring(0, 3)
+                            // }]
+
+                            // scheduleService.getDoctorSchedule(branchId, department, speciality, "false", requestBody)
+                            //     .then((response2) => {
+                            //         setDoctorScheduleData(response2.data)
+                            //     })
+                            //     .catch((err) => {
+                            //         setDoctorScheduleNotFoundModal(true)
+                            //         console.log(err);
+                            //     })
                         }
                     })
             }
@@ -181,7 +168,6 @@ const AppointmentType = () => {
 
     function selectSubService(item: any, responsible: any, devices: any, mobileOrOnline: any) {
         setModalVisible(true)
-        console.log("item: ", item)
         setSlotInterval(mobileOrOnline)
         setServiceResponsible((responsible == null || responsible == "" || responsible == undefined) ? "Doctor" : responsible)
         if (+callCenterDoctorFlow) {
@@ -205,9 +191,6 @@ const AppointmentType = () => {
         }
     }
 
-
-    var appointmentsRender: any = []
-    var appointmentsRowRender: any = []
 
     return (
         <SafeAreaView>
@@ -234,7 +217,7 @@ const AppointmentType = () => {
                                         <Pressable
                                             className="flex flex-row border border-pc-primary rounded-lg p-3 shadow-sm bg-white"
                                             onPress={() => { selectSubService(item, item.responsible, item.devices, item.mobileOrOnline) }}
-                                        // onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
+                                            // onPress={() => { selectSpeciality(item, item.code, item.name, item.services) }}
                                         >
                                             <View className="rounded-full bg-white flex justify-center items-center w-18 h-18 border border-gray-200">
                                                 {/* <Image source={specialityIcon} style={{ width: 50, height: 50 }} /> */}
@@ -245,10 +228,18 @@ const AppointmentType = () => {
                                                 />
                                             </View>
                                             <View className="w-full px-4 flex justify-center gap-3">
-                                                <View className="w-full flex flex-col items-start gap-2 font-semibold text-xl text-gray-800">
-                                                    <Text>
-                                                        {locale == "ar" ? item.subServiceNameAr : item.subServiceNameEn}
-                                                    </Text>
+                                                <View className="w-full flex flex-row flex-wrap justify-between items-start gap-2 font-semibold text-xl text-gray-800">
+                                                    <View>
+                                                        <Text>
+                                                            {item.subServiceNameEn}
+                                                            {/* {locale == "ar" ? item.subServiceNameAr : item.subServiceNameEn} */}
+                                                        </Text>
+                                                    </View>
+                                                    <View className="flex pr-6 flex-row justify-end flex-wrap">
+                                                        <Text>
+                                                            {item.subServiceNameAr}
+                                                        </Text>
+                                                    </View>
                                                 </View>
                                             </View>
                                         </Pressable>
@@ -267,7 +258,7 @@ const AppointmentType = () => {
                 </Modal>
                 <Modal transparent={true} animationType="fade" visible={doctorScheduleNotFoundModal} onRequestClose={() => {
                     setDoctorScheduleNotFoundModal(false)
-                    router.back()
+                    setLoader(false)
                 }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View className="bg-white p-6 rounded-lg w-4/5 relative">
@@ -282,7 +273,7 @@ const AppointmentType = () => {
                             <View className=" flex-row justify-end gap-5 items-center py-4">
                                 <Pressable onPress={() => {
                                     setDoctorScheduleNotFoundModal(false)
-                                    router.back()
+                                    setLoader(false)
                                 }} >
                                     <Text> {i18n.t('Back')} </Text>
                                 </Pressable>

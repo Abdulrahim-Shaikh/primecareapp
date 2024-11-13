@@ -13,6 +13,8 @@ import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useDoctors } from '../../domain/contexts/DoctorsContext';
 import appointmentService from '../../domain/services/AppointmentService';
 import { useUserSate } from '../../domain/state/UserState';
+import { useSpecialities } from '../../domain/contexts/SpecialitiesContext';
+import { useBranches } from '../../domain/contexts/BranchesContext';
 
 const categoryList = [
     "All",
@@ -38,6 +40,8 @@ const BranchDoctor = () => {
     const [patientData, setPatientData] = useState(useUserSate.getState().user)
     const [recentAppointments, setRecentAppointments] = useState<any>([]);
     const [branchIds, setBranchIds] = useState<any>({});
+    const {allSpecialities, changeSpecialities} = useSpecialities();
+    const {branches, changeBranches} = useBranches();
 
     const generalDentistry = 'General Dentistry';
     const generalMedicine = "General Medicine";
@@ -79,6 +83,13 @@ const BranchDoctor = () => {
                         for (let it = 0; it < lastAppts.length; it++) {
                             resourceService.find(lastAppts[it].practitionerId)
                                 .then((response) => {
+                                    console.log("lastApptsDoctor: ", response.data)
+                                    let sp = response.data.speciality
+                                    let spCode = allSpecialities.find((s: any) => s.name === sp).code
+                                    let bCode = branches.find((b: any) => b.name === response.data.primaryBranch).id
+                                    console.log("spCode: ", spCode)
+                                    response.data.spCode = spCode
+                                    response.data.bCode = bCode
                                     lastApptsDoctors.push(response.data)
                                     setRecentAppointments(lastApptsDoctors)
                                 })
@@ -187,7 +198,7 @@ const BranchDoctor = () => {
                     {
                         recentAppointments.map((props: any) => (
                             <View key={props.id}>
-                                <DoctorCard {...props} branchId={branchIds[props.id]} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={specialityCode} callCenterDoctorFlow={+callCenterDoctorFlow} />
+                                <DoctorCard {...props} branchId={props.bCode} mainSpeciality={speciality} fromSpeciality={fromSpeciality} selectedSpecialityCode={props.spCode} callCenterDoctorFlow={+callCenterDoctorFlow} />
                             </View>
                         ))
                     }
