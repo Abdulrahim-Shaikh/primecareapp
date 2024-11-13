@@ -73,7 +73,8 @@ const BranchPage = () => {
         }
     }, []);
 
-    function selectCity(item: any) {
+    function selectBranch(item: any) {
+        console.log("item: ", item)
         if (+callCenterDoctorFlow) {
             router.push({
                 pathname: "/DoctorSpecialityPage",
@@ -91,7 +92,7 @@ const BranchPage = () => {
                     pathname: "/ShiftAndGenderOptions",
                     params: {
                         city: city,
-                        branch: item,
+                        branch: item.name,
                         fromSpeciality: fromSpeciality,
                         department: department,
                         speciality: speciality,
@@ -159,7 +160,7 @@ const BranchPage = () => {
                                 <Pressable
                                     className="flex flex-row border border-pc-primary rounded-lg p-3 shadow-sm bg-white"
                                     onPress={() => {
-                                        typeof item === 'string' ? selectCity(item) : selectCity(item)
+                                        typeof item === 'string' ? selectBranch(item) : selectBranch(item)
                                     }
                                     }>
                                     <View className="rounded-smg bg-white flex justify-center items-center border-gray-200">
