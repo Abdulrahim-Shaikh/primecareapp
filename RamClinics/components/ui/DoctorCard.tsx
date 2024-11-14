@@ -18,6 +18,7 @@ import { I18n } from 'i18n-js'
 import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { lang } from "moment";
+import http from "../../domain/services/core/HttpService";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -94,25 +95,11 @@ const DoctorCard = ({
 
   useFocusEffect(
     useCallback(() => {
-      console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-      console.log("co: ", specialityCode)
-      console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-      console.log("branchId: ", branchId)
-      console.log("ssssspeciality: ", speciality)
-      console.log("mainSpeciality: ", mainSpeciality)
-      console.log("selectedSpecialityCode: ", selectedSpecialityCode)
-      console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
       changeLocale(language)
       changeLanguage(language)
-    }, [])
-  )
-
-  useFocusEffect(
-    useCallback(() => {
       if (useUserSate.getState().user != null) {
         setUser(useUserSate.getState().user)
         setPatientData(useUserSate.getState().user)
-        // console.log("useUserSate.getState().user: ", useUserSate.getState().user)
         if (useUserSate.getState().user.mobile != null) {
           const mobile = useUserSate.getState().user.mobile
           setMobile(useUserSate.getState().user.mobile)
@@ -126,16 +113,13 @@ const DoctorCard = ({
     }, [])
   )
 
-
   const getPatientPolicyData = async () => {
     setLoader(true)
     if (!useUserSate.getState().loggedIn) {
       setSignInModal(true);
     } else {
-      console.log("user.id: ", user.id)
       patientPolicyService.byPatientId(user.id)
         .then((response: any) => {
-          console.log("callCenterDoctorFlow: ", callCenterDoctorFlow)
           setPatientPolicyData(response.data[0])
           if (+callCenterDoctorFlow) {
             let visitTypes = []
@@ -162,15 +146,10 @@ const DoctorCard = ({
                 }
               })
             } else {
-              console.log('selectedSpecialityCode: ', selectedSpecialityCode)
               specialityService.getSpecialityServiceByDepartmentTest(department).then((response) => {
                 let specialityList = [...response.data];
                 let selectedDoctorSpeciality = specialityList.find(speciality => speciality.code == selectedSpecialityCode);
                 visitTypes = selectedDoctorSpeciality?.services[0].subServices;
-                for (let i of selectedDoctorSpeciality?.services) {
-                  console.log("\n\n\ni: ", i)
-                }
-                // console.log("1selectedSpecialityCode: ", selectedSpecialityCode)
                 router.push({
                   pathname: "/AppointmentType",
                   params: {
@@ -259,17 +238,10 @@ const DoctorCard = ({
             }
           })
       }
-
     }
-
-
-
   }
 
-
-
   return (
-
     <TouchableOpacity
       onPress={() => {
         router.push({
@@ -284,10 +256,14 @@ const DoctorCard = ({
         <View className="flex flex-row justify-start items-center flex-1">
           <View className="bg-amber-100 rounded-lg overflow-hidden mr-3">
             {photo && photo.length > 0 && photo[0] != null ? (
-              <Image source={profilePhotoUrl} style={{ width: 90, height: 120, justifyContent: "center" }} />
-
+              <Image source={{ uri: 
+                  photo == null || photo.length == 0 ?
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SefNqxMPw23P5tFdlgwEe9cfcdnf7d-Law&s' 
+                  : http.getURL() + 'resource/file/' + photo[0]
+              }} className="w-24 h-24 border-1" />
+              // <Image source={profilePhotoUrl} style={{ width: 90, height: 120, justifyContent: "center" }} />
             ) : (
-              <Image source={emptyImg} className="w-16 h-16 border-4" />
+              <Image source={emptyImg} className="w-24 h-24 border-1" />
             )}
           </View>
           <View style={{ flex: 1 }}>
@@ -311,10 +287,6 @@ const DoctorCard = ({
               <Text style={{ maxWidth: '80%' }} className="text-[12px]">
                 <AntDesign name="star" color={"#ffab00"} />
                 {rating}
-                <Entypo name="dot-single" />
-                <Text className="text-pc-primary">
-                  <AntDesign name="clockcircle" /> {clinicHours}
-                </Text>
               </Text>
             </View>
           </View>

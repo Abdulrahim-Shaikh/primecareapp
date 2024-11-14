@@ -101,16 +101,6 @@ const DoctorSpecialityPage = () => {
           services: JSON.stringify(services)
         }
       })
-      // router.push({
-      //   pathname: "/CityPage",
-      //   params: {
-      //     city: null,
-      //     fromSpeciality: fromSpeciality,
-      //     department: department,
-      //     callCenterFlow: callCenterFlow,
-      //     speciality: speciality
-      //   }
-      // })
     } else {
       if (+fromSpeciality) {
         router.push({
@@ -155,9 +145,9 @@ const DoctorSpecialityPage = () => {
           <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} />
         </View> */}
         <View className="pt-8">
-            {
-                loader && <ActivityIndicator size="large" color="#454567" />
-            }
+          {
+            loader && <ActivityIndicator size="large" color="#454567" />
+          }
         </View>
         <View className="flex-row flex-wrap">
           {
@@ -186,20 +176,20 @@ const DoctorSpecialityPage = () => {
                       </View>
                       <View className="w-full px-4 flex justify-center gap-3">
                         <View className="flex flex-row justify-between flex-wrap font-semibold text-lg text-gray-800">
-                            <View>
-                                <Text className="text-base">
-                                    {item.name}
-                                </Text>
-                            </View>
-                            <View
-                                style={{
-                                    paddingRight: 25,
-                                }}
-                                >
-                                <Text className="text-base">
-                                    {item.nameAr}
-                                </Text>
-                            </View>
+                          <View>
+                            <Text className="text-base">
+                              {item.name}
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              paddingRight: 25,
+                            }}
+                          >
+                            <Text className="text-base">
+                              {item.nameAr}
+                            </Text>
+                          </View>
                         </View>
                         {/* <View className="w-full flex flex-col items-start gap-2 font-semibold text-lg text-gray-800">
                           <Text>{item.name}</Text>

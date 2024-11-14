@@ -55,10 +55,6 @@ const BranchDoctor = () => {
 
     useFocusEffect(
         useCallback(() => {
-            console.log('\n\n\n\n\n\n\n\n\n\n\n')
-            console.log("speciaity: ", speciality)
-            console.log("sspecialityCode: ", specialityCode)
-            console.log('\n\n\n\n\n\n\n\n\n\n\n')
 
             changeLocale(language)
             changeLanguage(language)
@@ -66,10 +62,6 @@ const BranchDoctor = () => {
             if (+last3AppointmentsFlow) {
                 appointmentService.getLastThreeAppointments(patientData.id)
                     .then((response) => {
-                        for (let i of response.data) {
-                            console.log("i: ", i.practitionerId)
-                        }
-
                         let lastAppts: any[] = []
                         let lastApptsPractionerIds: any = new Set<any>()
                         for (let appt of response.data) {
@@ -83,11 +75,9 @@ const BranchDoctor = () => {
                         for (let it = 0; it < lastAppts.length; it++) {
                             resourceService.find(lastAppts[it].practitionerId)
                                 .then((response) => {
-                                    console.log("lastApptsDoctor: ", response.data)
                                     let sp = response.data.speciality
                                     let spCode = allSpecialities.find((s: any) => s.name === sp).code
                                     let bCode = branches.find((b: any) => b.name === response.data.primaryBranch).id
-                                    console.log("spCode: ", spCode)
                                     response.data.spCode = spCode
                                     response.data.bCode = bCode
                                     lastApptsDoctors.push(response.data)

@@ -7,6 +7,8 @@
 
 const translations = {
      en: {
+        "Machines": "Machines",
+        "Sub Speciality": "Sub Speciality",
         "Our Branches": "Our Branches",
         "Wallets": "Wallets",
         "Showing last 3 appointments' doctors": "Showing last 3 appointments' doctors",
@@ -776,6 +778,8 @@ const translations = {
         "Our Branches": "فروعنا",
         "You need to Sign in first": "يجب عليك تسجيل الدخول أولاً",
         "No branches in this city": "لم يتم العثور على فروع في هذه المدينة",
+        "Sub Speciality": "التخصص الفرعي",
+        "Machines": "الأجهزة",
     }
 }
 export default translations;

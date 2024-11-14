@@ -52,7 +52,6 @@ const DoctorSelect = () => {
         resourceService.find(item.id)
             .then((response) => {
                 setDisplayedDoctor(response.data)
-                // console.log("\n\n\n\nresourceServiceList: ", response.data.resourceServiceList)
             })
             .catch((error) => {
                 console.error("resourceService error: ", error.response)
@@ -63,17 +62,13 @@ const DoctorSelect = () => {
         useCallback(() => {
             if (branch != null) {
                 for (let i of branches) {
-                    console.log("\n\ni: ", i.name)
                     if (i.name == branch) {
                         setAppointmentBranch(i)
                         break;
                     }
                 }
                 setAppointmentBranch(branches.filter((branch: any) => branch.name === branch)[0])
-                console.log("branch: ", branches.filter((branch: any) => branch.name === branch)[0])
             }
-            console.log("\n\nuser: ", useUserSate.getState())
-            console.log("callCenterDoctor: ", callCenterDoctor)
             patientService.patientDetails(useUserSate.getState().user.firstName)
                 .then((response) => {
                     for (let i of response.data) {
@@ -86,11 +81,9 @@ const DoctorSelect = () => {
                 .catch((error) => {
                     console.log("\n\n\n\n\n\npatientService.getByPatientId error: ", error)
                 })
-            console.log("useUserSate.getState().user: ", useUserSate.getState().user)
             if (+callCenterDoctorFlow) {
                 resourceService.find(+callCenterDoctor)
                     .then((response) => {
-                        console.log("response.data: ", response.data)
                         setDoctors([response.data])
                     })
                     .catch((error: any) => {
@@ -111,7 +104,6 @@ const DoctorSelect = () => {
         setLoader(true)
 
         let branchId = branches.find((branch: any) => branch.name === doctor?.primaryBranch)?.id;
-        console.log("\n\n\n\nslotsReserved: ", slotsReserved)
         let slotGroupIds
         if (+callCenterDoctorFlow) {
             slotGroupIds = slotsReserved.flat().map((slot: any) => slot.id).join('$')
@@ -187,16 +179,12 @@ const DoctorSelect = () => {
             app.endTime = end;
             app.startTime = start;
             setLoader(true)
-            console.log("calling appointmentService.bookAppointmentBySource")
             appointmentService.bookAppointmentBySource(app)
                 .then((response) => {
-                    console.log("success: ")
                     setLoader(false)
-                    console.log("appointmentService response: ", response.data)
                     setBookingSuccess(true)
                 })
                 .catch((error) => {
-                    console.log("failed: ", error.response)
                     setLoader(false)
                     console.error("appointmentService error", error.response?.data.errors[0].msg)
                     setAppointmentServiceErrorText(error.response?.data.errors[0].msg)
@@ -205,7 +193,6 @@ const DoctorSelect = () => {
         } else {
             slotService.slotsByIds(slotGroupIds)
                 .then((response) => {
-                    console.log("arrararararesponse.data: ", response.data)
                     app.slots = [...response.data]
                     let start, end;
                     if (app.slots) {
@@ -237,21 +224,15 @@ const DoctorSelect = () => {
                         slotsApi.push(slot.slotName);
                     })
 
-                    console.log("slotsApi: ", slotsApi)
-                    console.log("app.branchId: ", app.branchId)
-                    console.log("moment(app.appointmentDate).format('yyyy-MM-DD'): ", moment(app.appointmentDate).format("yyyy-MM-DD"))
-                    console.log("app.practitionerId: ", app.practitionerId)
                     appointmentService.getAppointmentsBySlotId(slotsApi, app.branchId, moment(app.appointmentDate).format("yyyy-MM-DD"), app.practitionerId)
                         .then((response: any) => {
                             if (Object.keys(response.data).length > 0) {
                                 setLoader(false)
                                 setAppointmentExists(true)
                             } else {
-                                console.log("appppp: ", app)
                                 appointmentService.bookAppointmentBySource(app)
                                     .then((response) => {
                                         setLoader(false)
-                                        console.log("appointmentService response: ", response)
                                         setBookingSuccess(true)
                                     })
                                     .catch((error) => {
@@ -279,7 +260,6 @@ const DoctorSelect = () => {
     }
 
     function selectDoctor(item: any) {
-        console.log("selectDoctor: ", item)
         setSelectedDoctor(item)
         if (!loggedIn) {
             setPatientNotFoundModal(true)
@@ -358,8 +338,6 @@ const DoctorSelect = () => {
                             <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
                                 <Pressable
                                     onPress={() => {
-                                        console.log("toggleiing")
-                                        console.log("modalVisible: ", modalVisible)
                                         showDoctor(item)
                                         setModalVisible(!modalVisible)
                                     }}
