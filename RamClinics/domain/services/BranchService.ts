@@ -7,9 +7,7 @@ export class BranchService extends RestService<any> {
     }
 
     getAllBranchesInCity(city: any) {
-        let branchesResponse: any = this.get("filterByCity/" + city);
-        let filteredBranches = branchesResponse.filter((branch: any) => branch.showInMobileApp === true)
-        return filteredBranches;
+        return this.get("filterByCity/" + city);
     }
 
     getAllActiveBranchNames(){
@@ -21,9 +19,7 @@ export class BranchService extends RestService<any> {
     }
 
     branchesByCityAndDept(city: any, dept: any){
-        let branchesResponse: any = this.get(`branchesByCityAndDept/${city}/${dept}`)
-        let filteredBranches = branchesResponse.filter((branch: any) => branch.showInMobileApp === true)
-        return filteredBranches;
+        return this.get(`branchesByCityAndDept/${city}/${dept}`)
     }
 }
 const branchService = new BranchService('hisbranch');

@@ -37,7 +37,8 @@ const OurBranches = () => {
 
     useEffect(() => {
         branchService.getAllBranchesInCity(city).then((res) => {
-            setBranchesData(res.data);
+            console.log(res.data);
+            setBranchesData(res.data.filter((branch: any) => branch.showInMobileApp == true));
         });
     }, []);
 

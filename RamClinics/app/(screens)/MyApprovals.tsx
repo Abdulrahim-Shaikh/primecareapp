@@ -102,7 +102,7 @@ const MyApprovals = () => {
         try {
             if (branches == undefined || branches == null  || branches.length === 0) {
                 const branchesDataResponse = await branchService.findAll();
-                setBranchesData(branchesDataResponse.data);
+                setBranchesData(branchesDataResponse.data.filter((branch: any) => branch.showInMobileApp == true));
             } else {
                 setBranchesData(branches);
             }

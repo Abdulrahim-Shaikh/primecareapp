@@ -74,7 +74,7 @@ const CityPage = () => {
                 if (+callCenterDoctorFlow) {
                     if (branches == null) {
                         branchService.findAll().then((response) => {
-                            changeBranches(response.data)
+                            changeBranches(response.data.filter((branch: any) => branch.showInMobileApp == true))
                         })
                     }
                     let citySet: Set<string> = new Set();
@@ -103,7 +103,7 @@ const CityPage = () => {
             for (const city of citiesData) {
                 if (+callCenterDoctorFlow) {
                     branchService.getAllBranchesInCity(city.city).then((res) => {
-                        let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled)
+                        let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled && branch.showInMobileApp == true)
                         counts[city.city] = newCallCenterEnabledBranches.length;
                         setBranchCounts(counts);
                         console.log("counts: ", counts)

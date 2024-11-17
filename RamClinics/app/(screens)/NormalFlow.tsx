@@ -136,7 +136,7 @@ const NormalFlow = () => {
                         console.log("branchId: ", branch.id)
                     }
                 }
-                setBranchOptions(response.data)
+                setBranchOptions(response.data.filter((branch: any) => branch.showInMobileApp == true))
             })
             .catch((error) => {
                 console.log("branchService.findAll() error: ", error)

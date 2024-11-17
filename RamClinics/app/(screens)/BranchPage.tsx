@@ -66,7 +66,7 @@ const BranchPage = () => {
                 }
             } else {
                 branchService.getAllBranchesInCity(city).then((res: any) => {
-                    let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled)
+                    let newCallCenterEnabledBranches = res.data.filter((branch: any) => branch.newCallCenterEnabled && branch.showInMobileApp == true)
                     setBranchesData(newCallCenterEnabledBranches);
                 });
             }
