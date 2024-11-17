@@ -489,7 +489,7 @@ const translations = {
         "urwallet2": "محفظتك: ",
         "balanc": "الرصيد: ",
         "doctorWalt": "محفظة الطبيب: ",
-        "appointment": "ميعاد",
+        "appointment": "موعد",
         //Promotions
         "Offers": "العروض",
         "Packages": "الباقات",
