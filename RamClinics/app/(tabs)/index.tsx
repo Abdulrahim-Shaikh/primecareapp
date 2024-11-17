@@ -68,7 +68,7 @@ const Home = () => {
 
       if (branchesData == null) {
         branchService.findAll().then((res) => {
-          changeBranches(res.data)
+          changeBranches(res.data.filter((branch: any) => branch.showInMobileApp === true))
         })
           .then(() => {
             console.log("branches set")
