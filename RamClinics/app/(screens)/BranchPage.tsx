@@ -11,6 +11,7 @@ import * as Localization from 'expo-localization'
 import { useLanguage } from "../../domain/contexts/LanguageContext";
 import { useBranches } from "../../domain/contexts/BranchesContext";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
+import { useAppBranches } from "../../domain/contexts/AppBranchesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -23,7 +24,8 @@ const BranchPage = () => {
     const [ branchesData, setBranchesData ] = useState([]);
     const { language, changeLanguage } = useLanguage();
     const [ locale, setLocale ] = useState(i18n.locale);
-    const { branches, changeBranches } = useBranches();
+    // const { branches, changeBranches } = useBranches();
+    const { appBranches, changeAppBranches } = useAppBranches();
 
     const changeLocale = (locale: any) => {
         i18n.locale = locale;
@@ -32,7 +34,7 @@ const BranchPage = () => {
 
     useFocusEffect(
         useCallback(() => {
-            console.log("branches.length: ", branches.length)
+            console.log("branches.length: ", appBranches.length)
             changeLocale(language)
             changeLanguage(language)
         }, [])
@@ -52,7 +54,7 @@ const BranchPage = () => {
                 console.log("getBranchBySpecialityCity response.data: ", response.data)
                 let tempBranches: any = []
                 for (let b of response.data) {
-                    let branchSearch = branches.filter((branch: any) => branch.name == b)
+                    let branchSearch = appBranches.filter((branch: any) => branch.name == b)
                     tempBranches.push(branchSearch[0])
                 }
                 console.log("tempBranches: ", tempBranches.length)
@@ -61,8 +63,8 @@ const BranchPage = () => {
             getBranchBySpecialityCity()
         } else {
             if (city == null || city == "" || city.length == 0) {
-                if (branches != null) {
-                    setBranchesData(branches);
+                if (appBranches != null) {
+                    setBranchesData(appBranches);
                 }
             } else {
                 branchService.getAllBranchesInCity(city).then((res: any) => {

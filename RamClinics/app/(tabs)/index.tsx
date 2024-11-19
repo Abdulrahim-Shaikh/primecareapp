@@ -3,12 +3,10 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingSlider from "../../components/homePage/UpcomingSlider";
 import DoctorSpeciality from "../../components/homePage/DoctorSpeciality";
-import TopDoctor from "../(screens)/TopDoctor";
 import NotificationModal from "../../components/homePage/modal/NotificationModal";
 import FavouriteModal from "../../components/homePage/modal/FavouriteModal";
 import Header from "../../components/homePage/Header";
 import { router } from "expo-router";
-import MainMenu from "../../components/homePage/MainMenu";
 import { useUserSate } from "../../domain/state/UserState";
 import branchService from "../../domain/services/BranchService";
 import { useHISSate } from "../../domain/state/HISState";
@@ -26,6 +24,7 @@ import specialityService from "../../domain/services/SpecialityService";
 import { useCities } from "../../domain/contexts/CitiesContext";
 import cityMasterService from "../../domain/services/CityMasterService";
 import http from "../../domain/services/core/HttpService";
+import { useAppBranches } from "../../domain/contexts/AppBranchesContext";
 
 const i18n = new I18n(translations)
 i18n.locale = Localization.locale
@@ -48,6 +47,7 @@ const Home = () => {
   const { doctors, changeDoctors } = useDoctors()
   const { cities, changeCities } = useCities()
   const { allSpecialities, changeSpecialities } = useSpecialities();
+  const { appBranches, changeAppBranches } = useAppBranches();
 
   const changeLocale = (locale: any) => {
     i18n.locale = locale;
@@ -68,7 +68,8 @@ const Home = () => {
 
       if (branchesData == null) {
         branchService.findAll().then((res) => {
-          changeBranches(res.data.filter((branch: any) => branch.showInMobileApp === true))
+          changeBranches(res.data)
+          changeAppBranches(res.data.filter((branch: any) => branch.showInMobileApp === true))
         })
           .then(() => {
             console.log("branches set")

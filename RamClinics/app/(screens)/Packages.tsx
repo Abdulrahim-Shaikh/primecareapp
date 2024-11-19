@@ -251,12 +251,12 @@ const Packages = () => {
                                     <Pressable onPress={() => {
                                         setSignInRequiredModal(false)
                                     }} >
-                                        <Text> Back </Text>
+                                        <Text> {i18n.t('Back')} </Text>
                                     </Pressable>
                                     <Pressable onPress={() => {
                                         setSignInRequiredModal(false)
                                     }}>
-                                        <Text> Sign in </Text>
+                                        <Text> {i18n.t('Sign in')} </Text>
                                     </Pressable>
                                 </View>
                             </View>
@@ -272,12 +272,12 @@ const Packages = () => {
                                         color={"#EF4444"}
                                     />
                                 </View>
-                                <Text className="text-xl font-bold text-center mb-2 pt-3">Failed to fetch QR Code</Text>
+                                <Text className="text-xl font-bold text-center mb-2 pt-3">{i18n.t('Failed to fetch QR Code')}</Text>
                                 <View className=" flex-row justify-end gap-5 items-center py-4">
                                     <Pressable onPress={() => {
                                         setQrFetchError(false)
                                     }}>
-                                        <Text> Ok </Text>
+                                        <Text> {i18n.t('Ok')} </Text>
                                     </Pressable>
                                 </View>
                             </View>
@@ -293,12 +293,12 @@ const Packages = () => {
                                         color={"#EF4444"}
                                     />
                                 </View>
-                                <Text className="text-xl font-bold text-center mb-2 mt-7">An error occurred during the booking process</Text>
+                                <Text className="text-xl font-bold text-center mb-2 mt-7">{i18n.t('An error occurred during the booking process')}</Text>
                                 <View className=" flex-row justify-end gap-5 items-center py-4">
                                     <Pressable onPress={() => {
                                         setBookingError(false)
                                     }} >
-                                        <Text> Ok </Text>
+                                        <Text> {i18n.t('Ok')} </Text>
                                     </Pressable>
                                 </View>
                             </View>

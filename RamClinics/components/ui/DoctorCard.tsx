@@ -320,19 +320,19 @@ const DoctorCard = ({
                 color={"#EF4444"}
               />
             </View>
-            <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
-            <Text className="text-xl font-bold text-center mb-4">You need to Sign in first</Text>
+            <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Patient Not Found')}</Text>
+            <Text className="text-xl font-bold text-center mb-4">{i18n.t('You need to Sign in first')}</Text>
             <View className=" flex-row justify-between gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setSignInModal(false)
               }} >
-                <Text> Back </Text>
+                <Text> {i18n.t('Back')} </Text>
               </Pressable>
               <Pressable onPress={() => {
                 setSignInModal(false)
                 router.push('/SignIn')
               }}>
-                <Text> Sign In </Text>
+                <Text> {i18n.t('Sign in')} </Text>
               </Pressable>
             </View>
           </View>
@@ -348,12 +348,12 @@ const DoctorCard = ({
                 color={"#EF4444"}
               />
             </View>
-            <Text className="text-xl font-bold text-center mb-2 pt-3">Patient Policy data not found</Text>
+            <Text className="text-xl font-bold text-center mb-2 pt-3">{i18n.t('Patient Policy data not found')}</Text>
             <View className=" flex-row justify-end gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setPolicyNotFound(false)
               }} >
-                <Text> Ok </Text>
+                <Text> {i18n.t('Ok')} </Text>
               </Pressable>
             </View>
           </View>
@@ -371,13 +371,13 @@ const DoctorCard = ({
                 color={"#737373"}
               />
             </View>
-            <Text className="text-xl font-bold text-center mb-4 mt-1">Doctor schedule not found</Text>
+            <Text className="text-xl font-bold text-center mb-4 mt-1">{i18n.t('Doctor schedule not found')}</Text>
             <View className=" flex-row justify-end gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setDoctorScheduleNotFoundModal(false)
                 router.back()
               }} >
-                <Text> Back </Text>
+                <Text> {i18n.t('Back')} </Text>
               </Pressable>
             </View>
           </View>
@@ -395,12 +395,12 @@ const DoctorCard = ({
                 color={"#737373"}
               />
             </View>
-            <Text className="text-xl font-bold text-center mb-4 mt-1">Appointment Types not found</Text>
+            <Text className="text-xl font-bold text-center mb-4 mt-1">{i18n.t('Appointment Types not found')}</Text>
             <View className=" flex-row justify-end gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setAppointmentTypesNotFound(false)
               }} >
-                <Text> Back </Text>
+                <Text> {i18n.t('Back')} </Text>
               </Pressable>
             </View>
           </View>

@@ -319,7 +319,7 @@ const MyRadialogy = () => {
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {radialogys.branchName}</Text>
                                         <View className="flex-row justify-between">
                                             <Text className="mt-1 text-md text-gray-600">{i18n.t("Date")}: {moment(radialogys.invoiceDate).format("DD-MMM-YYYY")}</Text>
-                                            <Text className="mt-1 text-md text-gray-600">Status: <Text className="text-lime-600">{radialogys.status}</Text></Text>
+                                            <Text className="mt-1 text-md text-gray-600">{i18n.t('Status')}: <Text className="text-lime-600">{radialogys.status}</Text></Text>
                                         </View>
                                     </Pressable>
                                 ))

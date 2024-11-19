@@ -391,18 +391,18 @@ const SlotsConfirmationPage = () => {
                                     color={"#737373"}
                                 />
                             </View>
-                            <Text className="text-xl font-bold text-center mb-4 mt-1">No appointment schedules found on {moment(slotSearchDate).format("DD-MMMM-yyyy")}</Text>
+                            <Text className="text-xl font-bold text-center mb-4 mt-1">{i18n.t('No appointment schedules found on')} {moment(slotSearchDate).format("DD-MMMM-yyyy")}</Text>
                             <View className=" flex-row justify-between gap-5 items-center py-4">
                                 <Pressable onPress={() => {
                                     setDoctorScheduleNotFoundModal(false)
                                     router.back()
                                 }} >
-                                    <Text> Back </Text>
+                                    <Text> {i18n.t('Back')} </Text>
                                 </Pressable>
                                 <Pressable onPress={() => {
                                     setDoctorScheduleNotFoundModal(false)
                                 }} >
-                                    <Text> Ok </Text>
+                                    <Text> {i18n.t('Ok')} </Text>
                                 </Pressable>
                             </View>
                         </View>

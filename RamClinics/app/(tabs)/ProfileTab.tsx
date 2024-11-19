@@ -178,7 +178,7 @@ const ProfileTab = () => {
                   className="flex-1 border border-pc-primary rounded-lg bg-amber-100"
                 >
                   <Text className="text-pc-primary py-4 text-center font-medium ">
-                    Cancel
+                    {i18n.t('Cancel')}
                   </Text>
                 </Pressable>
                 <Pressable

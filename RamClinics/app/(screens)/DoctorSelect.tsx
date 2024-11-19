@@ -600,7 +600,7 @@ const DoctorSelect = () => {
                             />
                         </View>
                         <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Appointment booking failed')}</Text>
-                        <Text className="text-xl text-center mb-4">Failed to save appointment</Text>
+                        <Text className="text-xl text-center mb-4">{i18n.t('Failed to save appointment')}</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
                             <Pressable onPress={() => {
                                 setAppointmentFailed(false)
@@ -622,7 +622,7 @@ const DoctorSelect = () => {
                                 color={"#EF4444"}
                             />
                         </View>
-                        <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment booking failed</Text>
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Appointment booking failed')}</Text>
                         <Text className="text-xl text-center mb-4">{appointmentServiceErrorText}</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
                             <Pressable onPress={() => {
@@ -645,8 +645,8 @@ const DoctorSelect = () => {
                                 color={"#737373"}
                             />
                         </View>
-                        <Text className="text-xl font-bold text-center mb-2 mt-1">Appointment already exists</Text>
-                        <Text className="text-xl font-bold text-center mb-4">You already have an appointment in the selected slot interval!</Text>
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Appointment already exists')}</Text>
+                        <Text className="text-xl font-bold text-center mb-4">{i18n.t('You already have an appointment in the selected slot interval!')}</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
                             <Pressable onPress={() => {
                                 setAppointmentExists(false)
@@ -670,7 +670,7 @@ const DoctorSelect = () => {
                                 color={"#EF4444"}
                             />
                         </View>
-                        <Text className="text-xl font-bold text-center mb-4 pt-3">Doctor schedule not found</Text>
+                        <Text className="text-xl font-bold text-center mb-4 pt-3">{i18n.t('Doctor schedule not found')}</Text>
                         <View className=" flex-row justify-end gap-5 items-center py-4">
                             <Pressable onPress={() => {
                                 setDoctorScheduleNotFoundModal(false)
@@ -696,8 +696,8 @@ const DoctorSelect = () => {
                                 color={"#EF4444"}
                             />
                         </View>
-                        <Text className="text-xl font-bold text-center mb-2 mt-1">Patient Not Found</Text>
-                        <Text className="text-xl font-bold text-center mb-4">You need to Sign in to book an appointment</Text>
+                        <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Patient Not Found')}</Text>
+                        <Text className="text-xl font-bold text-center mb-4">{i18n.t('You need to Sign in to book an appointment')}</Text>
                         <View className=" flex-row justify-between gap-5 items-center py-4">
                             <Pressable onPress={() => {
                                 setPatientNotFoundModal(false)
