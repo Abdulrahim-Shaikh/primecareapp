@@ -229,50 +229,7 @@ const MyLabrotary = () => {
                             dropdownStyle={styles.dropdownMenuStyle}
                             showsVerticalScrollIndicator={false}
                         />
-                        {/* <Picker
-                            selectedValue={selectedValue}
-                            onValueChange={(itemValue) => {
-                                setSelectedValue(itemValue);
-                            }}
-                            className="h-12"
-                        >
-                            <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branchesData.map((branch: any) => (
-                                <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
-                            ))}
-                        </Picker> */}
                     </View>
-                    {/* <View className="bg-gray-200 rounded-lg mt-4 mb-3">
-                        <Picker selectedValue={fromType} onValueChange={(itemValue) => { setFromType(itemValue) }} className="h-12">
-                            <Picker.Item label={i18n.t("From Last Month")} value="lastMonth" />
-                            <Picker.Item label={i18n.t("All")} value="all" />
-                        </Picker>
-                    </View> */}
-
-                    {/* <View className="border border-gray-300 rounded-lg mb-4">
-                        <Picker
-                            selectedValue={selectedValue}
-                            onValueChange={(itemValue) => {
-                                setSelectedValue(itemValue);
-                            }}
-                            className="h-12"
-                        >
-                            <Picker.Item label={i18n.t("Select Branch")} value="" />
-                            {branchesData.map((branch: any) => (
-                                <Picker.Item key={branch.id} label={branch.name} value={branch.name} />
-                            ))}
-                        </Picker>
-                    </View> */}
-
-                    {/* <View className="flex-row justify-between mb-4">
-                        {tabNames.map((item, idx) => (
-                            <Pressable key={idx} onPress={() => setActiveTab(item)} className={`flex-1 border-b-2 pb-2 ${activeTab === item ? "border-lime-600" : "border-transparent"}`}>
-                                <Text className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : "text-gray-700"}`}>
-                                    {i18n.t(item)}
-                                </Text>
-                            </Pressable>
-                        ))}
-                    </View> */}
 
                     <View>
                         {isLoading ? (
@@ -296,7 +253,7 @@ const MyLabrotary = () => {
                                         <Text style={styles.branchText}>{i18n.t("Branch")}: {labratorys.branch}</Text>
                                         <View className="flex-row justify-between">
                                             <Text className="mt-1 text-md text-gray-600">{i18n.t("Date")}: {moment(labratorys.invoiceDate).format("DD-MMM-YYYY")}</Text>
-                                            <Text className="mt-1 text-md text-gray-600">Status: <Text className="text-lime-600">{labratorys.status}</Text></Text>
+                                            <Text className="mt-1 text-md text-gray-600">{i18n.t('Status')}: <Text className="text-lime-600">{labratorys.status}</Text></Text>
                                         </View>
                                     </Pressable>
                                 ))

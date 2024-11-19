@@ -49,9 +49,9 @@ const Wallets = () => {
   const [selectedDoc, setSelectedDoc] = useState('');
   const [noAccount, setNoAccount] = useState(true);
   const [patientWallets, setPatientWallets] = useState([]);
-  const [patientWallet, setPatientWallet] = useState();
+  const [patientWallet, setPatientWallet] = useState<any>();
   const [doctorName, setDoctorName] = useState();
-  const [doctorWallet, setDoctorWallet] = useState();
+  const [doctorWallet, setDoctorWallet] = useState<any>();
   const [showRefill, setShowRefill] = useState(false);
   const [showRefillDoctor, setShowRefillDoctor] = useState(false);
   const { option } = useLocalSearchParams();
@@ -122,7 +122,7 @@ const Wallets = () => {
 
   useEffect(() => {
     setShowBranchesData(false);
-    const doctor = doctors.find((doc: any) => doc.id === selectedDoc);
+    const doctor: any = doctors.find((doc: any) => doc.id === selectedDoc);
     setDoctorName(doctor?.name);
   }, [selectedDoc]);
 
@@ -287,7 +287,7 @@ const Wallets = () => {
               <Pressable className="absolute top-3 right-3" onPress={() => setShowRefill(false)}>
                 <AntDesign name="closecircle" size={24} color="#3B2314" />
               </Pressable>
-              <Text className="text-xl font-bold text-center mb-4 mt-7"> Enter the Amount to Refill</Text>
+              <Text className="text-xl font-bold text-center mb-4 mt-7"> {i18n.t('Enter the Amount to Refill')}</Text>
               <TextInput onChangeText={setRefillAmt} value={refillAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
               <View className=" flex-row justify-between items-center py-4">
                 <Button title="Cancel" color="red" onPress={() => setShowRefill(false)} />
@@ -303,7 +303,7 @@ const Wallets = () => {
               <Pressable className="absolute top-3 right-3" onPress={() => setShowRefillDoctor(false)}>
                 <AntDesign name="closecircle" size={24} color="#78450f" />
               </Pressable>
-              <Text className="text-xl font-bold text-center mb-4 mt-7"> Enter the Amount to Refill</Text>
+              <Text className="text-xl font-bold text-center mb-4 mt-7">{i18n.t('Enter the Amount to Refill')}</Text>
               <TextInput onChangeText={setRefillAmt} value={refillAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
               <View className=" flex-row justify-between items-center py-4">
                 <Button title="Cancel" color="red" onPress={() => setShowRefillDoctor(false)} />
@@ -319,7 +319,7 @@ const Wallets = () => {
               <Pressable className="absolute top-3 right-3" onPress={() => setShowTransfer(false)}>
                 <AntDesign name="closecircle" size={24} color="#78450f" />
               </Pressable>
-              <Text className="text-xl font-bold text-center mb-4 mt-7"> Enter the Amount to Transfer</Text>
+              <Text className="text-xl font-bold text-center mb-4 mt-7"> {i18n.t('Enter the Amount to Transfer')}</Text>
               <TextInput onChangeText={setTransferAmt} value={transferAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
               <View className=" flex-row justify-between items-center py-4">
                 <Button title="Cancel" color="red" onPress={() => setShowTransfer(false)} />
@@ -335,8 +335,8 @@ const Wallets = () => {
               <Pressable className="absolute top-3 right-3" onPress={() => setShowTransferPat(false)}>
                 <AntDesign name="closecircle" size={24} color="#78450f" />
               </Pressable>
-              <Text className="text-xl font-bold text-center mb-4 mt-7">Coming Soon</Text>
-              <Text className="text-xs text-center mb-4 mt-7">Visit RAM Clinics Reception for a Refund.</Text>
+              <Text className="text-xl font-bold text-center mb-4 mt-7">{i18n.t('Coming Soon')}</Text>
+              <Text className="text-xs text-center mb-4 mt-7">{i18n.t('Visit RAM Clinics Reception for a Refund')}</Text>
               {/* <TextInput onChangeText={setTransferAmt} value={transferAmount} placeholder="0" keyboardType="numeric" className="border border-gray-400 rounded-lg p-1 mx-3 my-2" />
               <View className=" flex-row justify-between items-center py-4">
                 <Button title="Cancel" color="red" onPress={() => setShowTransfer(false)} />
@@ -355,13 +355,13 @@ const Wallets = () => {
                   color={"#84CC16"}
                 />
               </View>
-              <Text className="text-xl font-bold text-center mb-2 mt-1">Error</Text>
-              <Text className="text-xl font-bold text-center mb-4">Failed to refill wallet</Text>
+              <Text className="text-xl font-bold text-center mb-2 mt-1">{i18n.t('Error')}</Text>
+              <Text className="text-xl font-bold text-center mb-4">{i18n.t('Failed to refill wallet')}</Text>
               <View className=" flex-row justify-between gap-5 items-center py-4">
                 <Pressable onPress={() => {
                   setSuccessModal(false)
                 }}>
-                  <Text> Ok </Text>
+                  <Text> {i18n.t('Ok')} </Text>
                 </Pressable>
               </View>
             </View>

@@ -234,7 +234,7 @@ const Offers = () => {
                                         color={"#EF4444"}
                                     />
                                 </View>
-                                <Text className="text-xl font-bold text-center mb-2 mt-7">An error occurred during the booking process</Text>
+                                <Text className="text-xl font-bold text-center mb-2 mt-7">{i18n.t('An error occurred during the booking process')}</Text>
                                 <View className=" flex-row justify-end gap-5 items-center py-4">
                                     <Pressable onPress={() => {
                                         setBookingError(false)

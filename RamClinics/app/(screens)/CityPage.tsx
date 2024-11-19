@@ -26,7 +26,7 @@ const CityPage = () => {
     const { language, changeLanguage } = useLanguage();
     const [locale, setLocale] = useState(i18n.locale);
     const [citiesData, setCitiesData] = useState<any>([]);
-    const [branchCounts, setBranchCounts] = useState(Object());
+    const [branchCounts, setBranchCounts] = useState(new Map<string, number>());
     const [devicesList, setDevicesList] = useState(JSON.parse(devices.toString()));
     const { branches, changeBranches } = useBranches();
     const { cities, changeCities } = useCities();

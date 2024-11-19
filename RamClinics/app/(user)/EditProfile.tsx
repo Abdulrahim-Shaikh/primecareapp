@@ -169,12 +169,12 @@ const EditProfile = () => {
                 color={"#84CC16"}
               />
             </View>
-            <Text className="text-xl font-bold text-center mb-4 pt-3">Success - User Updated Successfully</Text>
+            <Text className="text-xl font-bold text-center mb-4 pt-3">{i18n.t('Success - User Updated Successfully')}</Text>
             <View className=" flex-row justify-between gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setSuccessModalVisible(false)
               }}>
-                <Text> Ok </Text>
+                <Text> {i18n.t('Ok')} </Text>
               </Pressable>
             </View>
           </View>

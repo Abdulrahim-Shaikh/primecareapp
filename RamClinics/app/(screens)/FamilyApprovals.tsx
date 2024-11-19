@@ -5,15 +5,22 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Localization from 'expo-localization'
+import { I18n } from "i18n-js";
+import translations from "../../constants/locales/ar";
 
+
+const i18n = new I18n(translations)
+i18n.locale = Localization.locale
+i18n.enableFallback = true;
 
 const FamilyApprovals = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [status, setStatus] = useState("Pending");
+    const [locale, setLocale] = useState(i18n.locale);
 
     const handleCancelButton = () => {
-
         setModalVisible(false);
     };
 
@@ -39,7 +46,7 @@ const FamilyApprovals = () => {
                 <View className="flex-row border border-pc-primary rounded-lg mb-4 overflow-hidden">
                     <View className="flex-1 p-2">
                         <Text className="text-base font-bold ">
-                            Approve to as add Family Member with relation
+                            {i18n.t('Approve to as add Family Member with relation')}
                             <View>
                                 <Text>Added Family Member</Text>
                             </View>

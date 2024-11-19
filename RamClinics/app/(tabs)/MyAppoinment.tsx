@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  Alert,
   Modal,
   Pressable,
   ScrollView,
@@ -16,8 +15,6 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
-import { myAppoinmentData } from "../../constants/data";
-import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import appointmentService from "../../domain/services/AppointmentService";
 import { useUserSate } from "../../domain/state/UserState";
 import moment from "moment";
@@ -45,20 +42,12 @@ const Appoinment = () => {
     setLocale(locale);
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      changeLocale(language)
-      changeLanguage(language)
-    }, [])
-  )
   const [cancelModal, setCancelModal] = useState(false);
   const [activeTab, setActiveTab] = useState("Booked");
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
   const [appointments, setAppointments] = useState([]);
   const [allAppointments, setAllAppointments] = useState([]);
-  const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false); // Control for start date picker modal
-  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const { branches, changeBranches } = useBranches()
   const [branchId, setBranchId] = useState(null)
@@ -68,6 +57,7 @@ const Appoinment = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [patientNotFoundModal, setPatientNotFoundModal] = useState(false);
   const [doctorScheduleNotFoundModal, setDoctorScheduleNotFoundModal] = useState(false);
+  const [notRegisteredWithBranch, setNotRegisteredWithBranch] = useState(false);
 
   const filterOptions = [
     { id: 1, name: "Last Month", months: 1 },
@@ -77,12 +67,17 @@ const Appoinment = () => {
 
   useFocusEffect(
     useCallback(() => {
+      changeLocale(language)
+      changeLanguage(language)
       setLoader(true)
       if (useUserSate.getState().loggedIn === false) {
         setPatientNotFoundModal(true)
       } else {
         const patientId = useUserSate.getState().userId;
         let branch = branches.find((branch: any) => branch.name === useUserSate.getState().user.branch);
+        if (branch == undefined || branch == null || branch.length == 0) {
+          setNotRegisteredWithBranch(true)
+        }
         setBranchId(branch.id)
         appointmentService.getAppointments(patientId, branch.id)
           .then((response) => {
@@ -98,14 +93,17 @@ const Appoinment = () => {
               let slicedAppointments: any = []
               for (let appt of response.data) {
                 if (Object.keys(appt).includes("appointmentDate")) {
-                  let apptDate = new Date(...appt.appointmentDate)
-                  const slotTimeInstance = moment(apptDate)
-                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                  // let apptDate = new Date()
+                  // apptDate.setFullYear(appt.appointmentDate[0])
+                  // apptDate.setMonth(appt.appointmentDate[1])
+                  // apptDate.setDate(appt.appointmentDate[2])
+                  let dateString = `${appt.appointmentDate[0]}-${appt.appointmentDate[1]}-${appt.appointmentDate[2]}`
+                  const slotTimeInstance = moment(dateString)
+                  if (slotTimeInstance.isSameOrAfter(moment(firstDayOfMonth))) {
                     slicedAppointments.push(appt)
                   }
                 }
               }
-              // console.log("slicedAppointments: ", slicedAppointments)
               setAppointments(slicedAppointments)
               changeTab(activeTab)
               setLoader(false)
@@ -114,10 +112,13 @@ const Appoinment = () => {
               let slicedAppointments: any = []
               response.data.forEach((appt: any) => {
                 if (Object.keys(appt).includes("appointmentDate")) {
-                  let apptDate = new Date(...appt.appointmentDate)
-                  console.log("apptDate: ", apptDate )
-                  const slotTimeInstance = moment(apptDate)
-                  if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+                  // let apptDate = new Date()
+                  // apptDate.setFullYear(appt.appointmentDate[0])
+                  // apptDate.setMonth(appt.appointmentDate[1])
+                  // apptDate.setDate(appt.appointmentDate[2])
+                  let dateString = `${appt.appointmentDate[0]}-${appt.appointmentDate[1]}-${appt.appointmentDate[2]}`
+                  const slotTimeInstance = moment(dateString)
+                  if (slotTimeInstance.isSameOrAfter(moment(firstDayOfYear))) {
                     slicedAppointments.push(appt)
                   }
                 }
@@ -145,18 +146,23 @@ const Appoinment = () => {
     setToDate(currentDate);
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const firstDayOfYear = new Date(currentDate.setFullYear(currentDate.getFullYear() - 6));
+    let count = 0
+    console.log("allAppointmentsData.length: ", allAppointmentsData.length)
     if (filter.name === "Last Month") {
       setFromDate(firstDayOfMonth);
       let slicedAppointments: any = []
       for (let appt of allAppointmentsData) {
         if (Object.keys(appt).includes("appointmentDate")) {
-          let apptDate = new Date(...appt.appointmentDate)
-          const slotTimeInstance = moment(apptDate)
-          if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+          let dateString = `${appt.appointmentDate[0]}-${appt.appointmentDate[1]}-${appt.appointmentDate[2]}`
+          const slotTimeInstance = moment(dateString)
+          if (slotTimeInstance.isSameOrAfter(moment(firstDayOfMonth))) {
+            console.log("\n\n\nmoment(firstDayOfMonth): ", moment(firstDayOfMonth))
+            count ++;
             slicedAppointments.push(appt)
           }
         }
       }
+      console.log("slicedAppointments.length month: ", slicedAppointments.length)
       setAppointments(slicedAppointments)
       changeTab(activeTab)
     } else if (filter.name === "All") {
@@ -164,9 +170,10 @@ const Appoinment = () => {
       let slicedAppointments: any = []
       allAppointmentsData.forEach((appt: any) => {
         if (Object.keys(appt).includes("appointmentDate")) {
-          let apptDate = new Date(...appt.appointmentDate)
-          const slotTimeInstance = moment(apptDate)
-          if (moment(slotTimeInstance).isSameOrAfter(moment(firstDayOfYear))) {
+          let dateString = `${appt.appointmentDate[0]}-${appt.appointmentDate[1]}-${appt.appointmentDate[2]}`
+          const slotTimeInstance = moment(dateString)
+          if (slotTimeInstance.isSameOrAfter(moment(firstDayOfYear))) {
+            console.log("slotTimeInstance: ", slotTimeInstance)
             slicedAppointments.push(appt)
           }
         }
@@ -177,20 +184,6 @@ const Appoinment = () => {
     }
     setLoader(false)
   }
-
-
-  const onStartDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || fromDate;
-    setIsFromDatePickerOpen(false);
-    setFromDate(currentDate);
-  };
-
-  // Handle End Date Change
-  const onEndDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || toDate;
-    setIsToDatePickerOpen(false);
-    setToDate(currentDate);
-  };
 
   const changeTab = (tab: string) => {
     setActiveTab(tab)
@@ -211,17 +204,6 @@ const Appoinment = () => {
       }]
       if (useUserSate.getState().loggedIn == false) {
         setPatientNotFoundModal(true)
-        // Alert.alert('Patient Not Found', 'You need to Sign in first', [
-        //   {
-        //     text: 'BACK',
-        //     style: 'default'
-        //   },
-        //   {
-        //     text: 'SIGN IN',
-        //     onPress: () => router.push('/SignIn'),
-        //     style: 'default'
-        //   },
-        // ])
       } else {
         patientPolicyService.byPatientId(user.id)
           .then((patientPolicyResponse: any) => {
@@ -264,20 +246,6 @@ const Appoinment = () => {
                     setModalVisible(false)
                     console.log("specialityService.getByDept error: ", error.response)
                   })
-                // router.push({
-                //   pathname: "/ScheduleAppointment/",
-                //   params: {
-                //     branchId: branchId,
-                //     department: item.department,
-                //     speciality: item.speciality,
-                //     doctor: item.doctorName,
-                //     resourceId: item.resourceId,
-                //     date: (new Date()).toString(),
-                //     params: JSON.stringify(response.data[0]),
-                //     patientData: JSON.stringify(patientData),
-                //     patientPolicyData: JSON.stringify(patientPolicyResponse.data[0])
-                //   }
-                // })
               })
               .catch((error) => {
                 setModalVisible(false)
@@ -304,9 +272,6 @@ const Appoinment = () => {
             <HeaderWithBackButton isPushBack={true} title={i18n.t("My Appointments")} />
             <MaterialCommunityIcons name="calendar-check-outline" size={24} color={"rgb(59, 35, 20)"} />
           </View>
-          {/* <View className="pt-8">
-            <Searchbox searchValue={searchValue} setSearchValue={setSearchValue}/>
-          </View> */}
           <View className="mt-6 border py-4 pl-4 rounded-xl mb-2 w-1/3">
             <SelectDropdown
               data={filterOptions}
@@ -333,77 +298,13 @@ const Appoinment = () => {
               dropdownStyle={styles.dropdownMenuStyle}
               showsVerticalScrollIndicator={false}
             />
-            {/* <Picker selectedValue={1} onValueChange={(filter) => {
-              changeFilter(filter)
-              setLoader(true)
-              toggleSwitch(allAppointments)
-            }} className="text-slate-800">
-              {filterOptions.map((filter: any) => (
-                <Picker.Item key={filter.id} label={i18n.t(filter.name)} value={filter.name} />
-              ))}
-            </Picker> */}
           </View>
-          {/* <View className="pt-3 flex w-full flex-row items-center justify-start gap-3">
-            <View>
-              <Text className="text-lg">Last month</Text>
-            </View>
-            <View>
-              <Switch
-                trackColor={{ false: '#767577', true: '#767577' }}
-                thumbColor={isEnabled ? '#3b2314' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={() => {
-                  setLoader(true)
-                  toggleSwitch(allAppointments)
-                }}
-                // onValueChange={toggleSwitch(allAppointments)}
-                value={isEnabled}
-              />
-            </View>
-            <View>
-              <Text className="text-lg">All</Text>
-            </View>
-          </View> */}
           {
             loader &&
             <View className="pt-2">
               <ActivityIndicator size="large" color="#454567" />
             </View>
           }
-          {/* <View className="flex-row justify-between my-4">
-            <Pressable onPress={() => setIsFromDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg mr-2">
-              <Text className="text-lg">{i18n.t("From")}: {moment(fromDate).format("DD-MMM-YYYY")}</Text>
-            </Pressable>
-            {isFromDatePickerOpen && (
-              <DateTimePicker value={fromDate} mode="date" display="default" onChange={onStartDateChange} />
-            )}
-            <Pressable onPress={() => setIsToDatePickerOpen(true)} className="flex-1 bg-gray-300 p-3 rounded-lg ml-2">
-              <Text className="text-lg">{i18n.t("To")}: {moment(toDate).format("DD-MMM-YYYY")}</Text>
-            </Pressable>
-            {isToDatePickerOpen && (
-              <DateTimePicker value={toDate} mode="date" display="default" onChange={onEndDateChange} />
-            )}
-          </View> */}
-          {/* <View className="pt-2 flex flex-row  justify-between items-center">
-            {tabNames.map((item, idx) => (
-              <Pressable
-                key={idx}
-                onPress={() => changeTab(item)}
-                className={`flex-1 border-b-2  pb-2 ${activeTab === item
-                  ? "border-lime-600"
-                  : "border-transparent"
-                  }`}
-              >
-                <Text
-                  className={`text-center font-semibold ${activeTab === item ? "text-lime-600" : ""
-                    }`}
-                >
-                  {i18n.t(item)}
-                </Text>
-              </Pressable>
-            ))}
-          </View> */}
-
           <View>
             {!loader && appointments.length <= 0 &&
               <Text className="text-center text-lg text-gray-600 mt-4">{i18n.t("No appointments scheduled for this filter")}</Text>
@@ -415,10 +316,6 @@ const Appoinment = () => {
               >
                 <View className="flex flex-row w-full justify-between items-start border-b border-dashed border-pc-primary pb-4">
                   <View className="flex flex-row justify-start items-center ">
-                    {/* <View className="bg-amber-100 rounded-lg overflow-hidden mr-3 ">
-                      <Image source={item.img} />
-                    </View> */}
-
                     <View>
                       <Text className="text-base font-medium pb-2">
                         {item.branchName} - {item.practitionerName}
@@ -454,27 +351,8 @@ const Appoinment = () => {
                       </Text>
                     </View>
                   </View>
-
-                  {/* <View className=" border border-pc-primary p-2 rounded-md ">
-                    <Ionicons
-                      name="heart-outline"
-                      size={16}
-                      color={"rgb(132 204 22)"}
-                    />
-                  </View> */}
                 </View>
                 <View className="flex flex-row justify-between items-center pt-3 gap-4 ">
-                  {/* {item.sessionStatus === "Upcoming" ? (
-                    <TouchableOpacity>
-                      <Text
-                        onPress={() => setCancelModal(true)}
-                        className=" text-primaryColor border-t-[1px] border-x-[1px] border-b-[2px] border-primaryColor px-4 py-2 rounded-lg flex-1 text-center"
-                      >
-                        {i18n.t("Cancel")}
-                      </Text>
-                    </TouchableOpacity>
-                  ) : (
-                  )} */}
                   <TouchableOpacity
                     onPress={() => {
                       bookAgain(item)
@@ -522,12 +400,35 @@ const Appoinment = () => {
                 color={"#EF4444"}
               />
             </View>
-            <Text className="text-xl font-bold text-center mb-4 pt-3">Doctor schedule not found</Text>
+            <Text className="text-xl font-bold text-center mb-4 pt-3">{i18n.t('Doctor schedule not found')}</Text>
             <View className=" flex-row justify-end gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setDoctorScheduleNotFoundModal(false)
               }} >
-                <Text> Back </Text>
+                <Text> {i18n.t('Back')} </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      
+      <Modal transparent={true} animationType="fade" visible={notRegisteredWithBranch} onRequestClose={() => setNotRegisteredWithBranch(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="bg-white p-6 rounded-lg w-4/5 relative">
+            <View className="flex flex-row justify-center">
+              <MaterialCommunityIcons
+                name="information-outline"
+                size={60}
+                color={"#737373"}
+              />
+            </View>
+            <Text className="text-xl font-bold text-center mb-4 pt-3">{i18n.t('Patient is not registered with any branch')}</Text>
+            <View className=" flex-row justify-between gap-5 items-center py-4">
+              <Pressable onPress={() => {
+                setNotRegisteredWithBranch(false)
+                router.back()
+              }} >
+                <Text> {i18n.t('Back')} </Text>
               </Pressable>
             </View>
           </View>
@@ -544,19 +445,19 @@ const Appoinment = () => {
                 color={"#737373"}
               />
             </View>
-            <Text className="text-xl font-bold text-center mb-4 pt-3">You must sign in to view all your appointments</Text>
+            <Text className="text-xl font-bold text-center mb-4 pt-3">{i18n.t('You must sign in to view all your appointments')}</Text>
             <View className=" flex-row justify-between gap-5 items-center py-4">
               <Pressable onPress={() => {
                 setPatientNotFoundModal(false)
                 router.back()
               }} >
-                <Text> Back </Text>
+                <Text> {i18n.t('Back')} </Text>
               </Pressable>
               <Pressable onPress={() => {
                 setPatientNotFoundModal(false)
                 router.push('/SignIn')
               }}>
-                <Text> Sign in </Text>
+                <Text> {i18n.t('Sign in')} </Text>
               </Pressable>
             </View>
           </View>
