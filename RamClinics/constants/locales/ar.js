@@ -214,7 +214,7 @@ const translations = {
         "Upcoming Offers": "Upcoming Offers",
         "My Appoinments": "My Appointments",
         "My Appointments": "My Appointments",
-        "MyAppointmnts": "MyAppointment",
+        "MyAppointmnts": "MyAppts",
         "Book Appoinment": "Book Appointment",
         "Family Members": "Family Members",
         "Laboratory": "Laboratory",

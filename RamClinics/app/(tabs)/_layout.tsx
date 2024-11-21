@@ -36,7 +36,7 @@ const TabIcon = ({ focused, iconName, }: TabIconProbs) => {
   )
   return (
     <View className="flex items-center justify-center gap-2">
-      <Text className={`p-2 justify-center justify-items-center rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`} style={Platform.OS === 'ios' && styles.viewText} >
+      <Text className={`justify-center justify-items-center rounded-lg ${focused ? "bg-lime-500" : "bg-white"}`} style={Platform.OS === 'ios' && styles.viewText} >
         {iconName === "home" && (
           <View style={styles.iconBg}>
             <View className="flex flex-col justify-center justify-items-center justif-self-center" style={styles.iconView}>
@@ -107,13 +107,14 @@ const TabLayout = () => {
           },
 
           tabBarBadgeStyle: {
+            width: 32,
           },
 
           tabBarStyle: {
             backgroundColor: "rgb(59, 35, 20)",
             height: Platform.OS === 'ios' ? 100 : 90,
             marginTop: Platform.OS === 'ios' ? -35 : 0,
-            paddingTop: Platform.OS === 'ios' ? 0 : 12,
+            paddingTop: Platform.OS === 'ios' ? 10 : 12,
             borderTopEndRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopLeftRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopWidth: 0,
@@ -125,9 +126,18 @@ const TabLayout = () => {
           name="index"
           options={{
             headerShown: false,
-            title: i18n.t('Home'),
+            // title: i18n.t('Home'),
+            title: "",
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="home" focused={focused} />
+              // <TabIcon iconName="home" focused={focused} />
+              <View style={{
+                width: 30,
+                height: 30,
+                marginVertical: 4
+              }}>
+                  <FontAwesome name="home" size={32} color={focused ? "rgb(132 204 22)" : "white"} />
+                  <Text className={`text-xs text-center ${focused ? "text-lime-500" : "text-white"}`}>{i18n.t('Home')}</Text>
+              </View>
             ),
           }}
         />
@@ -139,7 +149,14 @@ const TabLayout = () => {
             headerShown: false,
             title: i18n.t('MyAppointmnts'),
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="calendar-check-outline" focused={focused} />
+              // <TabIcon iconName="calendar-check-outline" focused={focused} />
+              <View style={{
+                width: 30,
+                height: 30,
+                marginVertical: 4
+              }}>
+                  <FontAwesome name="calendar-check-o" size={28} color={focused ? "rgb(132 204 22)" : "white"} />
+              </View>
             ),
           }}
         />
@@ -197,7 +214,14 @@ const TabLayout = () => {
             headerShown: false,
             title: i18n.t("Promotions"),
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="gift" focused={focused} />
+              // <TabIcon iconName="gift" focused={focused} />
+              <View style={{
+                width: 30,
+                height: 30,
+                marginVertical: 4
+              }}>
+                  <FontAwesome name="gift" size={30} color={focused ? "rgb(132 204 22)" : "white"} />
+              </View>
             ),
           }}
         />
@@ -208,7 +232,15 @@ const TabLayout = () => {
             headerShown: false,
             title: i18n.t("Profile"),
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon iconName="user" focused={focused} />
+              // <TabIcon iconName="user" focused={focused} />
+              <View style={{
+                width: 30,
+                height: 30,
+                marginVertical: 4,
+                paddingStart: 4
+              }}>
+                  <FontAwesome name="user" size={28} color={focused ? "rgb(132 204 22)" : "white"} />
+              </View>
             ),
           }}
         />
