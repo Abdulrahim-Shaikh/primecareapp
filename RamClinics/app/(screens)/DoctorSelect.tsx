@@ -52,6 +52,7 @@ const DoctorSelect = () => {
         resourceService.find(item.id)
             .then((response) => {
                 setDisplayedDoctor(response.data)
+                console.log("resourceService.find response: ", response.data)
             })
             .catch((error) => {
                 console.error("resourceService error: ", error.response)
@@ -403,21 +404,6 @@ const DoctorSelect = () => {
                                 <View className="flex flex-row items-center gap-4 pt-6">
                                     <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <MaterialCommunityIcons
-                                            name="stethoscope"
-                                            size={30}
-                                            color={"#84cc16"}
-                                        />
-                                    </View>
-                                    <View className="flex flex-col">
-                                        <Text>Speciality</Text>
-                                        <Text className="font-bold text-xl">{displayedDoctor.speciality}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View>
-                                <View className="flex flex-row items-center gap-4 pt-6">
-                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
-                                        <MaterialCommunityIcons
                                             name="flag-variant"
                                             size={30}
                                             color={"#84cc16"}
@@ -426,6 +412,21 @@ const DoctorSelect = () => {
                                     <View className="flex flex-col">
                                         <Text>Nationality</Text>
                                         <Text className="font-bold text-xl">{displayedDoctor.nationality || minimalDoctorInfo.nationality || 'Unknown'}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                <View className="flex flex-row items-center gap-4 pt-6">
+                                    <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
+                                        <MaterialCommunityIcons
+                                            name="stethoscope"
+                                            size={30}
+                                            color={"#84cc16"}
+                                        />
+                                    </View>
+                                    <View className="flex flex-col">
+                                        <Text>Speciality</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.speciality}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -455,7 +456,7 @@ const DoctorSelect = () => {
                                     </View>
                                     <View className="flex flex-col">
                                         <Text>Qualification</Text>
-                                        <Text className="font-bold text-xl">{displayedDoctor.qualification || 'Unknown'}</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.qualificationDts || 'Unknown'}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -470,7 +471,7 @@ const DoctorSelect = () => {
                                     </View>
                                     <View className="flex flex-col">
                                         <Text>Graduation</Text>
-                                        <Text className="font-bold text-xl">{displayedDoctor.graduation ? displayedDoctor.qualification: 'Unknown'}</Text>
+                                        <Text className="font-bold text-xl">{displayedDoctor.graduation ? displayedDoctor.graduation: 'Unknown'}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -478,7 +479,7 @@ const DoctorSelect = () => {
                                 <View className="flex flex-row items-center gap-4 pt-6">
                                     <View className="rounded-full bg-white flex justify-center items-center w-20 h-20 border border-gray-200">
                                         <MaterialCommunityIcons
-                                            name="account-tie-hat-outline"
+                                            name="currency-rial"
                                             size={30}
                                             color={"#84cc16"}
                                         />
@@ -486,7 +487,7 @@ const DoctorSelect = () => {
                                     <View className="flex flex-col">
                                         <Text>Consultation Fees</Text>
                                         <View className="flex flex-row justify-start">
-                                            <Text className="font-bold text-xl flex flex-row justify-start">{'\uFDFC'} {displayedDoctor.consultationFee ? displayedDoctor.consultationFee: 'Unknown'}</Text>
+                                            <Text className="font-bold text-xl flex flex-row justify-start">{displayedDoctor.consultationFee ? displayedDoctor.consultationFee: 'Unknown'}</Text>
                                         </View>
                                     </View>
                                 </View>

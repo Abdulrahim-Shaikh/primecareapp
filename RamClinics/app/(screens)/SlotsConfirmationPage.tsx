@@ -231,9 +231,23 @@ const SlotsConfirmationPage = () => {
             cityBranch = branches.find((b: any) => b.name == branch).city
         }
         let tempResponsible: any = (responsible == undefined || responsible == null || responsible == "") ? "Doctor" : responsible
+        console.log("specialityCode: ", specialityCode)
+        console.log("tempSpecialityCode: ", tempSpecialityCode)
+        console.log("date: ", date)
+        console.log("branch: ", branch)
+        console.log("shift: ", shift)
+        console.log("city: ", city)
+        console.log("cityBranch: ", cityBranch)
+        console.log("deviceCode: ", deviceCode)
+        console.log("tempResponsible: ", tempResponsible)
         resourceService.getResourceByLiveSlotSpeciality(specialityCode ?? tempSpecialityCode, date, branch, shift, city ?? cityBranch, deviceCode, tempResponsible)
             .then((response) => {
+                console.log("getResourceByLiveSlotSpeciality response: ", response.data)
                 setLoader(true)
+                if (Object.keys(response.data).length == 0) {
+                    setLoader(false)
+                    setDoctorScheduleNotFoundModal(true)
+                }
                 let slots: any = response.data;
                 setAllSlots(response.data)
                 const currentTimeInstance = moment();
@@ -311,7 +325,7 @@ const SlotsConfirmationPage = () => {
             })
             .catch((error) => {
                 setLoader(false)
-                console.log("getResourceByLiveSlotSpeciality failed ", error.response)
+                console.log("getResourceByLiveSlotSpeciality failed ", error)
             })
     }
 

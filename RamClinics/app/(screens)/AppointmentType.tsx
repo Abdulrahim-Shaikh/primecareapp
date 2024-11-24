@@ -296,6 +296,7 @@ const AppointmentType = () => {
                             <View className=" flex-row justify-between gap-5 items-center py-4">
                                 <Pressable onPress={() => {
                                     setSignInModal(false)
+                                    router.back()
                                 }} >
                                     <Text> {i18n.t('Back')} </Text>
                                 </Pressable>

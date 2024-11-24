@@ -109,11 +109,6 @@ const SignIn = () => {
             <NASButton title={i18n.t('sendotp')} onPress={sendOtp} />
 
             <View className="pt-8">
-              <View>
-                <Text className="text-[14px] font-semibold text-center">
-                  {i18n.t('Or Continue With')}
-                </Text>
-              </View>
               <View className="pt-4">
                 <Text className="text-base text-pc-primary text-center">
                   {i18n.t('dont')}{" "}

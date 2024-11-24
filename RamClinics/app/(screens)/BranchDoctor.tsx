@@ -92,6 +92,9 @@ const BranchDoctor = () => {
                             }
                         }
                     })
+                    .catch((error: any) => {
+                        console.error("appointmentService.getLastThreeAppointments", error.response)
+                    })
             } else {
                 if (+callCenterDoctorFlow) {
                     let doctorsByBranch: any = []
@@ -112,7 +115,6 @@ const BranchDoctor = () => {
                     //     doctors.map((doctor: any) => {
                     //     })
                     // }
-                    console.log("doctorsByBranch: ", doctorsByBranch)
                     if (department == 'Dental') {
                         setDoctorsData(doctorsByBranch.length === 0 ? generalDentistryDoctors : doctorsByBranch)
                     } else if (department == 'Medical') {
@@ -123,7 +125,6 @@ const BranchDoctor = () => {
                     if (branchId != null && department != null && speciality != null) {
                         resourceService.getResourceBySpeciality(branchId, department, speciality)
                             .then((response) => {
-                                console.log("response: ", response.data)
                                 if (response.data.length == 0) {
                                     if (department == 'Dental' && speciality != generalDentistry) {
                                         resourceService.getResourceBySpeciality(branchId, department, generalDentistry)
@@ -150,7 +151,6 @@ const BranchDoctor = () => {
                         if (branchId == null) {
                             doctorService.getAllDoctors()
                                 .then((response) => {
-                                    // console.log("\ndoctorService.getAllDoctors(): \n", response)
                                     setDoctorsData(response.data);
                                     setLoader(false);
                                 })
@@ -162,7 +162,6 @@ const BranchDoctor = () => {
                                 .then((response) => {
                                     setDoctorsData(response.data.filter((doctor: any) => doctor.speciality === speciality));
                                     setLoader(false);
-                                    // console.log("\n\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) response", response);
                                 })
                                 .catch((error) => {
                                     console.log("\n\n\n\n\ndoctorService.getAllDoctorsByBranch(branchId) error", error);
