@@ -58,6 +58,9 @@ const BranchPage = () => {
                     tempBranches.push(branchSearch[0])
                 }
                 console.log("tempBranches: ", tempBranches.length)
+                for (let branch of tempBranches) {
+                    console.log("\n\nbranch: ", branch)
+                }
                 setBranchesData(tempBranches)
             }
             getBranchBySpecialityCity()
@@ -167,27 +170,34 @@ const BranchPage = () => {
                                     }>
                                     <View className="rounded-smg bg-white flex justify-center items-center border-gray-200">
                                         {/*<Image source={require("../../assets/logo/logo-ram-clinic-square.png")} style={{ width: 50, height: 50 }} />*/}
-
                                         <MaterialCommunityIcons
                                             name="hospital-building"
                                             size={30}
                                             color={"#3b2314"}
                                         />
                                     </View>
-                                    <View
-                                        style={{
-                                            paddingRight: 35,
-                                        }}
-                                        className="w-full pl-2 flex content-center items-center flex-row justify-between flex-wrap">
-                                        <View>
-                                            <Text className="font-semibold text-gray-800">
-                                                {item.name}
-                                            </Text>
-                                        </View>
-                                        <View>
-                                            <Text className="font-semibold text-lg text-gray-800">
-                                                {item.nameAr}
-                                            </Text>
+                                    <View>
+                                        <View
+                                            style={{
+                                                paddingRight: 35,
+                                            }}
+                                            className="w-full pl-2 flex content-center items-center flex-row justify-between flex-wrap">
+                                            <View className="flex flex-column flex-wrap">
+                                                <Text className="font-bold text-gray-800">
+                                                    {item.name}
+                                                </Text>
+                                                <Text className="text-gray-800">
+                                                    {item.district}
+                                                </Text>
+                                            </View>
+                                            <View>
+                                                <Text className="font-semibold text-lg text-gray-800">
+                                                    {item.nameAr}
+                                                </Text>
+                                                <Text className="text-lg text-gray-800">
+                                                    {item.districtAr}
+                                                </Text>
+                                            </View>
                                         </View>
                                     </View>
                                     {/*<View className="w-full pl-4 flex justify-center"*/}

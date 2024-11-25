@@ -7,6 +7,7 @@
 
 const translations = {
      en: {
+        "No packages avaiable currently": "No packages avaiable currently",
         "Appointment Types not found": "Appointment Types not found",
         "Appointment": "Appointment",
         "Success - User Updated Successfully": "Success - User Updated Successfully",
@@ -266,7 +267,7 @@ const translations = {
         //Promotions
         "Offers": "Offers",
         "Packages": "Packages",
-        "NoAvailableOffers": "No offers Available currently!",
+        "NoAvailableOffers": "No offers available currently!",
         "Book": "Book",
         "BookingSuccess": "Your booking has been successful",
         "BookingConfirmMessage": "Do you want to book this service?",
@@ -823,6 +824,7 @@ const translations = {
         "Success - User Updated Successfully": "تم تحديث المستخدم بنجاح",
         "Appointment": "موعد",
         "Appointment Types not found": "أنواع المواعيد غير موجودة",
+        "No packages avaiable currently": "لا توجد حزم متاحة حاليًا",
     }
 }
 export default translations;
