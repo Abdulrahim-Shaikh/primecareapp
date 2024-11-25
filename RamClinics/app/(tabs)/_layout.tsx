@@ -114,7 +114,7 @@ const TabLayout = () => {
             backgroundColor: "rgb(59, 35, 20)",
             height: Platform.OS === 'ios' ? 100 : 90,
             marginTop: Platform.OS === 'ios' ? -35 : 0,
-            paddingTop: Platform.OS === 'ios' ? 10 : 12,
+            paddingTop: Platform.OS === 'ios' ? 16 : 20,
             borderTopEndRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopLeftRadius: Platform.OS === 'ios' ? 0 : 15,
             borderTopWidth: 0,
@@ -126,17 +126,17 @@ const TabLayout = () => {
           name="index"
           options={{
             headerShown: false,
-            // title: i18n.t('Home'),
-            title: "",
+            title: i18n.t('Home'),
+            // title: "",
             tabBarIcon: ({ color, focused }) => (
               // <TabIcon iconName="home" focused={focused} />
               <View style={{
                 width: 30,
-                height: 30,
+                height: 40,
                 marginVertical: 4
               }}>
                   <FontAwesome name="home" size={32} color={focused ? "rgb(132 204 22)" : "white"} />
-                  <Text className={`text-xs text-center ${focused ? "text-lime-500" : "text-white"}`}>{i18n.t('Home')}</Text>
+                  {/* <Text className={`text-xs text-center ${focused ? "text-lime-500" : "text-white"}`}>{i18n.t('Home')}</Text> */}
               </View>
             ),
           }}
@@ -152,7 +152,7 @@ const TabLayout = () => {
               // <TabIcon iconName="calendar-check-outline" focused={focused} />
               <View style={{
                 width: 30,
-                height: 30,
+                height: 40,
                 marginVertical: 4
               }}>
                   <FontAwesome name="calendar-check-o" size={28} color={focused ? "rgb(132 204 22)" : "white"} />
@@ -217,7 +217,7 @@ const TabLayout = () => {
               // <TabIcon iconName="gift" focused={focused} />
               <View style={{
                 width: 30,
-                height: 30,
+                height: 40,
                 marginVertical: 4
               }}>
                   <FontAwesome name="gift" size={30} color={focused ? "rgb(132 204 22)" : "white"} />
@@ -235,7 +235,7 @@ const TabLayout = () => {
               // <TabIcon iconName="user" focused={focused} />
               <View style={{
                 width: 30,
-                height: 30,
+                height: 40,
                 marginVertical: 4,
                 paddingStart: 4
               }}>
